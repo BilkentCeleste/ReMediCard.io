@@ -1,29 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReMediCard.io</title>
-    <meta name="description" content="Welcome to ReMediCard.io, your go-to medical card solution.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to ReMediCard.io</h1>
-    </header>
-    <main>
-        <p>Your go-to medical card solution.</p>
-    </main>
-    <h1> Team Members </h1>
-    <ol>
-	    
-	    <li> Cenk  </li>
-	    <li> Faruk  </li>
-	    <li> Akif </li>
-	    <li> Enes  </li>
-	    <li> Bekiro  </li>
 
-    </ol>
-    <footer>
-        <p>&copy; 2024 ReMediCard.io</p>
-    </footer>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="hamburger">☰</div> <!-- Hamburger menü butonu -->
+        <ul>
+            <li><a href="#home">ReMediCard.io</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#documents">Documentation</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contact Us Paneli ve Kulakçık -->
+    <div id="contact-panel" class="contact-panel">
+        <div class="contact-tab">Contact Us</div>
+        <a href="https://github.com/BilkentCeleste/ReMediCard.io" target="_blank">
+            <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="mailto:project@example.com">
+            <i class="fas fa-envelope"></i> project@example.com
+        </a>
+    </div>
+
+
+    <!-- Section 1: Hero - Proje Adı ve Slogan -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>ReMediCard.io</h1>
+            <p>by Team Celeste</p>
+        </div>
+    </section>
+
+    <!-- Section 2: Proje Açıklaması -->
+    <section id="about" class="about-section">
+        <h2>About Us</h2>
+        <p>Our application integrates the essential features of widely-used flashcard applications available in the market, designed to alleviate the challenges of memorization encountered by medical students through the application of computer vision and machine learning technologies.</p>
+        <ul>
+            <li>🔍 User-Friendly Interface: Designed for ease of use.</li>
+            <li>💡 Advanced Technologies: Utilizing computer vision and machine learning.</li>
+            <li>🎓 Comprehensive Solution: Targeting specific burdens in medical studies.</li>
+        </ul>
+        <p>By leveraging these advanced technologies, our additional features aim to provide a comprehensive solution to the specific burdens associated with medical studies.</p>
+    </section>
+
+
+    <!-- Section 3: Proje Ekibi -->
+    <section id="team" class="team-section">
+        <h2>Our Team</h2>
+        <div class="team-container">
+            <div class="team-card">
+                <img src="img/team1.jpg" alt="Team Member 1">
+                <h3>Ömer Fırat Bekiroğlu</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/%C3%B6mer-f%C4%B1rat-bekiro%C4%9Flu-767421254/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/omerfiratbekiroglu" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="img/team2.jpg" alt="Team Member 2">
+                <h3>Cenk Merih Olcay</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/cenk-merih-o-1765031b5/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/JankOldjuy" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="img/team3.jpg" alt="Team Member 3">
+                <h3>Enes Bektaş</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/enes-bektas/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/EnesBektas" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="img/team4.jpg" alt="Team Member 4">
+                <h3>Faruk Uçgun</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/faruk-ucgun/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/farukucgun" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="img/team5.jpg" alt="Team Member 5">
+                <h3>Akif Erdem Tanyeri</h3>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/akiftanyeri/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/akiftnyr" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Proje Dokümanları -->
+    <section id="documents">
+        <h2>Proje Dokümanları</h2>
+        <div class="doc-container">
+          <div class="doc-card">
+            <h3>Rapor 1</h3>
+            <p>Bu bir rapordur</p>
+            <a href="img/rapor1.pdf" download class="download-btn">İndir</a>
+          </div>
+        <!--RAPOR EKLEYECEĞİNİZ ZAMAN BURDAKİ DİVİ KOPY PASTA YAPIN-->
+      
+        </div>
+    </section>
+
+    <!-- JavaScript Dosyası -->
+    <script src="index.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,369 @@
+/* Genel Stiller */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1a5c87, #2b95c8, #2bc1c8);
+    scroll-behavior: smooth;
+}
+
+/* Navbar Stilleri */
+.navbar {
+    position: fixed;
+    width: 100%;
+    background-color: #0b074e;
+    top: 0;
+    z-index: 1000;
+    padding: 10px 0;
+    box-shadow: 0 1px 2px rgb(255, 255, 255);
+    transition: background-color 0.3s ease;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navbar ul li {
+    position: relative;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #2bc1c8;
+    border-bottom: 2px solid #2bc1c8; 
+}
+
+/* Responsive Mobil Menü (Hamburger) */
+@media only screen and (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        display: none;
+    }
+
+    .navbar li {
+        margin: 5px;
+    }
+    .navbar ul.active {
+        display: flex; 
+    }
+
+    .navbar .hamburger {
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+    }
+}
+
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    color: white;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background: linear-gradient(to bottom, #0b074e, #090979);
+    color: white;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 6rem;
+    margin: 0;
+    animation: fadeInDown 1s ease;
+}
+
+.hero p {
+    font-size: 2rem;
+    animation: fadeInUp 1.5s ease;
+    margin-top: 10px;
+}
+
+section {
+    padding: 100px 20px;
+    height: 80vh;
+    text-align: center;
+    transition: background-color 0.5s ease;
+}
+
+#about {
+    background: linear-gradient(to bottom, #090979, #064ba4);
+    color: white;
+
+}
+
+#team {
+    background: linear-gradient(to bottom, #064ba4, #047dc5);
+    color: white;
+}
+
+#documents {
+    background: linear-gradient(to bottom, #047dc5, #008fc8);
+    color: white;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Tasarım */
+@media only screen and (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    section {
+        padding: 80px 10px;
+    }
+}
+
+/* Section 2: Proje Açıklaması */
+.about-section h2 {
+    font-size: 3rem; 
+    margin-bottom: 20px; 
+    color: #ffffff; 
+}
+
+.about-section ul {
+    list-style-type: none; 
+    padding: 0;
+}
+
+.about-section ul li {
+    margin: 10px 0; 
+    font-size: 1.1rem; 
+    line-height: 1.5; 
+}
+
+/* Section 3: Proje Ekibi */
+.team-section h2 {
+    font-size: 3rem; 
+    margin-bottom: 20px; 
+    color: #ffffff; 
+}
+
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.team-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 180px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.team-card:hover {
+    transform: scale(1.05);
+}
+
+.team-card img {
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.team-card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #1a5c87;
+}
+
+.team-card p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.team-card a {
+    color: #2b95c8;
+    text-decoration: none;
+}
+
+.team-card a:hover {
+    text-decoration: underline;
+}
+
+.social-links {
+    margin-top: 10px;
+}
+
+.social-links a {
+    margin: 0 10px;
+    color: #2b95c8;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    color: #1a5c87;
+}
+
+/* Contact Us Kulakçığı */
+.contact-tab {
+    position: absolute;
+    left: -44px; /* Panelin dışına taşacak */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ee455e; 
+    color: white;
+    padding: 10px;
+    writing-mode: vertical-rl;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px 0 0 10px; 
+}
+
+.contact-tab:hover {
+    background-color: #ff85a2; 
+}
+
+/* Yandan Açılan Panel */
+.contact-panel {
+    position: fixed;
+    right: -340px; /* Başlangıçta ekrandan dışarıda */
+    top: 120px;
+    width: 300px;
+    height: 40vh; /* Tüm sağ tarafı kaplamıyor */
+    background: linear-gradient(to right, #ee455e, #f7778a); 
+    color: white;
+    padding: 20px;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px; /
+}
+
+/* Linkler */
+.contact-panel a {
+    display: flex;
+    align-items: center; 
+    color: white; 
+    font-weight: bold; 
+    margin-bottom: 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.contact-panel a i {
+    margin-right: 10px; 
+    font-size: 1.5rem; 
+}
+
+.contact-panel a:hover {
+    text-decoration: underline;
+}
+
+.contact-panel.active {
+    right: 10px; 
+}
+
+.doc-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 50px;
+    }
+    
+    .doc-card {
+        background-color: #f9f9f9;
+        border: 1px solid #2b95c8;
+        border-radius: 10px;
+        padding: 20px;
+        width: 250px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .doc-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .doc-card h3 {
+        font-size: 1.2rem;
+        color: #1a5c87;
+    }
+    
+    .doc-card p {
+        font-size: 1rem;
+        color: #333;
+        margin: 10px 0;
+    }
+    
+    .download-btn {
+        display: inline-block;
+        background-color: #2b95c8;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .download-btn:hover {
+        background-color: #2bc1c8;
+    }
+
+#documents h2 {
+    font-size: 3rem; 
+    margin-bottom: 30px; 
+    color: #ffffff; 
+}
