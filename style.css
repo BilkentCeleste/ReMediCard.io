@@ -112,7 +112,7 @@ body {
 
 section {
     padding: 100px 20px;
-    height: auto; /* Change height to auto for better responsiveness */
+    height: auto;
     text-align: center;
     transition: background-color 0.5s ease;
 }
