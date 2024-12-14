@@ -22,6 +22,9 @@ public class JWTService {
     private String secretKey;
     @Value("${jwt.expiration}")
     private long jwtExpiration;
+    @Value("${jwt.header}")
+    private String jwtHeader;
+
     /*@Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;*/
 
@@ -42,7 +45,7 @@ public class JWTService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return jwtHeader + buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
     /*public String generateRefreshToken(
