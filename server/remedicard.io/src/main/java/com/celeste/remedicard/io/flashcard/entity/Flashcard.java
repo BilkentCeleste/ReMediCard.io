@@ -29,6 +29,7 @@ public class Flashcard extends AuditableEntity {
     @OneToOne
     private Side backSide;
 
-    @ManyToMany(mappedBy = "flashcardSet")
-    private Set<Deck> decks;
+    @ManyToOne
+    @JoinColumn(name = "deck_id", nullable = false)
+    private Deck deck;
 }

@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.flashcard.entity;
+package com.celeste.remedicard.io.common.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
