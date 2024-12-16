@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.service;
+package com.celeste.remedicard.io.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

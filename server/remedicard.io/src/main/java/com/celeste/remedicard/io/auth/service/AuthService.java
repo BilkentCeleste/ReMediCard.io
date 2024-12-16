@@ -1,14 +1,13 @@
-package com.celeste.remedicard.io.service;
+package com.celeste.remedicard.io.auth.service;
 
-import com.celeste.remedicard.io.dto.AuthRequest;
-import com.celeste.remedicard.io.dto.AuthResponse;
-import com.celeste.remedicard.io.dto.RegisterRequest;
-import com.celeste.remedicard.io.model.Role;
-import com.celeste.remedicard.io.model.User;
-import com.celeste.remedicard.io.repository.UserRepository;
+import com.celeste.remedicard.io.auth.controller.dto.AuthRequest;
+import com.celeste.remedicard.io.auth.controller.dto.AuthResponse;
+import com.celeste.remedicard.io.auth.controller.dto.RegisterRequest;
+import com.celeste.remedicard.io.auth.entity.Role;
+import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

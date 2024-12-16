@@ -1,7 +1,6 @@
 package com.celeste.remedicard.io.deck.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
-import com.celeste.remedicard.io.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

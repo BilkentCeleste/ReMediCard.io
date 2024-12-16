@@ -1,13 +1,10 @@
-package com.celeste.remedicard.io.repository;
+package com.celeste.remedicard.io.auth.repository;
 
-import com.celeste.remedicard.io.model.User;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.celeste.remedicard.io.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Repository

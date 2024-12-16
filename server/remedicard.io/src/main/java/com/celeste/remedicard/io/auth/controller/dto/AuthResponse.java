@@ -1,6 +1,6 @@
-package com.celeste.remedicard.io.dto;
+package com.celeste.remedicard.io.auth.controller.dto;
 
-import com.celeste.remedicard.io.model.Role;
+import com.celeste.remedicard.io.auth.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

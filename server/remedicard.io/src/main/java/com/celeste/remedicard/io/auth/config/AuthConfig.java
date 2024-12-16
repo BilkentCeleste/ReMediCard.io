@@ -1,6 +1,6 @@
-package com.celeste.remedicard.io.config;
+package com.celeste.remedicard.io.auth.config;
 
-import com.celeste.remedicard.io.repository.UserRepository;
+import com.celeste.remedicard.io.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

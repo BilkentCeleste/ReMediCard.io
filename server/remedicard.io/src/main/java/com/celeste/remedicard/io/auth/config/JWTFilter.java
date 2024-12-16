@@ -1,6 +1,6 @@
-package com.celeste.remedicard.io.config;
+package com.celeste.remedicard.io.auth.config;
 
-import com.celeste.remedicard.io.service.JWTService;
+import com.celeste.remedicard.io.auth.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

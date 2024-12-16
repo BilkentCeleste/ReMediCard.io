@@ -1,6 +1,6 @@
-package com.celeste.remedicard.io.dto;
+package com.celeste.remedicard.io.auth.controller.dto;
 
-import com.celeste.remedicard.io.model.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AuthRequest {
 
     private String username;
     private String email;
     private String password;
-    private Role role;
 }

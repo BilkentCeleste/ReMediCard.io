@@ -1,9 +1,9 @@
-package com.celeste.remedicard.io.controller;
+package com.celeste.remedicard.io.auth.controller;
 
-import com.celeste.remedicard.io.dto.AuthRequest;
-import com.celeste.remedicard.io.dto.AuthResponse;
-import com.celeste.remedicard.io.dto.RegisterRequest;
-import com.celeste.remedicard.io.service.AuthService;
+import com.celeste.remedicard.io.auth.controller.dto.AuthRequest;
+import com.celeste.remedicard.io.auth.controller.dto.AuthResponse;
+import com.celeste.remedicard.io.auth.controller.dto.RegisterRequest;
+import com.celeste.remedicard.io.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
