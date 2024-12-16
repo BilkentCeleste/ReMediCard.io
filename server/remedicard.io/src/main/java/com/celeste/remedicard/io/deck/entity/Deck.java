@@ -38,11 +38,6 @@ public class Deck extends AuditableEntity {
     )
     private Set<Figure> figureSet;
 
-    @ManyToMany
-    @JoinTable(
-            name = "deck_flashcard",
-            joinColumns = @JoinColumn(name = "deck_id"),
-            inverseJoinColumns = @JoinColumn(name = "flashcard_id")
-    )
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Flashcard> flashcardSet;
 }
