@@ -16,8 +16,15 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping("/create")
-    public void create(@RequestBody FlashcardCreateRequestDTO dto) {
+    public void create(@RequestBody FlashcardCreateRequestDTO dto, @RequestParam Long deckId) {
         Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
-        flashcardService.create(flashcard);
+
+        flashcardService.create(
+                flashcard,
+                dto.getDeckId(),
+                dto.getFrontText(),
+                dto.getBackText(),
+                dto.getFrontUrls(),
+                dto.getBackUrls());
     }
 }
