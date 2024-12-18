@@ -10,7 +10,6 @@ import {
   Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
-import axios from "axios";
 import {
   LockIcon,
   MailIcon,
@@ -19,6 +18,7 @@ import {
   EyeClosedIcon,
 } from "../constants/icons";
 import { Link } from "expo-router";
+import { register } from "../apiHelper/backendHelper"
 
 export default function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -31,7 +31,21 @@ export default function Register() {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSignUp = () => {};
+  const handleSignUp = () => {
+    const body = {
+      username: username,
+      email: email,
+      password: password
+    }
+
+    register(body)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+  };
 
   const uploadRegisterPage = () => {};
 

@@ -1,2 +1,1 @@
-
-export const LOGIN_URL = 'http://localhost:8080/auth/login';
+export const BASE_URL = 'http://localhost:8080';
