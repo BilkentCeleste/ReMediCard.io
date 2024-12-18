@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
-import { SearchIcon, FlashcardIcon, QuizIcon, GoalsIcon, CreateIcon, HomeIcon, ProfileIcon, SettingsIcon } from "../constants/icons";
+import { SearchIcon, FlashcardIcon, QuizIcon, GoalsIcon, CreateIcon, HomeIcon, ProfileIcon, SettingsIcon } from "../../constants/icons";
 
-export default function Login() {
+export default function Home() {
     
     const uploadDecksPage = () => {
         

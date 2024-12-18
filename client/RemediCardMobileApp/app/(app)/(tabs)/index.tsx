@@ -4,8 +4,18 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-
+import { Link } from "expo-router";
+import {useAuth} from "../../../AuthContext"
+import { Redirect } from "expo-router";
 export default function HomeScreen() {
+  
+  const { isLoggedIn } = useAuth();
+
+  if (!isLoggedIn) {
+    console.log(isLoggedIn);
+    return <Redirect href="/login" />;
+  }
+  
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -22,6 +32,7 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Login</ThemedText>
+        <Link href="/login">Go to Login</Link>
         <ThemedText>
           Edit{" "}
           <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
