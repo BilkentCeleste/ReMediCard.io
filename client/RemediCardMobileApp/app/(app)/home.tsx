@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import axios from 'axios';
 import { SearchIcon, FlashcardIcon, QuizIcon, GoalsIcon, CreateIcon, HomeIcon, ProfileIcon, SettingsIcon } from "../../constants/icons";
 
@@ -64,18 +64,18 @@ export default function Home() {
 
         <View style={styles.navbarRow}>
             <TouchableOpacity onPress={uploadGeneralEditPage}>
-                    <HomeIcon/>
+                    <Link href="/(app)/home"><HomeIcon/></Link>
             </TouchableOpacity>
             <TouchableOpacity onPress={uploadGeneralEditPage}>
-                    <ProfileIcon/>
+                    <Link href="/(app)/profile"><ProfileIcon/></Link>
             </TouchableOpacity>
             <TouchableOpacity onPress={uploadGeneralEditPage}>
                     <SettingsIcon/>
             </TouchableOpacity>
         </View>
         
-        <View style={styles.separatorContainer}>
-            <View style={styles.separatorLine} />
+        <View style={styles.navbarContainer}>
+            <View style={styles.navbarLine} />
         </View>
 
         </View>
@@ -91,14 +91,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#53789D',
     },
     remedicardio: {
-        fontSize: 35,
-        lineHeight: 22,
+        fontSize: 30,
+        lineHeight: 32,
         fontFamily: "InriaSans-Regular",
         color: "#fff",
-        textAlign: "left",
-        width: 200,
+        textAlign: "center",
+        width: "100%",   
         height: 27,
         marginBottom: 20,
+        fontWeight: "bold"
     },
     searchComponent: {
         height: 40,
@@ -197,15 +198,20 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
         width: "100%",
-        marginTop: 30
+        marginTop: 30,
+        position: "absolute", // Position the navbar absolutely
+        bottom: 50,
     },
-    separatorContainer: {
+    navbarContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         width: "75%",
-        marginVertical: 10,
+        position: "absolute",
+        bottom: 50,
+        backgroundColor: "#53789D", // Match the background color
+        height: 1,
     },
-    separatorLine: {
+    navbarLine: {
         flex: 1,
         height: 1,
         backgroundColor: '#fff',
