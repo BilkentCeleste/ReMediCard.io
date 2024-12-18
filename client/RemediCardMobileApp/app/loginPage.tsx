@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import axios from 'axios';
 import { LockIcon, AtIcon, GoogleIcon, EyeOpenIcon, EyeClosedIcon } from "../constants/icons";
+import { login } from "../apiHelper/backendHelper";
 
 export default function Login() {
 
@@ -20,6 +20,19 @@ export default function Login() {
     };
 
     const handleLogin = () => {
+
+        const body = {
+            username: username,
+            password: password
+        };
+
+        login(body)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         
     };
 

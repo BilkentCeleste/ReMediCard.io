@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import axios from 'axios';
 import { LockIcon, MailIcon, AtIcon, EyeOpenIcon, EyeClosedIcon } from "../constants/icons";
+import { register } from "../apiHelper/backendHelper";
 
 export default function Register() {
 
@@ -18,7 +18,19 @@ export default function Register() {
     };
 
     const handleSignUp = () => {
-        
+        const body = {
+            username: username,
+            email: email,
+            password: password,
+        };
+
+        register(body)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     
     const uploadRegisterPage = () => {
