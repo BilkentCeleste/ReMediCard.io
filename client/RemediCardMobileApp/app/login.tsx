@@ -10,7 +10,6 @@ import {
   Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
-import axios from "axios";
 import {
   LockIcon,
   AtIcon,
@@ -21,6 +20,7 @@ import {
 import { Link } from "expo-router";
 import { useAuth } from "@/AuthContext";
 import { Redirect } from "expo-router";
+import {login} from "../apiHelper/backendHelper"
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -28,7 +28,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { logIn, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -39,8 +39,18 @@ export default function Login() {
   };
 
   const handleLogin = () => {
-    console.log("Logging in");
-    logIn();
+    const body = {
+      username: username,
+      password: password
+    }
+
+    login(body)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
   };
 
   const handleLoginWithGoogle = () => {};
