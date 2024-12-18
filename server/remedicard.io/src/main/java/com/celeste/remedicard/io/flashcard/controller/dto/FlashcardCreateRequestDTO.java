@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.net.URL;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,4 +17,11 @@ import lombok.Setter;
 public class FlashcardCreateRequestDTO {
 
     private String topic;
+    private String type;
+    private double frequency;
+    private Long deckId;
+    private String frontText;
+    private Set<URL> frontUrls;
+    private String backText;
+    private Set<URL> backUrls;
 }

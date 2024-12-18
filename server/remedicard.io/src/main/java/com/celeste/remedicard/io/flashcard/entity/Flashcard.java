@@ -23,10 +23,12 @@ public class Flashcard extends AuditableEntity {
     @Column
     private double frequency;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "front_side_id", referencedColumnName = "id", nullable = false)
     private Side frontSide;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "back_side_id", referencedColumnName = "id", nullable = false)
     private Side backSide;
 
     @ManyToOne
