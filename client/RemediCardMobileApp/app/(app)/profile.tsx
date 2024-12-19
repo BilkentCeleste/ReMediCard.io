@@ -4,9 +4,11 @@ import { useRouter, Link } from 'expo-router';
 import axios from 'axios';
 import { AtIcon, MailIcon, ChevronRightIcon, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
     LanguageIcon, LogoutIcon, HomeIcon } from "../../constants/icons";
+import { useAuth } from '@/AuthContext';
 
 export default function Profile() {
-
+    
+    const { isLoggedIn, logIn, logOut } = useAuth();
 
     return (
         <View style={styles.container}>
@@ -75,6 +77,7 @@ export default function Profile() {
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
             </View>
+            <Button title="Log Out" onPress={logOut} />
         </View>
 
         <View style={styles.navbarRow}>
