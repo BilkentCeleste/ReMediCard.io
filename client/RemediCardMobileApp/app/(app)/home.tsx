@@ -6,8 +6,10 @@ import { SearchIcon, FlashcardIcon, QuizIcon, GoalsIcon, CreateIcon, HomeIcon, P
 
 export default function Home() {
     
+    const router = useRouter();
+
     const uploadDecksPage = () => {
-        
+        router.push('/(app)/decks');
     };
 
     const uploadQuizzesPage = () => {

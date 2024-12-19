@@ -67,7 +67,7 @@ export default function Profile() {
             </View>
         </View>
 
-        <View style={styles.menuComponent}>
+        <TouchableOpacity style={styles.menuComponent} onPress={logOut}>
             <View style={[styles.menuIcon, styles.iconLayout]}><LogoutIcon/></View>
 
             <Text style={styles.menuText}>Log Out</Text>
@@ -77,8 +77,7 @@ export default function Profile() {
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
             </View>
-            <Button title="Log Out" onPress={logOut} />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.navbarRow}>
             <TouchableOpacity>
