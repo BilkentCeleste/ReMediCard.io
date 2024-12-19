@@ -425,7 +425,11 @@ export function FlagUK() {
   )
 }
 
-export function ChevronRightIcon() {
+interface ChevronRightIconProps {
+  color?: string; // Optional color prop
+}
+
+export function ChevronRightIcon({ color = "#fff" }: ChevronRightIconProps) {
   return (
     <Svg
       width={24}
@@ -435,7 +439,7 @@ export function ChevronRightIcon() {
     >
       <Path
         d="M10 7l5 5-5 5"
-        stroke="#fff"
+        stroke={color}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -610,6 +614,25 @@ export function SaveIcon() {
         stroke="#fff"
         strokeWidth={2}
         strokeLinecap="round"
+      />
+    </Svg>
+  )
+}
+
+export function ChevronDown() {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M17 10l-5 5-5-5"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Svg>
   )

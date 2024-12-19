@@ -28,7 +28,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logIn } = useAuth();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -44,13 +44,15 @@ export default function Login() {
       password: password
     }
 
-    login(body)
+    /*login(body)
         .then((res) => {
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
-        })
+        })*/
+    logIn()
+
   };
 
   const handleLoginWithGoogle = () => {};
