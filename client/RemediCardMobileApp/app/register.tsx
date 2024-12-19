@@ -18,7 +18,7 @@ import {
   EyeClosedIcon,
 } from "../constants/icons";
 import { Link } from "expo-router";
-import { register } from "../apiHelper/backendHelper"
+import { useAuth } from "@/AuthContext";
 
 export default function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -26,6 +26,8 @@ export default function Register() {
   const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
+
+  const { isLoggedIn, registerAuth } = useAuth();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -38,13 +40,8 @@ export default function Register() {
       password: password
     }
 
-    register(body)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
+    console.log(body)
+    registerAuth(body);
   };
 
   const uploadRegisterPage = () => {};
