@@ -1,12 +1,19 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import axios from 'axios';
 import { AtIcon, MailIcon, ChevronRightIcon, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
-    LanguageIcon, LogoutIcon, HomeIcon } from "../../constants/icons";
+    LanguageIcon, LogoutIcon, HomeIcon } from "@/constants/icons";
+import { useAuth } from '@/AuthContext';
 
 export default function Profile() {
 
+    const router = useRouter();
+    const { isLoggedIn, logoutAuth } = useAuth();
+
+    const logoutHandler = () => {
+        logoutAuth();
+        router.push("/login");
+    }
 
     return (
         <View style={styles.container}>
@@ -65,7 +72,7 @@ export default function Profile() {
             </View>
         </View>
 
-        <View style={styles.menuComponent}>
+        <TouchableOpacity style={styles.menuComponent} onPress={logoutHandler}>
             <View style={[styles.menuIcon, styles.iconLayout]}><LogoutIcon/></View>
 
             <Text style={styles.menuText}>Log Out</Text>
@@ -75,7 +82,7 @@ export default function Profile() {
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
             </View>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.navbarRow}>
             <TouchableOpacity>

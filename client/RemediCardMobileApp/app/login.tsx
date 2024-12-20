@@ -16,11 +16,10 @@ import {
   GoogleIcon,
   EyeOpenIcon,
   EyeClosedIcon,
-} from "../constants/icons";
+} from "@/constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/AuthContext";
 import { Redirect } from "expo-router";
-import {login} from "../apiHelper/backendHelper"
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -28,7 +27,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, logIn } = useAuth();
+  const { isLoggedIn, loginAuth } = useAuth();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -38,21 +37,15 @@ export default function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
+
   const handleLogin = () => {
     const body = {
       username: username,
       password: password
     }
 
-    /*login(body)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        })*/
-    logIn()
-
+    console.log(body)
+    loginAuth(body);
   };
 
   const handleLoginWithGoogle = () => {};
