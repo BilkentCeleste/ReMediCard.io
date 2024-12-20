@@ -50,6 +50,8 @@ export default function Decks() {
             keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
+                    <Link href="/(app)/card" style={styles.link}>
+                    <View>
                     <Text style={styles.deckTitle}>{item.title}</Text>
                     <Text style={[styles.deckInfoText]}>
                         Last accessed: {item.lastAccessed}
@@ -63,6 +65,8 @@ export default function Decks() {
                     <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                         <ChevronRightIcon color="#111" />
                     </View>
+                    </View>
+                    </Link>
                 </TouchableOpacity>
             )}
         />
@@ -208,11 +212,14 @@ const styles = StyleSheet.create({
     deckInfoText: {
         fontSize: 12,
         color: "rgba(0, 0, 0, 0.7)",
+        marginBottom: 8, // Spacing below title
     },
     deckTitle: {
         fontSize: 16,
         color: "#000",
         fontWeight: "bold",
+        marginBottom: 8, // Spacing below title
+
     },
     deckComponent: {
         borderRadius: 20,
@@ -250,5 +257,10 @@ const styles = StyleSheet.create({
     flatListContent: {
         alignItems: "stretch", // Ensure items stretch to the container width
         paddingBottom: 20, // Add padding if needed at the bottom
+    },
+    link: {
+        flexDirection: "column", // Stack children vertically
+        alignItems: "flex-start", // Align text to the left
+        width: "100%", // Ensure it doesn't shrink
     },
 });

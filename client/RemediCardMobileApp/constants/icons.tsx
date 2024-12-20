@@ -637,3 +637,64 @@ export function ChevronDown() {
     </Svg>
   )
 }
+
+export function GoBackIcon() {
+  return (
+    <Svg
+      width={30}
+      height={30}
+      viewBox="0 0 30 30"
+      fill="none"
+
+    >
+      <Path
+        d="M15.639 20.861a1 1 0 001.536-1.28l-1.536 1.28zm-3.375-5.612l-.768-.64a1 1 0 000 1.28l.768-.64zm4.911-4.331a1 1 0 00-1.536-1.28l1.536 1.28zm0 8.663l-4.143-4.972-1.537 1.28 4.144 4.972 1.536-1.28zm-4.143-3.691l4.143-4.972-1.536-1.28-4.143 4.971 1.536 1.28zM15 25.25C9.34 25.25 4.75 20.66 4.75 15h-2c0 6.765 5.485 12.25 12.25 12.25v-2zM4.75 15C4.75 9.34 9.34 4.75 15 4.75v-2C8.235 2.75 2.75 8.235 2.75 15h2zM15 4.75c5.66 0 10.25 4.59 10.25 10.25h2c0-6.765-5.485-12.25-12.25-12.25v2zM25.25 15c0 5.66-4.59 10.25-10.25 10.25v2c6.765 0 12.25-5.485 12.25-12.25h-2z"
+        fill="#fff"
+      />
+    </Svg>
+  )
+}
+
+export function CorrectIcon() {
+  return (
+    <Svg
+      width={14}
+      height={14}
+      viewBox="0 0 14 14"
+      fill="none"
+    >
+      <G clipPath="url(#clip0_47_702)">
+        <Path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M13.637 1.198a1 1 0 01.134 1.408l-8.04 9.73-.003.002a1.922 1.922 0 01-2.999-.055L.211 9.045a1 1 0 111.578-1.228l2.464 3.167 7.976-9.652a1 1 0 011.408-.134z"
+          fill="#4CAF50"
+        />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_47_702">
+          <Path fill="#fff" d="M0 0H14V14H0z" />
+        </ClipPath>
+      </Defs>
+    </Svg>
+  )
+}
+
+export function FalseIcon() {
+  return (
+    <Svg
+      width={14}
+      height={14}
+      viewBox="0 0 14 14"
+      fill="none"
+    >
+      <Path
+        d="M11.083 2.917l-8.166 8.166m0-8.166l8.166 8.166"
+        stroke="#E30A17"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
