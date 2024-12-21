@@ -33,7 +33,9 @@ export default function Home() {
 
   const uploadStudyDashboardPage = () => {};
 
-  const uploadGeneralEditPage = () => {};
+  const uploadGeneralEditPage = () => {
+    router.push("/(app)/generatedecks");
+  };
 
   return (
     <View style={styles.container}>
@@ -109,8 +111,6 @@ export default function Home() {
           <SettingsIcon />
         </TouchableOpacity>
       </View>
-
-      <Link href="/(app)/generatedecks"> Generate Decks </Link>
 
       <View style={styles.navbarContainer}>
         <View style={styles.navbarLine} />

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import DropDown from "../../components/DropDown";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export default function GenerateDecks() {
   const [file, setFile] = useState(null);
@@ -102,10 +102,9 @@ export default function GenerateDecks() {
 
       {/* <Button
         title="ZAAAAAAAAAAAAA"
-        onPress={() => {
-          AsyncStorage.getItem("token").then((value) => {
-            console.log(value); // 'value'
-          });
+        onPress={async () => {
+          const value = await SecureStore.getItemAsync("token");
+          console.log(value);
         }}
       /> */}
     </View>
