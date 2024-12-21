@@ -18,7 +18,7 @@ import {
   EyeClosedIcon,
 } from "@/constants/icons";
 import { Link } from "expo-router";
-import { useAuth } from "@/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 
 export default function Login() {
@@ -27,7 +27,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, loginAuth } = useAuth();
+  const { isLoggedIn, loginAuth, dummyAuthenticator } = useAuth();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -37,6 +37,9 @@ export default function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
+  const dummyLogin = () => {
+    dummyAuthenticator();
+  }
 
   const handleLogin = () => {
     const body = {
@@ -44,7 +47,6 @@ export default function Login() {
       password: password
     }
 
-    console.log(body)
     loginAuth(body);
   };
 
@@ -93,6 +95,11 @@ export default function Login() {
 
       <TouchableOpacity style={styles.logincomponent} onPress={handleLogin}>
         <Text style={styles.logintext}>Log In</Text>
+      </TouchableOpacity>
+
+      {/*DELETE THIS*/}
+      <TouchableOpacity style={styles.logincomponent} onPress={dummyLogin}>
+        <Text style={styles.logintext}>Dummy Log In</Text>
       </TouchableOpacity>
 
       <View style={styles.rememberMeContainer}>

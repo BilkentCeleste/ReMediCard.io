@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.deck.controller;
 
+import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
@@ -28,9 +29,8 @@ public class DeckController {
 
     @GetMapping("/getByCurrentUser")
     public Set<DeckResponseDTO> getDecksByUserId() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = Long.parseLong(authentication.getDetails().toString());
-        Set<Deck> deckSet = deckService.getDeckByUserId(userId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Set<Deck> deckSet = deckService.getDeckByUserId(user.getId());
         return DeckCreateMapper.INSTANCE.toDTO(deckSet);
     }
 

@@ -10,7 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { useAuth } from "../../AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { Redirect } from "expo-router";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

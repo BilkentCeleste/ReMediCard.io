@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pre
 import { useRouter, Link } from 'expo-router';
 import { AtIcon, MailIcon, ChevronRightIcon, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
     LanguageIcon, LogoutIcon, HomeIcon } from "@/constants/icons";
-import { useAuth } from '@/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Profile() {
 

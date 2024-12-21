@@ -100,13 +100,14 @@ export default function GenerateDecks() {
         />
       )}
 
-      {/* <Button
-        title="ZAAAAAAAAAAAAA"
-        onPress={async () => {
-          const value = await SecureStore.getItemAsync("token");
-          console.log(value);
-        }}
-      /> */}
+      {/*<Button*/}
+      {/*  title="A"*/}
+      {/*  onPress={async () => {*/}
+      {/*    const value = await SecureStore.getItemAsync("key");*/}
+      {/*    console.log(value);*/}
+      {/*    console.log("aaaaaaaa")*/}
+      {/*  }}*/}
+      {/*/>*/}
     </View>
   );
 }

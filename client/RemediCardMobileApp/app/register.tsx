@@ -18,7 +18,7 @@ import {
   EyeClosedIcon,
 } from "../constants/icons";
 import { Link } from "expo-router";
-import { useAuth } from "@/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -40,7 +40,6 @@ export default function Register() {
       password: password
     }
 
-    console.log(body)
     registerAuth(body);
   };
 

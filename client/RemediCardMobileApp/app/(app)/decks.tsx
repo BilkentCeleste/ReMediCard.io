@@ -1,14 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import axios from 'axios';
 import { AtIcon, MailIcon, ChevronDown, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
-    LanguageIcon, SearchIcon, HomeIcon, 
-    ChevronRightIcon} from "../../constants/icons";
+    LanguageIcon, SearchIcon, HomeIcon, ChevronRightIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown"; // Path to the custom DropDown component
+import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 
 export default function Decks() {
     const [selectedSort, setSelectedSort] = useState<string>("");
+    const [decks, setDecks] = useState<any[]>([]);
+
+    useEffect(() => {
+        getDecksByCurrentUser()
+            .then((decks) => {
+                setDecks(decks);
+                console.log(decks);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }, []);
 
     const sortOptions = [
         { label: "Sort by Last Accessed", value: "last" },
@@ -17,7 +28,7 @@ export default function Decks() {
         { label: "Sort by Worst Performance", value: "worst" },
     ];
 
-    const decks = [
+    const dummy_decks = [
         { title: "Deck 1", lastAccessed: "31.12.2024", cards: 35, bestPerformance: 90, lastPerformance: 40 },
         { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
         { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },

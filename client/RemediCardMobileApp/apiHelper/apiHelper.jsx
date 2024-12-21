@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 /**
  * @author Faruk Uçgun
@@ -11,32 +12,39 @@ const _handleError = async (res) => {
         throw new Error("Something went wrong")
     }
 }
-  
-const commonHeader = {
-    "Content-Type": "application/json",
-    // "Authorization": localStorage.getItem("token") || " "
+
+const getCommonHeaders = async () => {
+    const token = await SecureStore.getItemAsync("token") || "";
+    return {
+        "Content-Type": "application/json",
+        "Authorization": token
+    }
 }
-  
+
 const _get = async (url, responseType) => {
+    let headers = await getCommonHeaders();
+
     return await axios.get(url, {
-        headers: commonHeader,
+        headers: headers,
         responseType: responseType
     })
 }
 
 const _post = async (url, data, contentType) => {
-    let headers = commonHeader;
+    let headers = await getCommonHeaders();
+
     if (contentType) {
         headers["Content-Type"] = contentType;
     }
-    return await axios.post(url, 
+    return await axios.post(url,
         data, 
         headers
     )
 }
 
 const _put = async (url, data, contentType) => {
-    let headers = commonHeader;
+    let headers = await getCommonHeaders();
+
     if (contentType) {
         headers["Content-Type"] = contentType;
     }
@@ -47,7 +55,8 @@ const _put = async (url, data, contentType) => {
 }
 
 const _patch = async (url, data, contentType) => {
-    let headers = commonHeader;
+    let headers = await getCommonHeaders();
+
     if (contentType) {
         headers["Content-Type"] = contentType;
     }
@@ -58,8 +67,10 @@ const _patch = async (url, data, contentType) => {
 }
 
 const _delete = async (url) => {
+    let headers = await getCommonHeaders();
+
     return await axios.delete(url, {
-        headers: commonHeader
+        headers: headers
     })
 }
 
