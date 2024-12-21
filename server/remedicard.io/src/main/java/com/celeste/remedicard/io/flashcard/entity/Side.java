@@ -1,11 +1,12 @@
 package com.celeste.remedicard.io.flashcard.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
+import com.celeste.remedicard.io.common.entity.URL;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.net.URL;
 import java.util.Set;
 
 @Getter
@@ -20,5 +21,5 @@ public class Side extends AuditableEntity {
     @ElementCollection
     @CollectionTable(name = "FLASHCARD_SIDE_URL", joinColumns = @JoinColumn(name = "SIDE_ID"))
     @Column(name = "URL")
-    private Set<URL> urlSet;
+    private Set<String> urlSet;
 }

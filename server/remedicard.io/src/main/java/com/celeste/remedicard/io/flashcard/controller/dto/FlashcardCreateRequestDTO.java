@@ -20,8 +20,6 @@ public class FlashcardCreateRequestDTO {
     private String type;
     private double frequency;
     private Long deckId;
-    private String frontText;
-    private Set<URL> frontUrls;
-    private String backText;
-    private Set<URL> backUrls;
+    SideCreateRequestDTO frontSide;
+    SideCreateRequestDTO backSide;
 }

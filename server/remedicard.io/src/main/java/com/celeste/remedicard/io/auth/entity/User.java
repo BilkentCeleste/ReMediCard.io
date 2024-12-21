@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.auth.entity;
 
+import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.studyStats.entity.StudyStats;
@@ -62,4 +63,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StudyStats> studyStats;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Deck> decks;
 }
