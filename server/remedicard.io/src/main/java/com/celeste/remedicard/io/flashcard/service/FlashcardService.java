@@ -16,24 +16,11 @@ import java.util.Set;
 public class FlashcardService {
 
     private final FlashcardRepository flashcardRepository;
-
     private final DeckRepository deckRepository;
 
-    public void create(Flashcard flashcard, Long deckId, String frontText, String backText, Set<URL> frontUrlSet, Set<URL> backUrlSet) {
+    public void create(Flashcard flashcard, Long deckId) {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
-
-        Side front = new Side();
-        front.setText(frontText);
-        front.setUrlSet(frontUrlSet);
-
-        Side back = new Side();
-        back.setText(backText);
-        back.setUrlSet(backUrlSet);
-
-        flashcard.setFrontSide(front);
-        flashcard.setBackSide(back);
         flashcard.setDeck(deck);
-
         flashcardRepository.save(flashcard);
     }
 }

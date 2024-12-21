@@ -6,18 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlashcardCreateRequestDTO {
+public class SideCreateRequestDTO {
 
-    private String topic;
-    private String type;
-    private double frequency;
-    private Long deckId;
-    SideCreateRequestDTO frontSide;
-    SideCreateRequestDTO backSide;
+    private String text;
+    private Set<String> urlSet;
 }
