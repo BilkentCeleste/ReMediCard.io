@@ -12,7 +12,7 @@ export default function Profile() {
 
     const logoutHandler = () => {
         logoutAuth();
-        router.push("/login");
+        router.push("/(auth)/login");
     }
 
     return (

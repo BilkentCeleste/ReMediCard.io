@@ -1,4 +1,4 @@
-import { BASE_URL } from "../constants/config";
+
 
 /**
  * @author Faruk Uçgun
@@ -7,6 +7,7 @@ import { BASE_URL } from "../constants/config";
  */
 
 // auth
+BASE_URL = "http://localhost:8000";
 export const LOGIN_PATH = () => `${BASE_URL}/auth/login`;
 export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
 

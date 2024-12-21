@@ -16,7 +16,7 @@ import {
   AtIcon,
   EyeOpenIcon,
   EyeClosedIcon,
-} from "../constants/icons";
+} from "../../constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/AuthContext";
 
