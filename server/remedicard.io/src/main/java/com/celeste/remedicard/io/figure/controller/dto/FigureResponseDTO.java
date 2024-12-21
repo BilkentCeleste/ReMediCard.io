@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.deck.controller.dto;
+package com.celeste.remedicard.io.figure.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -6,17 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DeckCreateRequestDTO {
+public class FigureResponseDTO {
 
-    private String topic;
-    private String name;
-    private String difficulty;
-    private int flashcardCount;
-    private int popularity;
-    private Long userId;
+    private String title;
+    Set<LabelResponseDTO> labelSet;
 }

@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.flashcard.controller.dto;
+package com.celeste.remedicard.io.deck.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -6,18 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlashcardCreateRequestDTO {
+public class DeckListByUserDTO {
 
     private String topic;
-    private String type;
-    private double frequency;
-    private Long deckId;
-    SideCreateRequestDTO frontSide;
-    SideCreateRequestDTO backSide;
+    private String name;
+    private String difficulty;
+    private int flashcardCount;
+    private int popularity;
 }

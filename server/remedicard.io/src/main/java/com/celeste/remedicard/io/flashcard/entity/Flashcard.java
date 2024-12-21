@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.flashcard.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import com.celeste.remedicard.io.deck.entity.Deck;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,5 +34,6 @@ public class Flashcard extends AuditableEntity {
 
     @ManyToOne
     @JoinColumn(name = "deck_id", nullable = false)
+    @JsonIgnore
     private Deck deck;
 }
