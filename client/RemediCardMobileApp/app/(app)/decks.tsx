@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly",
         width: "100%",
         marginTop: 30,
-        position: "absolute", // Position the navbar absolutely
+        position: "absolute",
         bottom: 50,
         backgroundColor: "#53789D",
 
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         width: "75%",
         position: "absolute",
         bottom: 50,
-        backgroundColor: "#53789D", // Match the background color
+        backgroundColor: "#53789D",
         height: 1,
     },
     navbarLine: {

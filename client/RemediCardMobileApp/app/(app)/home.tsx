@@ -110,7 +110,7 @@ export default function Home() {
         </TouchableOpacity>
       </View>
 
-      <Link href="/easteregg"> Easter Egg </Link>
+      <Link href="/(app)/generatedecks"> Generate Decks </Link>
 
       <View style={styles.navbarContainer}>
         <View style={styles.navbarLine} />
