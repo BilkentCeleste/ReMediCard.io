@@ -5,6 +5,8 @@ import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DeckService {
@@ -14,4 +16,8 @@ public class DeckService {
     public void create(Deck deck) {
         deckRepository.save(deck);
     }
+
+//    public List<Deck> listByUser(Long userId) {
+//        return deckRepository.findAllByUserId(userId);
+//    }
 }

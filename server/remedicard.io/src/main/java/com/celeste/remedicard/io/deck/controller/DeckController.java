@@ -1,14 +1,17 @@
 package com.celeste.remedicard.io.deck.controller;
 
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
+import com.celeste.remedicard.io.deck.controller.dto.DeckListByUserDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
+import com.celeste.remedicard.io.deck.mapper.DeckListByUserMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/deck")
@@ -23,5 +26,17 @@ public class DeckController {
         deckService.create(deck);
     }
 
+    @GetMapping("/listByUser")
+    public Long listByUser() {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getCredentials());
+        Long userId = Long.parseLong(authentication.getDetails().toString());
+        return userId;
+//        List<Deck> decks = deckService.listByUser(userId);
+//        return decks.stream()
+//                .map(DeckListByUserMapper.INSTANCE::toDTO)
+//                .collect(Collectors.toList());
+    }
 
 }
