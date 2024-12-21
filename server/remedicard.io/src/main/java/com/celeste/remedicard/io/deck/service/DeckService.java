@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +22,6 @@ public class DeckService {
         deck.setUser(user);
         deckRepository.save(deck);
     }
-
-//    public List<Deck> listByUser(Long userId) {
-//        return deckRepository.findAllByUserId(userId);
-//    }
 
     public Deck getDeckByDeckId(Long deckId) {
         return deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
