@@ -18,12 +18,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => { console.log("Logged",isLoggedIn)} ,[isLoggedIn])
+  // useEffect(() => { console.log("Logged",isLoggedIn)} ,[isLoggedIn])
 
-    if (!isLoggedIn) {
-      console.log(isLoggedIn);
-      return <Redirect href="/login" />;
-    }
+  //   if (!isLoggedIn) {
+  //     console.log(isLoggedIn);
+  //     return <Redirect href="/login" />;
+  //   }
 
   return (
     <Stack>
@@ -31,6 +31,9 @@ export default function RootLayout() {
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="profile" options={{ headerShown: false }} />
       <Stack.Screen name="decks" options={{ headerShown: false }} />
+      <Stack.Screen name="study_dashboard" options={{ headerShown: false }} />
+      <Stack.Screen name="goal_list" options={{ headerShown: false }} />
+      <Stack.Screen name="create_goal" options={{ headerShown: false }} />
     </Stack>
   );
 }

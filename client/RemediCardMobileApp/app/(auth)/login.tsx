@@ -3,10 +3,8 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  StyleSheet,
-  Alert,
   TouchableOpacity,
+  StyleSheet,
   Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -18,16 +16,13 @@ import {
   EyeClosedIcon,
 } from "@/constants/icons";
 import { Link } from "expo-router";
-import { useAuth } from "@/AuthContext";
-import { Redirect } from "expo-router";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const { isLoggedIn, loginAuth } = useAuth();
+  const router = useRouter();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -37,24 +32,14 @@ export default function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
-
   const handleLogin = () => {
-    const body = {
-      username: username,
-      password: password
-    }
-
-    console.log(body)
-    loginAuth(body);
+    // Redirect to home page directly
+    router.push("/(app)/home");
   };
 
   const handleLoginWithGoogle = () => {};
 
-  const uploadRegisterPage = () => {};
-
-  return isLoggedIn ? (
-    <Redirect href="/(app)/home" />
-  ) : (
+  return (
     <View style={styles.container}>
       <Text style={styles.title}>ReMediCard.io</Text>
 
@@ -71,7 +56,7 @@ export default function Login() {
       </View>
 
       <View style={styles.component}>
-        <LockIcon></LockIcon>
+        <LockIcon />
         <TextInput
           style={styles.passwordtext}
           placeholder="password"
@@ -114,7 +99,7 @@ export default function Login() {
         style={styles.component}
         onPress={handleLoginWithGoogle}
       >
-        <GoogleIcon></GoogleIcon>
+        <GoogleIcon />
         <Text style={styles.googleButtonText}>Continue with Google</Text>
       </TouchableOpacity>
 
@@ -160,14 +145,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 75,
     color: "#ffff",
-  },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#fff",
   },
   usernametext: {
     top: 5,

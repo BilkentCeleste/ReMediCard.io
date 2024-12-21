@@ -17,7 +17,7 @@ export default function Home() {
     };
 
     const uploadStudyDashboardPage = () => {
-        
+        router.push('/(app)/study_dashboard');
     };
 
     const uploadGeneralEditPage = () => {
