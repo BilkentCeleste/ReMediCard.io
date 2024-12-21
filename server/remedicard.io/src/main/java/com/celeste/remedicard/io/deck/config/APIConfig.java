@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.deck;
+package com.celeste.remedicard.io.deck.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

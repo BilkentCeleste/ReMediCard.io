@@ -4,15 +4,17 @@ import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "FLASHCARD")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Flashcard extends AuditableEntity {
 
     @Column

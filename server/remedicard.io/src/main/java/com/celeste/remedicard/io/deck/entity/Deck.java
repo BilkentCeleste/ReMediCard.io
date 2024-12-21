@@ -5,14 +5,16 @@ import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import com.celeste.remedicard.io.figure.entity.Figure;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "DECK")
 public class Deck extends AuditableEntity {
 

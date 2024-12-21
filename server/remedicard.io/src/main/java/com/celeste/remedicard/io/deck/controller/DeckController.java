@@ -8,8 +8,10 @@ import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Set;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/deck")
@@ -43,4 +45,20 @@ public class DeckController {
         Deck deck = deckService.getDeckByDeckId(deckId);
         return DeckCreateMapper.INSTANCE.toDTO(deck);
     }
+
+    @PostMapping("/generate")
+    public ResponseEntity<String> generateDeck(@RequestParam("file") MultipartFile file) {
+        try {
+            String fileName = file.getOriginalFilename();
+            long fileSize = file.getSize();
+
+            //TODO ADD FILE TO RESPECTIVE PROCESSING QUEUE BASED ON THE FILE TYPE
+            deckService.generateDeck(file);
+
+            return ResponseEntity.ok("File uploaded successfully: " + fileName + " (" + fileSize + " bytes)");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
+        }
+    }
+
 }
