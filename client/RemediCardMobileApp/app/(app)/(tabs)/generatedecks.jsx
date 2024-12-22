@@ -11,6 +11,12 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import DropDown from "../../../components/DropDown";
 import * as SecureStore from "expo-secure-store";
+import { useRouter, Link } from "expo-router";
+import { GoBackIcon, EditIcon } from "@/constants/icons";
+import { generateDeck } from "@/apiHelper/backendHelper";
+import axios from "axios";
+import * as FileSystem from "expo-file-system";
+import { BASE_URL } from "@/constants/config";
 
 export default function GenerateDecks() {
   const [file, setFile] = useState(null);
@@ -24,7 +30,7 @@ export default function GenerateDecks() {
     setTimeout(() => {
       setPopupVisible(false);
       setPopupMessage("");
-    }, 3000);
+    }, 5000);
   };
 
   const fileOptions = [
@@ -49,24 +55,109 @@ export default function GenerateDecks() {
         return;
       }
 
-      setFile({
-        name: result.assets[0].name,
-        uri: result.assets[0].uri,
-      });
+      setFile(result.assets[0]);
     } catch (error) {
       console.error("Error picking file:", error);
     }
   };
 
+  const handleGenerate = async () => {
+    const formData = new FormData();
+    formData.append("file", {
+      uri: file.uri,
+      type: "application/pdf",
+      name: file.name,
+    });
+
+    const token = await SecureStore.getItemAsync("token");
+
+    //TODO SOLVE THIS
+    axios
+      .post(`${BASE_URL}/deck/generate`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        console.log("SUCCESS");
+        setFile(null);
+        setFileType(null);
+
+        setPopupMessage(
+          "Deck generation is queued you can find your deck on deck menu once it is created"
+        );
+        showPopup();
+      })
+      .catch((e) => console.log(e.request));
+
+    /* generateDeck(formData)
+      .then((res) => {
+        console.log(res.data);
+        console.log("Will Auto Generate");
+        console.log(file, fileType);
+        
+      })
+      .catch((e) => console.log(e.request)); */
+  };
+
   return (
     <View style={styles.container}>
+      <View
+        style={[styles.menuComponent, { top: "20%" }, { position: "absolute" }]}
+      >
+        <View style={[styles.menuIcon, styles.iconLayout]}>
+          <Link href="/(app)/editdecklist">
+            <GoBackIcon />
+          </Link>
+        </View>
+        <Text style={styles.menuText}>Deck 1</Text>
+        <View style={[styles.menuIcon, styles.iconLayout, { right: "10%" }]}>
+          <EditIcon color="white" />
+        </View>
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+        </View>
+      </View>
+
+      <View style={styles.uploadComponent}>
+        <Text style={styles.fileComponentTitle}>
+          Choose a file to generate flashcards
+        </Text>
+        <Text
+          style={styles.fileComponentText}
+        >{`ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4 `}</Text>
+        <View style={[{ marginTop: "35%" }, { width: "100%" }]}>
+          <View style={styles.selectComponent}>
+            <View style={styles.selectedFile}>
+              <DropDown
+                options={fileOptions}
+                placeholder="Select document type"
+                onSelect={(value) => {
+                  setFileType(value);
+                  setFile(null);
+                }}
+                textColor="black"
+                showChevron={false}
+              />
+            </View>
+          </View>
+          <View style={styles.selectComponent}>
+            <Text style={styles.selectedFile} onPress={pickFile}>
+              {file ? file.name : "Select a file"}
+            </Text>
+          </View>
+        </View>
+      </View>
+
       <FadingPopup
         message={popupMessage}
         visible={popupVisible}
         onClose={() => {}}
       />
 
-      <DropDown
+      {/* <DropDown
         options={fileOptions}
         placeholder="Select document type"
         onSelect={(value) => {
@@ -74,40 +165,24 @@ export default function GenerateDecks() {
           setFile(null);
         }}
       />
-
-      <Button title="Select a file" onPress={pickFile} />
+ */}
+      {/* <Button title="Select a file" onPress={pickFile} />
       {file && (
         <View style={{ marginTop: 20 }}>
           <Text>File Name: {file.name}</Text>
           <Text>File URI: {file.uri}</Text>
           <Text>File Type: {file.mimeType || "Unknown"}</Text>
         </View>
-      )}
+      )} */}
 
       {file && (
-        <Button
-          title="Confirm Auto Generation"
-          onPress={() => {
-            console.log("Will Auto Generate");
-            console.log(file, fileType);
-            setPopupMessage(
-              "Deck generation is queued you can find your deck on deck menu once it is created"
-            );
-            showPopup();
-            setFile(null);
-            setFileType(null);
-          }}
-        />
+        <TouchableOpacity
+          style={styles.generateParent}
+          onPress={handleGenerate}
+        >
+          <Text style={styles.buttonText}>Confirm Auto Generation</Text>
+        </TouchableOpacity>
       )}
-
-      {/*<Button*/}
-      {/*  title="A"*/}
-      {/*  onPress={async () => {*/}
-      {/*    const value = await SecureStore.getItemAsync("key");*/}
-      {/*    console.log(value);*/}
-      {/*    console.log("aaaaaaaa")*/}
-      {/*  }}*/}
-      {/*/>*/}
     </View>
   );
 }
@@ -199,8 +274,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   menuText: {
-    left: "10%",
-    fontSize: 12,
+    fontSize: 20,
     lineHeight: 22,
     fontFamily: "Inter-Regular",
     color: "#fff",
@@ -282,37 +356,92 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     width: "100%",
   },
+  uploadComponent: {
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    width: "75%",
+    height: "35%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+  },
+  fileComponentTitle: {
+    position: "absolute",
+    top: 17,
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#000",
+    textAlign: "left",
+    width: 265,
+  },
+  fileComponentText: {
+    position: "absolute",
+    top: 70,
+    fontSize: 15,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "rgba(0, 0, 0, 0.5)",
+    textAlign: "left",
+    width: "95%",
+  },
+  selectedFile: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#000",
+    textAlign: "left",
+  },
+  selectComponent: {
+    borderRadius: 20,
+    backgroundColor: "rgba(207, 207, 207, 0.3)",
+    width: "100%",
+    height: 45,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
+  },
+  generateParent: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    height: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center", // Center the text inside the button
+  },
+  buttonText: {
+    color: "#fff", // White text color for visibility
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 const FadingPopup = ({ message, visible, onClose }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Trigger fade-in or fade-out based on `visible`
   React.useEffect(() => {
     if (visible) {
       Animated.timing(fadeAnim, {
-        toValue: 1, // Fully visible
-        duration: 300, // Animation duration (in ms)
+        toValue: 1,
+        duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(fadeAnim, {
-        toValue: 0, // Fully hidden
+        toValue: 0,
         duration: 300,
         useNativeDriver: true,
-      }).start(() => onClose && onClose()); // Call `onClose` after hiding
+      }).start(() => onClose && onClose());
     }
   }, [visible]);
 
   return (
-    <Animated.View
-      style={[
-        styles.popupContainer,
-        { opacity: fadeAnim }, // Bind opacity to `fadeAnim`
-      ]}
-    >
+    <Animated.View style={[styles.popupContainer, { opacity: fadeAnim }]}>
       <View style={styles.popup}>
-        <Text style={styles.popupText}>{message}</Text>
+        <Text style={[{ color: "#fff" }, { fontSize: 17 }]}>{message}</Text>
       </View>
     </Animated.View>
   );

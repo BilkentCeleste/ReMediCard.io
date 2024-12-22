@@ -14,12 +14,16 @@ interface DropDownProps {
   options: { label: string; value: string }[];
   placeholder?: string;
   onSelect: (value: string) => void;
+  textColor?: string;
+  showChevron?: boolean;
 }
 
 const DropDown: React.FC<DropDownProps> = ({
   options,
   placeholder = "Select an option",
   onSelect,
+  textColor = "#fff",
+  showChevron = true,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState<string>(placeholder);
@@ -37,10 +41,12 @@ const DropDown: React.FC<DropDownProps> = ({
         style={styles.menuComponent}
         onPress={() => setIsVisible(!isVisible)}
       >
-        <Text style={styles.menuText}>{selectedLabel}</Text>
-        <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-          <ChevronDown/>
-        </View>
+        <Text style={[styles.menuText, { color: textColor }]}>{selectedLabel}</Text>
+        {showChevron && ( // Conditionally render the chevron
+          <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+            <ChevronDown />
+          </View>
+        )}
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
         </View>

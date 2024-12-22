@@ -51,3 +51,7 @@ export const updateFlashcard = async (id, data) => {
 export const deleteFlashcard = async (id, data) => {
   return await deleteFetcher(url.DELETE_FLASHCARD_PATH(id), data);
 }
+
+export const generateDeck = async (data) => {
+  return await postFetcher(url.GENERATE_DECK_PATH(), data, "multipart/form-data");
+}

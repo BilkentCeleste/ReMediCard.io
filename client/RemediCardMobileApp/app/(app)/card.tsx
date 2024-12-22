@@ -3,11 +3,39 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pre
 import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
+import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 
-export default function Profile() {
-
+export default function Card( props: any ) {
     const router = useRouter();
 
+    const {deck} = useLocalSearchParams();
+    const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
+
+    const flashCardList = parsedDeck.flashcardSet;
+
+    const [currentCard, setCurrentCard] = useState(0);
+    const [trueAnswers, setTrueAnswers] = useState(0);
+    const [falseAnswers, setFalseAnswers] = useState(0);
+
+    const handleTrueAnswer = () => {
+        if (currentCard < flashCardList.length - 1) {
+            setCurrentCard(currentCard + 1);
+            setTrueAnswers(trueAnswers + 1);
+        }
+        else {
+            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers + 1}&falseAnswerCount=${falseAnswers}`);
+        }
+    };
+
+    const handleFalseAnswer = () => {
+        if (currentCard < flashCardList.length - 1) {
+            setCurrentCard(currentCard + 1);
+            setFalseAnswers(falseAnswers + 1);
+        }
+        else {
+            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers + 1}`);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -25,25 +53,26 @@ export default function Profile() {
         </View>
 
         <View style={styles.scoreTable}>
-            <Text style={[styles.text1, styles.scoreText]}>15/35</Text>
+            <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
             <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon></CorrectIcon></View>
-            <Text style={[styles.text2, styles.scoreText]}>10</Text>
+            <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
             <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon></FalseIcon></View>
-            <Text style={[styles.text3, styles.scoreText]}>5</Text>
+            <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
         </View>
 
         <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Flashcard 
-                question="LOREM"
-                answer="IPSUM"
+                question={flashCardList[currentCard].frontSide.text}
+                answer={flashCardList[currentCard].backSide.text}
                 width={250}
                 height={400}
+                key={currentCard}
             />
         </View>
 
         <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
-            <TouchableOpacity style={styles.crossIconPosition}><CrossIcon></CrossIcon></TouchableOpacity>
-            <TouchableOpacity style={styles.checkMarkIconPosition}><CheckmarkIcon></CheckmarkIcon></TouchableOpacity>
+            <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon></CrossIcon></TouchableOpacity>
+            <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon></CheckmarkIcon></TouchableOpacity>
         </View>
 
         </View>

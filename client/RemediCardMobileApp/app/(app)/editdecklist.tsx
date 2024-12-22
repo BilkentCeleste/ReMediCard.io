@@ -2,32 +2,36 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { AtIcon, MailIcon, ChevronDown, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
-    LanguageIcon, SearchIcon, HomeIcon, ChevronRightIcon} from "@/constants/icons";
+    LanguageIcon, SearchIcon, HomeIcon, PlusIcon,
+    EditIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown"; // Path to the custom DropDown component
 import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 
 export default function Decks() {
+    const router = useRouter();
+    
     const [selectedSort, setSelectedSort] = useState<string>("");
     const [decks, setDecks] = useState<any[]>([]);
-    const router = useRouter();
+
+    const uploadGeneratePage = () => {
+        router.push("/(app)/generatedecks");
+    };
 
     useEffect(() => {
         getDecksByCurrentUser()
             .then((decks) => {
-                const updatedDecks = decks.data.map((deck: any) => ({
-                    ...deck,
-                    lastAccessed: "31.12.2024",
-                    bestPerformance: 90,
-                    lastPerformance: 40,
-                }));
-
-                console.log(decks.data);
-                setDecks(updatedDecks);
+                const decks_info = decks.data;
+                decks_info.forEach((deck: any) => {
+                    deck.lastAccessed = "31.12.2024";
+                    deck.bestPerformance = 90;
+                    deck.lastPerformance = 40;
+                });
+                setDecks(decks_info);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+        }, []);
 
     const sortOptions = [
         { label: "Sort by Last Accessed", value: "last" },
@@ -36,10 +40,6 @@ export default function Decks() {
         { label: "Sort by Worst Performance", value: "worst" },
     ];
 
-
-    const uploadUpdateDeckPage = (id: any) => {
-        router.push("/(app)/updatedeck?deckId=" + id);
-    }
 
     return (
         <View style={styles.container}>
@@ -63,7 +63,7 @@ export default function Decks() {
             keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
-                    <Link href={"/(app)/card?deck=" + encodeURIComponent(JSON.stringify(item)) as any} style={styles.link} >
+                    <Link href="/(app)/card" style={styles.link}>
                     <View>
                     <Text style={styles.deckTitle}>{item.topic}</Text>
                     <Text style={[styles.deckInfoText]}>
@@ -72,20 +72,22 @@ export default function Decks() {
                     <Text style={[styles.deckInfoText]}>
                         {item.flashcardCount} cards
                     </Text>
-                        <TouchableOpacity onPress={() => uploadUpdateDeckPage(item.id)}>
-                            <Text> Update Deck </Text>
-                        </TouchableOpacity>
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%
                     </Text>
                     <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-                        <ChevronRightIcon color="#111" />
+                        <EditIcon color="#111" />
                     </View>
                     </View>
                     </Link>
                 </TouchableOpacity>
             )}
         />
+
+        <TouchableOpacity style={styles.createButton} onPress={uploadGeneratePage}>
+            <PlusIcon></PlusIcon>
+            <Text style={styles.createNewDeck}>Create New Deck</Text>
+        </TouchableOpacity>
                 
         <View style={styles.navbarRow}>
             <TouchableOpacity>
@@ -211,9 +213,8 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     chevronRightIcon: {
-        left: "100%",
-        zIndex: 3,
-        top: "90%"
+        left: "140%",
+        top: "50%"
     },
     menuIcon: {
         right: "95%",
@@ -278,5 +279,22 @@ const styles = StyleSheet.create({
         flexDirection: "column", // Stack children vertically
         alignItems: "flex-start", // Align text to the left
         width: "100%", // Ensure it doesn't shrink
+    },
+    createButton: {
+        borderRadius: 20,
+        backgroundColor: "#2916ff",
+        width: "75%",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 30,
+        height: 50,
+        bottom:"15%"
+    },
+    createNewDeck: {
+        fontSize: 17,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
     },
 });

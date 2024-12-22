@@ -64,6 +64,11 @@ const _patch = async (url, data, contentType) => {
         {headers}
     )
 }
+  if (contentType) {
+    headers["Content-Type"] = contentType;
+  }
+  return await axios.patch(url, data, headers);
+};
 
 const _delete = async (url) => {
     let headers = await getCommonHeaders();
@@ -73,11 +78,11 @@ const _delete = async (url) => {
     })
 }
 
-const getFetcher = async (url, responseType="json", isRaw=true) => {
-    const res = await _get(url, responseType)
-    await _handleError(res)
-    return isRaw ? res : res.json();
-}
+const getFetcher = async (url, responseType = "json", isRaw = true) => {
+  const res = await _get(url, responseType);
+  await _handleError(res);
+  return isRaw ? res : res.json();
+};
 
 const postFetcher = async (url, data, contentType="application/json", isRaw=true) => {
     const res = await _post(url, data, contentType)

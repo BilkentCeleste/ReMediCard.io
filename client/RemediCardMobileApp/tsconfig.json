@@ -3,17 +3,15 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-,
-    "app/(app)/(tabs)/generatedecks.jsx"
+    "expo-env.d.ts",
+    "app/(app)/(tabs)/generatedecks.jsx",
+    "app/(app)/(profile)/editprofile.jsx"
   ]
 }

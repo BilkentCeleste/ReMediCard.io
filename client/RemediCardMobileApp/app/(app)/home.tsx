@@ -34,7 +34,7 @@ export default function Home() {
   const uploadStudyDashboardPage = () => {};
 
   const uploadGeneralEditPage = () => {
-    router.push("/(app)/generatedecks");
+    router.push("/(app)/editdecklist");
   };
 
   return (
