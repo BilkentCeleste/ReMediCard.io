@@ -10,6 +10,7 @@ import com.celeste.remedicard.io.flashcard.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,10 +66,13 @@ public class DeckService {
             questionAnswerPairs.add(matcher.group(1));
         }
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Deck deck = Deck.builder()
                 .name("Generated_" + fileName)
                 .topic("")
                 .difficulty("Normal")
+                .user(user)
                 .popularity(3)
                 .build();
 
