@@ -36,7 +36,6 @@ export default function RootLayout() {
       <Stack.Screen name="decks" options={{ headerShown: false }} />
       <Stack.Screen name="card" options={{ headerShown: false }} />
       <Stack.Screen name="generatedecks" options={{ headerShown: false }} />
-      <Stack.Screen name="editprofile" options={{ headerShown: false }} />
     </Stack>
   );
 }

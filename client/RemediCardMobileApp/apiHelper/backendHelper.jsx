@@ -38,3 +38,7 @@ export const getDeckByDeckId = async (id) => {
 export const getDecksByUserId = async (id) => {
   return await getFetcher(url.GET_DECKS_BY_USER_ID_PATH(id));
 }
+
+export const generateDeck = async (data) => {
+  return await postFetcher(url.GENERATE_DECK_PATH(), data, "multipart/form-data");
+}
