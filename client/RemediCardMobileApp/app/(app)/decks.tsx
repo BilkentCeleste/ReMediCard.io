@@ -36,11 +36,6 @@ export default function Decks() {
         { label: "Sort by Worst Performance", value: "worst" },
     ];
 
-
-    const uploadUpdateDeckPage = (id: any) => {
-        router.push("/(app)/updatedeck?deckId=" + id);
-    }
-
     return (
         <View style={styles.container}>
         <Text style={styles.remedicardio}>ReMediCard.io</Text>
@@ -72,9 +67,6 @@ export default function Decks() {
                     <Text style={[styles.deckInfoText]}>
                         {item.flashcardCount} cards
                     </Text>
-                        <TouchableOpacity onPress={() => uploadUpdateDeckPage(item.id)}>
-                            <Text> Update Deck </Text>
-                        </TouchableOpacity>
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%
                     </Text>

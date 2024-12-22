@@ -21,6 +21,7 @@ export default function Decks() {
         getDecksByCurrentUser()
             .then((decks) => {
                 const decks_info = decks.data;
+                console.log(decks_info);
                 decks_info.forEach((deck: any) => {
                     deck.lastAccessed = "31.12.2024";
                     deck.bestPerformance = 90;
@@ -40,6 +41,9 @@ export default function Decks() {
         { label: "Sort by Worst Performance", value: "worst" },
     ];
 
+    const uploadUpdateDeckPage = (id: any) => {
+        router.push("/(app)/updatedeck?deckId=" + id);
+    }
 
     return (
         <View style={styles.container}>
@@ -75,9 +79,9 @@ export default function Decks() {
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%
                     </Text>
-                    <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+                    <TouchableOpacity style={[styles.chevronRightIcon, styles.iconLayout]} onPress={() => uploadUpdateDeckPage(item.id)}>
                         <EditIcon color="#111" />
-                    </View>
+                    </TouchableOpacity>
                     </View>
                     </Link>
                 </TouchableOpacity>

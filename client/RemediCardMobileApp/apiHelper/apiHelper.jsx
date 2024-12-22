@@ -64,11 +64,6 @@ const _patch = async (url, data, contentType) => {
         {headers}
     )
 }
-  if (contentType) {
-    headers["Content-Type"] = contentType;
-  }
-  return await axios.patch(url, data, headers);
-};
 
 const _delete = async (url) => {
     let headers = await getCommonHeaders();
