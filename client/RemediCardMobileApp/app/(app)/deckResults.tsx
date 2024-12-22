@@ -15,6 +15,10 @@ export default function DeckResults( ) {
         router.push(`/(app)/card?deck=${deck}`);
     };
 
+    const handleHomePage = () => {
+        router.push(`/(app)/home`);
+    };
+
     return (
         <View style={styles.container}>
 
@@ -30,16 +34,23 @@ export default function DeckResults( ) {
                 </View>
             </View>
             <View style={styles.scoreTable}>
-                <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon></CorrectIcon></View>
-                <Text style={[styles.text2, styles.scoreText]}>{trueAnwserCount}</Text>
-                <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon></FalseIcon></View>
-                <Text style={[styles.text3, styles.scoreText]}>{falseAnswerCount}</Text>
-                <Text> Success Rate: {successRate.toFixed(2)}%</Text>
+                <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon width={20} height={20}></CorrectIcon></View>
+                <Text style={[styles.text2, styles.scoreText]}>Correct: {trueAnwserCount}</Text>
+                <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon width={20} height={20}></FalseIcon></View>
+                <Text style={[styles.text3, styles.scoreText]}>False: {falseAnswerCount}</Text>
             </View>
 
-            <View>
+            <Text style={styles.successRateText}>Success Rate: {successRate.toFixed(2)}%</Text>
+
+            <View style={styles.retryButton}>
                 <TouchableOpacity onPress={handleRetry}>
-                    <Text> Retry? </Text>
+                    <Text style={styles.retryButtonText}> Retry? </Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.retryButton}>
+                <TouchableOpacity onPress={handleHomePage}>
+                    <Text style={styles.retryButtonText}> Home </Text>
                 </TouchableOpacity>
             </View>
 
@@ -109,7 +120,7 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontFamily: "Inter-Regular",
         lineHeight: 20,
-        fontSize: 15,
+        fontSize: 20,
         position: "absolute"
     },
     scoreTableIconLayout: {
@@ -131,6 +142,14 @@ const styles = StyleSheet.create({
     text3: {
         top: "70%",
         left: "15%"
+    },
+    successRateText: {
+        fontSize: 20,
+        color: "#fff",
+        fontFamily: "Inter-Regular",
+        lineHeight: 20,
+        marginBottom: 20,
+        marginTop: 10
     },
     checkIcon: {
         top: "25%",
@@ -163,4 +182,22 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         left: 0
     },
-});
+    retryButton: {
+        borderRadius: 20,
+        backgroundColor: "#2916ff",
+        width: "75%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", // Center text inside button
+        gap: 30,
+        height: 50,
+        marginTop: 10
+    },
+    retryButtonText: {
+        fontSize: 17,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
+    },
+}); 
