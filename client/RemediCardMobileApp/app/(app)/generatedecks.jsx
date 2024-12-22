@@ -106,9 +106,7 @@ export default function GenerateDecks() {
         style={[styles.menuComponent, { top: "20%" }, { position: "absolute" }]}
       >
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <Link href="/(app)/home">
-            <GoBackIcon />
-          </Link>
+          <Link href="/(app)/editdecklist"><GoBackIcon/></Link>
         </View>
         <Text style={styles.menuText}>Deck 1</Text>
         <View style={[styles.menuIcon, styles.iconLayout, { right: "10%" }]}>

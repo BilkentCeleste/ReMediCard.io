@@ -1,84 +1,53 @@
-import React, {useState} from 'react';
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
-import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
-import Flashcard from '@/components/FlashCard';
-import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 
-export default function Card( props: any ) {
+
+export default function DeckResults( ) {
+
     const router = useRouter();
 
-    const {deck} = useLocalSearchParams();
-    const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
+    const {deck, trueAnwserCount, falseAnswerCount} = useLocalSearchParams();
 
-    const flashCardList = parsedDeck.flashcardSet;
+    const successRate = (Number(trueAnwserCount) / (Number(trueAnwserCount) + Number(falseAnswerCount))) * 100;
 
-    const [currentCard, setCurrentCard] = useState(0);
-    const [trueAnswers, setTrueAnswers] = useState(0);
-    const [falseAnswers, setFalseAnswers] = useState(0);
-
-    const handleTrueAnswer = () => {
-        if (currentCard < flashCardList.length - 1) {
-            setCurrentCard(currentCard + 1);
-            setTrueAnswers(trueAnswers + 1);
-        }
-        else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers + 1}&falseAnswerCount=${falseAnswers}`);
-        }
-    };
-
-    const handleFalseAnswer = () => {
-        if (currentCard < flashCardList.length - 1) {
-            setCurrentCard(currentCard + 1);
-            setFalseAnswers(falseAnswers + 1);
-        }
-        else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers + 1}`);
-        }
+    const handleRetry = () => {
+        router.push(`/(app)/card?deck=${deck}`);
     };
 
     return (
         <View style={styles.container}>
 
-        <View style={styles.menuComponent}>
-            <View style={[styles.menuIcon, styles.iconLayout]}>
-                <Link href="/(app)/decks"><GoBackIcon/></Link>
+            <View style={styles.menuComponent}>
+                <View style={[styles.menuIcon, styles.iconLayout]}>
+                    <Link href="/(app)/decks"><GoBackIcon/></Link>
+                </View>
+            
+                <Text style={styles.menuText}>Deck Results</Text>
+                    
+                <View style={styles.separatorContainer}>
+                    <View style={styles.separatorLine} />
+                </View>
+            </View>
+            <View style={styles.scoreTable}>
+                <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon></CorrectIcon></View>
+                <Text style={[styles.text2, styles.scoreText]}>{trueAnwserCount}</Text>
+                <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon></FalseIcon></View>
+                <Text style={[styles.text3, styles.scoreText]}>{falseAnswerCount}</Text>
+                <Text> Success Rate: {successRate.toFixed(2)}%</Text>
             </View>
 
-            <Text style={styles.menuText}>Deck 1</Text>
-        
-            <View style={styles.separatorContainer}>
-                <View style={styles.separatorLine} />
+            <View>
+                <TouchableOpacity onPress={handleRetry}>
+                    <Text> Retry? </Text>
+                </TouchableOpacity>
             </View>
-        </View>
-
-        <View style={styles.scoreTable}>
-            <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
-            <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon></CorrectIcon></View>
-            <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
-            <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon></FalseIcon></View>
-            <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
-        </View>
-
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Flashcard 
-                question={flashCardList[currentCard].frontSide.text}
-                answer={flashCardList[currentCard].backSide.text}
-                width={250}
-                height={400}
-                key={currentCard}
-            />
-        </View>
-
-        <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
-            <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon></CrossIcon></TouchableOpacity>
-            <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon></CheckmarkIcon></TouchableOpacity>
-        </View>
 
         </View>
-    );
-}
+    )
     
+}
+
 const styles = StyleSheet.create({
     container: {
         width: "100%",
