@@ -16,6 +16,7 @@ import { GoBackIcon, EditIcon } from "@/constants/icons";
 import { generateDeck } from "@/apiHelper/backendHelper";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import { BASE_URL } from "@/constants/config";
 
 export default function GenerateDecks() {
   const [file, setFile] = useState(null);
@@ -29,7 +30,7 @@ export default function GenerateDecks() {
     setTimeout(() => {
       setPopupVisible(false);
       setPopupMessage("");
-    }, 3000);
+    }, 5000);
   };
 
   const fileOptions = [
@@ -60,7 +61,7 @@ export default function GenerateDecks() {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     const formData = new FormData();
     formData.append("file", {
       uri: file.uri,
@@ -68,13 +69,14 @@ export default function GenerateDecks() {
       name: file.name,
     });
 
+    const token = await SecureStore.getItemAsync("token");
+
     //TODO SOLVE THIS
     axios
-      .post("http://192.168.1.44:8080/deck/generate", formData, {
+      .post(`${BASE_URL}/deck/generate`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvbWVyIiwiaWF0IjoxNzM0ODc3MTYxLCJleHAiOjE3MzQ5NjM1NjF9.eAxAH46dBfvxbPUR-2yDSvpoOhnV5Y4BCCDyITZdBdg",
+          Authorization: token,
         },
       })
       .then((res) => {
@@ -106,7 +108,9 @@ export default function GenerateDecks() {
         style={[styles.menuComponent, { top: "20%" }, { position: "absolute" }]}
       >
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <Link href="/(app)/editdecklist"><GoBackIcon/></Link>
+          <Link href="/(app)/editdecklist">
+            <GoBackIcon />
+          </Link>
         </View>
         <Text style={styles.menuText}>Deck 1</Text>
         <View style={[styles.menuIcon, styles.iconLayout, { right: "10%" }]}>

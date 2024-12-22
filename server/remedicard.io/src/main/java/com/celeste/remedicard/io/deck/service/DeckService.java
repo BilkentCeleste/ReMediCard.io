@@ -70,7 +70,7 @@ public class DeckService {
 
         Deck deck = Deck.builder()
                 .name("Generated_" + fileName)
-                .topic("")
+                .topic("generated_" + fileName)
                 .difficulty("Normal")
                 .user(user)
                 .popularity(3)
