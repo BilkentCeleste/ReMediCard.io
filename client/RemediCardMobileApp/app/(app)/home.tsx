@@ -29,7 +29,9 @@ export default function Home() {
     router.push("/(app)/decks");
   };
 
-  const uploadQuizzesPage = () => {};
+    const uploadQuizzesPage = () => {
+        router.push('/(app)/quizzes');
+    };
 
     const uploadStudyDashboardPage = () => {
         router.push('/(app)/study_dashboard');

@@ -33,6 +33,8 @@ export default function RootLayout() {
       <Stack.Screen name="decks" options={{ headerShown: false }} />
       <Stack.Screen name="card" options={{ headerShown: false }} />
       <Stack.Screen name="generatedecks" options={{ headerShown: false }} />
+      <Stack.Screen name="quizzes" options={{ headerShown: false }} />
+      <Stack.Screen name="quiz_question" options={{ headerShown: false }} />
       <Stack.Screen name="study_dashboard" options={{ headerShown: false }} />
       <Stack.Screen name="goal_list" options={{ headerShown: false }} />
       <Stack.Screen name="create_goal" options={{ headerShown: false }} />
