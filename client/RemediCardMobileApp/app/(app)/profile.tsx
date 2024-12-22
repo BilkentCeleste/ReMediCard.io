@@ -20,8 +20,8 @@ export default function Profile() {
         <Text style={styles.remedicardio}>ReMediCard.io</Text>
 
         <View style={styles.infoCard}>
-            <Text style={styles.infoText}><AtIcon/>Username</Text>
-            <Text style={styles.infoText}><MailIcon/>Email</Text>
+            <Text style={styles.infoText}><AtIcon color="white" />Username</Text>
+            <Text style={styles.infoText}><MailIcon color="white"/>Email</Text>
         </View>
 
         <View style={styles.menuComponent}>
