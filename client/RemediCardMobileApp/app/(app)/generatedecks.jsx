@@ -287,20 +287,20 @@ const styles = StyleSheet.create({
 const FadingPopup = ({ message, visible, onClose }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  // Trigger fade-in or fade-out based on `visible`
+  
   React.useEffect(() => {
     if (visible) {
       Animated.timing(fadeAnim, {
-        toValue: 1, // Fully visible
-        duration: 300, // Animation duration (in ms)
+        toValue: 1,
+        duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(fadeAnim, {
-        toValue: 0, // Fully hidden
+        toValue: 0,
         duration: 300,
         useNativeDriver: true,
-      }).start(() => onClose && onClose()); // Call `onClose` after hiding
+      }).start(() => onClose && onClose());
     }
   }, [visible]);
 
@@ -308,7 +308,7 @@ const FadingPopup = ({ message, visible, onClose }) => {
     <Animated.View
       style={[
         styles.popupContainer,
-        { opacity: fadeAnim }, // Bind opacity to `fadeAnim`
+        { opacity: fadeAnim },
       ]}
     >
       <View style={styles.popup}>

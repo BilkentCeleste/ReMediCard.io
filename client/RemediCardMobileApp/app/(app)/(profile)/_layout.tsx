@@ -10,7 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import { Redirect } from "expo-router";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,14 +29,8 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="(profile)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="home" options={{ headerShown: false }} />
-      <Stack.Screen name="profile" options={{ headerShown: false }} />
-      <Stack.Screen name="decks" options={{ headerShown: false }} />
-      <Stack.Screen name="card" options={{ headerShown: false }} />
-      <Stack.Screen name="generatedecks" options={{ headerShown: false }} />
       <Stack.Screen name="editprofile" options={{ headerShown: false }} />
+      <Stack.Screen name="contactus" options={{ headerShown: false }} />
     </Stack>
   );
 }
