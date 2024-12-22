@@ -13,5 +13,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/(app)/generatedecks.jsx"  ]
+,
+    "app/(app)/(tabs)/generatedecks.jsx"
+  ]
 }

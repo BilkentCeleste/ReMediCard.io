@@ -32,13 +32,12 @@ const _get = async (url, responseType) => {
 
 const _post = async (url, data, contentType) => {
     let headers = await getCommonHeaders();
-
     if (contentType) {
         headers["Content-Type"] = contentType;
     }
     return await axios.post(url,
-        data, 
-        headers
+        data,
+        {headers}
     )
 }
 
@@ -49,8 +48,8 @@ const _put = async (url, data, contentType) => {
         headers["Content-Type"] = contentType;
     }
     return await axios.put(url, 
-        data, 
-        headers
+        data,
+        {headers}
     )
 }
 
@@ -61,8 +60,8 @@ const _patch = async (url, data, contentType) => {
         headers["Content-Type"] = contentType;
     }
     return await axios.patch(url, 
-        data, 
-        headers
+        data,
+        {headers}
     )
 }
 

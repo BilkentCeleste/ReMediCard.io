@@ -9,12 +9,12 @@ import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 export default function Decks() {
     const [selectedSort, setSelectedSort] = useState<string>("");
     const [decks, setDecks] = useState<any[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         getDecksByCurrentUser()
-            .then((decks) => {
-                setDecks(decks);
-                console.log(decks);
+            .then((data) => {
+                setDecks(data.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -38,6 +38,10 @@ export default function Decks() {
         { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
         { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
     ];
+
+    const uploadUpdateDeckPage = (id: any) => {
+        router.push("/(app)/updatedeck?deckId=" + id);
+    }
 
     return (
         <View style={styles.container}>
@@ -70,12 +74,16 @@ export default function Decks() {
                     <Text style={[styles.deckInfoText]}>
                         {item.cards} cards
                     </Text>
+                        <TouchableOpacity onPress={() => uploadUpdateDeckPage(item.id)}>
+                            <Text> Update Deck </Text>
+                        </TouchableOpacity>
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%
                     </Text>
                     <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                         <ChevronRightIcon color="#111" />
                     </View>
+
                     </View>
                     </Link>
                 </TouchableOpacity>

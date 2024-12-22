@@ -111,7 +111,6 @@ export default function Home() {
           <SettingsIcon />
         </TouchableOpacity>
       </View>
-
       <View style={styles.navbarContainer}>
         <View style={styles.navbarLine} />
       </View>
