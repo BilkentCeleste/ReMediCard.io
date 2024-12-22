@@ -84,6 +84,10 @@ public class DeckService {
         for (String pair : questionAnswerPairs) {
             String[] parts = pair.split(" /// ");
 
+            if (parts.length != 2){
+                continue;
+            }
+
             Side frontSide = Side.builder()
                     .text(parts[0])
                     .build();
