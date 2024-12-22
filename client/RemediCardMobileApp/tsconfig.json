@@ -12,6 +12,9 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "app/(app)/generatedecks.jsx",
-    "app/(app)/(profile)/editprofile.jsx"
+    "app/(app)/(profile)/editprofile.jsx",
+    "nativewind-env.d.ts",
+    "app/(app)/create_goal.jsx",
+    "app/(app)/study_dashboard.jsx"
   ]
 }

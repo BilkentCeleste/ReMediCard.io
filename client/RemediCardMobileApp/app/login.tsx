@@ -39,13 +39,13 @@ export default function Login() {
 
   const dummyLogin = () => {
     dummyAuthenticator();
-  }
+  };
 
   const handleLogin = () => {
     const body = {
       username: username,
-      password: password
-    }
+      password: password,
+    };
 
     loginAuth(body);
   };

@@ -18,9 +18,9 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log("Logged", isLoggedIn);
-  }, [isLoggedIn]);
+  }, [isLoggedIn]); */
 
   if (!isLoggedIn) {
     console.log(isLoggedIn);

@@ -35,9 +35,11 @@ export default function RootLayout() {
     <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="login" options={{headerShown: false}}/>
-          <Stack.Screen name="register" options={{headerShown: false}}/>
-          <Stack.Screen name="(app)" options={{headerShown: false}}/>
+          {/* The default route is the index, which redirects to /home */}
+          {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
+          <Stack.Screen name="(app)" options={{ headerShown: false }} />
+          <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen name="register" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
