@@ -13,13 +13,15 @@ export default function Decks() {
     useEffect(() => {
         getDecksByCurrentUser()
             .then((decks) => {
-                const decks_info = decks.data;
-                decks_info.forEach((deck) => {
-                    deck.lastAccessed = "31.12.2024";
-                    deck.bestPerformance = 90;
-                    deck.lastPerformance = 40;
-                });
-                setDecks(decks_info);
+                const updatedDecks = decks.data.map((deck: any) => ({
+                    ...deck,
+                    lastAccessed: "31.12.2024",
+                    bestPerformance: 90,
+                    lastPerformance: 40,
+                }));
+
+                console.log(decks.data);
+                setDecks(updatedDecks);
             })
             .catch((error) => {
                 console.log(error);
@@ -56,7 +58,7 @@ export default function Decks() {
             keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
-                    <Link href="/(app)/card" style={styles.link}>
+                    <Link href={"/(app)/card?deck=" + encodeURIComponent(JSON.stringify(item)) as any} style={styles.link} >
                     <View>
                     <Text style={styles.deckTitle}>{item.topic}</Text>
                     <Text style={[styles.deckInfoText]}>
