@@ -48,11 +48,11 @@ export default function Profile() {
 
       <View style={styles.infoCard}>
         <Text style={styles.infoText}>
-          <AtIcon />
+          <AtIcon color="white" />
           Username
         </Text>
         <Text style={styles.infoText}>
-          <MailIcon />
+          <MailIcon color="white" />
           Email
         </Text>
       </View>

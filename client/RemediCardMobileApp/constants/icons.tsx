@@ -21,7 +21,12 @@ export function LockIcon() {
     )
 }
 
-export function MailIcon() {
+
+interface MailIcoProps {
+  color?: string; // Optional color prop
+}
+
+export function MailIcon({ color = "#000" }: MailIcoProps) {
     return (
       <Svg
         width={24}
@@ -31,8 +36,8 @@ export function MailIcon() {
       >
         <Path
           d="M3.293 5.293A.997.997 0 014 5h16c.276 0 .526.112.707.293m-17.414 0A.997.997 0 003 6v12a1 1 0 001 1h16a1 1 0 001-1V6a.997.997 0 00-.293-.707m-17.414 0l7.293 7.293a2 2 0 002.828 0l7.293-7.293"
-          stroke="#000"
-          strokeOpacity={0.25}
+          stroke={color}
+          strokeOpacity={0.5}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -114,7 +119,11 @@ export function MailIcon() {
     )
   }
 
-  export function AtIcon() {
+  interface AtIconProps {
+    color?: string; // Optional color prop
+  }
+
+  export function AtIcon({ color = "#000" }: AtIconProps) {
     return (
       <Svg
         width={24}
@@ -125,8 +134,8 @@ export function MailIcon() {
       >
         <Path
           d="M15.857 12a3.857 3.857 0 11-7.714 0 3.857 3.857 0 017.714 0zm0 0v1.286a2.571 2.571 0 005.143 0V12a9 9 0 10-3.857 7.387"
-          stroke="#000"
-          strokeOpacity={0.25}
+          stroke={color}
+          strokeOpacity={0.5}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -522,17 +531,21 @@ export function ClockIcon() {
   )
 }
 
-export function EditIcon() {
+interface EditIconProps {
+  color?: string; // Optional color prop
+}
+
+export function EditIcon({ color = "#292D32" }: EditIconProps) {
   return (
     <Svg
-      width={30}
-      height={30}
+      width={24}
+      height={24}
       viewBox="0 0 30 30"
       fill="none"
     >
       <Path
         d="M13.75 2.5h-2.5C5 2.5 2.5 5 2.5 11.25v7.5C2.5 25 5 27.5 11.25 27.5h7.5c6.25 0 8.75-2.5 8.75-8.75v-2.5M18.637 5.187a8.93 8.93 0 006.175 6.176M20.05 3.775l-9.85 9.85c-.375.375-.75 1.113-.825 1.65l-.537 3.763c-.2 1.362.762 2.312 2.125 2.125l3.762-.538c.525-.075 1.263-.45 1.65-.825l9.85-9.85c1.7-1.7 2.5-3.675 0-6.175s-4.475-1.7-6.175 0z"
-        stroke="#292D32"
+        stroke={color}
         strokeWidth={1.5}
         strokeMiterlimit={10}
         strokeLinecap="round"
