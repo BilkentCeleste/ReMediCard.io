@@ -67,7 +67,6 @@ export default function Decks() {
             keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
-                    <Link href="/(app)/card" style={styles.link}>
                     <View>
                     <Text style={styles.deckTitle}>{item.topic}</Text>
                     <Text style={[styles.deckInfoText]}>
@@ -83,7 +82,6 @@ export default function Decks() {
                         <EditIcon color="#111" />
                     </TouchableOpacity>
                     </View>
-                    </Link>
                 </TouchableOpacity>
             )}
         />
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     chevronRightIcon: {
-        left: "140%",
+        left: "90%",
         top: "50%"
     },
     menuIcon: {

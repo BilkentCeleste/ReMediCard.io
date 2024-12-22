@@ -6,6 +6,7 @@ interface FlashcardProps {
     answer: string;
     width?: number;
     height?: number;
+    textSize?: number;
 }
 
 const Flashcard: React.FC<FlashcardProps> = ({
@@ -13,6 +14,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
     answer,
     width = 300, // Default width
     height = 200, // Default height
+    textSize = 20
 }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false); // Animation state
@@ -66,7 +68,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                         { width, height, transform: [{ rotateY: frontInterpolate }] },
                     ]}
                 >
-                    <Text style={styles.text}>{question}</Text>
+                    <Text style={[styles.text, { fontSize: textSize }]}>{question}</Text>
                 </Animated.View>
 
                 {/* Back Face */}
@@ -77,7 +79,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                         { width, height, transform: [{ rotateY: backInterpolate }] },
                     ]}
                 >
-                    <Text style={styles.text}>{answer}</Text>
+                    <Text style={[styles.text, { fontSize: textSize }]}>{answer}</Text>
                 </Animated.View>
             </View>
         </TouchableWithoutFeedback>

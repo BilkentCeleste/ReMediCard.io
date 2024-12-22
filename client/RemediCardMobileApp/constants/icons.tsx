@@ -651,11 +651,17 @@ export function ChevronDown() {
   )
 }
 
-export function GoBackIcon() {
+interface GoBackIconProps {
+  width?: number; // Optional color prop
+  height?: number;
+}
+
+
+export function GoBackIcon({ width = 30 , height = 30}: GoBackIconProps) {
   return (
     <Svg
-      width={30}
-      height={30}
+      width={width}
+      height={height}
       viewBox="0 0 30 30"
       fill="none"
 
