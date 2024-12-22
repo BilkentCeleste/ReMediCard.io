@@ -7,6 +7,7 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class DeckController {
         return DeckCreateMapper.INSTANCE.toDTO(deck);
     }
 
-    @PostMapping("/generate")
+    @PostMapping(value = "/generate", consumes = "multipart/form-data")
     public ResponseEntity<String> generateDeck(@RequestParam("file") MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();
