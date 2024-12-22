@@ -13,8 +13,13 @@ export default function Decks() {
     useEffect(() => {
         getDecksByCurrentUser()
             .then((decks) => {
-                setDecks(decks);
-                console.log(decks);
+                const decks_info = decks.data;
+                decks_info.forEach((deck) => {
+                    deck.lastAccessed = "31.12.2024";
+                    deck.bestPerformance = 90;
+                    deck.lastPerformance = 40;
+                });
+                setDecks(decks_info);
             })
             .catch((error) => {
                 console.log(error);
@@ -28,16 +33,6 @@ export default function Decks() {
         { label: "Sort by Worst Performance", value: "worst" },
     ];
 
-    const dummy_decks = [
-        { title: "Deck 1", lastAccessed: "31.12.2024", cards: 35, bestPerformance: 90, lastPerformance: 40 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-        { title: "Deck 2", lastAccessed: "30.12.2024", cards: 20, bestPerformance: 85, lastPerformance: 50 },
-    ];
 
     return (
         <View style={styles.container}>
@@ -63,12 +58,12 @@ export default function Decks() {
                 <TouchableOpacity style={styles.deckComponent}>
                     <Link href="/(app)/card" style={styles.link}>
                     <View>
-                    <Text style={styles.deckTitle}>{item.title}</Text>
+                    <Text style={styles.deckTitle}>{item.topic}</Text>
                     <Text style={[styles.deckInfoText]}>
                         Last accessed: {item.lastAccessed}
                     </Text>
                     <Text style={[styles.deckInfoText]}>
-                        {item.cards} cards
+                        {item.flashcardCount} cards
                     </Text>
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%
