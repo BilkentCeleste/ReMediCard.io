@@ -43,6 +43,8 @@ export default function RootLayout() {
       <Stack.Screen name="study_dashboard" options={{ headerShown: false }} />
       <Stack.Screen name="goal_list" options={{ headerShown: false }} />
       <Stack.Screen name="create_goal" options={{ headerShown: false }} />
+      <Stack.Screen name="updatedeck" options={{ headerShown: false }} />
+      <Stack.Screen name="updateflashcard" options={{ headerShown: false }} />
     </Stack>
   );
 }

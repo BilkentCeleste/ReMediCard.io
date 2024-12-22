@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
-import {createFlashcard, deleteFlashcard, updateFlashcard} from "../../../apiHelper/backendHelper";
+import {createFlashcard, deleteFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
+import { GoBackIcon} from '@/constants/icons';
+
 
 export default function UpdateFlashcard() {
     const [cardFrontSide, setCardFrontSide] = useState('');
@@ -56,7 +58,7 @@ export default function UpdateFlashcard() {
         createFlashcard(data)
             .then(() => {
                 console.log('Flashcard created');
-                router.push("/(app)/updatedeck");
+                router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
                 console.error('Error creating flashcard:', error);
@@ -84,7 +86,7 @@ export default function UpdateFlashcard() {
         updateFlashcard(flashcardId, data)
             .then(() => {
                 console.log('Flashcard updated');
-                router.push("/(app)/updatedeck");
+                router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
                 console.error('Error updating flashcard:', error);
@@ -95,7 +97,7 @@ export default function UpdateFlashcard() {
         deleteFlashcard(flashcardId)
             .then(() => {
                 console.log('Flashcard deleted');
-                router.push("/(app)/updatedeck");
+                router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
                 console.error('Error deleting flashcard:', error);
@@ -103,29 +105,43 @@ export default function UpdateFlashcard() {
     }
 
     const handleBack = () => {
-        router.push("/(app)/updatedeck");
+        router.push("/(app)/updatedeck?deckId=" + deckId);
     }
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-                <Text style={styles.backButtonText}>Back</Text>
-            </TouchableOpacity>
+            <View style={styles.menuComponent}>
+                <View style={[styles.menuIcon, styles.iconLayout]}>
+                    <TouchableOpacity onPress={handleBack}><GoBackIcon/></TouchableOpacity>
+                </View>
 
-            <Text style={styles.title}>{isCreating ? 'Create Flashcard' : 'Update Flashcard'}</Text>
+                <Text style={styles.menuText}>{isCreating ? 'Create Flashcard' : 'Update Flashcard'}</Text>
+            
+                <View style={styles.separatorContainer}>
+                    <View style={styles.separatorLine} />
+                </View>
+            </View>
+            
+            {/* <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+                <GoBackIcon></GoBackIcon>
+            </TouchableOpacity> */}
+
+           {/*  <Text style={styles.title}>{isCreating ? 'Create Flashcard' : 'Update Flashcard'}</Text> */}
 
             <TextInput
-                style={styles.input}
+                style={styles.qInput}
                 placeholder={isCreating ? 'Enter Front Side Text' : ''}
                 value={cardFrontSide}
                 onChangeText={setCardFrontSide}
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
             <TextInput
-                style={styles.input}
+                style={styles.aInput}
                 placeholder={isCreating ? 'Enter Back Side Text' : ''}
                 value={cardBackSide}
                 onChangeText={setCardBackSide}
+                multiline={true}
+                textAlignVertical="top"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
 
@@ -151,15 +167,10 @@ const styles = StyleSheet.create({
     },
     backButton: {
         position: 'absolute',
-        top: 20,
-        left: 10,
+        top: "10%",
+        left: "10%",
         padding: 10,
-        backgroundColor: '#fff',
         borderRadius: 5,
-    },
-    backButtonText: {
-        color: '#000',
-        fontWeight: 'bold',
     },
     title: {
         fontSize: 24,
@@ -168,9 +179,20 @@ const styles = StyleSheet.create({
         marginTop: 60,
         marginBottom: 20,
     },
-    input: {
-        width: '90%',
+    qInput: {
+        width: '75%',
         height: 50,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        fontSize: 16,
+    },
+    aInput: {
+        width: '75%',
+        height: 150,
         borderWidth: 1,
         borderColor: '#ddd',
         backgroundColor: '#fff',
@@ -202,5 +224,44 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    menuComponent: {
+        width: "75%",
+        height: 20,
+        padding: 10,
+        gap: 10,
+        alignItems: "center",
+        marginVertical: 40,
+    },
+    menuText: {
+        fontSize: 15,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "left",
+        zIndex: 1,
+        top: 5,
+        position: "absolute",
+    },
+    iconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute"
+    },
+    menuIcon: {
+        right: "95%",
+        zIndex: 3,
+        top: 5
+    },
+    separatorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "100%",
+        marginVertical: 30,
+    },
+    separatorLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#fff',
     },
 });

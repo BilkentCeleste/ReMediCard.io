@@ -9,10 +9,10 @@ import {
   Animated,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import DropDown from "../../../components/DropDown";
+import DropDown from "../../components/DropDown";
 import * as SecureStore from "expo-secure-store";
 import { useRouter, Link } from "expo-router";
-import { GoBackIcon, EditIcon } from "@/constants/icons";
+import { GoBackIcon, EditIcon, UploadIcon } from "@/constants/icons";
 import { generateDeck } from "@/apiHelper/backendHelper";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
@@ -147,6 +147,7 @@ export default function GenerateDecks() {
             <Text style={styles.selectedFile} onPress={pickFile}>
               {file ? file.name : "Select a file"}
             </Text>
+            <View><UploadIcon></UploadIcon></View>
           </View>
         </View>
       </View>
