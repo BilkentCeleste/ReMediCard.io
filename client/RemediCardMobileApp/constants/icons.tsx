@@ -668,11 +668,16 @@ export function GoBackIcon() {
   )
 }
 
-export function CorrectIcon() {
+interface CorrectIconProps {
+  width?: number;
+  height?: number; 
+}
+
+export function CorrectIcon({ width = 14 , height = 14}: CorrectIconProps) {
   return (
     <Svg
-      width={14}
-      height={14}
+      width={width}
+      height={height}
       viewBox="0 0 14 14"
       fill="none"
     >
@@ -693,11 +698,16 @@ export function CorrectIcon() {
   )
 }
 
-export function FalseIcon() {
+interface FalseIconProps {
+  width?: number;
+  height?: number; 
+}
+
+export function FalseIcon({ width = 14 , height = 14}: FalseIconProps) {
   return (
     <Svg
-      width={14}
-      height={14}
+      width={width}
+      height={height}
       viewBox="0 0 14 14"
       fill="none"
     >
