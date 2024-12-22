@@ -56,10 +56,10 @@ export default function Home() {
 
       <View style={styles.reminderComponent}>
         <Text style={[styles.reminderHeaderPlacement, styles.reminderHeader]}>
-          What about excercising lorem ipsum ?
+          What about exercising about cardiovascular system ?
         </Text>
         <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-          Last time you excersied lorem ipsum was 5 days ago
+          Last time you exercised about cardiovascular system was 5 days ago
         </Text>
       </View>
 
@@ -111,7 +111,7 @@ export default function Home() {
             <ProfileIcon />
           </Link>
         </TouchableOpacity>
-        <TouchableOpacity onPress={uploadGeneralEditPage}>
+        <TouchableOpacity>
           <SettingsIcon />
         </TouchableOpacity>
       </View>
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   reminderHeaderPlacement: {
     top: 10,
-    fontSize: 20,
+    fontSize: 18,
     width: "90%",
     height: "50%",
     zIndex: 0,

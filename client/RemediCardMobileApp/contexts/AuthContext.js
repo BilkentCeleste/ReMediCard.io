@@ -7,17 +7,12 @@ const AuthContext = createContext({
     loginAuth: (body) => {},
     registerAuth: (body) => {},
     logoutAuth: () => {},
-    dummyAuthenticator: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-
-    const dummyAuthenticator = async () => {
-        setIsLoggedIn( true);
-    }
 
     const addToken = async (token) => {
         await SecureStore.setItemAsync("token", token);
@@ -52,11 +47,11 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setToken(null);
         setIsLoggedIn( false);
-        removeToken();
+        await removeToken();
     };
 
     return (
-      <AuthContext.Provider value={{ isLoggedIn, loginAuth, registerAuth, logoutAuth, dummyAuthenticator, user, token }}>
+      <AuthContext.Provider value={{ isLoggedIn, loginAuth, registerAuth, logoutAuth, user, token }}>
         {children}
       </AuthContext.Provider>
     );

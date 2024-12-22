@@ -112,10 +112,7 @@ export default function GenerateDecks() {
             <GoBackIcon />
           </Link>
         </View>
-        <Text style={styles.menuText}>Deck 1</Text>
-        <View style={[styles.menuIcon, styles.iconLayout, { right: "10%" }]}>
-          <EditIcon color="white" />
-        </View>
+        <Text style={styles.menuText}>Generate New Deck</Text>
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
         </View>
