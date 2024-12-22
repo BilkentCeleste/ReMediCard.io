@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { useRouter } from "expo-router";
+import {Redirect, useRouter} from "expo-router";
 import {
   LockIcon,
   MailIcon,
@@ -45,7 +45,9 @@ export default function Register() {
 
   const uploadRegisterPage = () => {};
 
-  return (
+  return isLoggedIn ? (
+      <Redirect href="/(app)/home" />
+  ) : (
     <View style={styles.container}>
       <Text style={styles.title}>ReMediCard.io</Text>
 

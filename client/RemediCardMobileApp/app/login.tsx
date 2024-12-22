@@ -27,7 +27,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, loginAuth, dummyAuthenticator } = useAuth();
+  const { isLoggedIn, loginAuth } = useAuth();
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -36,10 +36,6 @@ export default function Login() {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-
-  const dummyLogin = () => {
-    dummyAuthenticator();
-  }
 
   const handleLogin = () => {
     const body = {
@@ -95,11 +91,6 @@ export default function Login() {
 
       <TouchableOpacity style={styles.logincomponent} onPress={handleLogin}>
         <Text style={styles.logintext}>Log In</Text>
-      </TouchableOpacity>
-
-      {/*DELETE THIS*/}
-      <TouchableOpacity style={styles.logincomponent} onPress={dummyLogin}>
-        <Text style={styles.logintext}>Dummy Log In</Text>
       </TouchableOpacity>
 
       <View style={styles.rememberMeContainer}>
