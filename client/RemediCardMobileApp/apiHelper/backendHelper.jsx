@@ -39,6 +39,19 @@ export const getDecksByUserId = async (id) => {
   return await getFetcher(url.GET_DECKS_BY_USER_ID_PATH(id));
 }
 
+// flashcard
+export const createFlashcard = async (data) => {
+  return await postFetcher(url.CREATE_FLASHCARD_PATH(), data);
+}
+
+export const updateFlashcard = async (id, data) => {
+  return await putFetcher(url.UPDATE_FLASHCARD_PATH(id), data);
+}
+
+export const deleteFlashcard = async (id, data) => {
+  return await deleteFetcher(url.DELETE_FLASHCARD_PATH(id), data);
+}
+
 export const generateDeck = async (data) => {
   return await postFetcher(url.GENERATE_DECK_PATH(), data, "multipart/form-data");
 }

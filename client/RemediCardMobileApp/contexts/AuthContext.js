@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }) => {
     const loginAuth = async (body) => {
         login(body)
           .then((res) => {
-              console.log(res);
               setIsLoggedIn( true);
               addToken(res.data.access_token);
           })

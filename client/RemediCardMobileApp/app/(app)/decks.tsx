@@ -9,6 +9,7 @@ import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 export default function Decks() {
     const [selectedSort, setSelectedSort] = useState<string>("");
     const [decks, setDecks] = useState<any[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         getDecksByCurrentUser()
@@ -26,7 +27,7 @@ export default function Decks() {
             .catch((error) => {
                 console.log(error);
             });
-        }, []);
+    }, []);
 
     const sortOptions = [
         { label: "Sort by Last Accessed", value: "last" },
@@ -34,7 +35,6 @@ export default function Decks() {
         { label: "Sort by Best Performance", value: "best" },
         { label: "Sort by Worst Performance", value: "worst" },
     ];
-
 
     return (
         <View style={styles.container}>

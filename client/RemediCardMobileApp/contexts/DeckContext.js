@@ -1,38 +1,30 @@
 import React, { createContext, useContext, useState } from 'react';
-import {getDeckById as getDeckByIdHelper, createDeck as createDeckHelper, getDeckById} from '../apiHelper/backendHelper';
+import {getDeckByDeckId, getDeckById} from '../apiHelper/backendHelper';
 
-const AuthContext = createContext({
-    getDeckById: (body) => {},
-    createDeck: (body) => {},
+const DeckContext = createContext({
+    deck: {},
+    setDeck: () => {},
+    getDeckById: (id) => {},
 });
 
 export const DeckProvider = ({ children }) => {
     const [deck, setDeck] = useState({});
 
-    const getDeckById = async (body) => {
-        getDeckByIdHelper(body)
+    const getDeckById = async (id) => {
+        getDeckByDeckId(id)
             .then((res) => {
-                setIsLoggedIn( true);
+                console.log(res.data);
+                return res.data;
             })
             .catch((err) => {
                 console.log(err);
             }) };
 
-    const createDeck = async (body) => {
-        createDeckHelper(body)
-            .then((res) => {
-                set
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-
     return (
-        <AuthContext.Provider value={{ Deck }}>
+        <DeckContext.Provider value={{ getDeckById, deck, setDeck }}>
             {children}
-        </AuthContext.Provider>
+        </DeckContext.Provider>
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useDeck = () => useContext(DeckContext);

@@ -23,4 +23,19 @@ public class FlashcardService {
         flashcard.setDeck(deck);
         flashcardRepository.save(flashcard);
     }
+
+    public void delete(Long flashcardId) {
+        flashcardRepository.deleteById(flashcardId);
+    }
+
+    public void update(Flashcard flashcard, Long flashcardId) {
+        Flashcard flashcardToUpdate = flashcardRepository.findById(flashcardId)
+                .orElseThrow(() -> new RuntimeException("Flashcard not found"));
+        flashcardToUpdate.setTopic(flashcard.getTopic());
+        flashcardToUpdate.setType(flashcard.getType());
+        flashcardToUpdate.setFrequency(flashcard.getFrequency());
+        flashcardToUpdate.setFrontSide(flashcard.getFrontSide());
+        flashcardToUpdate.setBackSide(flashcard.getBackSide());
+        flashcardRepository.save(flashcardToUpdate);
+    }
 }

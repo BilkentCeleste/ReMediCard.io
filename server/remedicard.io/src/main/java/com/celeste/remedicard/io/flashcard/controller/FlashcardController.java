@@ -1,5 +1,8 @@
 package com.celeste.remedicard.io.flashcard.controller;
 
+import com.celeste.remedicard.io.deck.entity.Deck;
+import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
+import com.celeste.remedicard.io.deck.service.DeckService;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardCreateRequestDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.mapper.FlashcardCreateMapper;
@@ -19,5 +22,16 @@ public class FlashcardController {
     public void create(@RequestBody FlashcardCreateRequestDTO dto) {
         Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
         flashcardService.create(flashcard, dto.getDeckId());
+    }
+
+    @DeleteMapping("/delete/{flashcardId}")
+    public void delete(@PathVariable Long flashcardId) {
+        flashcardService.delete(flashcardId);
+    }
+
+    @PutMapping("/update/{flashcardId}")
+    public void update(@RequestBody FlashcardCreateRequestDTO dto, @PathVariable Long flashcardId) {
+        Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
+        flashcardService.update(flashcard, flashcardId);
     }
 }

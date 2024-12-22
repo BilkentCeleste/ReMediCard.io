@@ -9,7 +9,7 @@ import {
   Animated,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import DropDown from "../../components/DropDown";
+import DropDown from "../../../components/DropDown";
 import * as SecureStore from "expo-secure-store";
 import { useRouter, Link } from "expo-router";
 import { GoBackIcon, EditIcon } from "@/constants/icons";
