@@ -15,6 +15,7 @@ import {
   EditProfileIcon, // placeholder for "Edit" icon
   ChevronDown, // placeholder for "Discard" icon
   SaveIcon, // placeholder for "Save" icon
+  DiscordIcon
 } from "../../constants/icons";
 import DropDown from "../../components/DropDown";
 import { useSearchParams } from "expo-router/build/hooks";
@@ -101,12 +102,15 @@ export default function CreateGoal() {
             placeholder="1"
             onSelect={(value) => setRepOneValue(value)}
             initialValue={repOneValue}
+            showChevron={false}
           />
           <DropDown
             options={repUnitsMonth}
             placeholder="month(s)"
             onSelect={(value) => setRepOneUnit(value)}
             initialValue={repOneUnit}
+            showChevron={false}
+
           />
         </View>
       </View>
@@ -121,12 +125,16 @@ export default function CreateGoal() {
             placeholder="2"
             onSelect={(value) => setRepTwoValue(value)}
             initialValue={repTwoValue}
+            showChevron={false}
+
           />
           <DropDown
             options={repUnitsDay}
             placeholder="day(s)"
             onSelect={(value) => setRepTwoUnit(value)}
             initialValue={repTwoUnit}
+            showChevron={false}
+
           />
         </View>
       </View>
@@ -159,7 +167,7 @@ export default function CreateGoal() {
               router.back();
             }}
           >
-            <ChevronDown color="#000" />
+            <DiscordIcon/>
             <Text style={styles.discardButtonText}>Discard</Text>
           </TouchableOpacity>
           <TouchableOpacity

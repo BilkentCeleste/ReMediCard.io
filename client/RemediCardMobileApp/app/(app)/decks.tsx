@@ -31,7 +31,7 @@ export default function Decks() {
 
     const sortOptions = [
         { label: "Sort by Last Accessed", value: "last" },
-        { label: "Sort by Newwly Accessed", value: "newest" },
+        { label: "Sort by Newly Accessed", value: "newest" },
         { label: "Sort by Best Performance", value: "best" },
         { label: "Sort by Worst Performance", value: "worst" },
     ];
@@ -65,7 +65,7 @@ export default function Decks() {
                         Last accessed: {item.lastAccessed}
                     </Text>
                     <Text style={[styles.deckInfoText]}>
-                        {item.flashcardCount} cards
+                        {item.flashcardSet.length} cards
                     </Text>
                     <Text style={[styles.deckInfoText]}>
                         Best: {item.bestPerformance}% Last: {item.lastPerformance}%

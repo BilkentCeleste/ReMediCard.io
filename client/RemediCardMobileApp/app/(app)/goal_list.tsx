@@ -14,6 +14,7 @@ import {
   ProfileIcon,
   SettingsIcon,
   ChevronRightIcon,
+  PlusIcon
 } from "../../constants/icons"; // Adjust to your icon imports
 import DropDown from "../../components/DropDown"; // Same custom DropDown component used in deck.tsx
 
@@ -101,7 +102,7 @@ export default function GoalList() {
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.goalComponent}>
             {/* If you want to link to a goal details page, adjust the href below */}
-            <Link href="/(app)/profile" style={styles.link}>
+            <View style={styles.link}>
               <View>
                 <Text style={styles.goalTitle}>{item.title}</Text>
                 <Text style={styles.goalInfoText}>
@@ -121,13 +122,20 @@ export default function GoalList() {
                   <ChevronRightIcon color="#111" />
                 </View>
               </View>
-            </Link>
+            </View>
           </TouchableOpacity>
         )}
       />
 
       {/* "Create New Study Goal" button */}
-      <TouchableOpacity
+      <TouchableOpacity style={styles.createButton} onPress={() => {
+          router.push("/(app)/create_goal");
+        }}>
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createNewDeck}>Create New Goal</Text>
+      </TouchableOpacity>
+
+      {/* <TouchableOpacity
         style={styles.createGoalButton}
         onPress={() => {
           // Navigate to create goal page or handle logic
@@ -135,7 +143,7 @@ export default function GoalList() {
         }}
       >
         <Text style={styles.createGoalButtonText}>+ Create New Study Goal</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Bottom Nav Bar */}
       <View style={styles.navbarRow}>
@@ -245,7 +253,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   chevronRightIcon: {
-    left: "100%",
+    left: "90%",
     zIndex: 3,
     top: "85%",
   },
@@ -291,4 +299,21 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#fff",
   },
+  createButton: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    height: 50,
+    bottom: "12%"
+  },
+createNewDeck: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#fff",
+    textAlign: "center",
+},
 });

@@ -6,6 +6,7 @@ import {
   ProfileIcon,
   SettingsIcon,
   ChevronRightIcon,
+  PlusIcon
 } from "../../constants/icons";
 
 export default function StudyDashboard() {
@@ -86,13 +87,20 @@ export default function StudyDashboard() {
       </TouchableOpacity>
 
       {/* Create New Study Goal Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.createGoalButton}
         onPress={() => {
           router.push("/(app)/create_goal");
         }}
       >
         <Text style={styles.createGoalButtonText}>+ Create New Study Goal</Text>
+      </TouchableOpacity> */}
+
+      <TouchableOpacity style={styles.createButton} onPress={() => {
+          router.push("/(app)/create_goal");
+        }}>
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createNewDeck}>Create New Goal</Text>
       </TouchableOpacity>
 
       {/* Bottom Navigation */}
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   blueBox: {
-    backgroundColor: "#1E40AF", // A bright blue/purple, adjust as needed
+    backgroundColor: "#2916ff", // A bright blue/purple, adjust as needed
   },
   whiteBox: {
     backgroundColor: "#fff",
@@ -165,7 +173,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   suggestionSubtitle: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#fff",
   },
   blueText: {
@@ -223,4 +231,21 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#fff",
   },
+  createButton: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    height: 50,
+    top:"35%"
+},
+createNewDeck: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#fff",
+    textAlign: "center",
+},
 });

@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { ChevronRightIcon, GoBackIcon } from "../../constants/icons"; // Replace with your icon paths
+import { ChevronRightIcon, GoBackIcon, NextQuestionIcon } from "../../constants/icons"; // Replace with your icon paths
 
 interface QuizQuestionData {
   questionText: string;
@@ -18,18 +18,33 @@ interface QuizQuestionData {
 const quizQuestions: QuizQuestionData[] = [
   {
     questionText:
-      "Question 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    answers: ["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5"],
+      "Question 1: What is the primary purpose of an ACL (Anterior Cruciate Ligament) reconstruction surgery?",
+    answers: [
+      "To remove damaged cartilage from the knee", 
+      "To repair a torn ligament in the knee", 
+      "To replace the knee joint with a prosthetic", 
+      "To treat a fracture in the tibia", 
+      "To reduce inflammation caused by arthritis"],
   },
   {
     questionText:
       "Question 2: Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-    answers: ["Answer A", "Answer B", "Answer C", "Answer D", "Answer E"],
+    answers: [
+      "Metal rods",
+      "Synthetic polymer",
+      "Tendons from the patient’s body (autograft)", 
+      "Artificial cartilage implants", 
+      "Stem cells"],
   },
   {
     questionText:
       "Question 3: Class aptent taciti sociosqu ad litora torquent per conubia nostra.",
-    answers: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
+    answers: [
+      "Recurrent knee infections",
+      "Severe knee pain that limits daily activities", 
+      "Swelling that subsides with rest", 
+      "Frequent dislocations of the knee cap", 
+      "Bruising around the knee after minor injuries"],
   },
 ];
 
@@ -135,10 +150,10 @@ export default function QuizQuestion() {
       {/* Bottom nav row for previous/next question */}
       <View style={styles.bottomNavRow}>
         <TouchableOpacity onPress={handlePrevQuestion}>
-          <GoBackIcon />
+          <NextQuestionIcon rotation={180}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleNextQuestion}>
-          <ChevronRightIcon color="#fff" />
+          <NextQuestionIcon/>
         </TouchableOpacity>
       </View>
     </View>
