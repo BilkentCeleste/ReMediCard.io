@@ -40,8 +40,8 @@ export default function Login() {
   const handleLogin = () => {
     const body = {
       username: username,
-      password: password
-    }
+      password: password,
+    };
 
     loginAuth(body);
   };

@@ -727,3 +727,26 @@ export function FalseIcon({ width = 14 , height = 14}: FalseIconProps) {
     </Svg>
   )
 }
+
+interface NextQuestionIconProps {
+  width?: number;
+  height?: number;
+  rotation?: number; // New property for rotation
+}
+
+export function NextQuestionIcon({ width = 50, height = 50, rotation = 0 }: NextQuestionIconProps) {
+  return (
+    <Svg
+      width={width}
+      height={height}
+      viewBox="0 0 50 50"
+      fill="none"
+      transform={`rotate(${rotation} 15 15)`} // Apply rotation around the center (15, 15)
+    >
+      <Path
+        d="M23.423 15.658a1 1 0 00-1.536 1.28l1.536-1.28zm6.138 8.926l.768.64a1 1 0 000-1.28l-.768.64zm-7.674 7.647a1 1 0 101.536 1.28l-1.536-1.28zm0-15.293l6.905 8.287 1.537-1.28-6.906-8.287-1.536 1.28zm6.905 7.006l-6.905 8.287 1.536 1.28 6.906-8.286-1.537-1.28zM25 7.25c9.803 0 17.75 7.947 17.75 17.75h2c0-10.908-8.842-19.75-19.75-19.75v2zM42.75 25c0 9.803-7.947 17.75-17.75 17.75v2c10.908 0 19.75-8.842 19.75-19.75h-2zM25 42.75c-9.803 0-17.75-7.947-17.75-17.75h-2c0 10.908 8.842 19.75 19.75 19.75v-2zM7.25 25c0-9.803 7.947-17.75 17.75-17.75v-2C14.092 5.25 5.25 14.092 5.25 25h2z"
+        fill="#fff"
+      />
+    </Svg>
+  )
+}

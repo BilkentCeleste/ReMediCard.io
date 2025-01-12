@@ -45,7 +45,7 @@ export default function Card( props: any ) {
                 <Link href="/(app)/decks"><GoBackIcon/></Link>
             </View>
 
-            <Text style={styles.menuText}>Deck 1</Text>
+            <Text style={styles.menuText}>{parsedDeck?.topic}</Text>
         
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
