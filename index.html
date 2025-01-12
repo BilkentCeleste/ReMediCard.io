@@ -18,6 +18,7 @@
             <li><a href="#about">About Us</a></li>
             <li><a href="#team">Team</a></li>
             <li><a href="#documents">Documentation</a></li>
+            <li><a href="#media">Media</a></li>
         </ul>
     </nav>
 
@@ -114,19 +115,59 @@
     <!-- Section 4: Proje Dokümanları -->   
     <section id="documents" class="documents-section">
         <h2>Project Documents</h2>
-        <div class="doc-container">
-          <div class="doc-card">
-            <h3>Project Specification Document</h3>
-            <a href="img/T2401_Project_Specification_Document.pdf" download class="download-btn">Download</a>
-          </div>
-        <!--RAPOR EKLEYECEĞİNİZ ZAMAN BURDAKİ DİVİ KOPY PASTA YAPIN-->
-        <div class="doc-container">
+    
+        <div class="row">
+            <!-- First PDF -->
             <div class="doc-card">
-              <h3>Analysis And Requirements Document</h3>
-              <a href="img/T2401_Analysis_and_Requirements_Report.pdf" download class="download-btn">Download</a>
+                <h3>Project Specification Document</h3>
+                <iframe 
+                    src="img/T2401_Project_Specification_Document.pdf" 
+                    width="100%" 
+                    height="550px">
+                </iframe>
+            </div>
+    
+            <!-- Second PDF -->
+            <div class="doc-card">
+                <h3>Analysis And Requirements Document</h3>
+                <iframe 
+                    src="img/T2401_Analysis_and_Requirements_Report.pdf" 
+                    width="100%" 
+                    height="550px">
+                </iframe>
+            </div>
+        </div>
+    
+        <div class="row">
+            <!-- Third PDF -->
+            <div class="doc-card landscape">
+                <h3>CS491 Demo Presentation</h3>
+                <iframe 
+                    src="img/ReMediCard.io.pdf" 
+                    width="100%" 
+                    height="1080px">
+                </iframe>
             </div>
         </div>
     </section>
+
+
+    <section id="media" class="media-section">
+        <h2>Project Media</h2>
+        <div class="video-container">
+            <h3>CS491 Demo Video</h3>
+            <iframe 
+                width="800" 
+                height="450" 
+                src="https://www.youtube.com/embed/iHkXnoFnwRc" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </section>    
+
 
     <!-- JavaScript Dosyası -->
     <script src="index.js"></script>
