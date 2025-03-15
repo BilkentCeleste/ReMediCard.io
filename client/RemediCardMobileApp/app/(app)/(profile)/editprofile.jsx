@@ -16,11 +16,14 @@ import {
   AtIcon,
   EyeOpenIcon,
   EyeClosedIcon,
+  GoBackIcon
 } from "../../../constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function EditProfile() {
+  const router = useRouter();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setMail] = useState("");
@@ -43,11 +46,14 @@ export default function EditProfile() {
     registerAuth(body);
   };
 
-  const uploadRegisterPage = () => {};
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>ReMediCard.io</Text>
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <GoBackIcon color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Edit Profile</Text>
+      </View>
 
       <View style={styles.component}>
         <AtIcon />
@@ -116,10 +122,17 @@ export default function EditProfile() {
       </View>
 
       <TouchableOpacity
-        style={styles.registercomponent}
+        style={styles.saveButton}
         onPress={handleSaveChanges}
       >
         <Text style={styles.registertext}>Save changes</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => router.back()}      
+      >
+        <Text style={styles.registertext}>Cancel changes</Text>
       </TouchableOpacity>
     </View>
   );
@@ -131,6 +144,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#53789D",
+  },
+  headerRow: {
+    width: "75%",
+    marginBottom: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   component: {
     height: 50,
@@ -146,8 +166,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 75,
+    marginBottom: 10,
     color: "#ffff",
+    marginRight: "25%"
   },
   input: {
     width: "80%",
@@ -179,7 +200,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: "absolute",
   },
-  registercomponent: {
+  saveButton: {
     height: 50,
     borderRadius: 20,
     backgroundColor: "#2916ff",
@@ -189,7 +210,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     gap: 30,
-    marginBottom: 20,
+    marginTop: 20,
+  },
+  cancelButton: {
+    height: 50,
+    borderRadius: 20,
+    backgroundColor: "#C8102E",
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    gap: 30,
+    marginTop: 20,
   },
   registertext: {
     fontSize: 17,

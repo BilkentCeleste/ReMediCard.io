@@ -11,14 +11,12 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
-  LockIcon,
-  MailIcon,
-  AtIcon,
-  EyeOpenIcon,
-  EyeClosedIcon,
+  GoBackIcon
 } from "../../../constants/icons";
 
 export default function ContactUs() {
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -26,7 +24,14 @@ export default function ContactUs() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <GoBackIcon color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Contact Us</Text>
+      </View>
+
+      <Text style={styles.infoText}>
         Send your complaints and recommendations to Team Celeste:
       </Text>
 
@@ -62,6 +67,13 @@ export default function ContactUs() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: {
+    width: "75%",
+    marginBottom: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   container: {
     height: "100%",
     justifyContent: "center",
@@ -82,8 +94,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 75,
+    marginBottom: 10,
     color: "#ffff",
+    marginRight: "25%"
+  },
+  infoText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 50,
+    color: "#ffff",
+    width: "75%"
   },
   input: {
     width: "80%",
