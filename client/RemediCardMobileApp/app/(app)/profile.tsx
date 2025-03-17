@@ -62,7 +62,7 @@ export default function Profile() {
           <EditProfileIcon></EditProfileIcon>
         </View>
 
-        <Text style={styles.menuText}>Edit Credentials</Text>
+        <Text style={styles.menuText}>Edit Profile</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>

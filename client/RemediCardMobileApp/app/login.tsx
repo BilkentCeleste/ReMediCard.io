@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   link: {
     marginHorizontal: 10,
     fontSize: 14,
-    color: "#2916ff",
+    color: "#2518c7",
     cursor: "pointer",
     fontWeight: "bold",
   },

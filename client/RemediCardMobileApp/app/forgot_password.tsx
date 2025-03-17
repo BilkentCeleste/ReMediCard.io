@@ -209,9 +209,8 @@ const styles = StyleSheet.create({
   },
   link: {
     fontSize: 14,
-    color: "#2916ff",
+    color: "#2518c7",
     marginTop: 10,
     fontWeight: "bold",
-    textDecorationLine: "underline",
   },
 });

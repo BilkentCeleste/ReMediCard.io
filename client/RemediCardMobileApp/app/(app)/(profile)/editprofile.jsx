@@ -37,13 +37,24 @@ export default function EditProfile() {
   };
 
   const handleSaveChanges = () => {
+    if (password !== passwordCheck) {
+      Alert.alert("Error", "Passwords do not match!");
+      return;
+    }
+  
+    if (!username || !email || !password) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
+  
     const body = {
       username: username,
       email: email,
       password: password,
     };
-
+  
     registerAuth(body);
+    Alert.alert("Success", "Changes saved successfully!");
   };
 
   return (
@@ -134,6 +145,13 @@ export default function EditProfile() {
       >
         <Text style={styles.registertext}>Cancel changes</Text>
       </TouchableOpacity>
+      
+      <View style={styles.bottomContainer}>
+        <Link href="/delete_account" style={styles.link}>
+          <Text>Delete Account</Text>
+        </Link>
+      </View>
+    
     </View>
   );
 }
@@ -250,9 +268,10 @@ const styles = StyleSheet.create({
   },
   link: {
     marginHorizontal: 10,
-    fontSize: 14,
-    color: "#2916ff",
+    fontSize: 16,
+    color: "#960c03",
     cursor: "pointer",
+    fontWeight: "bold"
   },
   bottomContainer: {
     width: "100%",
@@ -267,5 +286,17 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 14,
     color: "#2916FF",
+  },
+  deleteAccountContainer: {
+    height: 50,
+    borderRadius: 20,
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    gap: 30,
+    top: 75,
+
   },
 });
