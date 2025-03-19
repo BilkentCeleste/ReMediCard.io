@@ -9,6 +9,9 @@ import { BASE_URL } from "@/constants/config";
 // auth
 export const LOGIN_PATH = () => `${BASE_URL}/auth/login`;
 export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
+export const FORGOT_PASSWORD_PATH = () => `${BASE_URL}/auth/forgot_password`;
+export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_reset_passwordcode`;
+export const RESET_PASSWORD_PATH = () => `${BASE_URL}/auth/reset_password`;
 
 // deck
 export const CREATE_DECK_PATH = () => `${BASE_URL}/deck/create`;

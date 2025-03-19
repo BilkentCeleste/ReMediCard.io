@@ -55,3 +55,15 @@ export const deleteFlashcard = async (id, data) => {
 export const generateDeck = async (data) => {
   return await postFetcher(url.GENERATE_DECK_PATH(), data, "multipart/form-data");
 }
+
+export const sendForgotPasswordCode = async (data) => {
+  return await postFetcher(url.FORGOT_PASSWORD_PATH(), data);
+}
+
+export const verifyResetPasswordcode = async (data) => {
+  return await postFetcher(url.VERIFY_RESET_PASSWORD_CODE_PATH(), data);
+}
+
+export const resetPassword = async (data) => {
+  return await postFetcher(url.RESET_PASSWORD_PATH(), data);
+}
