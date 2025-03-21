@@ -1,103 +1,180 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { AtIcon, MailIcon, ChevronDown, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
-    LanguageIcon, SearchIcon, HomeIcon, ChevronRightIcon} from "@/constants/icons";
-import DropDown from "../../components/DropDown"; // Path to the custom DropDown component
+import {
+  ChevronRightIcon,
+  HomeIcon,
+  ProfileIcon,
+  SettingsIcon,
+  SearchIcon,
+  EditProfileIcon,
+  SubscriptionIcon,
+  ContactIcon,
+} from "@/constants/icons";
+import DropDown from "../../components/DropDown";
 import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 
 export default function Decks() {
-    const [selectedSort, setSelectedSort] = useState<string>("");
-    const [decks, setDecks] = useState<any[]>([]);
-    const router = useRouter();
+  const [selectedSort, setSelectedSort] = useState<string>("");
+  const [decks, setDecks] = useState<any[]>([]);
+  const [selectedDeck, setSelectedDeck] = useState<any>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
-    useEffect(() => {
-        getDecksByCurrentUser()
-            .then((decks) => {
-                const updatedDecks = decks.data.map((deck: any) => ({
-                    ...deck,
-                    lastAccessed: "31.12.2024",
-                    bestPerformance: 90,
-                    lastPerformance: 40,
-                }));
+  useEffect(() => {
+    getDecksByCurrentUser()
+      .then((decks) => {
+        const updatedDecks = decks.data.map((deck: any) => ({
+          ...deck,
+          lastAccessed: "31.12.2024",
+          bestPerformance: 90,
+          lastPerformance: 40,
+        }));
 
-                console.log(decks.data);
-                setDecks(updatedDecks);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
+        setDecks(updatedDecks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-    const sortOptions = [
-        { label: "Sort by Last Accessed", value: "last" },
-        { label: "Sort by Newly Accessed", value: "newest" },
-        { label: "Sort by Best Performance", value: "best" },
-        { label: "Sort by Worst Performance", value: "worst" },
-    ];
+  const sortOptions = [
+    { label: "Sort by Last Accessed", value: "last" },
+    { label: "Sort by Newly Accessed", value: "newest" },
+    { label: "Sort by Best Performance", value: "best" },
+    { label: "Sort by Worst Performance", value: "worst" },
+  ];
 
-    return (
-        <View style={styles.container}>
-        <Text style={styles.remedicardio}>ReMediCard.io</Text>
+  const handleDeckPress = (deck) => {
+    setSelectedDeck(deck);
+    setModalVisible(true); // Open Modal
+  };
 
-        <View style={styles.searchComponent}>
-            <SearchIcon></SearchIcon>
-            <TextInput style={[styles.searchText, styles.searchPosition]} placeholder='search anything' placeholderTextColor={"rgba(0, 0, 0, 0.25)"}></TextInput>
-        </View>
-        
-        <DropDown
-            options={sortOptions}
-            placeholder="Select sort option"
-            onSelect={(value) => setSelectedSort(value)}
+  const handleStartQuiz = () => {
+    if (selectedDeck) {
+      setModalVisible(false);
+      router.push({ pathname: "/(app)/card", params: { deck: JSON.stringify(selectedDeck) } });
+    } else {
+      Alert.alert("Error", "Deck information is missing.");
+    }
+  };
+
+  const handleEditDeck = () => {
+    if (selectedDeck) {
+      setModalVisible(false);
+      router.push("/(app)/updatedeck?deckId=" + selectedDeck.id);
+    } else {
+      Alert.alert("Error", "Deck information is missing.");
+    }
+  };
+
+  const handleDeleteDeck = () => {
+    //delete functionaltity needs to be implemented
+
+
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Header, Search, Sort */}
+      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+
+      <View style={styles.searchComponent}>
+        <SearchIcon />
+        <TextInput
+          style={[styles.searchText, styles.searchPosition]}
+          placeholder="search anything"
+          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         />
+      </View>
 
-        <FlatList
-            style={styles.flatListContainer}
-            contentContainerStyle={styles.flatListContent} // Style for inner FlatList items
-            data={decks}
-            keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
-            renderItem={({ item }) => (
-                <TouchableOpacity style={styles.deckComponent}>
-                    <Link href={"/(app)/card?deck=" + encodeURIComponent(JSON.stringify(item)) as any} style={styles.link} >
-                    <View>
-                    <Text style={styles.deckTitle}>{item.topic}</Text>
-                    <Text style={[styles.deckInfoText]}>
-                        Last accessed: {item.lastAccessed}
-                    </Text>
-                    <Text style={[styles.deckInfoText]}>
-                        {item.flashcardSet.length} cards
-                    </Text>
-                    <Text style={[styles.deckInfoText]}>
-                        Best: {item.bestPerformance}% Last: {item.lastPerformance}%
-                    </Text>
-                    <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-                        <ChevronRightIcon color="#111" />
-                    </View>
-                    </View>
-                    </Link>
-                </TouchableOpacity>
-            )}
-        />
-                
-        <View style={styles.navbarRow}>
-            <TouchableOpacity>
-                <Link href="/(app)/home"><HomeIcon/></Link>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Link href="/(app)/profile"><ProfileIcon/></Link>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <SettingsIcon/>
-            </TouchableOpacity>
-        </View>
-                
-        <View style={styles.navbarContainer}>
-            <View style={styles.navbarLine} />
-        </View>
+      <DropDown
+        options={sortOptions}
+        placeholder="Select sort option"
+        onSelect={(value) => setSelectedSort(value)}
+      />
 
+      {/* Decks List */}
+      <FlatList
+        style={styles.flatListContainer}
+        contentContainerStyle={styles.flatListContent}
+        data={decks}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.deckComponent}
+            onPress={() => handleDeckPress(item)}
+          >
+            <View>
+              <Text style={styles.deckTitle}>{item.topic}</Text>
+              <Text style={styles.deckInfoText}>Last accessed: {item.lastAccessed}</Text>
+              <Text style={styles.deckInfoText}>{item.flashcardSet.length} cards</Text>
+              <Text style={styles.deckInfoText}>
+                Best: {item.bestPerformance}% Last: {item.lastPerformance}%
+              </Text>
+              <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+                <ChevronRightIcon color="#111" />
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* Modal */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{selectedDeck?.topic}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={handleStartQuiz}>
+              <Text style={styles.modalButtonText}>Start Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={handleEditDeck}>
+            <Text style={styles.modalButtonText}>Edit Deck</Text>
+            </TouchableOpacity>
+            <TouchableOpacity   style={[styles.modalButton, { backgroundColor: "#C8102E" }]} onPress={handleDeleteDeck}>
+              <Text style={[styles.modalButtonText]}>Delete Deck</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalCancel} onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-    );
+      </Modal>
+
+      {/* Navbar */}
+      <View style={styles.navbarRow}>
+        <TouchableOpacity>
+          <Link href="/(app)/home"><HomeIcon /></Link>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Link href="/(app)/profile"><ProfileIcon /></Link>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <SettingsIcon />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.navbarContainer}>
+        <View style={styles.navbarLine} />
+      </View>
+    </View>
+  );
 }
+
     
 const styles = StyleSheet.create({
     container: {
@@ -203,9 +280,9 @@ const styles = StyleSheet.create({
         position: "absolute"
     },
     chevronRightIcon: {
-        left: "100%",
+        left: "90%",
         zIndex: 3,
-        top: "90%"
+        top: "70%"
     },
     menuIcon: {
         right: "95%",
@@ -271,4 +348,44 @@ const styles = StyleSheet.create({
         alignItems: "flex-start", // Align text to the left
         width: "100%", // Ensure it doesn't shrink
     },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      modalContainer: {
+        backgroundColor: "#fff",
+        width: "80%",
+        padding: 20,
+        borderRadius: 20,
+        alignItems: "center",
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 20,
+        textAlign: "center",
+      },
+      modalButton: {
+        backgroundColor: "#2916ff",
+        padding: 10,
+        borderRadius: 10,
+        width: "100%",
+        marginVertical: 5,
+        alignItems: "center",
+      },
+      modalButtonText: {
+        color: "#fff",
+        fontSize: 16,
+      },
+      modalCancel: {
+        marginTop: 10,
+      },
+      modalCancelText: {
+        color: "#2916ff",
+        fontWeight: "bold",
+        fontSize: 16,
+      },
+      
 });

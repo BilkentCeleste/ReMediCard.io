@@ -16,42 +16,62 @@ import * as url from "./urlHelper";
 // auth
 export const login = async (data) => {
   return await postFetcher(url.LOGIN_PATH(), data);
-}
+};
 
 export const register = async (data) => {
   return await postFetcher(url.REGISTER_PATH(), data);
-}
+};
 
 // deck
 export const createDeck = async (data) => {
   return await postFetcher(url.CREATE_DECK_PATH(), data);
-}
+};
 
 export const getDecksByCurrentUser = async () => {
   return await getFetcher(url.GET_DECKS_BY_CURRENT_USER());
-}
+};
 
 export const getDeckByDeckId = async (id) => {
   return await getFetcher(url.GET_DECK_BY_DECK_ID_PATH(id));
-}
+};
 
 export const getDecksByUserId = async (id) => {
   return await getFetcher(url.GET_DECKS_BY_USER_ID_PATH(id));
-}
+};
 
 // flashcard
 export const createFlashcard = async (data) => {
   return await postFetcher(url.CREATE_FLASHCARD_PATH(), data);
-}
+};
 
 export const updateFlashcard = async (id, data) => {
   return await putFetcher(url.UPDATE_FLASHCARD_PATH(id), data);
-}
+};
 
 export const deleteFlashcard = async (id, data) => {
   return await deleteFetcher(url.DELETE_FLASHCARD_PATH(id), data);
-}
+};
 
 export const generateDeck = async (data) => {
-  return await postFetcher(url.GENERATE_DECK_PATH(), data, "multipart/form-data");
-}
+  return await postFetcher(
+    url.GENERATE_DECK_PATH(),
+    data,
+    "multipart/form-data"
+  );
+};
+
+export const sendForgotPasswordCode = async (data) => {
+  return await postFetcher(url.FORGOT_PASSWORD_PATH(), data);
+};
+
+export const verifyResetPasswordcode = async (data) => {
+  return await postFetcher(url.VERIFY_RESET_PASSWORD_CODE_PATH(), data);
+};
+
+export const resetPassword = async (data) => {
+  return await postFetcher(url.RESET_PASSWORD_PATH(), data);
+};
+
+export const createFeedback = async (data) => {
+  return await postFetcher(url.CREATE_FEEDBACK_PATH(), data);
+};

@@ -10,47 +10,74 @@ import {
   Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
-import {
-  LockIcon,
-  MailIcon,
-  AtIcon,
-  EyeOpenIcon,
-  EyeClosedIcon,
-} from "../../../constants/icons";
+import { GoBackIcon } from "../../../constants/icons";
+import { createFeedback } from "../../../apiHelper/backendHelper";
 
 export default function ContactUs() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = () => {};
+  const [subject, setSubject] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleSubmit = () => {
+    console.log("fine", subject.length);
+    if (subject.length < 1 || content.length < 1) {
+      Alert.alert(
+        "Invalid form",
+        "Please enter a subject and a non-empty content for your feedback."
+      );
+      return;
+    }
+
+    createFeedback({
+      subject: subject,
+      content: content
+    }).then(res => {
+      Alert.alert(
+        "Success",
+        "Your feedback form is successfully submitted. The team will contact you shortly."
+      );
+      setSubject("")
+      setContent("")
+    })
+    .catch(e => console.log(e))
+
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Send your complaints and recommendations to Team Celeste:
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <GoBackIcon color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Contact Us</Text>
+      </View>
+
+      <Text style={styles.infoText}>
+        Send your complaints or recommendations to Team Celeste:
       </Text>
 
       <View style={styles.textAreaContainerSmall}>
         <TextInput
           style={styles.textInputSmall}
-          placeholder="Issue"
+          placeholder="Subject"
           placeholderTextColor="rgba(0, 0, 0, 0.25)"
           multiline
           numberOfLines={1}
-          value={title}
-          onChangeText={setTitle}
+          value={subject}
+          onChangeText={setSubject}
         />
       </View>
 
       <View style={styles.textAreaContainerLarge}>
         <TextInput
           style={styles.textInputLarge}
-          placeholder="Description"
+          placeholder="Content"
           placeholderTextColor="rgba(0, 0, 0, 0.25)"
           multiline
-          numberOfLines={4}
-          value={description}
-          onChangeText={setDescription}
+          numberOfLines={8}
+          value={content}
+          onChangeText={setContent}
         />
       </View>
 
@@ -62,6 +89,13 @@ export default function ContactUs() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: {
+    width: "75%",
+    marginBottom: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   container: {
     height: "100%",
     justifyContent: "center",
@@ -82,8 +116,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 75,
+    marginBottom: 10,
     color: "#ffff",
+    marginRight: "25%",
+  },
+  infoText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 50,
+    color: "#ffff",
+    width: "75%",
   },
   input: {
     width: "80%",

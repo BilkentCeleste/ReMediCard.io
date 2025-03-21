@@ -93,6 +93,12 @@ export default function Login() {
         <Text style={styles.logintext}>Log In</Text>
       </TouchableOpacity>
 
+      <View style={styles.forgotPasswordContainer}>
+          <Link href="/forgot_password" style={styles.link}>
+              <Text>Forgot password?</Text>
+          </Link>
+      </View>
+
       <View style={styles.rememberMeContainer}>
         <Pressable style={styles.checkbox} onPress={toggleRememberMe}>
           {rememberMe && <Text style={styles.checkmark}>✓</Text>}
@@ -214,6 +220,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+  forgotPasswordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   checkbox: {
     width: 20,
     height: 20,
@@ -254,8 +264,9 @@ const styles = StyleSheet.create({
   link: {
     marginHorizontal: 10,
     fontSize: 14,
-    color: "#2916ff",
+    color: "#2518c7",
     cursor: "pointer",
+    fontWeight: "bold",
   },
   googleButtonText: {
     alignSelf: "center",
