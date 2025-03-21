@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ import java.util.List;
 public class Question extends AuditableEntity {
 
     @Column
-    private Integer difficulty;
+    private String difficulty;
 
     @Column
     private String description;
@@ -25,7 +25,7 @@ public class Question extends AuditableEntity {
     @ElementCollection
     @CollectionTable(name = "OPTIONS", joinColumns = @JoinColumn(name = "question_id"))
     @Column(name = "option")
-    private List<String> options;
+    private Set<String> options = Set.of();
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = true)

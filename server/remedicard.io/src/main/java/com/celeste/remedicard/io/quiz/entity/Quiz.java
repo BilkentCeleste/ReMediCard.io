@@ -15,14 +15,17 @@ import java.util.Set;
 public class Quiz extends AuditableEntity {
 
     @Column
+    private String name;
+
+    @Column
     private String difficulty;
 
     @Column
     private Integer popularity;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = false)
-    private Set<Question> questions;
+    private Set<Question> questions = Set.of();
 
     @ManyToMany(mappedBy = "quizzes")
-    private Set<User> users;
+    private Set<User> users = Set.of();
 }
