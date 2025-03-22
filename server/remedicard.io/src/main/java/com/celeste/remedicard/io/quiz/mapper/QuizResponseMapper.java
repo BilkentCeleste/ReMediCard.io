@@ -1,6 +1,5 @@
 package com.celeste.remedicard.io.quiz.mapper;
 
-
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseDTO;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import org.mapstruct.Mapper;

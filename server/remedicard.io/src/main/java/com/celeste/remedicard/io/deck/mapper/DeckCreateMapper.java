@@ -19,6 +19,6 @@ public interface DeckCreateMapper {
 
     Set<DeckResponseDTO> toDTO(Set<Deck> deckSet);
 
-    @Mapping(target = "user", ignore = true)
+//    @Mapping(target = "user", ignore = true)
     Deck toEntity(DeckCreateRequestDTO dto);
 }

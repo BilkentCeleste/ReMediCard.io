@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -24,8 +25,35 @@ public class Quiz extends AuditableEntity {
     private Integer popularity;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = false)
-    private Set<Question> questions = Set.of();
+    private Set<Question> questions = new HashSet<>();
 
     @ManyToMany(mappedBy = "quizzes")
-    private Set<User> users = Set.of();
+    private Set<User> users = new HashSet<>();
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+        question.setQuiz(this);
+    }
+
+    public void removeQuestion(Question question) {
+        questions.remove(question);
+        question.setQuiz(null);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+        user.getQuizzes().add(this);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.getQuizzes().remove(this);
+    }
+
+    public void removeAllUsers() {
+        for (User user : users) {
+            user.getQuizzes().remove(this);
+        }
+        users.clear();
+    }
 }

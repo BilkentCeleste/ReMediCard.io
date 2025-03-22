@@ -1,11 +1,12 @@
 package com.celeste.remedicard.io.quiz.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.auth.repository.UserRepository;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.repository.QuizRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
     private final QuestionService questionService;
+    private final UserRepository userRepository;
 
     public Quiz getById(Long quizId) {
         return quizRepository.findById(quizId).orElseThrow();
@@ -25,34 +27,44 @@ public class QuizService {
         return quizRepository.findByUsersId(userId);
     }
 
-    public void create(Quiz quiz, User user) {
-        quiz.getUsers().add(user);
+    public void create(Quiz quiz, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        quiz.addUser(user);
         quizRepository.save(quiz);
     }
 
+    @Transactional
     public void delete(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow();
+        quiz.removeAllUsers();
         quizRepository.deleteById(quizId);
-        // are all the questions deleted
-        // do all the users still have the quiz
     }
 
-    public void deleteUserQuiz(Long quizId, User user) {
+    public void addUserQuiz(Long quizId, Long userId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow();
-        quiz.getUsers().remove(user);
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        quiz.addUser(user);
+        quizRepository.save(quiz);
+    }
+
+    public void deleteUserQuiz(Long quizId, Long userId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        quiz.removeUser(user);
         quizRepository.save(quiz);
     }
 
     public void addQuestion(Long questionId, Long quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow();
         Question question = questionService.getById(questionId);
-        quiz.getQuestions().add(question);
+        quiz.addQuestion(question);
         quizRepository.save(quiz);
     }
 
-    public void deleteQuestion(Long quizId, Long questionId) {
+    public void removeQuestion(Long quizId, Long questionId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow();
         Question question = questionService.getById(questionId);
-        quiz.getQuestions().remove(question);
+        quiz.removeQuestion(question);
         quizRepository.save(quiz);
     }
 

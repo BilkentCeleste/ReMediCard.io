@@ -7,6 +7,7 @@ import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -39,12 +40,22 @@ public class Deck extends AuditableEntity {
             joinColumns = @JoinColumn(name = "deck_id"),
             inverseJoinColumns = @JoinColumn(name = "figure_id")
     )
-    private Set<Figure> figureSet;
+    private Set<Figure> figureSet = new HashSet<>();
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Flashcard> flashcardSet;
+    private Set<Flashcard> flashcardSet = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void addFlashcard(Flashcard flashcard) {
+        flashcardSet.add(flashcard);
+        flashcard.setDeck(this);
+    }
+
+    public void removeFlashcard(Flashcard flashcard) {
+        flashcardSet.remove(flashcard);
+        flashcard.setDeck(null);
+    }
 }

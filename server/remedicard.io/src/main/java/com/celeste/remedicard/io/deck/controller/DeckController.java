@@ -25,7 +25,8 @@ public class DeckController {
     @PostMapping("/create")
     public void create(@RequestBody DeckCreateRequestDTO dto) {
         Deck deck = DeckCreateMapper.INSTANCE.toEntity(dto);
-        deckService.create(deck, dto.getUserId());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        deckService.create(deck, user.getId());
     }
 
     @GetMapping("/getByCurrentUser")

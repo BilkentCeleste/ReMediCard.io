@@ -6,18 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QuizResponseDTO {
+public class RemoveQuestionRequestDTO {
 
-        private Long id;
-        private String name;
-        private String difficulty;
-        private Integer popularity;
-        Set<QuestionResponseDTO> questions;
+    private Long questionId;
 }

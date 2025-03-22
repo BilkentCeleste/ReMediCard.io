@@ -6,7 +6,6 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
-import com.celeste.remedicard.io.flashcard.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -22,8 +21,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.util.Set;
-
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +29,12 @@ public class DeckService {
     private final GeminiAPIService geminiAPIService;
     private final DeckRepository deckRepository;
     private final UserRepository userRepository;
-    private final FlashcardService flashcardService;
 
     public void create(Deck deck, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         deck.setUser(user);
         deckRepository.save(deck);
     }
-
 
     public Deck getDeckByDeckId(Long deckId) {
         return deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));

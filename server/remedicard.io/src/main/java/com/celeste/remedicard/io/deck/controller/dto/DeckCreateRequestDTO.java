@@ -18,5 +18,5 @@ public class DeckCreateRequestDTO {
     private String difficulty;
     private int flashcardCount;
     private int popularity;
-    private Long userId;
+//    private Long userId;
 }

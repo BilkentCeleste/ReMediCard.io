@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -25,7 +26,7 @@ public class Question extends AuditableEntity {
     @ElementCollection
     @CollectionTable(name = "OPTIONS", joinColumns = @JoinColumn(name = "question_id"))
     @Column(name = "option")
-    private Set<String> options = Set.of();
+    private Set<String> options = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = true)
