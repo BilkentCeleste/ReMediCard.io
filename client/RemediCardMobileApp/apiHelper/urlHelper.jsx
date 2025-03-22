@@ -9,6 +9,9 @@ import { BASE_URL } from "@/constants/config";
 // auth
 export const LOGIN_PATH = () => `${BASE_URL}/auth/login`;
 export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
+export const FORGOT_PASSWORD_PATH = () => `${BASE_URL}/auth/forgot_password`;
+export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_reset_passwordcode`;
+export const RESET_PASSWORD_PATH = () => `${BASE_URL}/auth/reset_password`;
 
 // deck
 export const CREATE_DECK_PATH = () => `${BASE_URL}/deck/create`;
@@ -21,3 +24,6 @@ export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
 export const CREATE_FLASHCARD_PATH = () => `${BASE_URL}/flashcard/create`;
 export const UPDATE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/update/${id}`;
 export const DELETE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/delete/${id}`;
+
+// support
+export const CREATE_FEEDBACK_PATH = (id) => `${BASE_URL}/support/feedback`;

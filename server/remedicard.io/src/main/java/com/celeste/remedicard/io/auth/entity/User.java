@@ -4,8 +4,8 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.studyStats.entity.StudyStats;
+import com.celeste.remedicard.io.support.entity.Feedback;
 import com.celeste.remedicard.io.usageStats.entity.UsageStats;
-import com.celeste.remedicard.io.userFeedback.entity.UserFeedback;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,10 @@ public class User implements UserDetails {
     private String username;
 
     private String email;
+    private String previousPassword;
     private String password;
+    private String resetCode;
+    private Date resetCodeExpiry;
 
     private Role role;
 
@@ -56,7 +60,7 @@ public class User implements UserDetails {
     private Set<Quiz> quizzes;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserFeedback> feedbacks;
+    private Set<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsageStats> usageStats;

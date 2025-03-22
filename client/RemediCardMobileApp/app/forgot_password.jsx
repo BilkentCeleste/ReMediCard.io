@@ -9,56 +9,121 @@ import {
 } from "react-native";
 import { useNavigation } from "expo-router";
 import { AtIcon, LockIcon } from "@/constants/icons";
+import {
+  sendForgotPasswordCode,
+  verifyResetPasswordcode,
+  resetPassword,
+} from "@/apiHelper/backendHelper";
+import { useRouter } from "expo-router";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ForgotPassword() {
   const [stage, setStage] = useState(1);
   const [email, setEmail] = useState("");
-  const [authId, setAuthId] = useState(["", "", "", "", "", ""]);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigation = useNavigation();
+  const { addToken, setIsLoggedIn } = useAuth();
+
+  const router = useRouter();
+
+  const clearState = () => {
+    setStage(1);
+    setEmail("");
+    setCode(["", "", "", "", "", ""]);
+    setNewPassword("");
+    setConfirmPassword("");
+  };
 
   React.useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
-  const inputRefs = useRef(authId.map(() => React.createRef()));
+  const inputRefs = useRef(code.map(() => React.createRef()));
 
   const handleEmailSubmit = () => {
-    /* if (!email.includes("@")) {
+    if (!email.includes("@")) {
       Alert.alert("Invalid Email", "Please enter a valid email address.");
       return;
-    } */
-    setStage(2);
+    }
+
+    sendForgotPasswordCode({
+      email: email,
+    })
+      .then((res) => {
+        setStage(2);
+      })
+      .catch((e) => {
+        console.log(e.status);
+      });
   };
 
   const handleAuthSubmit = () => {
-    if (authId.join("" ).length !== 6) {
+    if (code.join("").length !== 6) {
       Alert.alert("Invalid Code", "The authentication code must be 6 digits.");
       return;
     }
-    setStage(3);
+
+    verifyResetPasswordcode({
+      email: email,
+      code: code.join(""),
+    })
+      .then((res) => {
+        addToken(res.data.access_token);
+        setStage(3);
+      })
+      .catch((e) => {
+        console.log(e);
+        Alert.alert("Failed", "Given code is invalid!");
+      });
   };
 
   const handlePasswordReset = () => {
     if (newPassword.length < 6) {
-      Alert.alert("Weak Password", "Password must be at least 6 characters long.");
+      Alert.alert(
+        "Weak Password",
+        "Password must be at least 6 characters long."
+      );
       return;
     }
     if (newPassword !== confirmPassword) {
       Alert.alert("Mismatch", "Passwords do not match.");
       return;
     }
-    Alert.alert("Success", "Your password has been reset.", [
-      { text: "OK", onPress: () => navigation.replace("/login") },
-    ]);
+
+    resetPassword({
+      email: email,
+      code: code.join(""),
+      password: newPassword,
+    })
+      .then((res) => {
+        setIsLoggedIn(true);
+        Alert.alert("Success", "Your password has been reset.", [
+          {
+            text: "OK",
+            onPress: () => {
+              clearState();
+              router.push("/(app)/home");
+            },
+          },
+        ]);
+      })
+      .catch((e) => {
+        console.log(e.status);
+        Alert.alert(
+          "Failed",
+          "New password can't be the same with last two set passwords!"
+        );
+      });
   };
 
   const handleAuthInputChange = (text, index) => {
+
     if (text.length > 1) return;
-    const newAuthId = [...authId];
-    newAuthId[index] = text;
-    setAuthId(newAuthId);
-    
+    const newCode = [...code];
+    newCode[index] = text;
+    setCode(newCode);
+
     if (text && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -69,7 +134,9 @@ export default function ForgotPassword() {
       <Text style={styles.title}>Forgot Password</Text>
       {stage === 1 && (
         <>
-          <Text style={styles.infoText}>Enter your registered email to receive a verification code.</Text>
+          <Text style={styles.infoText}>
+            Enter your registered email to receive a verification code.
+          </Text>
           <View style={styles.component}>
             <AtIcon />
             <TextInput
@@ -84,9 +151,11 @@ export default function ForgotPassword() {
       )}
       {stage === 2 && (
         <>
-          <Text style={styles.infoText}>Enter the 6-digit verification code sent to your email.</Text>
+          <Text style={styles.infoText}>
+            Enter the 6-digit verification code sent to your email.
+          </Text>
           <View style={styles.authCodeContainer}>
-            {authId.map((digit, index) => (
+            {code.map((digit, index) => (
               <TextInput
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}
@@ -98,14 +167,28 @@ export default function ForgotPassword() {
               />
             ))}
           </View>
-          <TouchableOpacity onPress={() => Alert.alert("Resent", "Verification email has been resent.")}> 
+          <TouchableOpacity
+            onPress={() =>
+              sendForgotPasswordCode({
+                email: email,
+              })
+                .then((res) => {
+                  Alert.alert("Resent", "Verification email has been resent.");
+                })
+                .catch((e) => {
+                  console.log(e.status);
+                })
+            }
+          >
             <Text style={styles.link}>Didn't receive the email? Try again</Text>
           </TouchableOpacity>
         </>
       )}
       {stage === 3 && (
         <>
-          <Text style={styles.infoText}>Set a new password for your account.</Text>
+          <Text style={styles.infoText}>
+            Set a new password for your account.
+          </Text>
           <View style={styles.component}>
             <LockIcon />
             <TextInput
@@ -133,11 +216,29 @@ export default function ForgotPassword() {
       <TouchableOpacity
         style={styles.button}
         onPress={
-          stage === 1 ? handleEmailSubmit : stage === 2 ? handleAuthSubmit : handlePasswordReset
+          stage === 1
+            ? handleEmailSubmit
+            : stage === 2
+            ? handleAuthSubmit
+            : handlePasswordReset
         }
       >
-        <Text style={styles.buttonText}>{stage === 3 ? "Reset Password" : "Next"}</Text>
+        <Text style={styles.buttonText}>
+          {stage === 3 ? "Reset Password" : "Next"}
+        </Text>
       </TouchableOpacity>
+      {stage === 3 && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setIsLoggedIn(true);
+            clearState();
+            router.push("/(app)/home");
+          }}
+        >
+          <Text style={styles.buttonText}>{"Continue Without Reset"}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
