@@ -27,3 +27,6 @@ export const DELETE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/delete/${id}
 
 // support
 export const CREATE_FEEDBACK_PATH = (id) => `${BASE_URL}/support/feedback`;
+
+// auto generation
+export const AUTO_GENERATE_DECK_PATH = () => `${BASE_URL}/auto_generation/generate`
