@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
@@ -37,6 +37,23 @@ export default function Card( props: any ) {
         }
     };
 
+    useEffect(() => {
+        if (flashCardList.length === 0) {
+            Alert.alert(
+                "No Cards Available",
+                "There are no cards in this deck.",
+                [
+                    {
+                        text: "Go Back",
+                        onPress: () => router.back(), // Go back to previous screen
+                        style: "cancel"
+                    }
+                ],
+                { cancelable: false }
+            );
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
 
@@ -52,28 +69,33 @@ export default function Card( props: any ) {
             </View>
         </View>
 
-        <View style={styles.scoreTable}>
-            <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
-            <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon></CorrectIcon></View>
-            <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
-            <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon></FalseIcon></View>
-            <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
-        </View>
+        {flashCardList.length > 0 && (
+                <>
+                    <View style={styles.scoreTable}>
+                        <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
+                        <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon /></View>
+                        <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
+                        <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon /></View>
+                        <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
+                    </View>
 
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Flashcard 
-                question={flashCardList[currentCard].frontSide.text}
-                answer={flashCardList[currentCard].backSide.text}
-                width={250}
-                height={400}
-                key={currentCard}
-            />
-        </View>
+                    <View style={{ justifyContent: "center", alignItems: "center" }}>
+                        <Flashcard
+                            question={flashCardList[currentCard]?.frontSide?.text}
+                            answer={flashCardList[currentCard]?.backSide?.text}
+                            width={250}
+                            height={400}
+                            key={currentCard}
+                        />
+                    </View>
 
-        <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
-            <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon></CrossIcon></TouchableOpacity>
-            <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon></CheckmarkIcon></TouchableOpacity>
-        </View>
+                    <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
+                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
+                        <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
+                    </View>
+                </>
+            )}
+
 
         </View>
     );
