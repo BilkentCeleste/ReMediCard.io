@@ -24,8 +24,10 @@ public class DeckController {
 
     @PostMapping("/create")
     public void create(@RequestBody DeckCreateRequestDTO dto) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Deck deck = DeckCreateMapper.INSTANCE.toEntity(dto);
-        deckService.create(deck, dto.getUserId());
+        deckService.create(deck, user.getId());
     }
 
     @GetMapping("/getByCurrentUser")
@@ -60,6 +62,13 @@ public class DeckController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/delete/{deckid}")
+    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckid) {
+        deckService.removeDeck(deckid);
+
+        return ResponseEntity.ok().build();
     }
 
 }

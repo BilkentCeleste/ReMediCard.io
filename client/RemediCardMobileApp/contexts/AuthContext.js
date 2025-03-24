@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginAuth = async (body) => {
+    removeToken()
     login(body)
       .then((res) => {
         setIsLoggedIn(true);
