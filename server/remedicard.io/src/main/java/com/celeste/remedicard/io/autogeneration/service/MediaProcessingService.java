@@ -7,22 +7,25 @@ import com.celeste.remedicard.io.autogeneration.dto.AutoGenerationRequest;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
 import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;
+import com.celeste.remedicard.io.cloud.service.S3Service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @AllArgsConstructor
 @Service
 public class MediaProcessingService {
 
     private final QueueService queueService;
+    private final S3Service s3Service;
     private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
     public void enqueueAutoGenerationTask
-            (MultipartFile file, DataType dataType, Language language) {
+            (MultipartFile file, DataType dataType, Language language) throws IOException {
 
-        //TODO Upload to S3 Bucket
-        String address = "ADDRESS";
+        String address = s3Service.uploadFile(file);
 
         MediaProcessingRecord mediaProcessingRecord = MediaProcessingRecord.builder()
                 .address(address)

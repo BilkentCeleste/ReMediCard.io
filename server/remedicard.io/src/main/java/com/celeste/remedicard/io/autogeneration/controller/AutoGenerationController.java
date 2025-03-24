@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("auto_generation")
@@ -22,7 +24,7 @@ public class AutoGenerationController {
     public ResponseEntity<Void> generateDeckFromLectureMaterial(
             @RequestPart("file") MultipartFile file,
             @RequestPart("dataType") String dataType,
-            @RequestPart("language") String language) {
+            @RequestPart("language") String language) throws IOException {
 
         mediaProcessingService.enqueueAutoGenerationTask(file,
                 DataType.valueOf(dataType),
