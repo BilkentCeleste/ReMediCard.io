@@ -7,71 +7,30 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { ChevronRightIcon, GoBackIcon, NextQuestionIcon } from "../../constants/icons"; // Replace with your icon paths
+import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
+import {useLocalSearchParams} from "expo-router/build/hooks";
 
-interface QuizQuestionData {
-  questionText: string;
-  answers: string[]; // e.g. ["Answer 1", "Answer 2", ...]
-}
 
-// Example array of questions
-const quizQuestions: QuizQuestionData[] = [
-  {
-    questionText:
-      "Question 1: What is the primary purpose of an ACL (Anterior Cruciate Ligament) reconstruction surgery?",
-    answers: [
-      "To remove damaged cartilage from the knee", 
-      "To repair a torn ligament in the knee", 
-      "To replace the knee joint with a prosthetic", 
-      "To treat a fracture in the tibia", 
-      "To reduce inflammation caused by arthritis"],
-  },
-  {
-    questionText:
-      "Question 2: Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-    answers: [
-      "Metal rods",
-      "Synthetic polymer",
-      "Tendons from the patient’s body (autograft)", 
-      "Artificial cartilage implants", 
-      "Stem cells"],
-  },
-  {
-    questionText:
-      "Question 3: Class aptent taciti sociosqu ad litora torquent per conubia nostra.",
-    answers: [
-      "Recurrent knee infections",
-      "Severe knee pain that limits daily activities", 
-      "Swelling that subsides with rest", 
-      "Frequent dislocations of the knee cap", 
-      "Bruising around the knee after minor injuries"],
-  },
-];
-
-export default function QuizQuestion() {
+export default function QuizQuestion(props: any) {
   const router = useRouter();
 
-  // We store the current index of the question
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const {quiz} = useLocalSearchParams();
+  const parsedQuiz = JSON.parse(Array.isArray(quiz) ? quiz[0] : quiz);
+  const quizQuestions = parsedQuiz?.questions;
+  console.log(parsedQuiz);
 
-  // Track which answer is selected for each question
-  // For simplicity, we’ll store them in an array of the same length as quizQuestions
+  const [timeRemaining] = useState("09:27");
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(
     () => Array(quizQuestions.length).fill(-1) // -1 indicates no selection
   );
-
-  // For the example, we’ll store a static quiz title, time remaining, etc.
-  const [quizTitle] = useState("Quiz 1");
-  const [timeRemaining] = useState("09:27");
-  // total number of questions
-  const totalQuestions = quizQuestions.length;
+  const totalQuestions = quizQuestions?.length || 0;
 
   // Get the current question object
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswerIndex = selectedAnswers[currentQuestionIndex];
 
   const handleAnswerSelect = (index: number) => {
-    // Update the selectedAnswers array for the current question
     const updatedSelectedAnswers = [...selectedAnswers];
     updatedSelectedAnswers[currentQuestionIndex] = index;
     setSelectedAnswers(updatedSelectedAnswers);
@@ -87,7 +46,6 @@ export default function QuizQuestion() {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
-      // If we’re on the last question, maybe submit the quiz or handle differently
       console.log(
         "Reached the end of the quiz. You could submit answers here."
       );
@@ -103,7 +61,7 @@ export default function QuizQuestion() {
           <GoBackIcon />
         </TouchableOpacity>
 
-        <Text style={styles.quizTitle}>{quizTitle}</Text>
+        <Text style={styles.quizTitle}>{parsedQuiz?.name || "Quiz"}</Text>
 
         {/* Space or an icon */}
         <View style={{ width: 24, height: 24 }} />
@@ -123,14 +81,14 @@ export default function QuizQuestion() {
       <View style={styles.questionBox}>
         <ScrollView>
           <Text style={styles.questionText}>
-            {currentQuestion.questionText}
+            {currentQuestion?.description || "Question text"}
           </Text>
         </ScrollView>
       </View>
 
       {/* Answers list */}
       <View style={styles.answersContainer}>
-        {currentQuestion.answers.map((answer, index) => (
+        {currentQuestion?.options?.map((answer: any, index: any) => (
           <TouchableOpacity
             key={index}
             style={[
@@ -140,9 +98,9 @@ export default function QuizQuestion() {
             onPress={() => handleAnswerSelect(index)}
           >
             <Text style={styles.answerLabel}>
-              {String.fromCharCode(65 + index)} {/* A, B, C, D, E */}
+              {String.fromCharCode(65 + index)}
             </Text>
-            <Text style={styles.answerText}>{answer}</Text>
+            <Text style={styles.answerText}>{answer || `answer ${index}`}</Text>
           </TouchableOpacity>
         ))}
       </View>

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
+  FlatList, Modal, Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -14,75 +14,77 @@ import {
   ProfileIcon,
   SettingsIcon,
   ChevronRightIcon,
-} from "../../constants/icons"; // Adjust to your icon imports
-import DropDown from "../../components/DropDown"; // Same custom DropDown component used in deck.tsx
+} from "@/constants/icons";
+import DropDown from "../../components/DropDown";
+import {deleteQuiz, getQuizzesByCurrentUser} from "@/apiHelper/backendHelper";
 
 export default function Quizzes() {
   const [selectedSort, setSelectedSort] = useState<string>("");
+  const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [popUpVisible, setPopUpVisible] = useState(false);
+  const [quizzes, setQuizzes] = useState<any[]>([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    getQuizzesByCurrentUser()
+        .then((quizzes: any) => {
+          const updatedQuizzes = quizzes?.data?.map((quiz: any) => ({
+            ...quiz,
+            lastAccessed: "31.12.2024",
+            bestPerformance: 90,
+            lastPerformance: 40,
+          }));
+
+          console.log(quizzes.data);
+          setQuizzes(updatedQuizzes);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+  }, []);
+
+  const handleQuizPress = (quiz: any) => {
+    setSelectedQuiz(quiz);
+    setModalVisible(true);
+  };
+
+  const handleDeleteQuiz = () => {
+    console.log(selectedQuiz?.id);
+
+    deleteQuiz(selectedQuiz?.id)
+      .then((res) => {
+        Alert.alert("Success", "Selected quiz is successfully deleted!");
+        setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
+        setSelectedQuiz(null);
+        setPopUpVisible(false);
+        setModalVisible(false);
+      });
+  }
+
+  const handleStartQuiz = () => {
+    if (selectedQuiz) {
+      setModalVisible(false);
+      router.push({
+        pathname: "/(app)/quiz_question",
+        params: { quiz: JSON.stringify(selectedQuiz) },
+      });
+    } else {
+      Alert.alert("Error", "Quiz information is missing.");
+    }
+  }
+
+  const handleEditQuiz = () => {
+    setModalVisible(false);
+    // router.push("/(app)/edit_deck");
+  }
+
   const sortOptions = [
     { label: "Sort by Last Accessed", value: "last" },
     { label: "Sort by Newly Accessed", value: "newest" },
     { label: "Sort by Best Performance", value: "best" },
     { label: "Sort by Worst Performance", value: "worst" },
-  ];
-
-  const decks = [
-    {
-      title: "Quiz 1",
-      lastAccessed: "31.12.2024",
-      cards: 35,
-      bestPerformance: 90,
-      lastPerformance: 40,
-    },
-    {
-      title: "Quiz 2",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 3",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 4",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 5",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 6",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 7",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
-    {
-      title: "Quiz 8",
-      lastAccessed: "30.12.2024",
-      cards: 20,
-      bestPerformance: 85,
-      lastPerformance: 50,
-    },
   ];
 
   return (
@@ -107,28 +109,95 @@ export default function Quizzes() {
       <FlatList
         style={styles.flatListContainer}
         contentContainerStyle={styles.flatListContent} // Style for inner FlatList items
-        data={decks}
+        data={quizzes}
         keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.deckComponent}>
-            <Link href="/(app)/quiz_question" style={styles.link}>
-              <View>
-                <Text style={styles.deckTitle}>{item.title}</Text>
-                <Text style={[styles.deckInfoText]}>
-                  Last accessed: {item.lastAccessed}
-                </Text>
-                <Text style={[styles.deckInfoText]}>{item.cards} cards</Text>
-                <Text style={[styles.deckInfoText]}>
-                  Best: {item.bestPerformance}% Last: {item.lastPerformance}%
-                </Text>
-                <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-                  <ChevronRightIcon color="#111" />
-                </View>
+          <TouchableOpacity
+              style={styles.deckComponent}
+              onPress={() => handleQuizPress(item)}
+          >
+            <View>
+              <Text style={styles.deckTitle}>{item.name}</Text>
+              <Text style={[styles.deckInfoText]}>
+                Last accessed: {item.lastAccessed}
+              </Text>
+              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} cards</Text>
+              <Text style={[styles.deckInfoText]}>
+                Best: {item.bestPerformance}% Last: {item.lastPerformance}%
+              </Text>
+              <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+                <ChevronRightIcon color="#111" />
               </View>
-            </Link>
+            </View>
           </TouchableOpacity>
         )}
       />
+
+      <Modal
+          transparent={true}
+          visible={popUpVisible}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>
+              {" "}
+              Are you sure about deleting the selected quiz?{" "}
+            </Text>
+
+            <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
+                onPress={handleDeleteQuiz}
+            >
+              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.modalCancel}
+                onPress={() => setPopUpVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+          transparent={true}
+          visible={modalVisible}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{selectedQuiz?.name}</Text>
+            <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleStartQuiz}
+            >
+              <Text style={styles.modalButtonText}>Start Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleEditQuiz}
+            >
+              <Text style={styles.modalButtonText}>Edit Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
+                onPress={() => setPopUpVisible(true)}
+            >
+              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.modalCancel}
+                onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.navbarRow}>
         <TouchableOpacity>
@@ -322,5 +391,44 @@ const styles = StyleSheet.create({
     flexDirection: "column", // Stack children vertically
     alignItems: "flex-start", // Align text to the left
     width: "100%", // Ensure it doesn't shrink
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButton: {
+    backgroundColor: "#2916ff",
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  modalCancel: {
+    marginTop: 10,
+  },
+  modalCancelText: {
+    color: "#2916ff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

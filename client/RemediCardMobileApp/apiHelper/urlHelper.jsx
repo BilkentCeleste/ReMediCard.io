@@ -31,3 +31,7 @@ export const CREATE_FEEDBACK_PATH = (id) => `${BASE_URL}/support/feedback`;
 
 // auto generation
 export const AUTO_GENERATE_DECK_PATH = () => `${BASE_URL}/auto_generation/generate`
+
+// quiz
+export const GET_QUIZZES_BY_CURRENT_USER_PATH = () => `${BASE_URL}/quiz/getByCurrentUser`;
+export const DELETE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/delete/${id}`;

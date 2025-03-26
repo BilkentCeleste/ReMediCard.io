@@ -16,9 +16,6 @@ import {
   ProfileIcon,
   SettingsIcon,
   SearchIcon,
-  EditProfileIcon,
-  SubscriptionIcon,
-  ContactIcon,
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { getDecksByCurrentUser, deleteDeck } from "@/apiHelper/backendHelper";
@@ -29,12 +26,13 @@ export default function Decks() {
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
     getDecksByCurrentUser()
       .then((decks) => {
-        const updatedDecks = decks.data.map((deck: any) => ({
+        const updatedDecks = decks?.data?.map((deck: any) => ({
           ...deck,
           lastAccessed: "31.12.2024",
           bestPerformance: 90,
@@ -55,7 +53,7 @@ export default function Decks() {
     { label: "Sort by Worst Performance", value: "worst" },
   ];
 
-  const handleDeckPress = (deck) => {
+  const handleDeckPress = (deck: any) => {
     setSelectedDeck(deck);
     setModalVisible(true); // Open Modal
   };
