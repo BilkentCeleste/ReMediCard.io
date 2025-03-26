@@ -44,6 +44,18 @@ public class DeckService {
         return deckRepository.findAllByUserId(userId);
     }
 
+    public void removeDeck(Long deckId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+
+        if(!deck.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException();
+        }
+
+        deckRepository.delete(deck);
+    }
+
     public void generateDeck(MultipartFile file) {
 
         String text = extractTextFromPDF(file);

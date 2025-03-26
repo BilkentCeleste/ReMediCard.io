@@ -63,4 +63,10 @@ public class DeckController {
         }
     }
 
+    @DeleteMapping("/delete/{deckid}")
+    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckid) {
+        deckService.removeDeck(deckid);
+
+        return ResponseEntity.ok().build();
+    }
 }
