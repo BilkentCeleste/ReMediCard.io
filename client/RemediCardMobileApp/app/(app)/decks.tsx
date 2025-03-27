@@ -37,7 +37,7 @@ export default function Decks() {
   useEffect(() => {
     getDecksByCurrentUser()
       .then((decks) => {
-        const updatedDecks = decks.data.map((deck: any) => ({
+        const updatedDecks = decks?.data?.map((deck: any) => ({
           ...deck,
           lastAccessed: "31.12.2024",
           bestPerformance: 90,
@@ -58,7 +58,7 @@ export default function Decks() {
     { label: "Sort by Worst Performance", value: "worst" },
   ];
 
-  const handleDeckPress = (deck) => {
+  const handleDeckPress = (deck: any) => {
     setSelectedDeck(deck);
     setModalVisible(true); // Open Modal
   };
