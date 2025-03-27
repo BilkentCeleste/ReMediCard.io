@@ -34,7 +34,7 @@ export default function Updatedeck() {
         <View style={styles.container}>
             <View style={styles.menuComponent}>
             <View style={[styles.menuIcon, styles.iconLayout]}>
-                <Link href="/(app)/editdecklist"><GoBackIcon  width={100} height={100} /></Link>
+                <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
             </View>
 
             <Text style={styles.menuText}>{deck?.topic}</Text>

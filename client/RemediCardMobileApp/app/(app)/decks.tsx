@@ -16,9 +16,8 @@ import {
   ProfileIcon,
   SettingsIcon,
   SearchIcon,
-  EditProfileIcon,
-  SubscriptionIcon,
-  ContactIcon,
+  PlusIcon,
+
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { getDecksByCurrentUser, deleteDeck } from "@/apiHelper/backendHelper";
@@ -29,6 +28,10 @@ export default function Decks() {
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
+  const [newDeckTitle, setNewDeckTitle] = useState("");
+
   const router = useRouter();
 
   useEffect(() => {
@@ -93,6 +96,26 @@ export default function Decks() {
     });
   };
 
+  const uploadGeneratePage = () => {
+    router.push("/(app)/generatedecks");
+  };
+
+  const handleManualCreate = () => {
+    if (!newDeckTitle.trim()) {
+      Alert.alert("Error", "Please enter a deck name");
+      return;
+    }
+  
+    // Dummy creation, replace this with your real API call
+    // Example: createDeck({ topic: newDeckTitle }) => returns { id }
+    const fakeDeckId = Math.floor(Math.random() * 100000); // replace with API response later
+  
+    // Redirect
+    setManualCreateModalVisible(false);
+    setNewDeckTitle("");
+    router.push("/(app)/updatedeck?deckId=" + fakeDeckId);
+  };
+  
   return (
     <View style={styles.container}>
       {/* Header, Search, Sort */}
@@ -142,6 +165,51 @@ export default function Decks() {
           </TouchableOpacity>
         )}
       />
+
+      <TouchableOpacity style={styles.createButton} onPress={() => setCreateModalVisible(true)}>
+        <PlusIcon></PlusIcon>
+        <Text style={styles.createNewDeck}>Create New Deck</Text>
+      </TouchableOpacity>
+      
+      <Modal
+        transparent={true}
+        visible={createModalVisible}
+        animationType="slide"
+        onRequestClose={() => setCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Create Deck</Text>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setCreateModalVisible(false);
+                setManualCreateModalVisible(true);
+              }}
+            >
+              <Text style={styles.modalButtonText}>Create Manually</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setCreateModalVisible(false);
+                uploadGeneratePage();
+              }}
+            >
+              <Text style={styles.modalButtonText}>Create with AI</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setCreateModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <Modal
         transparent={true}
@@ -208,6 +276,40 @@ export default function Decks() {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        transparent={true}
+        visible={manualCreateModalVisible}
+        animationType="slide"
+        onRequestClose={() => setManualCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>New Deck Name</Text>
+            <TextInput
+              style={[styles.searchComponent, { width: "100%", marginBottom: 10 }]}
+              placeholder="Enter deck title"
+              value={newDeckTitle}
+              onChangeText={setNewDeckTitle}
+            />
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleManualCreate}
+            >
+              <Text style={styles.modalButtonText}>Save & Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setManualCreateModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
 
       {/* Navbar */}
       <View style={styles.navbarRow}>
@@ -442,4 +544,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  createButton: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    height: 50,
+    bottom:"15%"
+  },
+  createNewDeck: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#fff",
+    textAlign: "center",
+},
 });

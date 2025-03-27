@@ -95,18 +95,18 @@ export default function Home() {
             onPress={uploadGeneralEditPage}
           >
             <CreateIcon></CreateIcon>
-            <Text style={[styles.mainComponentText]}>Edit / Create</Text>
+            <Text style={[styles.mainComponentText]}>Create</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.navbarRow}>
-        <TouchableOpacity onPress={uploadGeneralEditPage}>
+        <TouchableOpacity>
           <Link href="/(app)/home">
             <HomeIcon />
           </Link>
         </TouchableOpacity>
-        <TouchableOpacity onPress={uploadGeneralEditPage}>
+        <TouchableOpacity>
           <Link href="/(app)/profile">
             <ProfileIcon />
           </Link>
