@@ -17,10 +17,14 @@ import {
   SettingsIcon,
   SearchIcon,
   PlusIcon,
-
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
-import { getDecksByCurrentUser, deleteDeck } from "@/apiHelper/backendHelper";
+import {
+  getDecksByCurrentUser,
+  deleteDeck,
+  createDeck,
+} from "@/apiHelper/backendHelper";
+import { create } from "react-test-renderer";
 
 export default function Decks() {
   const [selectedSort, setSelectedSort] = useState<string>("");
@@ -29,7 +33,8 @@ export default function Decks() {
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
+  const [manualCreateModalVisible, setManualCreateModalVisible] =
+    useState(false);
   const [newDeckTitle, setNewDeckTitle] = useState("");
 
   const router = useRouter();
@@ -85,7 +90,6 @@ export default function Decks() {
   };
 
   const handleDeleteDeck = () => {
-    console.log(selectedDeck.id);
 
     deleteDeck(selectedDeck.id).then((res) => {
       Alert.alert("Success", "Selected deck is successfully deleted!");
@@ -105,17 +109,16 @@ export default function Decks() {
       Alert.alert("Error", "Please enter a deck name");
       return;
     }
-  
-    // Dummy creation, replace this with your real API call
-    // Example: createDeck({ topic: newDeckTitle }) => returns { id }
-    const fakeDeckId = Math.floor(Math.random() * 100000); // replace with API response later
-  
-    // Redirect
-    setManualCreateModalVisible(false);
-    setNewDeckTitle("");
-    router.push("/(app)/updatedeck?deckId=" + fakeDeckId);
+
+    createDeck({
+      name: newDeckTitle,
+    }).then((res) => {
+      setManualCreateModalVisible(false);
+      setNewDeckTitle("");
+      router.push("/(app)/updatedeck?deckId=" + res.data.id);
+    });
   };
-  
+
   return (
     <View style={styles.container}>
       {/* Header, Search, Sort */}
@@ -148,7 +151,7 @@ export default function Decks() {
             onPress={() => handleDeckPress(item)}
           >
             <View>
-              <Text style={styles.deckTitle}>{item.topic}</Text>
+              <Text style={styles.deckTitle}>{item.name}</Text>
               <Text style={styles.deckInfoText}>
                 Last accessed: {item.lastAccessed}
               </Text>
@@ -166,11 +169,14 @@ export default function Decks() {
         )}
       />
 
-      <TouchableOpacity style={styles.createButton} onPress={() => setCreateModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.createButton}
+        onPress={() => setCreateModalVisible(true)}
+      >
         <PlusIcon></PlusIcon>
         <Text style={styles.createNewDeck}>Create New Deck</Text>
       </TouchableOpacity>
-      
+
       <Modal
         transparent={true}
         visible={createModalVisible}
@@ -287,7 +293,10 @@ export default function Decks() {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>New Deck Name</Text>
             <TextInput
-              style={[styles.searchComponent, { width: "100%", marginBottom: 10 }]}
+              style={[
+                styles.searchComponent,
+                { width: "100%", marginBottom: 10 },
+              ]}
               placeholder="Enter deck title"
               value={newDeckTitle}
               onChangeText={setNewDeckTitle}
@@ -309,7 +318,6 @@ export default function Decks() {
           </View>
         </View>
       </Modal>
-
 
       {/* Navbar */}
       <View style={styles.navbarRow}>
@@ -552,7 +560,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 30,
     height: 50,
-    bottom:"15%"
+    bottom: "15%",
   },
   createNewDeck: {
     fontSize: 17,
@@ -560,5 +568,5 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Regular",
     color: "#fff",
     textAlign: "center",
-},
+  },
 });

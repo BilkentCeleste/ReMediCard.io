@@ -23,10 +23,10 @@ public class DeckController {
     private final DeckService deckService;
 
     @PostMapping("/create")
-    public void create(@RequestBody DeckCreateRequestDTO dto) {
+    public ResponseEntity<DeckResponseDTO> create(@RequestBody DeckCreateRequestDTO dto) {
         Deck deck = DeckCreateMapper.INSTANCE.toEntity(dto);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        deckService.create(deck, user.getId());
+        deck = deckService.create(deck);
+        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck));
     }
 
     @GetMapping("/getByCurrentUser")
@@ -66,7 +66,6 @@ public class DeckController {
     @DeleteMapping("/delete/{deckid}")
     public ResponseEntity<Void> deleteDeck(@PathVariable Long deckid) {
         deckService.removeDeck(deckid);
-
         return ResponseEntity.ok().build();
     }
 }

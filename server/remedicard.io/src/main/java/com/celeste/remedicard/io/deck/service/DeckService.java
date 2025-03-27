@@ -30,10 +30,12 @@ public class DeckService {
     private final DeckRepository deckRepository;
     private final UserRepository userRepository;
 
-    public void create(Deck deck, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public Deck create(Deck deck) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user = userRepository.findById(user.getId()).get();
         deck.setUser(user);
         deckRepository.save(deck);
+        return deck;
     }
 
     public Deck getDeckByDeckId(Long deckId) {

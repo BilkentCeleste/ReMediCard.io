@@ -37,7 +37,7 @@ export default function Updatedeck() {
                 <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
             </View>
 
-            <Text style={styles.menuText}>{deck?.topic}</Text>
+            <Text style={styles.menuText}>{deck?.name}</Text>
         
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
