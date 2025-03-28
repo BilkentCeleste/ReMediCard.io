@@ -32,10 +32,7 @@ public class JWTFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        /*if (request.getServletPath().contains("auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }*/
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
@@ -43,7 +40,7 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        logger.info("JWT token: " + authHeader);
+
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
