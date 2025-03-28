@@ -112,6 +112,7 @@ export default function Decks() {
 
     createDeck({
       name: newDeckTitle,
+      topic: newDeckTitle
     }).then((res) => {
       setManualCreateModalVisible(false);
       setNewDeckTitle("");

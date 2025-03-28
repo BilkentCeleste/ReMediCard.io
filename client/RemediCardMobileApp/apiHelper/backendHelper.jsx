@@ -89,3 +89,7 @@ export const deleteQuiz = async (id) => {
   return await deleteFetcher(url.DELETE_QUIZ_PATH(id));
 };
 
+export const createQuiz = async (data) => {
+  return await postFetcher(url.CREATE_QUIZ_PATH(), data);
+};
+
