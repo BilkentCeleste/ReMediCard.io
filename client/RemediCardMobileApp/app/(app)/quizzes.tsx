@@ -80,8 +80,12 @@ export default function Quizzes() {
   }
 
   const handleEditQuiz = () => {
-    setModalVisible(false);
-    // router.push("/(app)/edit_deck");
+    if (selectedQuiz) {
+          setModalVisible(false);
+          router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
+        } else {
+          Alert.alert("Error", "Quiz information is missing.");
+        }
   }
 
   const handleGenerateByAI = () => {
@@ -89,7 +93,7 @@ export default function Quizzes() {
   };
 
   const handleManualCreate = () => {
-    Alert.alert("Manual", "Generate Manual");
+    //Alert.alert("Manual", "Generate Manual");
 
     if (!newQuizTitle.trim()) {
       Alert.alert("Error", "Please enter a deck name");
@@ -133,9 +137,9 @@ export default function Quizzes() {
 
       <FlatList
         style={styles.flatListContainer}
-        contentContainerStyle={styles.flatListContent} // Style for inner FlatList items
+        contentContainerStyle={styles.flatListContent} 
         data={quizzes}
-        keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
+        keyExtractor={(item, index) => index.toString()} 
         renderItem={({ item }) => (
           <TouchableOpacity
               style={styles.deckComponent}
@@ -368,7 +372,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "100%",
     marginTop: 30,
-    position: "absolute", // Position the navbar absolutely
+    position: "absolute",
     bottom: 50,
     backgroundColor: "#53789D",
   },
@@ -378,7 +382,7 @@ const styles = StyleSheet.create({
     width: "75%",
     position: "absolute",
     bottom: 50,
-    backgroundColor: "#53789D", // Match the background color
+    backgroundColor: "#53789D", 
     height: 1,
   },
   navbarLine: {
@@ -435,9 +439,9 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   chevronRightIcon: {
-    left: "100%",
+    left: "90%",
     zIndex: 3,
-    top: "90%",
+    top: "70%",
   },
   menuIcon: {
     right: "95%",
@@ -452,24 +456,24 @@ const styles = StyleSheet.create({
   deckInfoText: {
     fontSize: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 8, 
   },
   deckTitle: {
     fontSize: 16,
     color: "#000",
     fontWeight: "bold",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 8, 
   },
   deckComponent: {
     borderRadius: 20,
     backgroundColor: "#fff",
-    width: "100%", // Adjusted width to fit screen
-    height: 120, // Increased height for sufficient spacing
+    width: "100%",
+    height: 120,
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
-    padding: 15, // Add padding for content
-    marginVertical: 5, // Space between items
+    padding: 15,
+    marginVertical: 5,
   },
   accessInfoPosition: {
     top: 35,
@@ -487,20 +491,20 @@ const styles = StyleSheet.create({
     left: 15,
   },
   flatListContainer: {
-    width: "75%", // Adjust the width to be larger
-    height: "35%", // Shorten the height
-    marginTop: 5, // Lower its starting position
-    backgroundColor: "transparent", // Optional, keeps it aligned with the background
+    width: "75%",
+    height: "35%",
+    marginTop: 5,
+    backgroundColor: "transparent",
     marginBottom: 120,
   },
   flatListContent: {
-    alignItems: "stretch", // Ensure items stretch to the container width
-    paddingBottom: 20, // Add padding if needed at the bottom
+    alignItems: "stretch",
+    paddingBottom: 20, 
   },
   link: {
-    flexDirection: "column", // Stack children vertically
-    alignItems: "flex-start", // Align text to the left
-    width: "100%", // Ensure it doesn't shrink
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "100%", 
   },
   modalOverlay: {
     flex: 1,

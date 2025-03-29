@@ -93,3 +93,7 @@ export const createQuiz = async (data) => {
   return await postFetcher(url.CREATE_QUIZ_PATH(), data);
 };
 
+export const getQuizByQuizId = async (id) => {
+  return await getFetcher(url.GET_QUIZ_BY_QUIZ_ID_PATH(id));
+};
+

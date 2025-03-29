@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useRouter,useNavigation } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { AtIcon, LockIcon } from "@/constants/icons";
 
 export default function ForgotPassword() {
