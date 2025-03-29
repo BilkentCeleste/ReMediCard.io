@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.caseStudy.entity;
+package com.celeste.remedicard.io.casestudy.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import jakarta.persistence.*;

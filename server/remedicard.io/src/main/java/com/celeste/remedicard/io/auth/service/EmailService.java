@@ -61,4 +61,22 @@ public class EmailService {
             throw new RuntimeException("Error sending email", e);
         }
     }
+
+    public void sendAccountDeletionMail(String email, String token) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(email);
+            helper.setSubject("CONFIRM ACCOUNT DELETION");
+            helper.setText("\n You can confirm the account deletion of your ReMediCard.io account by clicking to the following link: "
+                    + "\n\n\n" + "http://localhost:8080" + "/auth/confirm_delete_account?token="+ token + "\n", true);
+            helper.setFrom(mailFrom);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error sending email", e);
+        }
+    }
 }

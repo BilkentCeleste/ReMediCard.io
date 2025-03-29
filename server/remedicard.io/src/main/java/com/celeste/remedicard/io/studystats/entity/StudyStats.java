@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.studyStats.entity;
+package com.celeste.remedicard.io.studystats.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
@@ -21,7 +21,7 @@ public class StudyStats extends AuditableEntity {
     @Column
     private Double averageSuccessRate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

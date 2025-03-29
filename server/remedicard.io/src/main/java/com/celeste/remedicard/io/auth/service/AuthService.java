@@ -1,12 +1,12 @@
 package com.celeste.remedicard.io.auth.service;
 
-import com.celeste.remedicard.io.auth.controller.dto.AuthRequest;
-import com.celeste.remedicard.io.auth.controller.dto.AuthResponse;
-import com.celeste.remedicard.io.auth.controller.dto.RegisterRequest;
-import com.celeste.remedicard.io.auth.controller.dto.ResetPasswordRequest;
+import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.entity.Role;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.quiz.entity.Quiz;
+import com.celeste.remedicard.io.quiz.repository.QuizRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,9 +17,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -31,6 +29,8 @@ public class AuthService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+
+    private final QuizRepository quizRepository;
 
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -136,6 +136,47 @@ public class AuthService {
         }
 
         throw new IllegalArgumentException();
+    }
+
+    public void initiateDeleteAccount(AccountDeletionRequest accountDeletionRequest){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!passwordEncoder.matches(accountDeletionRequest.getPassword(), user.getPassword())){
+            throw new IllegalArgumentException("Wrong password");
+        }
+
+        String jwtToken = jwtService.generateToken(user).substring(7);
+
+        emailService.sendAccountDeletionMail(user.getEmail(), jwtToken);
+    }
+
+    @Transactional
+    public void completeDeleteAccount(String token){
+        String username = jwtService.extractUsername(token);
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if(user == null){
+            return;
+        }
+
+        if(!jwtService.isTokenValid(token, user)){
+            throw new IllegalArgumentException();
+        }
+
+        user.getFeedbacks().clear();
+        user.getUsageStats().clear();
+        user.getStudyStats().clear();
+        user.getDecks().clear();
+        user.getUsageStats().clear();
+
+        Set<Quiz> quizzes = user.getQuizzes();
+        quizzes.forEach(quiz -> quiz.removeUser(user));
+        quizRepository.saveAll(quizzes);
+
+        //user.getQuizzes().clear();
+
+        userRepository.save(user);
+        userRepository.delete(user);
     }
 
 }
