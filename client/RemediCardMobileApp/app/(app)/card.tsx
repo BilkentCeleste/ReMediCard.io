@@ -4,6 +4,9 @@ import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
+import { getFlashcardsInBatch, updateFlashcardReviews } from '@/apiHelper/backendHelper';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 
 export default function Card( props: any ) {
     const router = useRouter();
@@ -11,48 +14,108 @@ export default function Card( props: any ) {
     const {deck} = useLocalSearchParams();
     const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
 
-    const flashCardList = parsedDeck.flashcardSet;
 
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);
+    const [flashCardList, setFlashCardList] = useState([]);
+    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; isCorrect: boolean; lastReviewed: timestamp }[]>([]);
+
+    async function getFlashcards(deckId) {
+        getFlashcardsInBatch(deckId)
+        .then((response) => {
+            setFlashCardList(response.data.sort((a, b) => a.recallProbability - b.recallProbability)); // sort by recall probability
+            console.log("Flashcards fetched:", response.data);
+            if (response.data.length === 0) {
+                Alert.alert(
+                    "No Cards Available",
+                    "There are no cards in this deck.",
+                    [
+                        {
+                            text: "Go Back",
+                            onPress: () => router.back(), // Go back to previous screen
+                            style: "cancel"
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching flashcards:", error);
+        }
+        );    
+    }
+
+    async function sendFlashcardReviews() {
+        console.log("Sending flashcard reviews:", flashcardReviewList);
+        updateFlashcardReviews(flashcardReviewList)
+        .then((response) => {
+            setFlashcardReviewList([]); // clear list after sending
+        })
+        .catch((error) => {
+            console.error("Error updating flashcard reviews:", error);
+        });
+    }
+
+    useEffect(() => {
+        getFlashcards(parsedDeck.id);
+    }
+    , []);
+
+    useEffect(() => {
+        if ( flashcardReviewList.length % 5 === 0 && flashcardReviewList.length > 0 ) {
+        }
+    }
+    , [flashcardReviewList]);
 
     const handleTrueAnswer = () => {
+        setTrueAnswers(trueAnswers + 1);
+        setFlashcardReviewList([
+            ...flashcardReviewList,
+            {
+                id: flashCardList[currentCard].id,
+                isCorrect: true,
+                lastReviewed: new Date().toISOString().slice(0, -1),
+            },
+        ]);
+
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
-            setTrueAnswers(trueAnswers + 1);
         }
         else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers + 1}&falseAnswerCount=${falseAnswers}`);
+            sendFlashcardReviews();
+            getFlashcards(parsedDeck.id);
+            setCurrentCard(0);
         }
     };
 
     const handleFalseAnswer = () => {
+        setFalseAnswers(falseAnswers + 1);
+        setFlashcardReviewList([
+            ...flashcardReviewList,
+            {
+                id: flashCardList[currentCard].id,
+                isCorrect: true,
+                lastReviewed: new Date().toISOString().slice(0, -1),
+            },
+        ]);
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
-            setFalseAnswers(falseAnswers + 1);
         }
         else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers + 1}`);
+            sendFlashcardReviews();
+            getFlashcards(parsedDeck.id);
+            setCurrentCard(0);
+            // router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers + 1}`);
         }
     };
 
-    useEffect(() => {
-        if (flashCardList.length === 0) {
-            Alert.alert(
-                "No Cards Available",
-                "There are no cards in this deck.",
-                [
-                    {
-                        text: "Go Back",
-                        onPress: () => router.back(), // Go back to previous screen
-                        style: "cancel"
-                    }
-                ],
-                { cancelable: false }
-            );
-        }
-    }, []);
+    const handleEndSession = () => {
+        sendFlashcardReviews();
+        router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
+    }
+
 
     return (
         <View style={styles.container}>
@@ -92,6 +155,7 @@ export default function Card( props: any ) {
                     <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
                         <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
                         <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
+                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleEndSession}><CrossIcon /></TouchableOpacity>
                     </View>
                 </>
             )}

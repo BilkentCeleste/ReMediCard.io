@@ -25,6 +25,8 @@ export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
 export const CREATE_FLASHCARD_PATH = () => `${BASE_URL}/flashcard/create`;
 export const UPDATE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/update/${id}`;
 export const DELETE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/delete/${id}`;
+export const GET_FLASHCARDS_IN_BATCH_PATH = (deckId) => `${BASE_URL}/flashcard/getFlashcardsInBatch/${deckId}`;
+export const UPDATE_FLASHCARD_REVİEWS_PATH = () => `${BASE_URL}/flashcard/updateFlashcardReviews`;
 
 // support
 export const CREATE_FEEDBACK_PATH = (id) => `${BASE_URL}/support/feedback`;
