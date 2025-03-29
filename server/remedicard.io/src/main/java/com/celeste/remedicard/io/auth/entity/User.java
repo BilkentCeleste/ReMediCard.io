@@ -3,6 +3,7 @@ package com.celeste.remedicard.io.auth.entity;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
+import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
 import com.celeste.remedicard.io.studyStats.entity.StudyStats;
 import com.celeste.remedicard.io.support.entity.Feedback;
 import com.celeste.remedicard.io.usageStats.entity.UsageStats;
@@ -67,4 +68,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Deck> decks = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SpacedRepetition> spacedRepetitionRecords;
 }
