@@ -4,6 +4,8 @@ import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
+import { getFlashcardsInBatch, updateFlashcardReviews } from '@/apiHelper/backendHelper';
+
 
 export default function Card( props: any ) {
     const router = useRouter();
@@ -11,48 +13,115 @@ export default function Card( props: any ) {
     const {deck} = useLocalSearchParams();
     const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
 
-    const flashCardList = parsedDeck.flashcardSet;
 
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);
+    const [flashCardList, setFlashCardList] = useState([]);
+    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; correct: boolean; lastReviewed: timestamp }[]>([]);
+
+    async function getFlashcards(deckId) {
+        try {
+            const response = await getFlashcardsInBatch(deckId);
+            setFlashCardList(response.data.sort((a, b) => a.recallProbability - b.recallProbability));
+            response.data.forEach((card) => {
+                console.log("Card:", card.id, card.frontSide.text, card.recallProbability);
+            });
+    
+            if (response.data.length === 0) {
+                Alert.alert(
+                    "No Cards Available",
+                    "There are no cards in this deck.",
+                    [
+                        {
+                            text: "Go Back",
+                            onPress: () => router.back(),
+                            style: "cancel"
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            }
+        } catch (error) {
+            console.error("Error fetching flashcards:", error);
+        }
+    }
+
+async function sendFlashcardReviews() {
+    console.log("Sending flashcard reviews:", flashcardReviewList);
+    try {
+        await updateFlashcardReviews(flashcardReviewList);
+        setFlashcardReviewList([]); // Clear list after sending
+    } catch (error) {
+        console.error("Error updating flashcard reviews:", error);
+    }
+}
+
+    useEffect(() => {
+        getFlashcards(parsedDeck.id);
+    }
+    , []);
+
+    useEffect(() => {
+        if ((flashcardReviewList.length % 10 === 0 || currentCard === 0) && flashcardReviewList.length > 0) {
+            const updateAndFetch = async () => {
+                await sendFlashcardReviews(); // Ensure this completes first
+                if (currentCard === 0) {
+                    setFlashCardList([]); // Clear the list to force a re-fetch
+                    console.log("Getting flashcards after sending reviews.");
+                    await getFlashcards(parsedDeck.id); // Wait for database to update before fetching
+                }
+            };
+            updateAndFetch();
+        }
+    }, [flashcardReviewList]);
 
     const handleTrueAnswer = () => {
+        setTrueAnswers(trueAnswers + 1);
+        setFlashcardReviewList((prevList) => {
+            const updatedReviewList = [
+                ...prevList,
+                {
+                    id: flashCardList[currentCard].id,
+                    correct: true,
+                    lastReviewed: new Date().toISOString().slice(0, -1),
+                },
+            ];
+            return updatedReviewList;
+        }
+        );
+
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
-            setTrueAnswers(trueAnswers + 1);
         }
         else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers + 1}&falseAnswerCount=${falseAnswers}`);
+            setCurrentCard(0);
         }
     };
 
     const handleFalseAnswer = () => {
+        setFalseAnswers(falseAnswers + 1);
+        setFlashcardReviewList([
+            ...flashcardReviewList,
+            {
+                id: flashCardList[currentCard].id,
+                correct: false,
+                lastReviewed: new Date().toISOString().slice(0, -1),
+            },
+        ]);
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
-            setFalseAnswers(falseAnswers + 1);
         }
         else {
-            router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers + 1}`);
+            setCurrentCard(0);
         }
     };
 
-    useEffect(() => {
-        if (flashCardList.length === 0) {
-            Alert.alert(
-                "No Cards Available",
-                "There are no cards in this deck.",
-                [
-                    {
-                        text: "Go Back",
-                        onPress: () => router.back(), // Go back to previous screen
-                        style: "cancel"
-                    }
-                ],
-                { cancelable: false }
-            );
-        }
-    }, []);
+    const handleEndSession = () => {
+        sendFlashcardReviews();
+        router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
+    }
+
 
     return (
         <View style={styles.container}>
@@ -92,6 +161,7 @@ export default function Card( props: any ) {
                     <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
                         <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
                         <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
+                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleEndSession}><CrossIcon /></TouchableOpacity>
                     </View>
                 </>
             )}
