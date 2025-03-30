@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class FlashcardReviewDTO {
     private Long id;
-    private boolean isCorrect;
+    private boolean correct;
     private LocalDateTime lastReviewed;
 }

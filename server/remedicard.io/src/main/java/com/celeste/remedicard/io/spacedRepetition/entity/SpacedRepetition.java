@@ -2,9 +2,7 @@ package com.celeste.remedicard.io.spacedRepetition.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
-import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,8 +27,5 @@ public class SpacedRepetition extends AuditableEntity{
     @Column(columnDefinition = "TEXT") // Json representation of EbisuModel
     private String model;
 
-    private double recallProbability;  // Cached recall probability
-
     private LocalDateTime lastReviewed;
-
 }

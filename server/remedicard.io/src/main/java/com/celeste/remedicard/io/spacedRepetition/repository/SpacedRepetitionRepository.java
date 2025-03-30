@@ -1,7 +1,6 @@
 package com.celeste.remedicard.io.spacedRepetition.repository;
 
 import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,10 +13,4 @@ public interface SpacedRepetitionRepository extends JpaRepository<SpacedRepetiti
             "WHERE sr.user.id = :userId " +
             "AND sr.flashcard.deck.id = :deckId")
     List<SpacedRepetition> findByUserIdAndDeckId(Long userId, Long deckId);
-
-    @Query("SELECT sr FROM SpacedRepetition sr " +
-            "WHERE sr.user.id = :userId " +
-            "AND sr.flashcard.deck.id = :deckId " +
-            "ORDER BY sr.recallProbability ASC")
-    List<SpacedRepetition> findByUserIdAndDeckIdSortedByProbability(Long userId, Long deckId, Pageable pageable);
 }

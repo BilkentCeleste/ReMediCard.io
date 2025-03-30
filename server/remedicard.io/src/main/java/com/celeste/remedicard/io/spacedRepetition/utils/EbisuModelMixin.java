@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public abstract class EbisuModelMixin {
     @JsonCreator
     public EbisuModelMixin(
+            @JsonProperty("time") double time,
             @JsonProperty("alpha") double alpha,
-            @JsonProperty("beta") double beta,
-            @JsonProperty("time") double time
+            @JsonProperty("beta") double beta
     ) {}
 }
