@@ -14,9 +14,10 @@ import {
   ProfileIcon,
   SettingsIcon,
   ChevronRightIcon,
+  PlusIcon
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
-import {deleteQuiz, getQuizzesByCurrentUser} from "@/apiHelper/backendHelper";
+import {deleteQuiz, getQuizzesByCurrentUser, createQuiz} from "@/apiHelper/backendHelper";
 
 export default function Quizzes() {
   const [selectedSort, setSelectedSort] = useState<string>("");
@@ -24,7 +25,10 @@ export default function Quizzes() {
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [quizzes, setQuizzes] = useState<any[]>([]);
-
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [manualCreateModalVisible, setManualCreateModalVisible] =
+    useState(false);
+  const [newQuizTitle, setNewQuizTitle] = useState("");  
   const router = useRouter();
 
   useEffect(() => {
@@ -76,9 +80,34 @@ export default function Quizzes() {
   }
 
   const handleEditQuiz = () => {
-    setModalVisible(false);
-    // router.push("/(app)/edit_deck");
+    if (selectedQuiz) {
+          setModalVisible(false);
+          router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
+        } else {
+          Alert.alert("Error", "Quiz information is missing.");
+        }
   }
+
+  const handleGenerateByAI = () => {
+    Alert.alert("AI", "Generate With AI");
+  };
+
+  const handleManualCreate = () => {
+    //Alert.alert("Manual", "Generate Manual");
+
+    if (!newQuizTitle.trim()) {
+      Alert.alert("Error", "Please enter a deck name");
+      return;
+    }
+
+    createQuiz({
+      name: newQuizTitle,
+    }).then((res) => {
+      setManualCreateModalVisible(false);
+      setNewQuizTitle("");
+      //router.push("/(app)/updatedeck?deckId=" + res.data.id);
+    });
+  };
 
   const sortOptions = [
     { label: "Sort by Last Accessed", value: "last" },
@@ -108,9 +137,9 @@ export default function Quizzes() {
 
       <FlatList
         style={styles.flatListContainer}
-        contentContainerStyle={styles.flatListContent} // Style for inner FlatList items
+        contentContainerStyle={styles.flatListContent} 
         data={quizzes}
-        keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
+        keyExtractor={(item, index) => index.toString()} 
         renderItem={({ item }) => (
           <TouchableOpacity
               style={styles.deckComponent}
@@ -132,6 +161,55 @@ export default function Quizzes() {
           </TouchableOpacity>
         )}
       />
+
+      <TouchableOpacity
+              style={styles.createButton}
+              onPress={() => setCreateModalVisible(true)}
+            >
+              <PlusIcon></PlusIcon>
+              <Text style={styles.createNewDeck}>Create New Quiz</Text>
+            </TouchableOpacity>
+      
+            <Modal
+              transparent={true}
+              visible={createModalVisible}
+              animationType="slide"
+              onRequestClose={() => setCreateModalVisible(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContainer}>
+                  <Text style={styles.modalTitle}>Create Quiz</Text>
+      
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => {
+                      setCreateModalVisible(false);
+                      //handleManualCreate();
+                      setManualCreateModalVisible(true);
+                    }}
+                  >
+                    <Text style={styles.modalButtonText}>Create Manually</Text>
+                  </TouchableOpacity>
+      
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => {
+                      setCreateModalVisible(false);
+                      handleGenerateByAI();
+                    }}
+                  >
+                    <Text style={styles.modalButtonText}>Create with AI</Text>
+                  </TouchableOpacity>
+      
+                  <TouchableOpacity
+                    style={styles.modalCancel}
+                    onPress={() => setCreateModalVisible(false)}
+                  >
+                    <Text style={styles.modalCancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
 
       <Modal
           transparent={true}
@@ -198,7 +276,43 @@ export default function Quizzes() {
           </View>
         </View>
       </Modal>
+      
+      <Modal
+        transparent={true}
+        visible={manualCreateModalVisible}
+        animationType="slide"
+        onRequestClose={() => setManualCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>New Quiz Name</Text>
+            <TextInput
+              style={[
+                styles.searchComponent,
+                { width: "100%", marginBottom: 10 },
+              ]}
+              placeholder="Enter deck title"
+              value={newQuizTitle}
+              onChangeText={setNewQuizTitle}
+            />
 
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleManualCreate}
+            >
+              <Text style={styles.modalButtonText}>Save & Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setManualCreateModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+        
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -258,7 +372,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "100%",
     marginTop: 30,
-    position: "absolute", // Position the navbar absolutely
+    position: "absolute",
     bottom: 50,
     backgroundColor: "#53789D",
   },
@@ -268,7 +382,7 @@ const styles = StyleSheet.create({
     width: "75%",
     position: "absolute",
     bottom: 50,
-    backgroundColor: "#53789D", // Match the background color
+    backgroundColor: "#53789D", 
     height: 1,
   },
   navbarLine: {
@@ -325,9 +439,9 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   chevronRightIcon: {
-    left: "100%",
+    left: "90%",
     zIndex: 3,
-    top: "90%",
+    top: "70%",
   },
   menuIcon: {
     right: "95%",
@@ -342,24 +456,24 @@ const styles = StyleSheet.create({
   deckInfoText: {
     fontSize: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 8, 
   },
   deckTitle: {
     fontSize: 16,
     color: "#000",
     fontWeight: "bold",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 8, 
   },
   deckComponent: {
     borderRadius: 20,
     backgroundColor: "#fff",
-    width: "100%", // Adjusted width to fit screen
-    height: 120, // Increased height for sufficient spacing
+    width: "100%",
+    height: 120,
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
-    padding: 15, // Add padding for content
-    marginVertical: 5, // Space between items
+    padding: 15,
+    marginVertical: 5,
   },
   accessInfoPosition: {
     top: 35,
@@ -377,20 +491,20 @@ const styles = StyleSheet.create({
     left: 15,
   },
   flatListContainer: {
-    width: "75%", // Adjust the width to be larger
-    height: "35%", // Shorten the height
-    marginTop: 5, // Lower its starting position
-    backgroundColor: "transparent", // Optional, keeps it aligned with the background
+    width: "75%",
+    height: "35%",
+    marginTop: 5,
+    backgroundColor: "transparent",
     marginBottom: 120,
   },
   flatListContent: {
-    alignItems: "stretch", // Ensure items stretch to the container width
-    paddingBottom: 20, // Add padding if needed at the bottom
+    alignItems: "stretch",
+    paddingBottom: 20, 
   },
   link: {
-    flexDirection: "column", // Stack children vertically
-    alignItems: "flex-start", // Align text to the left
-    width: "100%", // Ensure it doesn't shrink
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "100%", 
   },
   modalOverlay: {
     flex: 1,
@@ -430,5 +544,22 @@ const styles = StyleSheet.create({
     color: "#2916ff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  createButton: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 30,
+    height: 50,
+    bottom: "15%",
+  },
+  createNewDeck: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#fff",
+    textAlign: "center",
   },
 });

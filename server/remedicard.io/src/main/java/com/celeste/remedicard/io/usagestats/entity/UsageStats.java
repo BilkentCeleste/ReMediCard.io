@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.usageStats.entity;
+package com.celeste.remedicard.io.usagestats.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
@@ -31,7 +31,7 @@ public class UsageStats extends AuditableEntity {
     private Map<Date, Date> sessions;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

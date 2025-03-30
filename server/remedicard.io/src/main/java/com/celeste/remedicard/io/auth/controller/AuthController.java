@@ -1,14 +1,12 @@
 package com.celeste.remedicard.io.auth.controller;
 
-import com.celeste.remedicard.io.auth.controller.dto.AuthRequest;
-import com.celeste.remedicard.io.auth.controller.dto.AuthResponse;
-import com.celeste.remedicard.io.auth.controller.dto.RegisterRequest;
-import com.celeste.remedicard.io.auth.controller.dto.ResetPasswordRequest;
+import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("auth")
@@ -49,6 +47,20 @@ public class AuthController {
             @RequestBody ResetPasswordRequest request
     ) {
         return ResponseEntity.ok(authService.verifyResetCode(request));
+    }
+
+    @PostMapping("initiate_delete_account")
+    public ResponseEntity<Void> initiateAccountDeletion(@RequestBody AccountDeletionRequest accountDeletionRequest){
+        authService.initiateDeleteAccount(accountDeletionRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("confirm_delete_account")
+    public RedirectView confirmAccountDeletion(@RequestParam String token){
+        authService.completeDeleteAccount(token);
+
+        return new RedirectView("/deletion-success.html");
     }
 
     @Secured("ROLE_USER")

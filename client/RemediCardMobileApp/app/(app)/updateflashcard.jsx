@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     deleteButton: {
-        backgroundColor: '#FF6B6B',
+        backgroundColor: '#C8102E',
     },
     saveButton: {
         backgroundColor: '#4CAF50',

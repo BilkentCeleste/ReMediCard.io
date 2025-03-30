@@ -37,3 +37,6 @@ export const AUTO_GENERATE_DECK_PATH = () => `${BASE_URL}/auto_generation/genera
 // quiz
 export const GET_QUIZZES_BY_CURRENT_USER_PATH = () => `${BASE_URL}/quiz/getByCurrentUser`;
 export const DELETE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/delete/${id}`;
+export const CREATE_QUIZ_PATH = () => `${BASE_URL}/quiz/create`;
+export const GET_QUIZ_BY_QUIZ_ID_PATH = (id) => `${BASE_URL}/quiz/get/${id}`;
+
