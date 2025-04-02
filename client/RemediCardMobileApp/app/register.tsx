@@ -19,8 +19,11 @@ import {
 } from "../constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+  const { t } = useTranslation("register");
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setMail] = useState("");
@@ -49,13 +52,13 @@ export default function Register() {
       <Redirect href="/(app)/home" />
   ) : (
     <View style={styles.container}>
-      <Text style={styles.title}>ReMediCard.io</Text>
+      <Text style={styles.title}>{t('title')}</Text>
 
       <View style={styles.component}>
         <AtIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder="username"
+          placeholder={t('username')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           value={username}
@@ -67,9 +70,8 @@ export default function Register() {
         <MailIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder="email"
+          placeholder={t('email')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
           value={email}
           onChangeText={setMail}
         ></TextInput>
@@ -79,7 +81,7 @@ export default function Register() {
         <LockIcon />
         <TextInput
           style={styles.passwordtext}
-          placeholder="password"
+          placeholder={t('password')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -100,7 +102,7 @@ export default function Register() {
         <LockIcon></LockIcon>
         <TextInput
           style={styles.passwordtext}
-          placeholder="confirm password"
+          placeholder={t('confirm_password')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -118,16 +120,16 @@ export default function Register() {
       </View>
 
       <TouchableOpacity style={styles.registercomponent} onPress={handleSignUp}>
-        <Text style={styles.registertext}>Sign Up</Text>
+        <Text style={styles.registertext}>{t('sign_up')}</Text>
       </TouchableOpacity>
 
       <View style={styles.bottomContainer}>
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
           <Text style={styles.seperatortext}>
-            Already have an account?
+            {t('already_have_an_account')}
             <Link href="/login" style={styles.link}>
-              <Text style={styles.link}> Log In</Text>
+              <Text style={styles.link}> {t('log_in')}</Text>
             </Link>
           </Text>
           <View style={styles.separatorLine} />

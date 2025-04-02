@@ -24,8 +24,11 @@ import {
   HomeIcon,
 } from "@/constants/icons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
+  const { t } = useTranslation("profile");
+
   const router = useRouter();
   const { isLoggedIn, logoutAuth } = useAuth();
 
@@ -44,16 +47,16 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+      <Text style={styles.remedicardio}>{t("title")}</Text>
 
       <View style={styles.infoCard}>
         <Text style={styles.infoText}>
           <AtIcon color="white" />
-          Username
+          Username (dummy)
         </Text>
         <Text style={styles.infoText}>
           <MailIcon color="white" />
-          Email
+          Email (dummy)
         </Text>
       </View>
 
@@ -62,7 +65,7 @@ export default function Profile() {
           <EditProfileIcon></EditProfileIcon>
         </View>
 
-        <Text style={styles.menuText}>Edit Profile</Text>
+        <Text style={styles.menuText}>{t("edit_profile")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -78,7 +81,7 @@ export default function Profile() {
           <SubscriptionIcon />
         </View>
 
-        <Text style={styles.menuText}>Subscription</Text>
+        <Text style={styles.menuText}>{t("subscription")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -94,7 +97,7 @@ export default function Profile() {
           <ContactIcon />
         </View>
 
-        <Text style={styles.menuText}>Contact Us</Text>
+        <Text style={styles.menuText}>{t("contact_us")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -110,7 +113,7 @@ export default function Profile() {
           <LanguageIcon />
         </View>
 
-        <Text style={styles.menuText}>Language</Text>
+        <Text style={styles.menuText}>{t("language")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -126,7 +129,7 @@ export default function Profile() {
           <LogoutIcon />
         </View>
 
-        <Text style={styles.menuText}>Log Out</Text>
+        <Text style={styles.menuText}>{t("log_out")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>

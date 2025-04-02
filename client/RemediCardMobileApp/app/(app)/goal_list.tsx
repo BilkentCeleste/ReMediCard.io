@@ -17,6 +17,7 @@ import {
   PlusIcon
 } from "../../constants/icons"; // Adjust to your icon imports
 import DropDown from "../../components/DropDown"; // Same custom DropDown component used in deck.tsx
+import { useTranslation } from "react-i18next";
 
 interface Goal {
   title: string;
@@ -28,14 +29,16 @@ interface Goal {
 }
 
 export default function GoalList() {
+  const { t } = useTranslation("goal_list");
+
   const router = useRouter();
 
   // Sorting options (mirroring what you do in decks)
   const sortOptions = [
-    { label: "Sort by Longest", value: "longest" },
-    { label: "Sort by Shortest", value: "shortest" },
-    { label: "Sort by Highest Goal %", value: "highestGoal" },
-    { label: "Sort by Lowest Goal %", value: "lowestGoal" },
+    { label: t("sort_by_longest"), value: "longest" },
+    { label: t("sort_by_shortest"), value: "shortest" },
+    { label: t("sort_by_highest"), value: "highestGoal" },
+    { label: t("sort_by_lowest"), value: "lowestGoal" },
   ];
 
   const [selectedSort, setSelectedSort] = useState<string>("longest");
@@ -71,14 +74,14 @@ export default function GoalList() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+      <Text style={styles.remedicardio}>{t("title")}</Text>
 
       {/* Search Bar */}
       <View style={styles.searchComponent}>
         <SearchIcon />
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
-          placeholder="search anything"
+          placeholder={t("search")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           value={searchTerm}
           onChangeText={(text) => setSearchTerm(text)}
@@ -88,7 +91,7 @@ export default function GoalList() {
       {/* Sort Dropdown */}
       <DropDown
         options={sortOptions}
-        placeholder="Select sort option"
+        placeholder={t("select_sort_option")}
         onSelect={(value) => setSelectedSort(value)}
         // optional: default selected could be set here
       />
@@ -132,7 +135,7 @@ export default function GoalList() {
           router.push("/(app)/create_goal");
         }}>
           <PlusIcon></PlusIcon>
-          <Text style={styles.createNewDeck}>Create New Goal</Text>
+          <Text style={styles.createNewDeck}>{t("create_goal")}</Text>
       </TouchableOpacity>
 
       {/* <TouchableOpacity

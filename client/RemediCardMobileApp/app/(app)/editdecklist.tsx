@@ -6,8 +6,10 @@ import { AtIcon, MailIcon, ChevronDown, EditProfileIcon, SubscriptionIcon, Conta
     EditIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown"; // Path to the custom DropDown component
 import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
+import { useTranslation } from 'react-i18next';
 
 export default function Decks() {
+    const { t } = useTranslation("edit_deck_list");
     const router = useRouter();
     
     const [selectedSort, setSelectedSort] = useState<string>("");
@@ -35,10 +37,10 @@ export default function Decks() {
         }, []);
 
     const sortOptions = [
-        { label: "Sort by Last Accessed", value: "last" },
-        { label: "Sort by Newly Accessed", value: "newest" },
-        { label: "Sort by Best Performance", value: "best" },
-        { label: "Sort by Worst Performance", value: "worst" },
+        { label: t("sort_by_last_accessed"), value: "last" },
+        { label: t("sort_by_newly_accessed"), value: "newest" },
+        { label: t("sort_by_best_performance"), value: "best" },
+        { label: t("sort_by_worst_performance"), value: "worst" },
     ];
 
     const uploadUpdateDeckPage = (id: any) => {
@@ -47,16 +49,16 @@ export default function Decks() {
 
     return (
         <View style={styles.container}>
-        <Text style={styles.remedicardio}>ReMediCard.io</Text>
+        <Text style={styles.remedicardio}>{t("title")}</Text>
 
         <View style={styles.searchComponent}>
             <SearchIcon></SearchIcon>
-            <TextInput style={[styles.searchText, styles.searchPosition]} placeholder='search anything' placeholderTextColor={"rgba(0, 0, 0, 0.25)"}></TextInput>
+            <TextInput style={[styles.searchText, styles.searchPosition]} placeholder={t("search")} placeholderTextColor={"rgba(0, 0, 0, 0.25)"}></TextInput>
         </View>
         
         <DropDown
             options={sortOptions}
-            placeholder="Select sort option"
+            placeholder={t("select_sort_option")}
             onSelect={(value) => setSelectedSort(value)}
         />
 
@@ -68,15 +70,15 @@ export default function Decks() {
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
                     <View>
-                    <Text style={styles.deckTitle}>{item.topic}</Text>
+                    <Text style={styles.deckTitle}>{item.name}</Text>
                     <Text style={[styles.deckInfoText]}>
-                        Last accessed: {item.lastAccessed}
+                    {t("last_accessed")} {item.lastAccessed}
                     </Text>
                     <Text style={[styles.deckInfoText]}>
-                        {item.flashcardSet.length} cards
+                        {item.flashcardSet.length} {t("cards")}
                     </Text>
                     <Text style={[styles.deckInfoText]}>
-                        Best: {item.bestPerformance}% Last: {item.lastPerformance}%
+                    {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
                     </Text>
                     <TouchableOpacity style={[styles.chevronRightIcon, styles.iconLayout]} onPress={() => uploadUpdateDeckPage(item.id)}>
                         <EditIcon color="#111" />
@@ -88,7 +90,7 @@ export default function Decks() {
 
         <TouchableOpacity style={styles.createButton} onPress={uploadGeneratePage}>
             <PlusIcon></PlusIcon>
-            <Text style={styles.createNewDeck}>Create New Deck</Text>
+            <Text style={styles.createNewDeck}>{t("create_new_deck")}</Text>
         </TouchableOpacity>
                 
         <View style={styles.navbarRow}>

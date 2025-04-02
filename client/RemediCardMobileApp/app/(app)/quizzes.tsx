@@ -18,8 +18,11 @@ import {
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {deleteQuiz, getQuizzesByCurrentUser, createQuiz} from "@/apiHelper/backendHelper";
+import { useTranslation } from "react-i18next";
 
 export default function Quizzes() {
+  const { t } = useTranslation("quizzes");
+
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -59,7 +62,7 @@ export default function Quizzes() {
 
     deleteQuiz(selectedQuiz?.id)
       .then((res) => {
-        Alert.alert("Success", "Selected quiz is successfully deleted!");
+        Alert.alert(t("success"), t("quiz_deleted"));
         setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
         setSelectedQuiz(null);
         setPopUpVisible(false);
@@ -75,7 +78,7 @@ export default function Quizzes() {
         params: { quiz: JSON.stringify(selectedQuiz) },
       });
     } else {
-      Alert.alert("Error", "Quiz information is missing.");
+      Alert.alert(t("error"), t("quiz_info_missing"));
     }
   }
 
@@ -84,19 +87,19 @@ export default function Quizzes() {
           setModalVisible(false);
           router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
         } else {
-          Alert.alert("Error", "Quiz information is missing.");
+          Alert.alert(t("error"), t("quiz_info_missing"));
         }
   }
 
   const handleGenerateByAI = () => {
-    Alert.alert("AI", "Generate With AI");
+    Alert.alert(t("ai"), t("ai_message"));
   };
 
   const handleManualCreate = () => {
     //Alert.alert("Manual", "Generate Manual");
 
     if (!newQuizTitle.trim()) {
-      Alert.alert("Error", "Please enter a deck name");
+      Alert.alert(t("error"), t("enter_deck_name"));
       return;
     }
 
@@ -110,10 +113,10 @@ export default function Quizzes() {
   };
 
   const sortOptions = [
-    { label: "Sort by Last Accessed", value: "last" },
-    { label: "Sort by Newly Accessed", value: "newest" },
-    { label: "Sort by Best Performance", value: "best" },
-    { label: "Sort by Worst Performance", value: "worst" },
+    { label: t("sort_by_last_accessed"), value: "last" },
+    { label: t("sort_by_newly_accessed"), value: "newest" },
+    { label: t("sort_by_best_performance"), value: "best" },
+    { label: t("sort_by_worst_performance"), value: "worst" },
   ];
 
   return (
@@ -124,14 +127,14 @@ export default function Quizzes() {
         <SearchIcon></SearchIcon>
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
-          placeholder="search anything"
+          placeholder={t("search")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         ></TextInput>
       </View>
 
       <DropDown
         options={sortOptions}
-        placeholder="Select sort option"
+        placeholder={t("select_sort_option")}
         onSelect={(value) => setSelectedSort(value)}
       />
 
@@ -148,11 +151,11 @@ export default function Quizzes() {
             <View>
               <Text style={styles.deckTitle}>{item.name}</Text>
               <Text style={[styles.deckInfoText]}>
-                Last accessed: {item.lastAccessed}
+                {t("last_accessed")} {item.lastAccessed}
               </Text>
-              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} cards</Text>
+              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} {t("cards")}</Text>
               <Text style={[styles.deckInfoText]}>
-                Best: {item.bestPerformance}% Last: {item.lastPerformance}%
+              {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
               </Text>
               <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                 <ChevronRightIcon color="#111" />
@@ -167,7 +170,7 @@ export default function Quizzes() {
               onPress={() => setCreateModalVisible(true)}
             >
               <PlusIcon></PlusIcon>
-              <Text style={styles.createNewDeck}>Create New Quiz</Text>
+              <Text style={styles.createNewDeck}>{t("create_new_quiz")}</Text>
             </TouchableOpacity>
       
             <Modal
@@ -178,7 +181,7 @@ export default function Quizzes() {
             >
               <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
-                  <Text style={styles.modalTitle}>Create Quiz</Text>
+                  <Text style={styles.modalTitle}>{t("create_quiz")}</Text>
       
                   <TouchableOpacity
                     style={styles.modalButton}
@@ -188,7 +191,7 @@ export default function Quizzes() {
                       setManualCreateModalVisible(true);
                     }}
                   >
-                    <Text style={styles.modalButtonText}>Create Manually</Text>
+                    <Text style={styles.modalButtonText}>{t("create_manually")}</Text>
                   </TouchableOpacity>
       
                   <TouchableOpacity
@@ -198,14 +201,14 @@ export default function Quizzes() {
                       handleGenerateByAI();
                     }}
                   >
-                    <Text style={styles.modalButtonText}>Create with AI</Text>
+                    <Text style={styles.modalButtonText}>{t("create_with_ai")}</Text>
                   </TouchableOpacity>
       
                   <TouchableOpacity
                     style={styles.modalCancel}
                     onPress={() => setCreateModalVisible(false)}
                   >
-                    <Text style={styles.modalCancelText}>Cancel</Text>
+                    <Text style={styles.modalCancelText}>{t("cancel")}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -285,13 +288,13 @@ export default function Quizzes() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>New Quiz Name</Text>
+            <Text style={styles.modalTitle}>{t("new_quiz_name")}</Text>
             <TextInput
               style={[
                 styles.searchComponent,
                 { width: "100%", marginBottom: 10 },
               ]}
-              placeholder="Enter deck title"
+              placeholder={t("enter_quiz_title")}
               value={newQuizTitle}
               onChangeText={setNewQuizTitle}
             />
@@ -300,14 +303,14 @@ export default function Quizzes() {
               style={styles.modalButton}
               onPress={handleManualCreate}
             >
-              <Text style={styles.modalButtonText}>Save & Edit</Text>
+              <Text style={styles.modalButtonText}>{t("save_and_edit")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setManualCreateModalVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>

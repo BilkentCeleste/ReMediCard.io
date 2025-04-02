@@ -1,0 +1,9 @@
+{
+    "title": "Hesabı Sil",
+    "description": "Hesabınızı silmek için lütfen e-posta adresinize gönderilen 6 haneli doğrulama kodunu girin.",
+    "try_again": "E-postayı almadınız mı? Tekrar deneyin",
+    "delete_account": "Hesabı Sil",
+    "cancel": "İptal",
+    "resent": "Yeniden Gönderildi",
+    "resent_message": "Doğrulama e-postası yeniden gönderildi."
+}

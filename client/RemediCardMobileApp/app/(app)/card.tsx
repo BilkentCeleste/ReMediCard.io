@@ -5,9 +5,10 @@ import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/c
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 import { getFlashcardsInBatch, updateFlashcardReviews } from '@/apiHelper/backendHelper';
-
+import { useTranslation } from 'react-i18next';
 
 export default function Card( props: any ) {
+    const { t } = useTranslation("card");
     const router = useRouter();
 
     const {deck} = useLocalSearchParams();
@@ -30,11 +31,11 @@ export default function Card( props: any ) {
     
             if (response.data.length === 0) {
                 Alert.alert(
-                    "No Cards Available",
-                    "There are no cards in this deck.",
+                    t("no_cards_available"),
+                    t("no_cards_available_message"),
                     [
                         {
-                            text: "Go Back",
+                            text: t("go_back"),
                             onPress: () => router.back(),
                             style: "cancel"
                         }

@@ -9,9 +9,12 @@ import {
 import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
+import { useTranslation } from "react-i18next";
 
 
 export default function QuizQuestion(props: any) {
+  const { t } = useTranslation("quiz_question");
+
   const router = useRouter();
 
   const {quiz} = useLocalSearchParams();
@@ -61,7 +64,7 @@ export default function QuizQuestion(props: any) {
           <GoBackIcon />
         </TouchableOpacity>
 
-        <Text style={styles.quizTitle}>{parsedQuiz?.name || "Quiz"}</Text>
+        <Text style={styles.quizTitle}>{parsedQuiz?.name || t("quiz")}</Text>
 
         {/* Space or an icon */}
         <View style={{ width: 24, height: 24 }} />
@@ -81,7 +84,7 @@ export default function QuizQuestion(props: any) {
       <View style={styles.questionBox}>
         <ScrollView>
           <Text style={styles.questionText}>
-            {currentQuestion?.description || "Question text"}
+            {currentQuestion?.description || t("question_text")}
           </Text>
         </ScrollView>
       </View>
@@ -100,7 +103,7 @@ export default function QuizQuestion(props: any) {
             <Text style={styles.answerLabel}>
               {String.fromCharCode(65 + index)}
             </Text>
-            <Text style={styles.answerText}>{answer || `answer ${index}`}</Text>
+            <Text style={styles.answerText}>{answer || t("answer") + index }</Text>
           </TouchableOpacity>
         ))}
       </View>

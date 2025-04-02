@@ -1,0 +1,8 @@
+{
+    "title": "Destenin Sonuçları",
+    "correct": "Doğru: ",
+    "incorrect": "Yanlış: ",
+    "success_rate": "Başarı Oranı: ",
+    "retry": "Yeniden dene?",
+    "home": "Ana sayfa"
+}

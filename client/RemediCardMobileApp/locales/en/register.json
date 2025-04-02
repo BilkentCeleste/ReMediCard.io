@@ -1,0 +1,10 @@
+{
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "log_in": "Log in",
+    "title": "ReMediCard.io",
+    "sign_up": "Sign up",
+    "already_have_an_account": "Already have an account?"
+}
