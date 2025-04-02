@@ -38,7 +38,7 @@ public class S3Service {
 
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        String fileAddress = "https://{" + "}.s3.{ " + region + "}.amazonaws.com/{"+ key + " }";
+        String fileAddress = "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
 
         return fileAddress;
     }

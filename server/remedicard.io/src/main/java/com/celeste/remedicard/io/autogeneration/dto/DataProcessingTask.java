@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Data
 public class DataProcessingTask implements Serializable {
     private Long id;
+    private Long userId;
     private String fileName;
     private String address;
     private DataType dataType;

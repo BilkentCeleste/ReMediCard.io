@@ -4,7 +4,7 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
-import com.celeste.remedicard.io.studyStats.entity.StudyStats;
+import com.celeste.remedicard.io.studystats.entity.StudyStats;
 import com.celeste.remedicard.io.support.entity.Feedback;
 import com.celeste.remedicard.io.usagestats.entity.UsageStats;
 import jakarta.persistence.*;

@@ -2,13 +2,20 @@ package com.celeste.remedicard.io.deck.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
+import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
+import com.celeste.remedicard.io.spacedRepetition.service.SpacedRepetitionService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +36,7 @@ public class DeckService {
     private final GeminiAPIService geminiAPIService;
     private final DeckRepository deckRepository;
     private final UserRepository userRepository;
+    private final SpacedRepetitionService spacedRepetitionService;
 
     public Deck create(Deck deck) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -136,6 +144,57 @@ public class DeckService {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Unexpected error occurred while processing the PDF: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public void createDeck(DeckCreationTask deckCreationTask){
+
+        User user = userRepository.findById(deckCreationTask.getUserId()).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+
+        Deck deck = Deck.builder()
+                .name("Generated_" + deckCreationTask.getName())
+                .topic(deckCreationTask.getName())
+                .difficulty("Normal")
+                .user(user)
+                .popularity(0)
+                .build();
+
+        Set<Flashcard> flashcards = new HashSet<>();
+
+        for (FlashcardCreationTask flashcardCreationTask : deckCreationTask.getFlashcards()) {
+
+            Side frontSide = Side.builder()
+                    .text(flashcardCreationTask.getFront())
+                    .build();
+
+            Side backSide = Side.builder()
+                    .text(flashcardCreationTask.getBack())
+                    .build();
+
+            Flashcard flashcard = Flashcard.builder()
+                    .type("flashcard")
+                    .deck(deck)
+                    .topic("")
+                    .frequency(0.5)
+                    .frontSide(frontSide)
+                    .backSide(backSide)
+                    .build();
+
+            flashcards.add(flashcard);
+        }
+
+        deck.setFlashcardSet(flashcards);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        deckRepository.save(deck);
+
+        for(Flashcard flashcard: flashcards){
+            spacedRepetitionService.create(user, flashcard);
         }
     }
 

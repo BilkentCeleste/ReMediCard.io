@@ -16,7 +16,7 @@ import java.util.Set;
 @Table(name = "SIDE")
 public class Side extends AuditableEntity {
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @ElementCollection
