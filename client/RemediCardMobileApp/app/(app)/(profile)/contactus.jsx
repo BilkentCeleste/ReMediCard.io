@@ -12,8 +12,11 @@ import {
 import { useRouter } from "expo-router";
 import { GoBackIcon } from "../../../constants/icons";
 import { createFeedback } from "../../../apiHelper/backendHelper";
+import { useTranslation } from "react-i18next";
 
 export default function ContactUs() {
+  const { t } = useTranslation("contact_us");
+
   const router = useRouter();
 
   const [subject, setSubject] = useState("");
@@ -23,8 +26,7 @@ export default function ContactUs() {
     console.log("fine", subject.length);
     if (subject.length < 1 || content.length < 1) {
       Alert.alert(
-        "Invalid form",
-        "Please enter a subject and a non-empty content for your feedback."
+        t("invalid_form"), t("invalid_form_message")
       );
       return;
     }
@@ -34,8 +36,7 @@ export default function ContactUs() {
       content: content
     }).then(res => {
       Alert.alert(
-        "Success",
-        "Your feedback form is successfully submitted. The team will contact you shortly."
+        t("success"), t("success_message")
       );
       setSubject("")
       setContent("")
@@ -50,17 +51,17 @@ export default function ContactUs() {
         <TouchableOpacity onPress={() => router.back()}>
           <GoBackIcon color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.title}>Contact Us</Text>
+        <Text style={styles.title}>{t("title")}</Text>
       </View>
 
       <Text style={styles.infoText}>
-        Send your complaints or recommendations to Team Celeste:
+        {t("send_message")}
       </Text>
 
       <View style={styles.textAreaContainerSmall}>
         <TextInput
           style={styles.textInputSmall}
-          placeholder="Subject"
+          placeholder={t("subject")}
           placeholderTextColor="rgba(0, 0, 0, 0.25)"
           multiline
           numberOfLines={1}
@@ -72,7 +73,7 @@ export default function ContactUs() {
       <View style={styles.textAreaContainerLarge}>
         <TextInput
           style={styles.textInputLarge}
-          placeholder="Content"
+          placeholder={t("content")}
           placeholderTextColor="rgba(0, 0, 0, 0.25)"
           multiline
           numberOfLines={8}
@@ -82,7 +83,7 @@ export default function ContactUs() {
       </View>
 
       <TouchableOpacity style={styles.registercomponent} onPress={handleSubmit}>
-        <Text style={styles.registertext}>Submit</Text>
+        <Text style={styles.registertext}>{t("submit")}</Text>
       </TouchableOpacity>
     </View>
   );

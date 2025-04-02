@@ -1,0 +1,12 @@
+{
+    "username": "Kullanıcı adı",
+    "password": "Şifre",
+    "log_in": "Giriş yap",
+    "title": "ReMediCard.io",
+    "forgot_password": "Şifrenizi mi unuttunuz?",
+    "remember_me": "Beni hatırla",
+    "or": "Ya da",
+    "continue_with_google": "Google ile devam et",
+    "dont_have_an_account": "Hesabınız yok mu?",
+    "sign_up": "Kayıt olun"
+}

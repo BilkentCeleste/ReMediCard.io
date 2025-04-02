@@ -3,8 +3,11 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList, 
 import { useRouter, Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { ChevronRightIcon, GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import { getQuizByQuizId } from '../../apiHelper/backendHelper';
+import { useTranslation } from 'react-i18next';
 
 export default function editQuiz() {
+    const { t } = useTranslation("edit_quiz");
+    
     const [quiz, setQuiz] = useState();
     const router = useRouter();
     const navigation = useNavigation();
@@ -96,7 +99,7 @@ export default function editQuiz() {
                     <View style={styles.questionCard}>
                         <Text style={styles.questionText}>{item.text}</Text>
                         <TouchableOpacity style={styles.editButton} onPress={() => uploadUpdateQuestion()}>
-                            <Text style={styles.editButtonText}>Edit</Text>
+                            <Text style={styles.editButtonText}>{t("edit")}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -104,7 +107,7 @@ export default function editQuiz() {
             />
 
             <TouchableOpacity style={styles.createParent} onPress={() => uploadUpdateQuestion()}>
-                <Text style={styles.buttonText}>Create Question</Text>
+                <Text style={styles.buttonText}>{t("create_question")}</Text>
             </TouchableOpacity>
 
             <View style={styles.navbarRow}>

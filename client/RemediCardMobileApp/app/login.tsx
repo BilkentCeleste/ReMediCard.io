@@ -20,8 +20,11 @@ import {
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation("login");
+
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
@@ -54,13 +57,13 @@ export default function Login() {
     <Redirect href="/(app)/home" />
   ) : (
     <View style={styles.container}>
-      <Text style={styles.title}>ReMediCard.io</Text>
+      <Text style={styles.title}>{t('title')}</Text>
 
       <View style={styles.component}>
         <AtIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder="username"
+          placeholder={t('username')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           value={username}
@@ -72,7 +75,7 @@ export default function Login() {
         <LockIcon></LockIcon>
         <TextInput
           style={styles.passwordtext}
-          placeholder="password"
+          placeholder={t('password')}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -90,12 +93,12 @@ export default function Login() {
       </View>
 
       <TouchableOpacity style={styles.logincomponent} onPress={handleLogin}>
-        <Text style={styles.logintext}>Log In</Text>
+        <Text style={styles.logintext}>{t("log_in")}</Text>
       </TouchableOpacity>
 
       <View style={styles.forgotPasswordContainer}>
           <Link href="/forgot_password" style={styles.link}>
-              <Text>Forgot password?</Text>
+              <Text>{t('forgot_password')}</Text>
           </Link>
       </View>
 
@@ -104,13 +107,13 @@ export default function Login() {
           {rememberMe && <Text style={styles.checkmark}>✓</Text>}
         </Pressable>
         <TouchableOpacity onPress={toggleRememberMe}>
-          <Text style={styles.rememberMeText}>Remember Me</Text>
+          <Text style={styles.rememberMeText}>{t('remember_me')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
-        <Text style={styles.seperatortext}>OR</Text>
+        <Text style={styles.seperatortext}>{t('or')}</Text>
         <View style={styles.separatorLine} />
       </View>
 
@@ -119,16 +122,16 @@ export default function Login() {
         onPress={handleLoginWithGoogle}
       >
         <GoogleIcon></GoogleIcon>
-        <Text style={styles.googleButtonText}>Continue with Google</Text>
+        <Text style={styles.googleButtonText}>{t('continue_with_google')}</Text>
       </TouchableOpacity>
 
       <View style={styles.bottomContainer}>
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
           <Text style={styles.seperatortext}>
-            Don't have an account?
+            {t('dont_have_an_account')}
             <Link href="/register" style={styles.link}>
-              <Text> Sign Up</Text>
+              <Text> {t('sign_up')}</Text>
             </Link>
           </Text>
           <View style={styles.separatorLine} />

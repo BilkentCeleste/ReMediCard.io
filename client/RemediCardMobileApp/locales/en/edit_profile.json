@@ -1,0 +1,15 @@
+{
+    "title": "Edit Profile",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "save": "Save Changes",
+    "cancel": "Cancel Changes",
+    "delete_account": "Delete Account",
+    "error": "Error",
+    "success": "Success",
+    "passwords_do_not_match": "Passwords do not match!",
+    "fill_all_fields": "Please fill in all fields!",
+    "success_message": "Changes saved successfully!"
+}

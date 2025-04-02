@@ -20,8 +20,11 @@ import {
 import DropDown from "../../components/DropDown";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useLocalSearchParams } from "expo-router/build/hooks";
+import { useTranslation } from "react-i18next";
 
 export default function CreateGoal() {
+  const { t } = useTranslation("create_goal");
+  
   const router = useRouter();
 
   const { deck_id } = useLocalSearchParams();
@@ -53,12 +56,12 @@ export default function CreateGoal() {
     // Add more as needed
   ];
   const repUnitsMonth = [
-    { label: "month(s)", value: "month(s)" },
-    { label: "week(s)", value: "week(s)" },
+    { label: t("months"), value: "month(s)" },
+    { label: t("weeks"), value: "week(s)" },
   ];
   const repUnitsDay = [
-    { label: "day(s)", value: "day(s)" },
-    { label: "hour(s)", value: "hour(s)" },
+    { label: t("days"), value: "day(s)" },
+    { label: t("hours"), value: "hour(s)" },
   ];
 
   // Derived text for the summary box at the bottom
@@ -82,11 +85,11 @@ export default function CreateGoal() {
 
       {/* Deck Row */}
       <View style={styles.formRow}>
-        <Text style={styles.labelText}>Deck</Text>
+        <Text style={styles.labelText}>{t("deck")}</Text>
         {/* Example using DropDown component (like in deck.tsx) */}
         <DropDown
           options={deckOptions}
-          placeholder="Select Deck"
+          placeholder={t("select_deck")}
           onSelect={(value) => setDeck(value)}
           initialValue={deck}
         />
@@ -95,7 +98,7 @@ export default function CreateGoal() {
 
       {/* Repetition Row #1 */}
       <View style={styles.formRow}>
-        <Text style={styles.labelText}>Repetition</Text>
+        <Text style={styles.labelText}>{t("repetition")}</Text>
         <View style={styles.repetitionRow}>
           <DropDown
             options={repValues}
@@ -106,7 +109,7 @@ export default function CreateGoal() {
           />
           <DropDown
             options={repUnitsMonth}
-            placeholder="month(s)"
+            placeholder={t("months")}
             onSelect={(value) => setRepOneUnit(value)}
             initialValue={repOneUnit}
             showChevron={false}
@@ -118,7 +121,7 @@ export default function CreateGoal() {
 
       {/* Repetition Row #2 */}
       <View style={styles.formRow}>
-        <Text style={styles.labelText}>Repetition</Text>
+        <Text style={styles.labelText}>{t("repetition")}</Text>
         <View style={styles.repetitionRow}>
           <DropDown
             options={repValues}
@@ -130,7 +133,7 @@ export default function CreateGoal() {
           />
           <DropDown
             options={repUnitsDay}
-            placeholder="day(s)"
+            placeholder={t("days")}
             onSelect={(value) => setRepTwoUnit(value)}
             initialValue={repTwoUnit}
             showChevron={false}
@@ -142,7 +145,7 @@ export default function CreateGoal() {
 
       {/* Performance Row */}
       <View style={styles.formRow}>
-        <Text style={styles.labelText}>Performance</Text>
+        <Text style={styles.labelText}>{t("performance")}</Text>
         {/* Example: plain TextInput for performance */}
         <TextInput
           style={styles.performanceInput}
@@ -168,7 +171,7 @@ export default function CreateGoal() {
             }}
           >
             <DiscordIcon/>
-            <Text style={styles.discardButtonText}>Discard</Text>
+            <Text style={styles.discardButtonText}>{t("discard")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.saveButton}
@@ -178,7 +181,7 @@ export default function CreateGoal() {
             }}
           >
             <SaveIcon color="#000" />
-            <Text style={styles.saveButtonText}>Save</Text>
+            <Text style={styles.saveButtonText}>{t("save")}</Text>
           </TouchableOpacity>
         </View>
       </View>

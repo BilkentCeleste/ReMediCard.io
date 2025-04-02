@@ -8,8 +8,11 @@ import {
   ChevronRightIcon,
   PlusIcon
 } from "../../constants/icons";
+import { useTranslation } from "react-i18next";
 
 export default function StudyDashboard() {
+  const { t } = useTranslation("study_dashboard");
+
   const router = useRouter();
 
   //TODO fetch decks
@@ -22,7 +25,7 @@ export default function StudyDashboard() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+      <Text style={styles.remedicardio}>{t("title")}</Text>
 
       {/* Suggestion Box 1 */}
       <TouchableOpacity
@@ -36,7 +39,7 @@ export default function StudyDashboard() {
             What about exercising Deck 1 ?
           </Text>
           <Text style={styles.suggestionSubtitle}>
-            The deck you haven't studied for the longest time is Deck 1.
+            The deck you haven't studied for the longest time is Deck 1. (dummy)
           </Text>
           {/* Chevron icon on the right */}
           <View style={[styles.chevronRightIcon, styles.iconLayout]}>
@@ -55,10 +58,10 @@ export default function StudyDashboard() {
         <Link href="/(app)/create_goal?deck_id=2" style={styles.suggestionLink}>
           <View>
             <Text style={styles.suggestionTitle}>
-              What about exercising Deck 2 ?
+              What about exercising Deck 2 ? 
             </Text>
             <Text style={styles.suggestionSubtitle}>
-              The deck in which you perform the lowest is Deck 2
+              The deck in which you perform the lowest is Deck 2 (dummy)
             </Text>
             {/* Chevron icon on the right */}
             <View style={[styles.chevronRightIcon, styles.iconLayout]}>
@@ -76,7 +79,7 @@ export default function StudyDashboard() {
               You Have 2 active study goals
             </Text>
             <Text style={[styles.suggestionSubtitle, styles.blueText]}>
-              See your goals
+              See your goals (dummy)
             </Text>
             {/* Chevron icon on the right */}
             <View style={[styles.chevronRightIcon, styles.iconLayout]}>
@@ -100,7 +103,7 @@ export default function StudyDashboard() {
           router.push("/(app)/create_goal");
         }}>
           <PlusIcon></PlusIcon>
-          <Text style={styles.createNewDeck}>Create New Goal</Text>
+          <Text style={styles.createNewDeck}>{t("create_goal")}</Text>
       </TouchableOpacity>
 
       {/* Bottom Navigation */}

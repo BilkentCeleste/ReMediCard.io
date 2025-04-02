@@ -4,8 +4,11 @@ import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { ChevronRightIcon, GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import { getDeckByDeckId } from '../../apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
+import { useTranslation } from 'react-i18next';
 
 export default function Updatedeck() {
+    const { t } = useTranslation('update_deck');
+    
     const [deck, setDeck] = useState();
     const router = useRouter();
     const { deckId } = useLocalSearchParams();
@@ -63,14 +66,14 @@ export default function Updatedeck() {
                         <Text  
                                 style={{ justifyContent: "center", alignItems: "center" }}
                             >
-                                <Text style={{ fontSize: 10, color: "#111", textAlign: "center" }}>update flashcard</Text>
+                                <Text style={{ fontSize: 10, color: "#111", textAlign: "center" }}>{t("update_flashcard")}</Text>
                             </Text>
                     </TouchableOpacity>
                 )}
             />
 
             <TouchableOpacity style={styles.createParent} onPress={() => uploadUpdateFlashcard()}>
-                <Text style={styles.buttonText}>Create flashcard</Text>
+                <Text style={styles.buttonText}>{t("create_flashcard")}</Text>
             </TouchableOpacity>
 
             <View style={styles.navbarRow}>

@@ -1,0 +1,12 @@
+{
+    "months": "month(s)",
+    "days": "day(s)",
+    "weeks": "week(s)",
+    "hours": "hour(s)",
+    "deck": "Deck",
+    "select_deck": "Select Deck",
+    "repetition": "Repetition",
+    "performance": "Performance",
+    "discard": "Discard",
+    "save": "Save"
+}

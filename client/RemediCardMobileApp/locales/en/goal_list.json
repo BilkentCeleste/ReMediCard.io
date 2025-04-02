@@ -1,0 +1,10 @@
+{
+    "title": "ReMediCard.io",
+    "search": "Search",
+    "select_sort_option": "Select sort option",
+    "create_goal": "Create New Goal",
+    "sort_by_longest": "Sort by Longest",
+    "sort_by_shortest": "Sort by Shortest",
+    "sort_by_highest": "Sort by Highest Goal %",
+    "sort_by_lowest": "Sort by Lowest Goal %"
+}

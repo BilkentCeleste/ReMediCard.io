@@ -20,8 +20,11 @@ import {
 } from "../../../constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function EditProfile() {
+  const { t } = useTranslation("edit_profile");
+
   const router = useRouter();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -38,12 +41,12 @@ export default function EditProfile() {
 
   const handleSaveChanges = () => {
     if (password !== passwordCheck) {
-      Alert.alert("Error", "Passwords do not match!");
+      Alert.alert(t("error"), t("passwords_do_not_match"));
       return;
     }
   
     if (!username || !email || !password) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Alert.alert(t("error"), t("fill_all_fields"));
       return;
     }
   
@@ -54,7 +57,7 @@ export default function EditProfile() {
     };
   
     registerAuth(body);
-    Alert.alert("Success", "Changes saved successfully!");
+    Alert.alert(t("success"), t("success_message"));
   };
 
   return (
@@ -63,14 +66,14 @@ export default function EditProfile() {
         <TouchableOpacity onPress={() => router.back()}>
           <GoBackIcon color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.title}>Edit Profile</Text>
+        <Text style={styles.title}>{t("title")}</Text>
       </View>
 
       <View style={styles.component}>
         <AtIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder="username"
+          placeholder={t("username")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           value={username}
@@ -82,9 +85,8 @@ export default function EditProfile() {
         <MailIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder="email"
+          placeholder={t("email")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
           value={email}
           onChangeText={setMail}
         ></TextInput>
@@ -94,7 +96,7 @@ export default function EditProfile() {
         <LockIcon />
         <TextInput
           style={styles.passwordtext}
-          placeholder="password"
+          placeholder={t("password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -115,7 +117,7 @@ export default function EditProfile() {
         <LockIcon></LockIcon>
         <TextInput
           style={styles.passwordtext}
-          placeholder="confirm password"
+          placeholder={t("confirm_password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -136,19 +138,19 @@ export default function EditProfile() {
         style={styles.saveButton}
         onPress={handleSaveChanges}
       >
-        <Text style={styles.registertext}>Save changes</Text>
+        <Text style={styles.registertext}>{t("save")}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => router.back()}      
       >
-        <Text style={styles.registertext}>Cancel changes</Text>
+        <Text style={styles.registertext}>{t("cancel")}</Text>
       </TouchableOpacity>
       
       <View style={styles.bottomContainer}>
         <Link href="/delete_account" style={styles.link}>
-          <Text>Delete Account</Text>
+          <Text>{t("delete_account")}</Text>
         </Link>
       </View>
     
