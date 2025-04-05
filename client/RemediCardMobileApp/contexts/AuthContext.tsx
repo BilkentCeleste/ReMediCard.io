@@ -2,19 +2,42 @@ import React, { createContext, useContext, useState } from "react";
 import { login, register } from "@/apiHelper/backendHelper";
 import * as SecureStore from "expo-secure-store";
 
-const AuthContext = createContext({
+export interface User {
+  username?: string;
+  email?: string;
+}
+
+export interface AuthContextType {
+  isLoggedIn: boolean;
+  user: User | null;
+  token: string | null;
+  loginAuth: (body: any) => Promise<void>;
+  registerAuth: (body: any) => Promise<void>;
+  logoutAuth: () => Promise<void>;
+  addToken: (token: string) => Promise<void>;
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
-  loginAuth: (body) => {},
-  registerAuth: (body) => {},
-  logoutAuth: () => {},
+  user: null,
+  token: null,
+  loginAuth: async () => {},
+  registerAuth: async () => {},
+  logoutAuth: async () => {},
+  addToken: async () => {},
+  setIsLoggedIn: () => {},
 });
 
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+// Export the useAuth hook with proper typing
+export const useAuth = (): AuthContextType => useContext(AuthContext);
 
-  const addToken = async (token) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  const addToken = async (token: string) => {
     await SecureStore.setItemAsync("token", token);
   };
 
@@ -22,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     await SecureStore.deleteItemAsync("token");
   };
 
-  const loginAuth = async (body) => {
+  const loginAuth = async (body: any) => {
     removeToken()
     login(body)
       .then((res) => {
@@ -34,7 +57,7 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
-  const registerAuth = async (body) => {
+  const registerAuth = async (body: any) => {
     register(body)
       .then((res) => {
         setIsLoggedIn(true);
@@ -68,6 +91,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => useContext(AuthContext);
+}; 
