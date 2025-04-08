@@ -24,6 +24,7 @@ import edit_deck_list_en from "./en/edit_deck_list.json";
 import edit_quiz_en from "./en/edit_quiz.json";
 import generate_decks_en from "./en/generate_decks.json";
 import card_en from "./en/card.json";
+import generate_quizzes_en from "./en/generate_quizzes.json";
 
 import login_tr from "./tr/login.json";
 import register_tr from "./tr/register.json";
@@ -48,64 +49,67 @@ import edit_deck_list_tr from "./tr/edit_deck_list.json";
 import edit_quiz_tr from "./tr/edit_quiz.json";
 import generate_decks_tr from "./tr/generate_decks.json";
 import card_tr from "./tr/card.json";
+import generate_quizzes_tr from "./tr/generate_quizzes.json";
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: { 
-        login: login_en,
-        register: register_en,
-        forgot_password: forgot_password_en,
-        not_found: not_found_en,
-        home: home_en,
-        profile: profile_en,
-        contact_us: contact_us_en,
-        delete_account: delete_account_en,
-        edit_profile: edit_profile_en,
-        goal_list: goal_list_en,
-        study_dashboard: study_dashboard_en,
-        update_deck: update_deck_en,
-        update_flashcard: update_flashcard_en,
-        update_quiz_question: update_quiz_question_en,
-        quiz_question: quiz_question_en,
-        quizzes: quizzes_en,
-        create_goal: create_goal_en,
-        decks: decks_en,
-        deck_results: deck_results_en,
-        edit_deck_list: edit_deck_list_en,
-        edit_quiz: edit_quiz_en,
-        generate_decks: generate_decks_en,
-        card: card_en,
+    en: {
+      login: login_en,
+      register: register_en,
+      forgot_password: forgot_password_en,
+      not_found: not_found_en,
+      home: home_en,
+      profile: profile_en,
+      contact_us: contact_us_en,
+      delete_account: delete_account_en,
+      edit_profile: edit_profile_en,
+      goal_list: goal_list_en,
+      study_dashboard: study_dashboard_en,
+      update_deck: update_deck_en,
+      update_flashcard: update_flashcard_en,
+      update_quiz_question: update_quiz_question_en,
+      quiz_question: quiz_question_en,
+      quizzes: quizzes_en,
+      create_goal: create_goal_en,
+      decks: decks_en,
+      deck_results: deck_results_en,
+      edit_deck_list: edit_deck_list_en,
+      edit_quiz: edit_quiz_en,
+      generate_decks: generate_decks_en,
+      card: card_en,
+      generate_quizzes: generate_quizzes_en,
     },
     tr: {
-        login: login_tr,
-        register: register_tr,
-        forgot_password: forgot_password_tr,
-        not_found: not_found_tr,
-        home: home_tr,
-        profile: profile_tr,
-        contact_us: contact_us_tr,
-        delete_account: delete_account_tr,
-        edit_profile: edit_profile_tr,
-        goal_list: goal_list_tr,
-        study_dashboard: study_dashboard_tr,
-        update_deck: update_deck_tr,
-        update_flashcard: update_flashcard_tr,
-        update_quiz_question: update_quiz_question_tr,
-        quiz_question: quiz_question_tr,
-        quizzes: quizzes_tr,
-        create_goal: create_goal_tr,
-        decks: decks_tr,
-        deck_results: deck_results_tr,
-        edit_deck_list: edit_deck_list_tr,
-        edit_quiz: edit_quiz_tr,
-        generate_decks: generate_decks_tr,
-        card: card_tr,
+      login: login_tr,
+      register: register_tr,
+      forgot_password: forgot_password_tr,
+      not_found: not_found_tr,
+      home: home_tr,
+      profile: profile_tr,
+      contact_us: contact_us_tr,
+      delete_account: delete_account_tr,
+      edit_profile: edit_profile_tr,
+      goal_list: goal_list_tr,
+      study_dashboard: study_dashboard_tr,
+      update_deck: update_deck_tr,
+      update_flashcard: update_flashcard_tr,
+      update_quiz_question: update_quiz_question_tr,
+      quiz_question: quiz_question_tr,
+      quizzes: quizzes_tr,
+      create_goal: create_goal_tr,
+      decks: decks_tr,
+      deck_results: deck_results_tr,
+      edit_deck_list: edit_deck_list_tr,
+      edit_quiz: edit_quiz_tr,
+      generate_decks: generate_decks_tr,
+      card: card_tr,
+      generate_quizzes: generate_quizzes_tr,
     },
   },
   lng: "tr", // default language
   fallbackLng: "en", // if a language is not available
   interpolation: {
-    escapeValue: false, 
+    escapeValue: false,
   },
 });
 

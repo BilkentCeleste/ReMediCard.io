@@ -4,9 +4,8 @@ from typing import Any
 
 
 class RedisQueue:
-    def __init__(self, queue_name: str, host: str = 'localhost', port: int = 6379, db: int = 0, password: str = ''):
+    def __init__(self, host: str = 'localhost', port: int = 6379, db: int = 0, password: str = ''):
 
-        self.queue_name = queue_name
         try:
             self.client = redis.Redis(
                 host=host, port=port, db=db, decode_responses=True, password=password)
@@ -14,23 +13,23 @@ class RedisQueue:
         except redis.ConnectionError as e:
             raise Exception(f"Failed to connect to Redis: {str(e)}")
 
-    def enqueue(self, message: Any) -> bool:
+    def enqueue(self, queue, message: Any) -> bool:
         try:
 
             if not isinstance(message, str):
                 message = json.dumps(message)
 
-            self.client.lpush(self.queue_name, message)
+            self.client.lpush(queue, message)
             print(f"Enqueued message: {message}")
             return True
         except Exception as e:
             print(f"Error enqueuing message: {str(e)}")
             return False
 
-    def get_queue_length(self) -> int:
-        return self.client.llen(self.queue_name)
+    def get_queue_length(self, queue) -> int:
+        return self.client.llen(queue)
 
-    def wait_message(self, queue_name='my_queue', host='localhost', port=6379, db=0, password=""):
+    def wait_message(self, queue='queue', host='localhost', port=6379, db=0, password=""):
         try:
 
             r = redis.Redis(
@@ -42,12 +41,12 @@ class RedisQueue:
             )
 
             print(
-                f"Connected to Redis. Waiting for messages on queue '{queue_name}'...")
+                f"Connected to Redis. Waiting for messages on queue '{queue}'...")
             print("Press Ctrl+C to stop")
 
             while True:
 
-                message = r.blpop(queue_name, timeout=0)
+                message = r.blpop(queue, timeout=0)
 
                 if message:
                     print(f"Received message: {message[1]}")

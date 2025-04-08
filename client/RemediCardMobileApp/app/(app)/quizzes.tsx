@@ -5,7 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  FlatList, Modal, Alert,
+  FlatList,
+  Modal,
+  Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -14,10 +16,14 @@ import {
   ProfileIcon,
   SettingsIcon,
   ChevronRightIcon,
-  PlusIcon
+  PlusIcon,
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
-import {deleteQuiz, getQuizzesByCurrentUser, createQuiz} from "@/apiHelper/backendHelper";
+import {
+  deleteQuiz,
+  getQuizzesByCurrentUser,
+  createQuiz,
+} from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 
 export default function Quizzes() {
@@ -31,25 +37,25 @@ export default function Quizzes() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [manualCreateModalVisible, setManualCreateModalVisible] =
     useState(false);
-  const [newQuizTitle, setNewQuizTitle] = useState("");  
+  const [newQuizTitle, setNewQuizTitle] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     getQuizzesByCurrentUser()
-        .then((quizzes: any) => {
-          const updatedQuizzes = quizzes?.data?.map((quiz: any) => ({
-            ...quiz,
-            lastAccessed: "31.12.2024",
-            bestPerformance: 90,
-            lastPerformance: 40,
-          }));
+      .then((quizzes: any) => {
+        const updatedQuizzes = quizzes?.data?.map((quiz: any) => ({
+          ...quiz,
+          lastAccessed: "31.12.2024",
+          bestPerformance: 90,
+          lastPerformance: 40,
+        }));
 
-          console.log(quizzes.data);
-          setQuizzes(updatedQuizzes);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
+        console.log(quizzes.data);
+        setQuizzes(updatedQuizzes);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   }, []);
 
   const handleQuizPress = (quiz: any) => {
@@ -60,15 +66,14 @@ export default function Quizzes() {
   const handleDeleteQuiz = () => {
     console.log(selectedQuiz?.id);
 
-    deleteQuiz(selectedQuiz?.id)
-      .then((res) => {
-        Alert.alert(t("success"), t("quiz_deleted"));
-        setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
-        setSelectedQuiz(null);
-        setPopUpVisible(false);
-        setModalVisible(false);
-      });
-  }
+    deleteQuiz(selectedQuiz?.id).then((res) => {
+      Alert.alert(t("success"), t("quiz_deleted"));
+      setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
+      setSelectedQuiz(null);
+      setPopUpVisible(false);
+      setModalVisible(false);
+    });
+  };
 
   const handleStartQuiz = () => {
     if (selectedQuiz) {
@@ -80,19 +85,20 @@ export default function Quizzes() {
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
-  }
+  };
 
   const handleEditQuiz = () => {
     if (selectedQuiz) {
-          setModalVisible(false);
-          router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
-        } else {
-          Alert.alert(t("error"), t("quiz_info_missing"));
-        }
-  }
+      setModalVisible(false);
+      router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
+    } else {
+      Alert.alert(t("error"), t("quiz_info_missing"));
+    }
+  };
 
   const handleGenerateByAI = () => {
-    Alert.alert(t("ai"), t("ai_message"));
+
+    router.push("/(app)/generatequizzes")
   };
 
   const handleManualCreate = () => {
@@ -140,22 +146,25 @@ export default function Quizzes() {
 
       <FlatList
         style={styles.flatListContainer}
-        contentContainerStyle={styles.flatListContent} 
+        contentContainerStyle={styles.flatListContent}
         data={quizzes}
-        keyExtractor={(item, index) => index.toString()} 
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-              style={styles.deckComponent}
-              onPress={() => handleQuizPress(item)}
+            style={styles.deckComponent}
+            onPress={() => handleQuizPress(item)}
           >
             <View>
               <Text style={styles.deckTitle}>{item.name}</Text>
               <Text style={[styles.deckInfoText]}>
                 {t("last_accessed")} {item.lastAccessed}
               </Text>
-              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} {t("cards")}</Text>
               <Text style={[styles.deckInfoText]}>
-              {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
+                {item?.questions?.length || 0} {t("cards")}
+              </Text>
+              <Text style={[styles.deckInfoText]}>
+                {t("best")} {item.bestPerformance}% {t("last")}{" "}
+                {item.lastPerformance}%
               </Text>
               <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                 <ChevronRightIcon color="#111" />
@@ -166,59 +175,59 @@ export default function Quizzes() {
       />
 
       <TouchableOpacity
-              style={styles.createButton}
-              onPress={() => setCreateModalVisible(true)}
-            >
-              <PlusIcon></PlusIcon>
-              <Text style={styles.createNewDeck}>{t("create_new_quiz")}</Text>
-            </TouchableOpacity>
-      
-            <Modal
-              transparent={true}
-              visible={createModalVisible}
-              animationType="slide"
-              onRequestClose={() => setCreateModalVisible(false)}
-            >
-              <View style={styles.modalOverlay}>
-                <View style={styles.modalContainer}>
-                  <Text style={styles.modalTitle}>{t("create_quiz")}</Text>
-      
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      setCreateModalVisible(false);
-                      //handleManualCreate();
-                      setManualCreateModalVisible(true);
-                    }}
-                  >
-                    <Text style={styles.modalButtonText}>{t("create_manually")}</Text>
-                  </TouchableOpacity>
-      
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      setCreateModalVisible(false);
-                      handleGenerateByAI();
-                    }}
-                  >
-                    <Text style={styles.modalButtonText}>{t("create_with_ai")}</Text>
-                  </TouchableOpacity>
-      
-                  <TouchableOpacity
-                    style={styles.modalCancel}
-                    onPress={() => setCreateModalVisible(false)}
-                  >
-                    <Text style={styles.modalCancelText}>{t("cancel")}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
+        style={styles.createButton}
+        onPress={() => setCreateModalVisible(true)}
+      >
+        <PlusIcon></PlusIcon>
+        <Text style={styles.createNewDeck}>{t("create_new_quiz")}</Text>
+      </TouchableOpacity>
 
       <Modal
-          transparent={true}
-          visible={popUpVisible}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
+        transparent={true}
+        visible={createModalVisible}
+        animationType="slide"
+        onRequestClose={() => setCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{t("create_quiz")}</Text>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setCreateModalVisible(false);
+                //handleManualCreate();
+                setManualCreateModalVisible(true);
+              }}
+            >
+              <Text style={styles.modalButtonText}>{t("create_manually")}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setCreateModalVisible(false);
+                handleGenerateByAI();
+              }}
+            >
+              <Text style={styles.modalButtonText}>{t("create_with_ai")}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setCreateModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        transparent={true}
+        visible={popUpVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -228,14 +237,14 @@ export default function Quizzes() {
             </Text>
 
             <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
-                onPress={handleDeleteQuiz}
+              style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
+              onPress={handleDeleteQuiz}
             >
               <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.modalCancel}
-                onPress={() => setPopUpVisible(false)}
+              style={styles.modalCancel}
+              onPress={() => setPopUpVisible(false)}
             >
               <Text style={styles.modalCancelText}>Cancel</Text>
             </TouchableOpacity>
@@ -244,42 +253,42 @@ export default function Quizzes() {
       </Modal>
 
       <Modal
-          transparent={true}
-          visible={modalVisible}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>{selectedQuiz?.name}</Text>
             <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleStartQuiz}
+              style={styles.modalButton}
+              onPress={handleStartQuiz}
             >
-              <Text style={styles.modalButtonText}>Start Quiz</Text>
+              <Text style={styles.modalButtonText}>{t("start_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleEditQuiz}
+              style={styles.modalButton}
+              onPress={handleEditQuiz}
             >
-              <Text style={styles.modalButtonText}>Edit Quiz</Text>
+              <Text style={styles.modalButtonText}>{t("edit_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
-                onPress={() => setPopUpVisible(true)}
+              style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
+              onPress={() => setPopUpVisible(true)}
             >
-              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.modalCancel}
-                onPress={() => setModalVisible(false)}
+              style={styles.modalCancel}
+              onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      
+
       <Modal
         transparent={true}
         visible={manualCreateModalVisible}
@@ -315,7 +324,7 @@ export default function Quizzes() {
           </View>
         </View>
       </Modal>
-        
+
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -385,7 +394,7 @@ const styles = StyleSheet.create({
     width: "75%",
     position: "absolute",
     bottom: 50,
-    backgroundColor: "#53789D", 
+    backgroundColor: "#53789D",
     height: 1,
   },
   navbarLine: {
@@ -459,13 +468,13 @@ const styles = StyleSheet.create({
   deckInfoText: {
     fontSize: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 8, 
+    marginBottom: 8,
   },
   deckTitle: {
     fontSize: 16,
     color: "#000",
     fontWeight: "bold",
-    marginBottom: 8, 
+    marginBottom: 8,
   },
   deckComponent: {
     borderRadius: 20,
@@ -502,12 +511,12 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     alignItems: "stretch",
-    paddingBottom: 20, 
+    paddingBottom: 20,
   },
   link: {
     flexDirection: "column",
     alignItems: "flex-start",
-    width: "100%", 
+    width: "100%",
   },
   modalOverlay: {
     flex: 1,

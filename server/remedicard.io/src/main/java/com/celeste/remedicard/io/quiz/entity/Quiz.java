@@ -3,14 +3,16 @@ package com.celeste.remedicard.io.quiz.entity;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name= "QUIZ")
 public class Quiz extends AuditableEntity {

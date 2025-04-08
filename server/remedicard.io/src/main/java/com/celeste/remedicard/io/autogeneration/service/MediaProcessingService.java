@@ -4,6 +4,7 @@ package com.celeste.remedicard.io.autogeneration.service;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.config.Language;
+import com.celeste.remedicard.io.autogeneration.config.TargetDataType;
 import com.celeste.remedicard.io.autogeneration.dto.AutoGenerationRequest;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
@@ -25,7 +26,7 @@ public class MediaProcessingService {
     private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
     public void enqueueAutoGenerationTask
-            (MultipartFile file, DataType dataType, Language language) throws IOException {
+            (MultipartFile file, DataType dataType, Language language, TargetDataType targetDataType) throws IOException {
 
         String address = s3Service.uploadFile(file);
 
@@ -46,6 +47,7 @@ public class MediaProcessingService {
                 .dataType(dataType)
                 .userId(user.getId())
                 .language(language)
+                .targetDataType(targetDataType)
                 .fileName(file.getOriginalFilename())
                 .build();
 

@@ -16,6 +16,7 @@
     "cards": "Cards",
     "last": "Last: ",
     "best": "Best: ",
+    "start_quiz": "Start Quiz",
     "create_new_quiz": "Create New Quiz",
     "create_quiz": "Create Quiz",
     "create_manually": "Create Manually",

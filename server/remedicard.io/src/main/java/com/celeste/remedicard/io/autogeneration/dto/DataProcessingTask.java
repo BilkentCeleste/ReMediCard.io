@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.autogeneration.dto;
 
 import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.config.Language;
+import com.celeste.remedicard.io.autogeneration.config.TargetDataType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,5 @@ public class DataProcessingTask implements Serializable {
     private String address;
     private DataType dataType;
     private Language language;
+    private TargetDataType targetDataType;
 }
