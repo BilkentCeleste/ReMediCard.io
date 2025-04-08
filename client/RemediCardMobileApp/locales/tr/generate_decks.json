@@ -3,7 +3,7 @@
     "video_record": "Video Kaydı",
     "voice_record": "Ses Kaydı",
     "file_type_must_be_selected": "Dosya türü seçilmelidir",
-    "queued_message": "Deste oluşturma sıraya alındı, oluşturulduğunda deste menüsünde bulabilirsiniz",
+    "queued_message": "Deste oluşturma isteği sıraya alındı, deste oluşturulduğunda deste menüsünde bulabilirsiniz",
     "generate_new_deck": "Yeni Deste Oluştur",
     "choose_file": "Bilgi kartı oluşturmak için bir dosya seçin",
     "select_file_type": "Dosya Türünü Seçin",
