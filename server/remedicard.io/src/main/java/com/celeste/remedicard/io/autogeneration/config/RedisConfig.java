@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.autogeneration.config;
 
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
+import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -28,6 +29,16 @@ public class RedisConfig {
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new Jackson2JsonRedisSerializer<DeckCreationTask>(DeckCreationTask.class));
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, QuizCreationTask> redisTemplateQuizCreationTask(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, QuizCreationTask> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<QuizCreationTask>(QuizCreationTask.class));
         template.afterPropertiesSet();
         return template;
     }

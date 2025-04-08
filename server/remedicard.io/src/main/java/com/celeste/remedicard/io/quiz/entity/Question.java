@@ -2,14 +2,16 @@ package com.celeste.remedicard.io.quiz.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name= "QUESTION")
 public class Question extends AuditableEntity {
@@ -17,7 +19,7 @@ public class Question extends AuditableEntity {
     @Column
     private String difficulty;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column
@@ -25,7 +27,7 @@ public class Question extends AuditableEntity {
 
     @ElementCollection
     @CollectionTable(name = "OPTIONS", joinColumns = @JoinColumn(name = "question_id"))
-    @Column(name = "option")
+    @Column(name = "option", columnDefinition = "TEXT")
     private Set<String> options = new HashSet<>();
 
     @ManyToOne

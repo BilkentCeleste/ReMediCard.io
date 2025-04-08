@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.autogeneration.controller;
 
 import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.config.Language;
+import com.celeste.remedicard.io.autogeneration.config.TargetDataType;
 import com.celeste.remedicard.io.autogeneration.service.MediaProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ public class AutoGenerationController {
 
     private final MediaProcessingService mediaProcessingService;
 
-    @PostMapping(path= "generate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @PostMapping(path= "deck/generate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Void> generateDeckFromLectureMaterial(
             @RequestPart("file") MultipartFile file,
             @RequestPart("dataType") String dataType,
@@ -28,7 +29,22 @@ public class AutoGenerationController {
 
         mediaProcessingService.enqueueAutoGenerationTask(file,
                 DataType.valueOf(dataType),
-                Language.valueOf(language));
+                Language.valueOf(language),
+                TargetDataType.DECK);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path= "quiz/generate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Void> generateQuizFromLectureMaterial(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("dataType") String dataType,
+            @RequestPart("language") String language) throws IOException {
+
+        mediaProcessingService.enqueueAutoGenerationTask(file,
+                DataType.valueOf(dataType),
+                Language.valueOf(language),
+                TargetDataType.QUIZ);
 
         return ResponseEntity.ok().build();
     }

@@ -3,7 +3,9 @@ package com.celeste.remedicard.io.autogeneration.service;
 import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
+import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.deck.service.DeckService;
+import com.celeste.remedicard.io.quiz.service.QuizService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +24,20 @@ public class QueueService {
 
     private static final String VIDEO_RECORD_QUEUE_NAME = "video-queue";
     private static final String VOICE_RECORD_QUEUE_NAME = "voice-queue";
-    private static final String DECK_GENERATION_QUEUE_NAME = "generation-queue";
+    private static final String DECK_GENERATION_QUEUE_NAME = "deck-generation-queue";
+    private static final String QUIZ_GENERATION_QUEUE_NAME = "quiz-generation-queue";
 
     private final DeckService deckService;
+    private final QuizService quizService;
 
     @Resource(name = "redisTemplateDataProcessingTask")
     private ListOperations<String, DataProcessingTask> dataProcessingTaskListOperations;
 
     @Resource(name = "redisTemplateDeckCreationTask")
     private ListOperations<String, DeckCreationTask> deckCreationTaskListOperations;
+
+    @Resource(name = "redisTemplateQuizCreationTask")
+    private ListOperations<String, QuizCreationTask> quizCreationTaskListOperations;
 
     public void enqueueVideoRecord(DataProcessingTask dataProcessingTask) {
         dataProcessingTaskListOperations.leftPush(VIDEO_RECORD_QUEUE_NAME, dataProcessingTask);
@@ -76,12 +83,26 @@ public class QueueService {
         DeckCreationTask deckCreationTask;
         while ((deckCreationTask = deckCreationTaskListOperations.rightPop(DECK_GENERATION_QUEUE_NAME)) != null) {
 
-            log.info("Processing auto-generation task for: " + deckCreationTask.getUserId() + ", " + deckCreationTask.getName());
+            log.info("Processing auto-generation task for the deck: " + deckCreationTask.getUserId() + ", " + deckCreationTask.getName());
 
             deckService.createDeck(deckCreationTask);
         }
 
-        log.info("Generation queue is empty");
+        log.info("Deck generation queue is empty");
+    }
+
+    @Scheduled(fixedDelay = 30000)
+    public void pollQuizGenerationQueue() {
+
+        QuizCreationTask quizCreationTask;
+        while ((quizCreationTask = quizCreationTaskListOperations.rightPop(QUIZ_GENERATION_QUEUE_NAME)) != null) {
+
+            log.info("Processing auto-generation task for the quiz: " + quizCreationTask.getUserId() + ", " + quizCreationTask.getName());
+
+            quizService.createQuiz(quizCreationTask);
+        }
+
+        log.info("Quiz generation queue is empty");
     }
 
 }
