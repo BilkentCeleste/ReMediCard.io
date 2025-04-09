@@ -1,9 +1,9 @@
 package com.celeste.remedicard.io.cloud.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -17,6 +17,7 @@ import java.io.IOException;
 public class S3Service {
 
     private final S3Client s3Client;
+    private final CurrentUserService currentUserService;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -25,7 +26,7 @@ public class S3Service {
     private String region;
 
     public String uploadFile(MultipartFile file) throws IOException {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = currentUserService.getCurrentUser();
 
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 

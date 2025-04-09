@@ -1,18 +1,14 @@
 package com.celeste.remedicard.io.deck.controller;
 
-import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -26,13 +22,12 @@ public class DeckController {
     public ResponseEntity<DeckResponseDTO> create(@RequestBody DeckCreateRequestDTO dto) {
         Deck deck = DeckCreateMapper.INSTANCE.toEntity(dto);
         deck = deckService.create(deck);
-        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck));
+        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, false));
     }
 
     @GetMapping("/getByCurrentUser")
-    public Set<DeckResponseDTO> getDecksByUserId() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Set<Deck> deckSet = deckService.getDeckByUserId(user.getId());
+    public Set<DeckResponseDTO> getDecksByCurrentUser() {
+        Set<Deck> deckSet = deckService.getDeckByCurrentUser();
         return DeckCreateMapper.INSTANCE.toDTO(deckSet);
     }
 
@@ -45,7 +40,7 @@ public class DeckController {
     @GetMapping("/getByDeckId/{deckId}")
     public DeckResponseDTO getDeckByDeckId(@PathVariable Long deckId) {
         Deck deck = deckService.getDeckByDeckId(deckId);
-        return DeckCreateMapper.INSTANCE.toDTO(deck);
+        return DeckCreateMapper.INSTANCE.toDTO(deck, false);
     }
 
     @PostMapping(value = "/generate", consumes = "multipart/form-data")
@@ -63,9 +58,27 @@ public class DeckController {
         }
     }
 
-    @DeleteMapping("/delete/{deckid}")
-    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckid) {
-        deckService.removeDeck(deckid);
+    @DeleteMapping("/delete/{deckId}")
+    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckId) {
+        deckService.removeDeck(deckId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/share/{deckId}")
+    public ResponseEntity<String> createShareLink(@PathVariable Long deckId) {
+        String shareLink = deckService.createShareLink(deckId);
+        return ResponseEntity.ok(shareLink);
+    }
+
+    @GetMapping("/shared/{shareToken}")
+    public DeckResponseDTO getSharedDeck(@PathVariable String shareToken) {
+        Deck deck = deckService.getSharedDeck(shareToken);
+        return DeckCreateMapper.INSTANCE.toDTO(deck, true);
+    }
+
+//    @PostMapping("/shared/{shareToken}/copy")
+//    public ResponseEntity<DeckResponseDTO> copySharedDeck(@PathVariable String shareToken) {
+//        DeckResponseDTO copiedDeck = deckService.copySharedDeck(shareToken);
+//        return ResponseEntity.ok(copiedDeck);
+//    }
 }

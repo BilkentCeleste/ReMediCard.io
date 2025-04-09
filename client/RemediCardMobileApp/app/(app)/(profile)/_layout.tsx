@@ -23,7 +23,6 @@ export default function RootLayout() {
   }, [isLoggedIn]); */
 
   if (!isLoggedIn) {
-    console.log(isLoggedIn);
     return <Redirect href="/login" />;
   }
 

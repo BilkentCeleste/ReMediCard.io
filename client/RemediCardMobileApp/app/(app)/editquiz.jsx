@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
+import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList, Alert, Modal} from 'react-native';
 import { useRouter, Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { ChevronRightIcon, GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
-import { getQuizByQuizId } from '../../apiHelper/backendHelper';
+import { getQuizByQuizId, removeQuestion } from '../../apiHelper/backendHelper';
 
 export default function editQuiz() {
     const [quiz, setQuiz] = useState();
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [DeleteQuestionModalVisible, setDeleteQuestionModalVisible] = useState(false);
+
     const router = useRouter();
     const navigation = useNavigation();
     const { quizId } = useLocalSearchParams();
@@ -17,8 +20,9 @@ export default function editQuiz() {
     useEffect(() => {
         if (quizId) {
             getQuizByQuizId(quizId)
-                .then((data) => {
-                    setQuiz(data.data);
+                .then((res) => {
+                    setQuiz(res?.data);
+                    // console.log(res.data)
                 })
                 .catch((error) => {
                     console.error(error);
@@ -34,19 +38,35 @@ export default function editQuiz() {
         router.push({ pathname: path });
     } */
 
-    //mock data
-    const questions = [
-        { id: '1', text: 'What is the capital of France?' },
-        { id: '2', text: 'What is 2 + 2?' },
-        { id: '3', text: 'Who is the president of the United States?' },
-        { id: '4', text: 'What is the capital of France?' },
-        { id: '5', text: 'What is 2 + 2?' },
-        { id: '6', text: 'Who is the president of the United StatesWho is the president of the United StatesWho is the president of the United States?' },
-    ];
-
-    const uploadUpdateQuestion = () => {
+    const uploadUpdateQuestion = (questionId) => {
         //Alert.alert("Create", "create");
-        router.push("/(app)/updatequizquestion");
+        // find the question with the matching id and send it to the update page
+        const question = quiz?.questions?.find(q => q.id === questionId);
+        router.push(`/(app)/updatequizquestion?question=${question}`)
+    }
+
+    const handleToggleDeleteQuestionModal = (id) => {
+        setDeleteQuestionModalVisible(!DeleteQuestionModalVisible);
+        setSelectedQuestion(id);
+    }
+
+    const handleDeleteQuestion = () => {
+        const data = {
+            questionId: selectedQuestion,
+        }
+        removeQuestion(quizId, data)
+            .then((res) => {
+                console.log(res.data);
+                setDeleteQuestionModalVisible(false);
+                setQuiz(prevQuiz => ({
+                    ...prevQuiz,
+                    questions: prevQuiz?.questions?.filter(question => question?.id !== selectedQuestion)
+                }));
+                setSelectedQuestion(null);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     return (
@@ -91,17 +111,50 @@ export default function editQuiz() {
             <FlatList
                 style={styles.flatListContainer}
                 contentContainerStyle={styles.flatListContent}
-                data={questions}
+                data={quiz?.questions}
                 renderItem={({ item }) => (
                     <View style={styles.questionCard}>
-                        <Text style={styles.questionText}>{item.text}</Text>
+                        <Text style={styles.questionText}>{item?.description}</Text>
                         <TouchableOpacity style={styles.editButton} onPress={() => uploadUpdateQuestion()}>
                             <Text style={styles.editButtonText}>Edit</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => handleToggleDeleteQuestionModal(item?.id)}>
+                            <Text style={styles.deleteButtonText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
                 )}
                 keyExtractor={(item) => item.id}
             />
+
+            {/*a modal to ask whether the user is sure about deleting the question*/}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={DeleteQuestionModalVisible}
+                onRequestClose={() => {
+                    setDeleteQuestionModalVisible(!DeleteQuestionModalVisible);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Are you sure you want to delete this question?</Text>
+                        <View style={styles.modalButtonContainer}>
+                            <TouchableOpacity
+                                style={styles.editButton}
+                                onPress={() => setDeleteQuestionModalVisible(false)}
+                            >
+                                <Text style={styles.editButtonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.deleteButton}
+                                onPress={() => handleDeleteQuestion()}
+                            >
+                                <Text style={styles.deleteButtonText}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
 
             <TouchableOpacity style={styles.createParent} onPress={() => uploadUpdateQuestion()}>
                 <Text style={styles.buttonText}>Create Question</Text>
@@ -279,5 +332,38 @@ const styles = StyleSheet.create({
     editButtonText: {
         color: '#fff',
         fontWeight: 'bold',
-    }
+    },
+    deleteButton: {
+        backgroundColor: '#C8102E',
+        paddingVertical: 1,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    deleteButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
 });

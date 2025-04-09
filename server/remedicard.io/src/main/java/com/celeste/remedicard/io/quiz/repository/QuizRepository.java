@@ -8,5 +8,5 @@ import java.util.Set;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
-    Set<Quiz> findByUsersId(Long userId);
+    Set<Quiz> findByUserId(Long userId);
 }

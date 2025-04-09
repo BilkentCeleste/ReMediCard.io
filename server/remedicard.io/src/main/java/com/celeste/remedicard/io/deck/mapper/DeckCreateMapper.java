@@ -3,8 +3,7 @@ package com.celeste.remedicard.io.deck.mapper;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
@@ -15,10 +14,15 @@ public interface DeckCreateMapper {
     DeckCreateMapper INSTANCE = Mappers.getMapper(DeckCreateMapper.class);
 
     @Mapping(target = "userId", source = "user.id")
-    DeckResponseDTO toDTO(Deck deck);
+    DeckResponseDTO toDTO(Deck deck, @Context boolean isSharedView);
 
     Set<DeckResponseDTO> toDTO(Set<Deck> deckSet);
 
 //    @Mapping(target = "user", ignore = true)
     Deck toEntity(DeckCreateRequestDTO dto);
+
+    @AfterMapping
+    default void setSharedView(@MappingTarget DeckResponseDTO dto, @Context boolean isSharedView) {
+        dto.setSharedView(isSharedView);
+    }
 }

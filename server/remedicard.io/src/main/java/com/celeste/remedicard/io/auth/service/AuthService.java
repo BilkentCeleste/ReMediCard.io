@@ -4,13 +4,10 @@ import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.entity.Role;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
-import com.celeste.remedicard.io.quiz.entity.Quiz;
-import com.celeste.remedicard.io.quiz.repository.QuizRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
-    private final QuizRepository quizRepository;
+    private final CurrentUserService currentUserService;
 
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -97,7 +94,7 @@ public class AuthService {
             throw new IllegalArgumentException();
         }
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = currentUserService.getCurrentUser();
 
         if(passwordEncoder.matches(resetPasswordRequest.getPassword(), user.getPassword())){
             throw new IllegalArgumentException("New password must be different than the last 3 passwords.");
@@ -139,7 +136,7 @@ public class AuthService {
     }
 
     public void initiateDeleteAccount(AccountDeletionRequest accountDeletionRequest){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = currentUserService.getCurrentUser();
 
         if(!passwordEncoder.matches(accountDeletionRequest.getPassword(), user.getPassword())){
             throw new IllegalArgumentException("Wrong password");
@@ -169,9 +166,16 @@ public class AuthService {
         user.getDecks().clear();
         user.getUsageStats().clear();
 
-        Set<Quiz> quizzes = user.getQuizzes();
-        quizzes.forEach(quiz -> quiz.removeUser(user));
-        quizRepository.saveAll(quizzes);
+//        user.getQuizzes().forEach(quiz -> {
+//            quiz.getQuestions().clear();
+//            quiz.setUser(null);
+//        });
+
+        user.getQuizzes().clear();
+
+//        Set<Quiz> quizzes = user.getQuizzes();
+//        quizzes.forEach(Quiz::removeUser);
+//        quizRepository.saveAll(quizzes);
 
         //user.getQuizzes().clear();
 

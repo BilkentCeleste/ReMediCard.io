@@ -19,11 +19,9 @@ export default function RootLayout() {
   const { isLoggedIn } = useAuth();
 
   useEffect(() => {
-    console.log("Logged", isLoggedIn);
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
-    console.log(isLoggedIn);
     return <Redirect href="/login" />;
   }
 

@@ -41,7 +41,6 @@ export default function Quizzes() {
             lastPerformance: 40,
           }));
 
-          console.log(quizzes.data);
           setQuizzes(updatedQuizzes);
         })
         .catch((error: any) => {
@@ -100,13 +99,21 @@ export default function Quizzes() {
       return;
     }
 
-    createQuiz({
-      name: newQuizTitle,
-    }).then((res) => {
-      setManualCreateModalVisible(false);
-      setNewQuizTitle("");
-      //router.push("/(app)/updatedeck?deckId=" + res.data.id);
-    });
+    const data = {
+      name: newQuizTitle
+    }
+
+    createQuiz(data)
+        .then((res) => {
+          setManualCreateModalVisible(false);
+          setNewQuizTitle("");
+          setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
+          //router.push("/(app)/updatedeck?deckId=" + res.data.id);
+        })
+        .catch((error) => {
+            console.log(error);
+            Alert.alert("Error", "Failed to create quiz");
+        });
   };
 
   const sortOptions = [
@@ -150,7 +157,7 @@ export default function Quizzes() {
               <Text style={[styles.deckInfoText]}>
                 Last accessed: {item.lastAccessed}
               </Text>
-              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} cards</Text>
+              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} card(s)</Text>
               <Text style={[styles.deckInfoText]}>
                 Best: {item.bestPerformance}% Last: {item.lastPerformance}%
               </Text>
@@ -291,7 +298,7 @@ export default function Quizzes() {
                 styles.searchComponent,
                 { width: "100%", marginBottom: 10 },
               ]}
-              placeholder="Enter deck title"
+              placeholder="Enter quiz title"
               value={newQuizTitle}
               onChangeText={setNewQuizTitle}
             />
@@ -300,7 +307,7 @@ export default function Quizzes() {
               style={styles.modalButton}
               onPress={handleManualCreate}
             >
-              <Text style={styles.modalButtonText}>Save & Edit</Text>
+              <Text style={styles.modalButtonText}>Save</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

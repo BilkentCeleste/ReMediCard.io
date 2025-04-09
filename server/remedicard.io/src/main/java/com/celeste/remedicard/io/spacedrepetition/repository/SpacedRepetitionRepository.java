@@ -1,6 +1,6 @@
-package com.celeste.remedicard.io.spacedRepetition.repository;
+package com.celeste.remedicard.io.spacedrepetition.repository;
 
-import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
+import com.celeste.remedicard.io.spacedrepetition.entity.SpacedRepetition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

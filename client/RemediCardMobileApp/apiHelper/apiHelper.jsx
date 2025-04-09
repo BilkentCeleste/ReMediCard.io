@@ -79,7 +79,7 @@ const getFetcher = async (url, responseType = "json", isRaw = true) => {
   return isRaw ? res : res.json();
 };
 
-const postFetcher = async (url, data, contentType="application/json", isRaw=true) => {
+const postFetcher = async (url, data={}, contentType="application/json", isRaw=true) => {
     const res = await _post(url, data, contentType)
     await _handleError(res)
     return isRaw ? res : res.json()

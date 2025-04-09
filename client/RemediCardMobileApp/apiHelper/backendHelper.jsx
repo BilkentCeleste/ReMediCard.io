@@ -43,6 +43,10 @@ export const getDecksByUserId = async (id) => {
   return await getFetcher(url.GET_DECKS_BY_USER_ID_PATH(id));
 };
 
+export const shareDeck = async (id) => {
+    return await postFetcher(url.SHARE_DECK_PATH(id));
+}
+
 // flashcard
 export const createFlashcard = async (data) => {
   return await postFetcher(url.CREATE_FLASHCARD_PATH(), data);
@@ -61,7 +65,7 @@ export const getFlashcardsInBatch = async (deckId) => {
 }
 
 export const updateFlashcardReviews = async (data) => {
-  return await postFetcher(url.UPDATE_FLASHCARD_REVİEWS_PATH(), data);
+  return await postFetcher(url.UPDATE_FLASHCARD_REVIEWS_PATH(), data);
 }
 
 export const generateDeck = async (data) => {
@@ -104,4 +108,9 @@ export const createQuiz = async (data) => {
 export const getQuizByQuizId = async (id) => {
   return await getFetcher(url.GET_QUIZ_BY_QUIZ_ID_PATH(id));
 };
+
+export const removeQuestion = async (id, data) => {
+  return await postFetcher(url.REMOVE_QUESTION_PATH(id), data);
+};
+
 

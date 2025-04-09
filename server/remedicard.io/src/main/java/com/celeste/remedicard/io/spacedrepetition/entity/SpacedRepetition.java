@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.spacedRepetition.entity;
+package com.celeste.remedicard.io.spacedrepetition.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;

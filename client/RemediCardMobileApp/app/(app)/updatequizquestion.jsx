@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useRouter, useNavigation } from 'expo-router';
+import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 
 export default function UpdateFlashcard() {
@@ -10,8 +10,10 @@ export default function UpdateFlashcard() {
     React.useEffect(() => {
     navigation.setOptions({ headerShown: false });
     }, [navigation]);
+    const {question} = useLocalSearchParams();
+    console.log(question);
 
-    const [question, setQuestion] = useState('');
+    const [newQuestion, setNewQuestion] = useState('');
     const [answers, setAnswers] = useState(['', '', '', '', '']);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
 
@@ -50,8 +52,8 @@ export default function UpdateFlashcard() {
             <TextInput
                 style={styles.qInput}
                 placeholder='Enter Question'
-                value={question}
-                onChangeText={setQuestion}
+                value={question?.description}
+                // onChangeText={setQuestion}
                 placeholderTextColor='rgba(0, 0, 0, 0.5)'
                 multiline={true}
                 textAlignVertical='top'

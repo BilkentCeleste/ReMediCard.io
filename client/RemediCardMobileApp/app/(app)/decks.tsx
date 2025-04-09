@@ -23,8 +23,10 @@ import {
   getDecksByCurrentUser,
   deleteDeck,
   createDeck,
+  shareDeck
 } from "@/apiHelper/backendHelper";
 import { create } from "react-test-renderer";
+import { Share, Button } from 'react-native';
 
 export default function Decks() {
   const [selectedSort, setSelectedSort] = useState<string>("");
@@ -118,6 +120,23 @@ export default function Decks() {
       setNewDeckTitle("");
       router.push("/(app)/updatedeck?deckId=" + res.data.id);
     });
+  };
+
+  const handleShareDeck = () => {
+    if (selectedDeck) {
+      shareDeck(selectedDeck?.id)
+          .then((res) => {
+            const shareUrl = res?.data;
+            const message = `Check out this deck on ReMediCard:\n\n${shareUrl}`;
+            Share.share({
+              message,
+              title: `Share Deck: ${selectedDeck.name}`,
+            });
+          })
+          .catch((err) => {
+            console.error('Error sharing deck:', err);
+          });
+    }
   };
 
   return (
@@ -267,6 +286,12 @@ export default function Decks() {
               onPress={handleEditDeck}
             >
               <Text style={styles.modalButtonText}>Edit Deck</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleShareDeck}
+            >
+              <Text style={styles.modalButtonText}>Share Deck</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}

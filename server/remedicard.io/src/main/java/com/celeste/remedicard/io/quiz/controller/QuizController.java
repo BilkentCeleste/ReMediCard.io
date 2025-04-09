@@ -1,6 +1,5 @@
 package com.celeste.remedicard.io.quiz.controller;
 
-import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.quiz.controller.dto.AddQuestionRequestDTO;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizCreateRequestDTO;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseDTO;
@@ -10,7 +9,6 @@ import com.celeste.remedicard.io.quiz.mapper.QuizCreateMapper;
 import com.celeste.remedicard.io.quiz.mapper.QuizResponseMapper;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -30,8 +28,7 @@ public class QuizController {
 
     @GetMapping("/getByCurrentUser")
     public Set<QuizResponseDTO> getByCurrentUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Set<Quiz> quizSet = quizService.getByUserId(user.getId());
+        Set<Quiz> quizSet = quizService.getByCurrentUserId();
         return QuizResponseMapper.INSTANCE.toDTO(quizSet);
     }
 
@@ -42,10 +39,10 @@ public class QuizController {
     }
 
     @PostMapping("/create")
-    public void create(@RequestBody QuizCreateRequestDTO dto) {
+    public QuizResponseDTO create(@RequestBody QuizCreateRequestDTO dto) {
         Quiz quiz = QuizCreateMapper.INSTANCE.toEntity(dto);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        quizService.create(quiz, user.getId());
+        Quiz createdQuiz = quizService.create(quiz);
+        return QuizResponseMapper.INSTANCE.toDTO(createdQuiz);
     }
 
     @PostMapping("/addQuestion/{quizId}")
@@ -65,14 +62,7 @@ public class QuizController {
 
     @PostMapping("/addUserQuiz/{quizId}")
     public void addUserQuiz(@PathVariable Long quizId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        quizService.addUserQuiz(quizId, user.getId());
-    }
-
-    @DeleteMapping("/deleteUserQuiz/{quizId}")
-    public void deleteUserQuiz(@PathVariable Long quizId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        quizService.deleteUserQuiz(quizId, user.getId());
+        quizService.addUserQuiz(quizId);
     }
 
 //    @PutMapping("/update/{quizId}")

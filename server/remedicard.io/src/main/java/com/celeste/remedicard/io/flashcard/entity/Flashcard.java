@@ -2,7 +2,7 @@ package com.celeste.remedicard.io.flashcard.entity;
 
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import com.celeste.remedicard.io.deck.entity.Deck;
-import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
+import com.celeste.remedicard.io.spacedrepetition.entity.SpacedRepetition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

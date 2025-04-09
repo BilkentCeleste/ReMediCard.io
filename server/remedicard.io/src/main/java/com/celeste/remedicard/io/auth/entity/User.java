@@ -3,8 +3,8 @@ package com.celeste.remedicard.io.auth.entity;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
-import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
-import com.celeste.remedicard.io.studyStats.entity.StudyStats;
+import com.celeste.remedicard.io.spacedrepetition.entity.SpacedRepetition;
+import com.celeste.remedicard.io.studystats.entity.StudyStats;
 import com.celeste.remedicard.io.support.entity.Feedback;
 import com.celeste.remedicard.io.usagestats.entity.UsageStats;
 import jakarta.persistence.*;
@@ -49,12 +49,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Notification> notifications = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_quiz",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "quiz_id")
-    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

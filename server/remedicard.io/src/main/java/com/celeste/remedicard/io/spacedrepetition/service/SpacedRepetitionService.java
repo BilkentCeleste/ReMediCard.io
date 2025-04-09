@@ -1,16 +1,15 @@
-package com.celeste.remedicard.io.spacedRepetition.service;
+package com.celeste.remedicard.io.spacedrepetition.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardResponseDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardReviewDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.mapper.FlashcardResponseMapper;
-import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
-import com.celeste.remedicard.io.spacedRepetition.repository.SpacedRepetitionRepository;
-import com.celeste.remedicard.io.spacedRepetition.utils.EbisuUtils;
+import com.celeste.remedicard.io.spacedrepetition.entity.SpacedRepetition;
+import com.celeste.remedicard.io.spacedrepetition.repository.SpacedRepetitionRepository;
+import com.celeste.remedicard.io.spacedrepetition.utils.EbisuUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import me.aldebrn.ebisu.*;
 

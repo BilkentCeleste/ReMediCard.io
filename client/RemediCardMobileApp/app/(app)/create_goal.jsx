@@ -29,9 +29,9 @@ export default function CreateGoal() {
   //console.log("Full Route:", router.asPath);
   //console.log("Deck_id", deck_id);
 
-  useEffect(() => {
-    console.log("deck_id?", deck_id);
-  }, []);
+  // useEffect(() => {
+  //   console.log("deck_id?", deck_id);
+  // }, []);
 
   // Example states for each form field
   const [deck, setDeck] = useState("Deck 1");

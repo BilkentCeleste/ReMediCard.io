@@ -1,20 +1,17 @@
 package com.celeste.remedicard.io.flashcard.service;
 
-import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardResponseDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardReviewDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.repository.FlashcardRepository;
-import com.celeste.remedicard.io.spacedRepetition.service.SpacedRepetitionService;
+import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +20,7 @@ public class FlashcardService {
     private final FlashcardRepository flashcardRepository;
     private final DeckRepository deckRepository;
     private final SpacedRepetitionService spacedRepetitionService;
+    private final CurrentUserService currentUserService;
 
     public void create(Flashcard flashcard, Long deckId) {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
@@ -32,13 +30,13 @@ public class FlashcardService {
     }
 
     public List<FlashcardResponseDTO> getFlashcardsInBatch(Long deckId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return spacedRepetitionService.getFlashcardsInBatch(user.getId(), deckId, 20);
+        Long userId = currentUserService.getCurrentUserId();
+        return spacedRepetitionService.getFlashcardsInBatch(userId, deckId, 20);
     }
 
     public void updateFlashcardReviews(List<FlashcardReviewDTO> reviews){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        spacedRepetitionService.updateFlashcardReviews(user.getId(), reviews);
+        Long userId = currentUserService.getCurrentUserId();
+        spacedRepetitionService.updateFlashcardReviews(userId, reviews);
     }
 
     public void delete(Long flashcardId) {

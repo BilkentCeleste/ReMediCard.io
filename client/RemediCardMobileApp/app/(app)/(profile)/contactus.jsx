@@ -20,7 +20,6 @@ export default function ContactUs() {
   const [content, setContent] = useState("");
 
   const handleSubmit = () => {
-    console.log("fine", subject.length);
     if (subject.length < 1 || content.length < 1) {
       Alert.alert(
         "Invalid form",

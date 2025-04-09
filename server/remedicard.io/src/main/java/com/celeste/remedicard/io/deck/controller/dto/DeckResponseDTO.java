@@ -26,4 +26,5 @@ public class DeckResponseDTO {
         private Long userId;
         Set<FlashcardResponseDTO> flashcardSet;
         Set<FigureResponseDTO> figureSet;
+        private boolean isSharedView;
 }

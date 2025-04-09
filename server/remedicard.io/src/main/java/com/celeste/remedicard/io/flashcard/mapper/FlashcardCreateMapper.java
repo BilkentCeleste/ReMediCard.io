@@ -4,14 +4,11 @@ import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardCreateRequest
 import com.celeste.remedicard.io.flashcard.controller.dto.SideCreateRequestDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
-import com.celeste.remedicard.io.spacedRepetition.entity.SpacedRepetition;
+import com.celeste.remedicard.io.spacedrepetition.entity.SpacedRepetition;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-
-import java.net.URL;
-import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface FlashcardCreateMapper {

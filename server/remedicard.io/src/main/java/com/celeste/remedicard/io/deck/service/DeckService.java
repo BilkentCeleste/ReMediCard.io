@@ -1,15 +1,17 @@
 package com.celeste.remedicard.io.deck.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
-import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.entity.Deck;
+import com.celeste.remedicard.io.deck.entity.DeckShareLink;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
+import com.celeste.remedicard.io.deck.repository.DeckShareLinkRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,18 +23,20 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 @Service
 @RequiredArgsConstructor
 public class DeckService {
 
     private final GeminiAPIService geminiAPIService;
     private final DeckRepository deckRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
+    private final DeckShareLinkRepository shareLinkRepository;
+
+    @Value("${app.share-link-base-url}")
+    private String shareLinkBaseUrl;
 
     public Deck create(Deck deck) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        user = userRepository.findById(user.getId()).get();
+        User user = currentUserService.getCurrentUser();
         deck.setUser(user);
         deckRepository.save(deck);
         return deck;
@@ -46,12 +50,18 @@ public class DeckService {
         return deckRepository.findAllByUserId(userId);
     }
 
+    public Set<Deck> getDeckByCurrentUser() {
+        Long userId = currentUserService.getCurrentUserId();
+
+        return deckRepository.findAllByUserId(userId);
+    }
+
     public void removeDeck(Long deckId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = currentUserService.getCurrentUserId();
 
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
 
-        if(!deck.getUser().getId().equals(user.getId())) {
+        if(!deck.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException();
         }
 
@@ -75,7 +85,7 @@ public class DeckService {
             questionAnswerPairs.add(matcher.group(1));
         }
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = currentUserService.getCurrentUser();
 
         Deck deck = Deck.builder()
                 .name("Generated_" + fileName)
@@ -138,5 +148,33 @@ public class DeckService {
             throw new RuntimeException("Unexpected error occurred while processing the PDF: " + e.getMessage(), e);
         }
     }
+
+    public String createShareLink(Long deckId) {
+        User currentUser = currentUserService.getCurrentUser();
+        Deck deck = getDeckByDeckId(deckId);
+        
+        if (!deck.getUser().getId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException("Only deck owner can create share links");
+        }
+        
+        DeckShareLink shareLink = deck.createShareLink();
+        deckRepository.save(deck);
+
+        return shareLinkBaseUrl + shareLink.getShareToken();
+    }
+
+    public Deck getSharedDeck(String shareToken) {
+        DeckShareLink shareLink = shareLinkRepository.findByShareToken(shareToken);
+
+        if (!shareLink.isActive()) {
+            throw new IllegalArgumentException("Share link is expired");
+        }
+
+        return shareLink.getDeck();
+    }
+
+//    public Deck copySharedDeck(String shareToken) {
+//
+//    }
 
 }

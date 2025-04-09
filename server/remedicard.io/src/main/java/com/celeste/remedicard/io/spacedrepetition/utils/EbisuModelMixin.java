@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.spacedRepetition.utils;
+package com.celeste.remedicard.io.spacedrepetition.utils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

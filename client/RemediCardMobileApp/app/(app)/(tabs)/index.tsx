@@ -5,14 +5,13 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Link } from "expo-router";
-import {useAuth} from "../../../contexts/AuthContext"
+import {useAuth} from "@/contexts/AuthContext"
 import { Redirect } from "expo-router";
 export default function HomeScreen() {
   
   const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
-    console.log(isLoggedIn);
     return <Redirect href="/login" />;
   }
   

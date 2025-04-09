@@ -49,13 +49,18 @@ public class Deck extends AuditableEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void addFlashcard(Flashcard flashcard) {
-        flashcardSet.add(flashcard);
-        flashcard.setDeck(this);
-    }
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<DeckShareLink> shareLinks = new HashSet<>();
 
-    public void removeFlashcard(Flashcard flashcard) {
-        flashcardSet.remove(flashcard);
-        flashcard.setDeck(null);
+    public DeckShareLink createShareLink() {
+        DeckShareLink shareLink = DeckShareLink.builder()
+                .shareToken(java.util.UUID.randomUUID().toString())
+                .expiryDate(java.time.LocalDateTime.now().plusDays(7))
+                .deck(this)
+                .active(true)
+                .build();
+
+        shareLinks.add(shareLink);
+        return shareLink;
     }
 }
