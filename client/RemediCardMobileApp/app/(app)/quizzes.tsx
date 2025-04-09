@@ -39,6 +39,7 @@ export default function Quizzes() {
     useState(false);
   const [newQuizTitle, setNewQuizTitle] = useState("");
   const router = useRouter();
+  const [updated, setUpdated] = useState(false)
 
   useEffect(() => {
     getQuizzesByCurrentUser()
@@ -56,7 +57,7 @@ export default function Quizzes() {
       .catch((error: any) => {
         console.log(error);
       });
-  }, []);
+  }, [updated]);
 
   const handleQuizPress = (quiz: any) => {
     setSelectedQuiz(quiz);
@@ -114,6 +115,7 @@ export default function Quizzes() {
     }).then((res) => {
       setManualCreateModalVisible(false);
       setNewQuizTitle("");
+      setUpdated(updated => !updated)
       //router.push("/(app)/updatedeck?deckId=" + res.data.id);
     });
   };
