@@ -1,0 +1,10 @@
+{
+    "update_flashcard": "Bilgi Kartını Güncelle",
+    "create_flashcard": "Bilgi Kartı Oluştur",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "update": "Güncelle",
+    "front_message": "Ön Yüz Metnini Girin",
+    "back_message": "Arka Yüz Metnini Girin"
+}

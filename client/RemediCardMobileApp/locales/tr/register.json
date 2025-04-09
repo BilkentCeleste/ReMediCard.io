@@ -1,0 +1,10 @@
+{
+    "username": "Kullanıcı adı",
+    "email": "Email",
+    "password": "Şifre",
+    "confirm_password": "Şifreyi onayla",
+    "log_in": "Giriş yapın",
+    "title": "ReMediCard.io",
+    "sign_up": "Kayıt ol",
+    "already_have_an_account": "Zaten bir hesabınız var mı?"
+}

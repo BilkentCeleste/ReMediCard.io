@@ -1,0 +1,9 @@
+{
+    "title": "Delete Account",
+    "description": "To delete your account please enter the 6-digit verification code sent to your email.",
+    "try_again": "Didn't receive the email? Try again",
+    "delete_account": "Delete Account",
+    "cancel": "Cancel",
+    "resent": "Resent",
+    "resent_message": "Verification email has been resent."
+}

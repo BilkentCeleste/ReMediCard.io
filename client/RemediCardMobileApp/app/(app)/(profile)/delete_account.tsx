@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import { useRouter, useNavigation } from "expo-router";
 import { AtIcon, LockIcon } from "@/constants/icons";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
+  const { t } = useTranslation("delete_account");
+
   const [authId, setAuthId] = useState(["", "", "", "", "", ""]);
   const navigation = useNavigation();
   const router = useRouter();
@@ -37,8 +40,8 @@ export default function ForgotPassword() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Delete Account</Text>
-          <Text style={styles.infoText}>To delete your account please enter the 6-digit verification code sent to your email.</Text>
+      <Text style={styles.title}>{t("title")}</Text>
+          <Text style={styles.infoText}>{t("description")}</Text>
           <View style={styles.authCodeContainer}>
             {authId.map((digit, index) => (
               <TextInput
@@ -52,22 +55,22 @@ export default function ForgotPassword() {
               />
             ))}
           </View>
-          <TouchableOpacity onPress={() => Alert.alert("Resent", "Verification email has been resent.")}> 
-            <Text style={styles.link}>Didn't receive the email? Try again</Text>
+          <TouchableOpacity onPress={() => Alert.alert(t("resent"), t("resent_message"))}> 
+            <Text style={styles.link}>{t("try_again")}</Text>
           </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => handleDelete()}
       >
-        <Text style={styles.buttonText}>Delete Account</Text>
+        <Text style={styles.buttonText}>{t("delete_account")}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.cancelButton}
         onPress={() => router.back()}
       >
-        <Text style={styles.buttonText}>Cancel</Text>
+        <Text style={styles.buttonText}>{t("cancel")}</Text>
       </TouchableOpacity>
     </View>
   );

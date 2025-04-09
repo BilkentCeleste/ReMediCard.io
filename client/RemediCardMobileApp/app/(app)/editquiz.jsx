@@ -3,8 +3,11 @@ import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList, A
 import { useRouter, Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { ChevronRightIcon, GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import { getQuizByQuizId, removeQuestion } from '../../apiHelper/backendHelper';
+import { useTranslation } from 'react-i18next';
 
 export default function editQuiz() {
+    const { t } = useTranslation("edit_quiz");
+
     const [quiz, setQuiz] = useState();
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [DeleteQuestionModalVisible, setDeleteQuestionModalVisible] = useState(false);
@@ -116,7 +119,7 @@ export default function editQuiz() {
                     <View style={styles.questionCard}>
                         <Text style={styles.questionText}>{item?.description}</Text>
                         <TouchableOpacity style={styles.editButton} onPress={() => uploadUpdateQuestion()}>
-                            <Text style={styles.editButtonText}>Edit</Text>
+                            <Text style={styles.editButtonText}>{t("edit")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.deleteButton} onPress={() => handleToggleDeleteQuestionModal(item?.id)}>
                             <Text style={styles.deleteButtonText}>Delete</Text>
@@ -126,7 +129,6 @@ export default function editQuiz() {
                 keyExtractor={(item) => item.id}
             />
 
-            {/*a modal to ask whether the user is sure about deleting the question*/}
             <Modal
                 animationType="slide"
                 transparent={true}

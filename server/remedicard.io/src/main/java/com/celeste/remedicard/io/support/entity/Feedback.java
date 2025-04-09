@@ -22,7 +22,7 @@ public class Feedback {
     private String subject;
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

@@ -1,0 +1,8 @@
+{
+    "title": "Deck Results",
+    "correct": "Correct: ",
+    "incorrect": "Incorrect: ",
+    "success_rate": "Success Rate: ",
+    "retry": "Retry?",
+    "home": "Home"
+}

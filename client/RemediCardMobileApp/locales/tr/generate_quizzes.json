@@ -1,0 +1,13 @@
+{
+  "lecture_notes": "Ders Notları",
+  "video_record": "Video Kaydı",
+  "voice_record": "Ses Kaydı",
+  "file_type_must_be_selected": "Dosya türü seçilmelidir",
+  "queued_message": "Test oluşturma isteği sıraya alındı, test oluşturulduğunda test menüsünde bulabilirsiniz",
+  "generate_new_quiz": "Yeni Test Oluştur",
+  "choose_file": "Test sorusu oluşturmak için bir dosya seçin",
+  "select_file_type": "Dosya Türünü Seçin",
+  "select_file": "Bir Dosya Seçin",
+  "supported_file_types": "ReMediCard.io .pdf .png .jpeg .mp3 .mp4 uzantılarını destekler",
+  "confirm_auto_generation": "Yapay Zeka ile Oluştur"
+}

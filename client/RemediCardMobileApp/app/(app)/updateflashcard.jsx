@@ -3,9 +3,12 @@ import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, deleteFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon} from '@/constants/icons';
+import { useTranslation } from 'react-i18next';
 
 
 export default function UpdateFlashcard() {
+    const { t } = useTranslation('update_flashcard');
+
     const [cardFrontSide, setCardFrontSide] = useState('');
     const [cardBackSide, setCardBackSide] = useState('');
     const [flashcardId, setFlashcardId] = useState('');
@@ -115,7 +118,7 @@ export default function UpdateFlashcard() {
                     <TouchableOpacity onPress={handleBack}><GoBackIcon/></TouchableOpacity>
                 </View>
 
-                <Text style={styles.menuText}>{isCreating ? 'Create Flashcard' : 'Update Flashcard'}</Text>
+                <Text style={styles.menuText}>{isCreating ? t("create_flashcard") : t("update_flashcard")}</Text>
             
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
@@ -130,14 +133,14 @@ export default function UpdateFlashcard() {
 
             <TextInput
                 style={styles.qInput}
-                placeholder={isCreating ? 'Enter Front Side Text' : ''}
+                placeholder={isCreating ? t("front_message") : ''}
                 value={cardFrontSide}
                 onChangeText={setCardFrontSide}
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
             <TextInput
                 style={styles.aInput}
-                placeholder={isCreating ? 'Enter Back Side Text' : ''}
+                placeholder={isCreating ? t("back_message") : ''}
                 value={cardBackSide}
                 onChangeText={setCardBackSide}
                 multiline={true}
@@ -147,10 +150,10 @@ export default function UpdateFlashcard() {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={isCreating ? handleBack : handleDelete}>
-                    <Text style={styles.buttonText}>{isCreating ? 'Cancel' : 'Delete'}</Text>
+                    <Text style={styles.buttonText}>{isCreating ? t("cancel") : t("delete")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={isCreating ? handleSave : handleUpdate}>
-                    <Text style={styles.buttonText}>{isCreating ? 'Save' : 'Update'}</Text>
+                    <Text style={styles.buttonText}>{isCreating ? t("save") : t("update")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

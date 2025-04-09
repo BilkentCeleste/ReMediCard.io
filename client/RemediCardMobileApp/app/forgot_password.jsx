@@ -16,8 +16,11 @@ import {
 } from "@/apiHelper/backendHelper";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
+  const { t } = useTranslation("forgot_password");
+
   const [stage, setStage] = useState(1);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -43,7 +46,7 @@ export default function ForgotPassword() {
 
   const handleEmailSubmit = () => {
     if (!email.includes("@")) {
-      Alert.alert("Invalid Email", "Please enter a valid email address.");
+      Alert.alert(t("invalid_email"), t("invalid_email_message"));
       return;
     }
 
@@ -60,7 +63,7 @@ export default function ForgotPassword() {
 
   const handleAuthSubmit = () => {
     if (code.join("").length !== 6) {
-      Alert.alert("Invalid Code", "The authentication code must be 6 digits.");
+      Alert.alert(t("invalid_code"), t("invalid_code_message"));
       return;
     }
 
@@ -74,20 +77,17 @@ export default function ForgotPassword() {
       })
       .catch((e) => {
         console.log(e);
-        Alert.alert("Failed", "Given code is invalid!");
+        Alert.alert(t("failed"), t("code_is_invalid"));
       });
   };
 
   const handlePasswordReset = () => {
     if (newPassword.length < 6) {
-      Alert.alert(
-        "Weak Password",
-        "Password must be at least 6 characters long."
-      );
+      Alert.alert(t("weak_password"), t("weak_password_message"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      Alert.alert("Mismatch", "Passwords do not match.");
+      Alert.alert(t("missmatch_password"), t("missmatch_password_message"));
       return;
     }
 
@@ -98,7 +98,7 @@ export default function ForgotPassword() {
     })
       .then((res) => {
         setIsLoggedIn(true);
-        Alert.alert("Success", "Your password has been reset.", [
+        Alert.alert(t("success"), t("password_reset_success_message"), [
           {
             text: "OK",
             onPress: () => {
@@ -111,8 +111,7 @@ export default function ForgotPassword() {
       .catch((e) => {
         console.log(e.status);
         Alert.alert(
-          "Failed",
-          "New password can't be the same with last two set passwords!"
+          t("failed"), t("password_should_be_different_from_old_passwords_message")
         );
       });
   };
@@ -131,17 +130,17 @@ export default function ForgotPassword() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
+      <Text style={styles.title}>{t("title")}</Text>
       {stage === 1 && (
         <>
           <Text style={styles.infoText}>
-            Enter your registered email to receive a verification code.
+            {t("enter_registered_email")}
           </Text>
           <View style={styles.component}>
             <AtIcon />
             <TextInput
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder={t('email')}
               placeholderTextColor="rgba(0, 0, 0, 0.25)"
               value={email}
               onChangeText={setEmail}
@@ -152,7 +151,7 @@ export default function ForgotPassword() {
       {stage === 2 && (
         <>
           <Text style={styles.infoText}>
-            Enter the 6-digit verification code sent to your email.
+            {t("enter_verification_code")}
           </Text>
           <View style={styles.authCodeContainer}>
             {code.map((digit, index) => (
@@ -173,27 +172,27 @@ export default function ForgotPassword() {
                 email: email,
               })
                 .then((res) => {
-                  Alert.alert("Resent", "Verification email has been resent.");
+                  Alert.alert(t("resent_email"), t("resent_email_message"));
                 })
                 .catch((e) => {
                   console.log(e.status);
                 })
             }
           >
-            <Text style={styles.link}>Didn't receive the email? Try again</Text>
+            <Text style={styles.link}>{t("didnt_receive_email")}</Text>
           </TouchableOpacity>
         </>
       )}
       {stage === 3 && (
         <>
           <Text style={styles.infoText}>
-            Set a new password for your account.
+            {t("set_new_password")}
           </Text>
           <View style={styles.component}>
             <LockIcon />
             <TextInput
               style={styles.input}
-              placeholder="New password"
+              placeholder={t("new_password")}
               placeholderTextColor="rgba(0, 0, 0, 0.25)"
               secureTextEntry
               value={newPassword}
@@ -204,7 +203,7 @@ export default function ForgotPassword() {
             <LockIcon />
             <TextInput
               style={styles.input}
-              placeholder="Confirm new password"
+              placeholder={t("confirm_new_password")}
               placeholderTextColor="rgba(0, 0, 0, 0.25)"
               secureTextEntry
               value={confirmPassword}
@@ -224,7 +223,7 @@ export default function ForgotPassword() {
         }
       >
         <Text style={styles.buttonText}>
-          {stage === 3 ? "Reset Password" : "Next"}
+          {stage === 3 ? t("reset_password") : t("next")}
         </Text>
       </TouchableOpacity>
       {stage === 3 && (
@@ -236,7 +235,7 @@ export default function ForgotPassword() {
             router.push("/(app)/home");
           }}
         >
-          <Text style={styles.buttonText}>{"Continue Without Reset"}</Text>
+          <Text style={styles.buttonText}>{t("continue_without_reset")}</Text>
         </TouchableOpacity>
       )}
     </View>

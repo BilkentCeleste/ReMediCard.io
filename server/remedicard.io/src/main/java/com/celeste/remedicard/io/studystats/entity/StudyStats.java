@@ -21,7 +21,7 @@ public class StudyStats extends AuditableEntity {
     @Column
     private Double averageSuccessRate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

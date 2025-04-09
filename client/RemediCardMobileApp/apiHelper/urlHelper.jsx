@@ -33,7 +33,8 @@ export const UPDATE_FLASHCARD_REVIEWS_PATH = () => `${BASE_URL}/flashcard/update
 export const CREATE_FEEDBACK_PATH = (id) => `${BASE_URL}/support/feedback`;
 
 // auto generation
-export const AUTO_GENERATE_DECK_PATH = () => `${BASE_URL}/auto_generation/generate`
+export const AUTO_GENERATE_DECK_PATH = () => `${BASE_URL}/auto_generation/deck/generate`
+export const AUTO_GENERATE_QUIZ_PATH = () => `${BASE_URL}/auto_generation/quiz/generate`
 
 // quiz
 export const GET_QUIZZES_BY_CURRENT_USER_PATH = () => `${BASE_URL}/quiz/getByCurrentUser`;

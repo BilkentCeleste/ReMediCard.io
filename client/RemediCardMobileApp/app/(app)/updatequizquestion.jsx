@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
+import { useTranslation } from 'react-i18next';
 
 export default function UpdateFlashcard() {
+    const { t } = useTranslation('update_quiz_question');
+
     const router = useRouter();
     const navigation = useNavigation();
     
@@ -42,7 +45,7 @@ export default function UpdateFlashcard() {
                     <TouchableOpacity onPress={() => router.back()}><GoBackIcon/></TouchableOpacity>
                 </View>
 
-                <Text style={styles.menuText}>Create Question</Text>
+                <Text style={styles.menuText}>{t("create_question")}</Text>
             
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
@@ -51,7 +54,7 @@ export default function UpdateFlashcard() {
             
             <TextInput
                 style={styles.qInput}
-                placeholder='Enter Question'
+                placeholder={t("enter_question")}
                 value={question?.description}
                 // onChangeText={setQuestion}
                 placeholderTextColor='rgba(0, 0, 0, 0.5)'
@@ -72,7 +75,7 @@ export default function UpdateFlashcard() {
                         multiline={true}
                         value={answer}
                         onChangeText={(text) => handleAnswerChange(text, index)}
-                        placeholder={`Answer ${index + 1}`}
+                        placeholder={t("answer") + (index + 1)}
                         placeholderTextColor='rgba(0, 0, 0, 0.5)'
                     />
                 </View>
@@ -80,10 +83,10 @@ export default function UpdateFlashcard() {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => router.back()}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    <Text style={styles.buttonText}>{t("cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSave}>
-                    <Text style={styles.buttonText}>Save</Text>
+                    <Text style={styles.buttonText}>{t("save")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

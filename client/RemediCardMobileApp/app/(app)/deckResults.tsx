@@ -1,10 +1,10 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
-
+import { useTranslation } from "react-i18next";
 
 export default function DeckResults( ) {
-
+    const { t } = useTranslation("deck_results");
     const router = useRouter();
 
     const {deck, trueAnwserCount, falseAnswerCount} = useLocalSearchParams();
@@ -27,7 +27,7 @@ export default function DeckResults( ) {
                     <Link href="/(app)/decks"><GoBackIcon/></Link>
                 </View>
             
-                <Text style={styles.menuText}>Deck Results</Text>
+                <Text style={styles.menuText}>{t("title")}</Text>
                     
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
@@ -35,22 +35,22 @@ export default function DeckResults( ) {
             </View>
             <View style={styles.scoreTable}>
                 <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon width={20} height={20}></CorrectIcon></View>
-                <Text style={[styles.text2, styles.scoreText]}>Correct: {trueAnwserCount}</Text>
+                <Text style={[styles.text2, styles.scoreText]}>{t("correct")} {trueAnwserCount}</Text>
                 <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon width={20} height={20}></FalseIcon></View>
-                <Text style={[styles.text3, styles.scoreText]}>False: {falseAnswerCount}</Text>
+                <Text style={[styles.text3, styles.scoreText]}>{t("incorrect")} {falseAnswerCount}</Text>
             </View>
 
-            <Text style={styles.successRateText}>Success Rate: {successRate.toFixed(2)}%</Text>
+            <Text style={styles.successRateText}>{t("success_rate")} {successRate.toFixed(2)}%</Text>
 
             <View style={styles.retryButton}>
                 <TouchableOpacity onPress={handleRetry}>
-                    <Text style={styles.retryButtonText}> Retry? </Text>
+                    <Text style={styles.retryButtonText}> {t("retry")} </Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.retryButton}>
                 <TouchableOpacity onPress={handleHomePage}>
-                    <Text style={styles.retryButtonText}> Home </Text>
+                    <Text style={styles.retryButtonText}> {t("home")} </Text>
                 </TouchableOpacity>
             </View>
 

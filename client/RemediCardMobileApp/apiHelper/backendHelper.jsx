@@ -62,7 +62,7 @@ export const deleteFlashcard = async (id, data) => {
 
 export const getFlashcardsInBatch = async (deckId) => {
   return await getFetcher(url.GET_FLASHCARDS_IN_BATCH_PATH(deckId));
-}
+};
 
 export const updateFlashcardReviews = async (data) => {
   return await postFetcher(url.UPDATE_FLASHCARD_REVIEWS_PATH(), data);
@@ -113,4 +113,10 @@ export const removeQuestion = async (id, data) => {
   return await postFetcher(url.REMOVE_QUESTION_PATH(id), data);
 };
 
-
+export const autoGenerateQuiz = async (formData) => {
+  return await postFetcher(
+    url.AUTO_GENERATE_QUIZ_PATH(),
+    formData,
+    "multipart/form-data"
+  );
+};

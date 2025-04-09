@@ -3,18 +3,17 @@ package com.celeste.remedicard.io.quiz.entity;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name= "QUIZ")
 public class Quiz extends AuditableEntity {
@@ -37,7 +36,7 @@ public class Quiz extends AuditableEntity {
 
     public Quiz(Quiz quiz) {
         BeanUtils.copyProperties(quiz, this, "id", "user", "questions");
-        
+
         Set<Question> originalQuestions = quiz.getQuestions();
         for (Question question : originalQuestions) {
             this.addQuestion(new Question(question));

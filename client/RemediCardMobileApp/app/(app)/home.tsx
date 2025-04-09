@@ -21,8 +21,11 @@ import {
   ProfileIcon,
   SettingsIcon,
 } from "../../constants/icons";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation("home");
+
   const router = useRouter();
 
   const uploadDecksPage = () => {
@@ -49,17 +52,17 @@ export default function Home() {
         <SearchIcon></SearchIcon>
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
-          placeholder="search anything"
+          placeholder={t("search")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         ></TextInput>
       </View>
 
       <View style={styles.reminderComponent}>
         <Text style={[styles.reminderHeaderPlacement, styles.reminderHeader]}>
-          What about exercising about cardiovascular system ?
+          What about exercising about cardiovascular system ? (dummy)
         </Text>
         <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-          Last time you exercised about cardiovascular system was 5 days ago
+          Last time you exercised about cardiovascular system was 5 days ago (dummy)
         </Text>
       </View>
 
@@ -70,7 +73,7 @@ export default function Home() {
             onPress={uploadDecksPage}
           >
             <FlashcardIcon></FlashcardIcon>
-            <Text style={[styles.mainComponentText]}>Decks</Text>
+            <Text style={[styles.mainComponentText]}>{t("decks")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -78,7 +81,7 @@ export default function Home() {
             onPress={uploadQuizzesPage}
           >
             <QuizIcon></QuizIcon>
-            <Text style={[styles.mainComponentText]}>Quizzes</Text>
+            <Text style={[styles.mainComponentText]}>{t("quizzes")}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -87,7 +90,7 @@ export default function Home() {
             onPress={uploadStudyDashboardPage}
           >
             <GoalsIcon></GoalsIcon>
-            <Text style={[styles.mainComponentText]}>Study Goals</Text>
+            <Text style={[styles.mainComponentText]}>{t("study_goals")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -95,7 +98,7 @@ export default function Home() {
             onPress={uploadGeneralEditPage}
           >
             <CreateIcon></CreateIcon>
-            <Text style={[styles.mainComponentText]}>Create</Text>
+            <Text style={[styles.mainComponentText]}>{t("create")}</Text>
           </TouchableOpacity>
         </View>
       </View>

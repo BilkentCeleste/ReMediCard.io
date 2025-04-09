@@ -27,8 +27,11 @@ import {
 } from "@/apiHelper/backendHelper";
 import { create } from "react-test-renderer";
 import { Share, Button } from 'react-native';
+import { useTranslation } from "react-i18next";
 
 export default function Decks() {
+  const { t } = useTranslation("decks");
+
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [decks, setDecks] = useState<any[]>([]);
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
@@ -59,10 +62,10 @@ export default function Decks() {
   }, []);
 
   const sortOptions = [
-    { label: "Sort by Last Accessed", value: "last" },
-    { label: "Sort by Newly Accessed", value: "newest" },
-    { label: "Sort by Best Performance", value: "best" },
-    { label: "Sort by Worst Performance", value: "worst" },
+    { label: t("sort_by_last_accessed"), value: "last" },
+    { label: t("sort_by_newly_accessed"), value: "newest" },
+    { label: t("sort_by_best_performance"), value: "best" },
+    { label: t("sort_by_worst_performance"), value: "worst" },
   ];
 
   const handleDeckPress = (deck: any) => {
@@ -78,7 +81,7 @@ export default function Decks() {
         params: { deck: JSON.stringify(selectedDeck) },
       });
     } else {
-      Alert.alert("Error", "Deck information is missing.");
+      Alert.alert(t("error"), t("deck_info_missing"));
     }
   };
 
@@ -87,14 +90,14 @@ export default function Decks() {
       setModalVisible(false);
       router.push("/(app)/updatedeck?deckId=" + selectedDeck.id);
     } else {
-      Alert.alert("Error", "Deck information is missing.");
+      Alert.alert(t("error"), t("deck_info_missing"));
     }
   };
 
   const handleDeleteDeck = () => {
 
     deleteDeck(selectedDeck.id).then((res) => {
-      Alert.alert("Success", "Selected deck is successfully deleted!");
+      Alert.alert(t("success"), t("success_message"));
       setDecks(decks.filter((d) => d.id !== selectedDeck.id));
       setSelectedDeck(null);
       setPopUpVisible(false);
@@ -108,7 +111,7 @@ export default function Decks() {
 
   const handleManualCreate = () => {
     if (!newDeckTitle.trim()) {
-      Alert.alert("Error", "Please enter a deck name");
+      Alert.alert(t("error"), t("enter_deck_name"));
       return;
     }
 
@@ -142,20 +145,20 @@ export default function Decks() {
   return (
     <View style={styles.container}>
       {/* Header, Search, Sort */}
-      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+      <Text style={styles.remedicardio}>{t("title")}</Text>
 
       <View style={styles.searchComponent}>
         <SearchIcon />
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
-          placeholder="search anything"
+          placeholder={t("search")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         />
       </View>
 
       <DropDown
         options={sortOptions}
-        placeholder="Select sort option"
+        placeholder={t("select_sort_option")}
         onSelect={(value) => setSelectedSort(value)}
       />
 
@@ -173,13 +176,13 @@ export default function Decks() {
             <View>
               <Text style={styles.deckTitle}>{item.name}</Text>
               <Text style={styles.deckInfoText}>
-                Last accessed: {item.lastAccessed}
+                {t("last_accessed")} {item.lastAccessed}
               </Text>
               <Text style={styles.deckInfoText}>
-                {item.flashcardSet.length} cards
+                {item.flashcardSet.length} {t("cards")}
               </Text>
               <Text style={styles.deckInfoText}>
-                Best: {item.bestPerformance}% Last: {item.lastPerformance}%
+              {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
               </Text>
               <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                 <ChevronRightIcon color="#111" />
@@ -194,7 +197,7 @@ export default function Decks() {
         onPress={() => setCreateModalVisible(true)}
       >
         <PlusIcon></PlusIcon>
-        <Text style={styles.createNewDeck}>Create New Deck</Text>
+        <Text style={styles.createNewDeck}>{t("create_new_deck")}</Text>
       </TouchableOpacity>
 
       <Modal
@@ -205,7 +208,7 @@ export default function Decks() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Create Deck</Text>
+            <Text style={styles.modalTitle}>{t("create_deck")}</Text>
 
             <TouchableOpacity
               style={styles.modalButton}
@@ -214,7 +217,7 @@ export default function Decks() {
                 setManualCreateModalVisible(true);
               }}
             >
-              <Text style={styles.modalButtonText}>Create Manually</Text>
+              <Text style={styles.modalButtonText}>{t("create_manually")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -224,14 +227,14 @@ export default function Decks() {
                 uploadGeneratePage();
               }}
             >
-              <Text style={styles.modalButtonText}>Create with AI</Text>
+              <Text style={styles.modalButtonText}>{t("create_with_ai")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setCreateModalVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -247,20 +250,20 @@ export default function Decks() {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
               {" "}
-              Are you sure about deleting the selected deck?{" "}
+              {t("delete_deck_message")}{" "}
             </Text>
 
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={handleDeleteDeck}
             >
-              <Text style={[styles.modalButtonText]}>Delete Deck</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setPopUpVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -279,13 +282,13 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleStartQuiz}
             >
-              <Text style={styles.modalButtonText}>Start Quiz</Text>
+              <Text style={styles.modalButtonText}>{t("start_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalButton}
               onPress={handleEditDeck}
             >
-              <Text style={styles.modalButtonText}>Edit Deck</Text>
+              <Text style={styles.modalButtonText}>{t("edit_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.modalButton}
@@ -297,13 +300,13 @@ export default function Decks() {
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={() => setPopUpVisible(true)}
             >
-              <Text style={[styles.modalButtonText]}>Delete Deck</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -317,13 +320,13 @@ export default function Decks() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>New Deck Name</Text>
+            <Text style={styles.modalTitle}>{t("new_deck_name")}</Text>
             <TextInput
               style={[
                 styles.searchComponent,
                 { width: "100%", marginBottom: 10 },
               ]}
-              placeholder="Enter deck title"
+              placeholder={t("enter_deck_title")}
               value={newDeckTitle}
               onChangeText={setNewDeckTitle}
             />
@@ -332,14 +335,14 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleManualCreate}
             >
-              <Text style={styles.modalButtonText}>Save & Edit</Text>
+              <Text style={styles.modalButtonText}>{t("save_and_edit")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setManualCreateModalVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>

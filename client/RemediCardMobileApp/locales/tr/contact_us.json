@@ -1,0 +1,11 @@
+{
+    "title": "Bize Ulaşın",
+    "invalid_form": "Geçersiz form",
+    "invalid_form_message": "Lütfen bir konu ve geri bildiriminiz için boş olmayan bir içerik girin.",
+    "success": "Başarılı",
+    "success_message": "Geri bildirim formunuz başarıyla gönderildi. Ekip en kısa sürede sizinle iletişime geçecektir.",
+    "send_message": "Şikayetlerinizi veya önerilerinizi Celeste Ekibine gönderin:",
+    "subject": "Konu",
+    "content": "İçerik",
+    "submit": "Gönder"
+}

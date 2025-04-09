@@ -1,0 +1,14 @@
+{
+    "sort_by_last_accessed": "Son Erişim Tarihine Göre Sırala",
+    "sort_by_newly_accessed": "Yeni Erişim Tarihine Göre Sırala",
+    "sort_by_best_performance": "En İyi Performansa Göre Sırala",
+    "sort_by_worst_performance": "En Kötü Performansa Göre Sırala",
+    "title": "ReMediCard.io",
+    "search": "Ara",
+    "select_sort_option": "Sıralama Seçeneğini Seçin",
+    "last_accessed": "Son Erişim: ",
+    "cards": "Kart",
+    "last": "Son: ",
+    "best": "En İyi: ",
+    "create_new_deck": "Yeni Deste Oluştur"
+}

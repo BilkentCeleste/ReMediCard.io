@@ -1,0 +1,12 @@
+{
+    "lecture_notes": "Ders Notları",
+    "video_record": "Video Kaydı",
+    "voice_record": "Ses Kaydı",
+    "file_type_must_be_selected": "Dosya türü seçilmelidir",
+    "queued_message": "Deste oluşturma isteği sıraya alındı, deste oluşturulduğunda deste menüsünde bulabilirsiniz",
+    "generate_new_deck": "Yeni Deste Oluştur",
+    "choose_file": "Bilgi kartı oluşturmak için bir dosya seçin",
+    "select_file_type": "Dosya Türünü Seçin",
+    "select_file": "Bir Dosya Seçin",
+    "supported_file_types": "ReMediCard.io .pdf .png .jpeg .mp3 .mp4 uzantılarını destekler"
+}

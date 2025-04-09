@@ -31,7 +31,7 @@ public class UsageStats extends AuditableEntity {
     private Map<Date, Date> sessions;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
