@@ -8,7 +8,7 @@ import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
 import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;
 import com.celeste.remedicard.io.deck.service.DeckService;
-import com.celeste.remedicard.io.notification.entity.service.NotificationService;
+import com.celeste.remedicard.io.notification.service.NotificationService;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

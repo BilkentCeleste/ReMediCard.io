@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.notification.entity.service;
+package com.celeste.remedicard.io.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
