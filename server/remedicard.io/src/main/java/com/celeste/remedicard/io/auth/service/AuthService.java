@@ -35,6 +35,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .pushNotificationToken(request.getPushNotificationToken())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -60,6 +61,10 @@ public class AuthService {
 
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
+
+        user.setPushNotificationToken(request.getPushNotificationToken());
+        userRepository.save(user);
+
         String jwtToken = jwtService.generateToken(user);
 
         return AuthResponse.builder()

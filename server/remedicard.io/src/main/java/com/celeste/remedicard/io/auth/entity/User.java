@@ -1,5 +1,7 @@
 package com.celeste.remedicard.io.auth.entity;
 
+import com.celeste.remedicard.io.common.enumeration.Language;
+import com.celeste.remedicard.io.common.enumeration.Role;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.notification.entity.Notification;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
@@ -38,6 +40,10 @@ public class User implements UserDetails {
     private Date resetCodeExpiry;
 
     private Role role;
+
+    private Language language;
+
+    private String pushNotificationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
