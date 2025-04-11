@@ -2,10 +2,9 @@ package com.celeste.remedicard.io.autogeneration.service;
 
 
 import com.celeste.remedicard.io.auth.entity.User;
-import com.celeste.remedicard.io.autogeneration.config.DataType;
-import com.celeste.remedicard.io.autogeneration.config.Language;
-import com.celeste.remedicard.io.autogeneration.config.TargetDataType;
-import com.celeste.remedicard.io.autogeneration.dto.AutoGenerationRequest;
+import com.celeste.remedicard.io.common.enumeration.DataType;
+import com.celeste.remedicard.io.common.enumeration.Language;
+import com.celeste.remedicard.io.common.enumeration.TargetDataType;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
 import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;

@@ -1,6 +1,6 @@
 package com.celeste.remedicard.io.autogeneration.service;
 
-import com.celeste.remedicard.io.autogeneration.config.DataType;
+import com.celeste.remedicard.io.common.enumeration.DataType;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;

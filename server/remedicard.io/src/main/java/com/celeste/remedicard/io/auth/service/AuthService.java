@@ -1,7 +1,7 @@
 package com.celeste.remedicard.io.auth.service;
 
 import com.celeste.remedicard.io.auth.controller.dto.*;
-import com.celeste.remedicard.io.auth.entity.Role;
+import com.celeste.remedicard.io.common.enumeration.Role;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;

@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.autogeneration.config;
+package com.celeste.remedicard.io.common.enumeration;
 
 public enum DataType {
 

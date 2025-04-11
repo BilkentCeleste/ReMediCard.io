@@ -1,7 +1,7 @@
 package com.celeste.remedicard.io.autogeneration.entity;
 
-import com.celeste.remedicard.io.autogeneration.config.DataType;
-import com.celeste.remedicard.io.autogeneration.config.Language;
+import com.celeste.remedicard.io.common.enumeration.DataType;
+import com.celeste.remedicard.io.common.enumeration.Language;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

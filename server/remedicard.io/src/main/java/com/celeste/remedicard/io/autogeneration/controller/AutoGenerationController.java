@@ -1,8 +1,8 @@
 package com.celeste.remedicard.io.autogeneration.controller;
 
-import com.celeste.remedicard.io.autogeneration.config.DataType;
-import com.celeste.remedicard.io.autogeneration.config.Language;
-import com.celeste.remedicard.io.autogeneration.config.TargetDataType;
+import com.celeste.remedicard.io.common.enumeration.DataType;
+import com.celeste.remedicard.io.common.enumeration.Language;
+import com.celeste.remedicard.io.common.enumeration.TargetDataType;
 import com.celeste.remedicard.io.autogeneration.service.MediaProcessingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

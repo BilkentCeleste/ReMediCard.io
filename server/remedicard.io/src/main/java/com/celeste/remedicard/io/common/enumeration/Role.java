@@ -1,4 +1,4 @@
-package com.celeste.remedicard.io.auth.entity;
+package com.celeste.remedicard.io.common.enumeration;
 
 public enum Role {
     USER,
