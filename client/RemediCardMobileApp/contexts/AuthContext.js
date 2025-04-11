@@ -9,6 +9,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { GOOGLE_WEB_CLIENT_ID } from "@/constants/config";
 import { Alert } from "react-native";
+import { JWT_TOKEN_KEY } from "@/constants/config";
 
 const AuthContext = createContext({
   isLoggedIn: false,
@@ -69,11 +70,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const addToken = async (token) => {
-    await SecureStore.setItemAsync("token", token);
+    await SecureStore.setItemAsync(JWT_TOKEN_KEY, token);
   };
 
   const removeToken = async () => {
-    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync(JWT_TOKEN_KEY);
   };
 
   const loginAuth = async (body) => {

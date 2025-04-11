@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { JWT_TOKEN_KEY } from '@/constants/config';
 
 /**
  * @author Faruk Uçgun
@@ -14,7 +15,7 @@ const _handleError = async (res) => {
 }
 
 const getCommonHeaders = async () => {
-    const token = await SecureStore.getItemAsync("token") || "";
+    const token = await SecureStore.getItemAsync(JWT_TOKEN_KEY) || "";
     return {
         "Content-Type": "application/json",
         "Authorization": token
