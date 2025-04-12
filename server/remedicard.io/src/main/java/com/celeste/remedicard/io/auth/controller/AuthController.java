@@ -63,11 +63,10 @@ public class AuthController {
         return new RedirectView("/deletion-success.html");
     }
 
-    @Secured("ROLE_USER")
-    @GetMapping("hello")
-    public String hello() {
-        return "Hello";
-    }
+    @GetMapping("get_current_user_profile")
+    public ResponseEntity<AccountProfileDTO> getProfileInfo(){
 
+        return ResponseEntity.ok(authService.getCurrentUserProfile());
+    }
 
 }

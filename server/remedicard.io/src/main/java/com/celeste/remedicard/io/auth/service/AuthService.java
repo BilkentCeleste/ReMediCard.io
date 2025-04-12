@@ -179,4 +179,12 @@ public class AuthService {
         userRepository.delete(user);
     }
 
+    public AccountProfileDTO getCurrentUserProfile() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return AccountProfileDTO.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
+    }
 }
