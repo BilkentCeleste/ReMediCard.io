@@ -2,12 +2,13 @@ package com.celeste.remedicard.io.quiz.mapper;
 
 import com.celeste.remedicard.io.quiz.controller.dto.QuestionResponseDTO;
 import com.celeste.remedicard.io.quiz.entity.Question;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder=true))
 public interface QuestionResponseMapper {
 
     QuestionResponseMapper INSTANCE = Mappers.getMapper(QuestionResponseMapper.class);

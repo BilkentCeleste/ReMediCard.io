@@ -5,6 +5,8 @@ import {
   View,
   TouchableOpacity,
   Animated,
+  ActivityIndicator,
+  Modal,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import DropDown from "../../components/DropDown";
@@ -22,6 +24,8 @@ export default function GenerateQuiz() {
 
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+
+  const [showIndicator, setShowIndicator] = useState(false);
 
   const showPopup = () => {
     setPopupVisible(true);
@@ -62,6 +66,8 @@ export default function GenerateQuiz() {
   //TODO DISTINCT INPUT TYPES
 
   const handleGenerate = async () => {
+    setShowIndicator(true);
+
     const formData = new FormData();
 
     const dataType = "VOICE_RECORD";
@@ -79,12 +85,14 @@ export default function GenerateQuiz() {
     //TODO ALERT ON SUCCESSS
     autoGenerateQuiz(formData)
       .then((res) => {
+        setShowIndicator(false);
         setFile(null);
         setFileType(null);
         setPopupMessage(t("queued_message"));
         showPopup();
       })
       .catch((e) => {
+        setShowIndicator(false);
         console.log(e.request);
       });
   };
@@ -138,6 +146,21 @@ export default function GenerateQuiz() {
           </View>
         </View>
       </View>
+
+      <Modal
+        transparent={true}
+        visible={showIndicator}
+        animationType="slide"
+        onRequestClose={() => setShowIndicator(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <ActivityIndicator size={"large"} style={styles.indicator} />
+
+            <Text style={styles.indicatorText}> {t("file_transfer")}</Text>
+          </View>
+        </View>
+      </Modal>
 
       <FadingPopup
         message={popupMessage}
@@ -410,6 +433,32 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  indicator: {
+    transform: [{ scale: 1.8 }],
+    margin: 20,
+  },
+  indicatorText: {
+    fontSize: 20,
   },
 });
 

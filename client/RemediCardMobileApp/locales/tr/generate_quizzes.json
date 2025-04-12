@@ -9,5 +9,6 @@
   "select_file_type": "Dosya Türünü Seçin",
   "select_file": "Bir Dosya Seçin",
   "supported_file_types": "ReMediCard.io .pdf .png .jpeg .mp3 .mp4 uzantılarını destekler",
+  "file_transfer": "Dosya transferi tamamlanana kadar lütfen bekleyiniz",
   "confirm_auto_generation": "Yapay Zeka ile Oluştur"
 }

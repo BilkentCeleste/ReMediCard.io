@@ -8,6 +8,7 @@ import {
   Modal,
   StyleSheet,
   Alert,
+  Dimensions,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -28,6 +29,9 @@ import {
 import { create } from "react-test-renderer";
 import { Share, Button } from 'react-native';
 import { useTranslation } from "react-i18next";
+import ListLoader from "../../components/ListLoader";
+
+const { width } = Dimensions.get("window");
 
 export default function Decks() {
   const { t } = useTranslation("decks");
@@ -42,6 +46,8 @@ export default function Decks() {
     useState(false);
   const [newDeckTitle, setNewDeckTitle] = useState("");
 
+  const [showLoading, setShowLoading] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -55,9 +61,11 @@ export default function Decks() {
         }));
 
         setDecks(updatedDecks);
+        setShowLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setShowLoading(false);
       });
   }, []);
 
@@ -95,7 +103,6 @@ export default function Decks() {
   };
 
   const handleDeleteDeck = () => {
-
     deleteDeck(selectedDeck.id).then((res) => {
       Alert.alert(t("success"), t("success_message"));
       setDecks(decks.filter((d) => d.id !== selectedDeck.id));
@@ -117,7 +124,7 @@ export default function Decks() {
 
     createDeck({
       name: newDeckTitle,
-      topic: newDeckTitle
+      topic: newDeckTitle,
     }).then((res) => {
       setManualCreateModalVisible(false);
       setNewDeckTitle("");
@@ -163,42 +170,49 @@ export default function Decks() {
       />
 
       {/* Decks List */}
-      <FlatList
-        style={styles.flatListContainer}
-        contentContainerStyle={styles.flatListContent}
-        data={decks}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.deckComponent}
-            onPress={() => handleDeckPress(item)}
-          >
-            <View>
-              <Text style={styles.deckTitle}>{item.name}</Text>
-              <Text style={styles.deckInfoText}>
-                {t("last_accessed")} {item.lastAccessed}
-              </Text>
-              <Text style={styles.deckInfoText}>
-                {item.flashcardSet.length} {t("cards")}
-              </Text>
-              <Text style={styles.deckInfoText}>
-              {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
-              </Text>
-              <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-                <ChevronRightIcon color="#111" />
+      {showLoading ? (
+        <ListLoader count={6} width={width} />
+      ) : (
+        <FlatList
+          style={styles.flatListContainer}
+          contentContainerStyle={styles.flatListContent}
+          data={decks}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.deckComponent}
+              onPress={() => handleDeckPress(item)}
+            >
+              <View>
+                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={styles.deckInfoText}>
+                  {t("last_accessed")} {item.lastAccessed}
+                </Text>
+                <Text style={styles.deckInfoText}>
+                  {item.flashcardSet.length} {t("cards")}
+                </Text>
+                <Text style={styles.deckInfoText}>
+                  {t("best")} {item.bestPerformance}% {t("last")}{" "}
+                  {item.lastPerformance}%
+                </Text>
+                <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+                  <ChevronRightIcon color="#111" />
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+            </TouchableOpacity>
+          )}
+        />
+      )}
 
-      <TouchableOpacity
-        style={styles.createButton}
-        onPress={() => setCreateModalVisible(true)}
-      >
-        <PlusIcon></PlusIcon>
-        <Text style={styles.createNewDeck}>{t("create_new_deck")}</Text>
-      </TouchableOpacity>
+      {showLoading ? null : (
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => setCreateModalVisible(true)}
+        >
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createNewDeck}>{t("create_new_deck")}</Text>
+        </TouchableOpacity>
+      )}
 
       <Modal
         transparent={true}
@@ -248,10 +262,7 @@ export default function Decks() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>
-              {" "}
-              {t("delete_deck_message")}{" "}
-            </Text>
+            <Text style={styles.modalTitle}> {t("delete_deck_message")} </Text>
 
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}

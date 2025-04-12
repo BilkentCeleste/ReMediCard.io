@@ -106,7 +106,7 @@ i18n.use(initReactI18next).init({
       generate_quizzes: generate_quizzes_tr,
     },
   },
-  lng: "tr", // default language
+  lng: "en", // default language
   fallbackLng: "en", // if a language is not available
   interpolation: {
     escapeValue: false,

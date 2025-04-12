@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity,
   Pressable,
+  Image,
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
@@ -21,9 +22,12 @@ import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default function Login() {
-  const { t } = useTranslation("login");
+  const { t, i18n } = useTranslation("login");
+
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
 
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -31,6 +35,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const { isLoggedIn, loginAuth } = useAuth();
+
+  const handleLanguageSelection = (language) => {
+    if (selectedLanguage === language) {
+      return;
+    }
+
+    setSelectedLanguage(language);
+    i18n.changeLanguage(language);
+  };
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);
@@ -57,13 +70,13 @@ export default function Login() {
     <Redirect href="/(app)/home" />
   ) : (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('title')}</Text>
+      <Text style={styles.title}>{t("title")}</Text>
 
       <View style={styles.component}>
         <AtIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder={t('username')}
+          placeholder={t("username")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           value={username}
@@ -75,7 +88,7 @@ export default function Login() {
         <LockIcon></LockIcon>
         <TextInput
           style={styles.passwordtext}
-          placeholder={t('password')}
+          placeholder={t("password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -97,9 +110,9 @@ export default function Login() {
       </TouchableOpacity>
 
       <View style={styles.forgotPasswordContainer}>
-          <Link href="/forgot_password" style={styles.link}>
-              <Text>{t('forgot_password')}</Text>
-          </Link>
+        <Link href="/forgot_password" style={styles.link}>
+          <Text>{t("forgot_password")}</Text>
+        </Link>
       </View>
 
       <View style={styles.rememberMeContainer}>
@@ -107,13 +120,13 @@ export default function Login() {
           {rememberMe && <Text style={styles.checkmark}>✓</Text>}
         </Pressable>
         <TouchableOpacity onPress={toggleRememberMe}>
-          <Text style={styles.rememberMeText}>{t('remember_me')}</Text>
+          <Text style={styles.rememberMeText}>{t("remember_me")}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.separatorContainer}>
         <View style={styles.separatorLine} />
-        <Text style={styles.seperatortext}>{t('or')}</Text>
+        <Text style={styles.seperatortext}>{t("or")}</Text>
         <View style={styles.separatorLine} />
       </View>
 
@@ -122,16 +135,47 @@ export default function Login() {
         onPress={handleLoginWithGoogle}
       >
         <GoogleIcon></GoogleIcon>
-        <Text style={styles.googleButtonText}>{t('continue_with_google')}</Text>
+        <Text style={styles.googleButtonText}>{t("continue_with_google")}</Text>
       </TouchableOpacity>
+
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          style={[
+            styles.languageOption,
+            selectedLanguage === "en" && styles.selectedOption,
+          ]}
+          onPress={() => {
+            handleLanguageSelection("en");
+          }}
+        >
+          <Image
+            source={require("../assets/images/uk_flag.png")} // Path relative to the file
+            style={styles.flag_image}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.languageOption,
+            selectedLanguage === "tr" && styles.selectedOption,
+          ]}
+          onPress={() => {
+            handleLanguageSelection("tr");
+          }}
+        >
+          <Image
+            source={require("../assets/images/tr_flag.png")} // Path relative to the file
+            style={styles.flag_image}
+          />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
           <Text style={styles.seperatortext}>
-            {t('dont_have_an_account')}
+            {t("dont_have_an_account")}
             <Link href="/register" style={styles.link}>
-              <Text> {t('sign_up')}</Text>
+              <Text> {t("sign_up")}</Text>
             </Link>
           </Text>
           <View style={styles.separatorLine} />
@@ -221,11 +265,13 @@ const styles = StyleSheet.create({
   rememberMeContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
   },
   forgotPasswordContainer: {
     flexDirection: "row",
     alignItems: "center",
+    textAlign: "center",
   },
   checkbox: {
     width: 20,
@@ -235,9 +281,13 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginRight: 10,
     backgroundColor: "#53789D",
+    justifyContent: "center",
+    textAlign: "center",
   },
   checkedBox: {
     backgroundColor: "#fff",
+    justifyContent: "center",
+    textAlign: "center",
   },
   rememberMeText: {
     fontSize: 16,
@@ -247,6 +297,8 @@ const styles = StyleSheet.create({
   checkmark: {
     fontSize: 16,
     color: "#fff",
+    justifyContent: "center",
+    textAlign: "center",
   },
   separatorContainer: {
     flexDirection: "row",
@@ -290,5 +342,25 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 14,
     color: "#2916FF",
+  },
+  languageOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    fontSize: 32,
+    backgroundColor: "#f9f9f9",
+    marginBottom: 10,
+  },
+  selectedOption: {
+    backgroundColor: "#e6f0ff",
+    borderWidth: 2,
+    borderColor: "#000000",
+  },
+  flagIcon: {
+    marginRight: 10,
+  },
+  flag_image: {
+    width: 44,
+    height: 28,
   },
 });

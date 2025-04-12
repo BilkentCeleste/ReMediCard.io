@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   Alert,
+  Dimensions,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -25,6 +26,9 @@ import {
   createQuiz,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
+import ListLoader from "../../components/ListLoader";
+
+const { width } = Dimensions.get("window");
 
 export default function Quizzes() {
   const { t } = useTranslation("quizzes");
@@ -39,6 +43,9 @@ export default function Quizzes() {
     useState(false);
   const [newQuizTitle, setNewQuizTitle] = useState("");
   const router = useRouter();
+  const [updated, setUpdated] = useState(false);
+
+  const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
     getQuizzesByCurrentUser()
@@ -50,12 +57,14 @@ export default function Quizzes() {
           lastPerformance: 40,
         }));
 
-          setQuizzes(updatedQuizzes);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
-  }, []);
+        setShowLoading(false);
+        setQuizzes(updatedQuizzes);
+      })
+      .catch((error: any) => {
+        setShowLoading(false);
+        console.log(error);
+      });
+  }, [updated]);
 
   const handleQuizPress = (quiz: any) => {
     setSelectedQuiz(quiz);
@@ -97,8 +106,7 @@ export default function Quizzes() {
   };
 
   const handleGenerateByAI = () => {
-
-    router.push("/(app)/generatequizzes")
+    router.push("/(app)/generatequizzes");
   };
 
   const handleManualCreate = () => {
@@ -117,6 +125,7 @@ export default function Quizzes() {
         .then((res) => {
           setManualCreateModalVisible(false);
           setNewQuizTitle("");
+          setUpdated((updated) => !updated);
           setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
           //router.push("/(app)/updatedeck?deckId=" + res.data.id);
         })
@@ -152,44 +161,49 @@ export default function Quizzes() {
         onSelect={(value) => setSelectedSort(value)}
       />
 
-      <FlatList
-        style={styles.flatListContainer}
-        contentContainerStyle={styles.flatListContent}
-        data={quizzes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.deckComponent}
-            onPress={() => handleQuizPress(item)}
-          >
-            <View>
-              <Text style={styles.deckTitle}>{item.name}</Text>
-              <Text style={[styles.deckInfoText]}>
-                {t("last_accessed")} {item.lastAccessed}
-              </Text>
-              <Text style={[styles.deckInfoText]}>
-                {item?.questions?.length || 0} {t("cards")}
-              </Text>
-              <Text style={[styles.deckInfoText]}>{item?.questions?.length || 0} card(s)</Text>
-              <Text style={[styles.deckInfoText]}>
-                {t("best")} {item.bestPerformance}% {t("last")}{" "}
-                {item.lastPerformance}%
-              </Text>
-              <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-                <ChevronRightIcon color="#111" />
+      {showLoading ? (
+        <ListLoader count={6} width={width} />
+      ) : (
+        <FlatList
+          style={styles.flatListContainer}
+          contentContainerStyle={styles.flatListContent}
+          data={quizzes}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.deckComponent}
+              onPress={() => handleQuizPress(item)}
+            >
+              <View>
+                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={[styles.deckInfoText]}>
+                  {t("last_accessed")} {item.lastAccessed}
+                </Text>
+                <Text style={[styles.deckInfoText]}>
+                  {item?.questions?.length || 0} {t("cards")}
+                </Text>
+                <Text style={[styles.deckInfoText]}>
+                  {t("best")} {item.bestPerformance}% {t("last")}{" "}
+                  {item.lastPerformance}%
+                </Text>
+                <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+                  <ChevronRightIcon color="#111" />
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+            </TouchableOpacity>
+          )}
+        />
+      )}
 
-      <TouchableOpacity
-        style={styles.createButton}
-        onPress={() => setCreateModalVisible(true)}
-      >
-        <PlusIcon></PlusIcon>
-        <Text style={styles.createNewDeck}>{t("create_new_quiz")}</Text>
-      </TouchableOpacity>
+      {showLoading ? null : (
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => setCreateModalVisible(true)}
+        >
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createNewDeck}>{t("create_new_quiz")}</Text>
+        </TouchableOpacity>
+      )}
 
       <Modal
         transparent={true}
