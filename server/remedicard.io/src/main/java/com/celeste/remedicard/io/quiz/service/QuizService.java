@@ -2,7 +2,7 @@ package com.celeste.remedicard.io.quiz.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
-import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.QuestionCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.quiz.entity.Question;
@@ -16,9 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +28,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuestionService questionService;
     private final CurrentUserService currentUserService;
+    private final UserService userService;
 
     public Quiz getById(Long quizId) {
         return quizRepository.findById(quizId)
@@ -95,7 +94,7 @@ public class QuizService {
 
     @Transactional
     public void createQuiz(QuizCreationTask quizCreationTask) {
-        User user = userRepository.findById(quizCreationTask.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.getUserById(quizCreationTask.getUserId());
 
         Set<Question> questions = new HashSet<>();
 
@@ -103,7 +102,7 @@ public class QuizService {
                 .name(quizCreationTask.getName())
                 .popularity(0)
                 .difficulty("")
-                .users(new HashSet<>())
+                .user(null)
                 .build();
 
         quiz.addUser(user);

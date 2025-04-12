@@ -52,7 +52,7 @@ public class QuizController {
 
     @PostMapping("/removeQuestion/{quizId}")
     public void removeQuestion(@RequestBody RemoveQuestionRequestDTO dto, @PathVariable Long quizId) {
-        quizService.removeQuestion(dto.getQuestionId(), quizId);
+            quizService.removeQuestion(dto.getQuestionId(), quizId);
     }
 
     @DeleteMapping("/delete/{quizId}")

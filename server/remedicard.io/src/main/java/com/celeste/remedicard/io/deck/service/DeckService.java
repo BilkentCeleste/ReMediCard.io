@@ -2,7 +2,7 @@ package com.celeste.remedicard.io.deck.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
-import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
 import com.celeste.remedicard.io.deck.entity.Deck;
@@ -11,7 +11,7 @@ import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.deck.repository.DeckShareLinkRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
-import com.celeste.remedicard.io.spacedRepetition.service.SpacedRepetitionService;
+import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -40,11 +40,11 @@ public class DeckService {
     private final DeckRepository deckRepository;
     private final CurrentUserService currentUserService;
     private final DeckShareLinkRepository shareLinkRepository;
+    private final UserService userService;
+    private final SpacedRepetitionService spacedRepetitionService;
 
     @Value("${app.share-link-base-url}")
     private String shareLinkBaseUrl;
-    private final UserRepository userRepository;
-    private final SpacedRepetitionService spacedRepetitionService;
 
     public Deck create(Deck deck) {
         User user = currentUserService.getCurrentUser();
@@ -191,9 +191,7 @@ public class DeckService {
     @Transactional
     public void createDeck(DeckCreationTask deckCreationTask){
 
-        User user = userRepository.findById(deckCreationTask.getUserId()).orElseThrow(
-                () -> new RuntimeException("User not found")
-        );
+        User user = userService.getUserById(deckCreationTask.getUserId());
 
         Deck deck = Deck.builder()
                 .name("Generated_" + deckCreationTask.getName())
