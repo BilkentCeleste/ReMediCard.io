@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,8 @@ import {
 } from "@/constants/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { getUserProfile } from "@/apiHelper/backendHelper";
+import { useFocusEffect } from "expo-router";
 
 export default function Profile() {
   const { t, i18n } = useTranslation("profile");
@@ -36,6 +38,19 @@ export default function Profile() {
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
+
+  const [userProfile, setUserProfile] = useState({
+    username: "-----",
+    email: "-------",
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserProfile()
+        .then((res) => setUserProfile(res.data))
+        .catch((e) => console.log(e));
+    }, [])
+  );
 
   const handleLanguageSelection = (language) => {
     if (selectedLanguage === language) {
@@ -69,12 +84,10 @@ export default function Profile() {
 
       <View style={styles.infoCard}>
         <Text style={styles.infoText}>
-          <AtIcon color="white" />
-          Username (dummy)
+          <AtIcon color="white" /> {userProfile.username}
         </Text>
         <Text style={styles.infoText}>
-          <MailIcon color="white" />
-          Email (dummy)
+          <MailIcon color="white" /> {userProfile.email}
         </Text>
       </View>
 

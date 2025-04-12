@@ -120,3 +120,7 @@ export const autoGenerateQuiz = async (formData) => {
     "multipart/form-data"
   );
 };
+
+export const getUserProfile = async () => {
+  return await getFetcher(url.GET_USER_PROFILE());
+};
