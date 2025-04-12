@@ -9,5 +9,6 @@
   "select_file_type": "Select File Type",
   "select_file": "Select a File",
   "supported_file_types": "ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4",
+  "file_transfer": "Please wait until the file transfer is complete",
   "confirm_auto_generation": "Confirm Auto Generation"
 }

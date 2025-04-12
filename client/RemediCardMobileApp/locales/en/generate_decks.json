@@ -1,12 +1,14 @@
 {
-    "lecture_notes": "Lecture Notes",
-    "video_record": "Video Record",
-    "voice_record": "Voice Record",
-    "file_type_must_be_selected": "File type must be selected",
-    "queued_message": "Deck generation is queued you can find your deck on deck menu once it is created",
-    "generate_new_deck": "Generate New Deck",
-    "choose_file": "Choose a file to generate flashcards",
-    "select_file_type": "Select File Type",
-    "select_file": "Select a File",
-    "supported_file_types": "ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4"
+  "lecture_notes": "Lecture Notes",
+  "video_record": "Video Record",
+  "voice_record": "Voice Record",
+  "file_type_must_be_selected": "File type must be selected",
+  "queued_message": "Deck generation is queued you can find your deck on deck menu once it is created",
+  "generate_new_deck": "Generate New Deck",
+  "choose_file": "Choose a file to generate flashcards",
+  "select_file_type": "Select File Type",
+  "select_file": "Select a File",
+  "supported_file_types": "ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4",
+  "file_transfer": "Please wait until the file transfer is complete",
+  "confirm_auto_generation": "Confirm Auto Generation"
 }
