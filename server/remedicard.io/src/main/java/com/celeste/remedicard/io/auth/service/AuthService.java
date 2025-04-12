@@ -26,7 +26,6 @@ public class AuthService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
-
     private final CurrentUserService currentUserService;
 
     public AuthResponse register(RegisterRequest request) {
@@ -184,7 +183,7 @@ public class AuthService {
     }
 
     public AccountProfileDTO getCurrentUserProfile() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = currentUserService.getCurrentUser();
 
         return AccountProfileDTO.builder()
                 .username(user.getUsername())
