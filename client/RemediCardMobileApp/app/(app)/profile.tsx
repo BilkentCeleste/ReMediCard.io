@@ -8,6 +8,8 @@ import {
   Alert,
   TouchableOpacity,
   Pressable,
+  Modal,
+  Image,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -27,10 +29,22 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 
 export default function Profile() {
-  const { t } = useTranslation("profile");
+  const { t, i18n } = useTranslation("profile");
 
   const router = useRouter();
   const { isLoggedIn, logoutAuth } = useAuth();
+
+  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [showLanguage, setShowLanguage] = useState(false);
+
+  const handleLanguageSelection = (language) => {
+    if (selectedLanguage === language) {
+      return;
+    }
+
+    setSelectedLanguage(language);
+    i18n.changeLanguage(language);
+  };
 
   const logoutHandler = () => {
     logoutAuth();
@@ -43,6 +57,10 @@ export default function Profile() {
 
   const loadContactUs = () => {
     router.push("/(app)/(profile)/contactus");
+  };
+
+  const loadLanguage = () => {
+    setShowLanguage(true);
   };
 
   return (
@@ -108,7 +126,7 @@ export default function Profile() {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.menuComponent}>
+      <TouchableOpacity style={styles.menuComponent} onPress={loadLanguage}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
           <LanguageIcon />
         </View>
@@ -122,7 +140,7 @@ export default function Profile() {
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
         </View>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.menuComponent} onPress={logoutHandler}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
@@ -140,6 +158,58 @@ export default function Profile() {
         </View>
       </TouchableOpacity>
 
+      <Modal
+        transparent={true}
+        visible={showLanguage}
+        animationType="slide"
+        onRequestClose={() => setShowLanguage(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{t("language")}</Text>
+
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                style={[
+                  styles.languageOption,
+                  selectedLanguage === "en" && styles.selectedOption,
+                ]}
+                onPress={() => {
+                  handleLanguageSelection("en");
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/uk_flag.png")} // Path relative to the file
+                  style={styles.flag_image}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.languageOption,
+                  selectedLanguage === "tr" && styles.selectedOption,
+                ]}
+                onPress={() => {
+                  handleLanguageSelection("tr");
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/tr_flag.png")} // Path relative to the file
+                  style={styles.flag_image}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={styles.modalBack}
+              onPress={() => setShowLanguage(false)}
+            >
+              <Text style={styles.modalBackText}>{t("back")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Navbar */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -264,5 +334,64 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
     backgroundColor: "#fff",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButton: {
+    backgroundColor: "#2916ff",
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  modalBack: {
+    marginTop: 10,
+  },
+  modalBackText: {
+    color: "#2916ff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  languageOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    fontSize: 32,
+    backgroundColor: "#f9f9f9",
+    marginBottom: 10,
+  },
+  selectedOption: {
+    backgroundColor: "#e6f0ff",
+    borderWidth: 2,
+    borderColor: "#000000",
+  },
+  flagIcon: {
+    marginRight: 10,
+  },
+  flag_image: {
+    width: 44,
+    height: 28,
   },
 });

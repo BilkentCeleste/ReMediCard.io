@@ -1,8 +1,9 @@
 {
-    "title": "ReMediCard.io",
-    "edit_profile": "Profili Düzenle",
-    "subscription": "Abonelik",
-    "contact_us": "Bize Ulaşın",
-    "language": "Dil",
-    "log_out": "Çıkış Yap"
+  "title": "ReMediCard.io",
+  "edit_profile": "Profili Düzenle",
+  "subscription": "Abonelik",
+  "contact_us": "Bize Ulaşın",
+  "language": "Dil",
+  "log_out": "Çıkış Yap",
+  "back": "Geri Dön"
 }

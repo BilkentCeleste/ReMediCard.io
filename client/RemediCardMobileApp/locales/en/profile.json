@@ -1,8 +1,9 @@
 {
-    "title": "ReMediCard.io",
-    "edit_profile": "Edit Profile",
-    "subscription": "Subscription",
-    "contact_us": "Contact Us",
-    "language": "Language",
-    "log_out": "Log Out"
+  "title": "ReMediCard.io",
+  "edit_profile": "Edit Profile",
+  "subscription": "Subscription",
+  "contact_us": "Contact Us",
+  "language": "Language",
+  "log_out": "Log Out",
+  "back": "Back"
 }
