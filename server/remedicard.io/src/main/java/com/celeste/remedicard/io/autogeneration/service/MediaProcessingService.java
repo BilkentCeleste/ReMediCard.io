@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -26,15 +29,19 @@ public class MediaProcessingService {
     private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
     public void enqueueAutoGenerationTask
-            (MultipartFile file, DataType dataType, Language language, TargetDataType targetDataType) throws IOException {
+            (MultipartFile[] files, DataType dataType, Language language, TargetDataType targetDataType) throws IOException {
 
-        String address = s3Service.uploadFile(file);
+        List<String> addresses = s3Service.uploadFiles(files);
+
+        List<String> fileNames = Arrays.stream(files).map(MultipartFile::getOriginalFilename).toList();
 
         MediaProcessingRecord mediaProcessingRecord = MediaProcessingRecord.builder()
-                .address(address)
-                .fileName(file.getOriginalFilename())
+                .addresses(addresses)
+                .fileNames(fileNames)
                 .dataType(dataType)
                 .language(language)
+                .isProcessed(false)
+                .isFilesCleaned(false)
                 .build();
 
         mediaProcessingRecordRepository.save(mediaProcessingRecord);
@@ -43,12 +50,13 @@ public class MediaProcessingService {
 
         DataProcessingTask dataProcessingTask = DataProcessingTask.builder()
                 .id(mediaProcessingRecord.getId())
-                .address(address)
+                .addresses(addresses)
                 .dataType(dataType)
                 .userId(user.getId())
+                .mediaProcessingRecordId(mediaProcessingRecord.getId())
                 .language(language)
                 .targetDataType(targetDataType)
-                .fileName(file.getOriginalFilename())
+                .fileNames(fileNames)
                 .build();
 
         if(dataType.equals(DataType.VIDEO_RECORD)){
@@ -61,7 +69,16 @@ public class MediaProcessingService {
             return;
         }
 
-        //TODO OTHER DATA TYPES
+        if(dataType.equals(DataType.LECTURE_NOTE_IMAGES)){
+            queueService.enqueueLectureNotesImages(dataProcessingTask);
+            return;
+        }
+
+        if(dataType.equals(DataType.LECTURE_NOTES_PDF)){
+            queueService.enqueueLectureNotesPdf(dataProcessingTask);
+            return;
+        }
+
         throw new IllegalArgumentException();
     }
 
