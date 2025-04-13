@@ -1,14 +1,19 @@
 {
-  "lecture_notes": "Ders Notları",
-  "video_record": "Video Kaydı",
-  "voice_record": "Ses Kaydı",
+  "lecture_notes_pdf": "Ders Notları - Yazı Dokümanı (PDF)",
+  "lecture_notes_img": "Ders Notları - Fotoğraf (JPG/PNG)",
+  "video_record": "Video Kaydı (MP4)",
+  "voice_record": "Ses Kaydı (MP3)",
   "file_type_must_be_selected": "Dosya türü seçilmelidir",
   "queued_message": "Deste oluşturma isteği sıraya alındı, deste oluşturulduğunda deste menüsünde bulabilirsiniz",
   "generate_new_deck": "Yeni Deste Oluştur",
   "choose_file": "Bilgi kartı oluşturmak için bir dosya seçin",
-  "select_file_type": "Dosya Türünü Seçin",
-  "select_file": "Bir Dosya Seçin",
+  "select_file_type": "Dosya Türünü Seçiniz",
+  "select_file": "Bir Dosya Seçiniz",
   "supported_file_types": "ReMediCard.io .pdf .png .jpeg .mp3 .mp4 uzantılarını destekler",
   "file_transfer": "Dosya transferi tamamlanana kadar lütfen bekleyiniz",
-  "confirm_auto_generation": "Yapay Zeka ile Oluştur"
+  "confirm_auto_generation": "Yapay Zeka ile Oluştur",
+  "content_language": "İçerik Dilini Seçiniz",
+  "images_selected": " fotoğraf seçildi",
+  "english": "İngilizce",
+  "turkish": "Türkçe"
 }
