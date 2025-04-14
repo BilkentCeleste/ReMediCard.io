@@ -1,5 +1,6 @@
 {
-  "lecture_notes": "Lecture Notes",
+  "lecture_notes_pdf": "Lecture Notes - Text Based (PDF)",
+  "lecture_notes_img": "Lecture Notes - Image Based (JPG/PNG)",
   "video_record": "Video Record",
   "voice_record": "Voice Record",
   "file_type_must_be_selected": "File type must be selected",
@@ -10,5 +11,9 @@
   "select_file": "Select a File",
   "supported_file_types": "ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4",
   "file_transfer": "Please wait until the file transfer is complete",
-  "confirm_auto_generation": "Confirm Auto Generation"
+  "confirm_auto_generation": "Confirm Auto Generation",
+  "content_language": "Select the Content Language",
+  "images_selected": " images selected",
+  "english": "English",
+  "turkish": "Turkish"
 }

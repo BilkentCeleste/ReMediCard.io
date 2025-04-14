@@ -4,6 +4,8 @@ import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
+import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
+import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import jakarta.annotation.Resource;
@@ -24,11 +26,16 @@ public class QueueService {
 
     private static final String VIDEO_RECORD_QUEUE_NAME = "video-queue";
     private static final String VOICE_RECORD_QUEUE_NAME = "voice-queue";
+    private static final String LECTURE_NOTES_IMAGES_QUEUE_NAME = "ln-images-queue";
+    private static final String LECTURE_NOTES_PDF_QUEUE_NAME = "ln-pdf-queue";
+
     private static final String DECK_GENERATION_QUEUE_NAME = "deck-generation-queue";
     private static final String QUIZ_GENERATION_QUEUE_NAME = "quiz-generation-queue";
 
     private final DeckService deckService;
     private final QuizService quizService;
+
+    private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
     @Resource(name = "redisTemplateDataProcessingTask")
     private ListOperations<String, DataProcessingTask> dataProcessingTaskListOperations;
@@ -45,6 +52,14 @@ public class QueueService {
 
     public void enqueueVoiceRecord(DataProcessingTask dataProcessingTask) {
         dataProcessingTaskListOperations.leftPush(VOICE_RECORD_QUEUE_NAME, dataProcessingTask);
+    }
+
+    public void enqueueLectureNotesImages(DataProcessingTask dataProcessingTask) {
+        dataProcessingTaskListOperations.leftPush(LECTURE_NOTES_IMAGES_QUEUE_NAME, dataProcessingTask);
+    }
+
+    public void enqueueLectureNotesPdf(DataProcessingTask dataProcessingTask) {
+        dataProcessingTaskListOperations.leftPush(LECTURE_NOTES_PDF_QUEUE_NAME, dataProcessingTask);
     }
 
     public DataProcessingTask dequeueVideoRecord() {
@@ -86,6 +101,13 @@ public class QueueService {
             log.info("Processing auto-generation task for the deck: " + deckCreationTask.getUserId() + ", " + deckCreationTask.getName());
 
             deckService.createDeck(deckCreationTask);
+
+            MediaProcessingRecord mediaProcessingRecord = mediaProcessingRecordRepository.findById(deckCreationTask.getMediaProcessingRecordId()).orElseThrow(
+                    IllegalArgumentException::new
+            );
+
+            mediaProcessingRecord.setIsProcessed(true);
+            mediaProcessingRecordRepository.save(mediaProcessingRecord);
         }
 
         log.info("Deck generation queue is empty");

@@ -11,6 +11,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,22 +27,30 @@ public class S3Service {
     @Value("${aws.region}")
     private String region;
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public List<String> uploadFiles(MultipartFile[] files) throws IOException {
         User user = currentUserService.getCurrentUser();
 
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        List<String> addresses = new ArrayList<>();
 
-        String key = "user_files" + "/" + user.getId() + "/" + fileName;
+        String fileName, key, fileAddress;
 
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
+        for(MultipartFile file : files) {
+            fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            key = "user_files" + "/" + user.getId() + "/" + fileName;
 
-        String fileAddress = "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
 
-        return fileAddress;
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+            fileAddress = "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
+
+            addresses.add(fileAddress);
+        }
+
+        return addresses;
     }
 }

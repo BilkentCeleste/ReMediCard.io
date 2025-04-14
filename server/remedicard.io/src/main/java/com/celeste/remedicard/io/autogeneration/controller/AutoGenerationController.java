@@ -23,11 +23,11 @@ public class AutoGenerationController {
 
     @PostMapping(path= "deck/generate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Void> generateDeckFromLectureMaterial(
-            @RequestPart("file") MultipartFile file,
+            @RequestPart("files") MultipartFile[] files,
             @RequestPart("dataType") String dataType,
             @RequestPart("language") String language) throws IOException {
 
-        mediaProcessingService.enqueueAutoGenerationTask(file,
+        mediaProcessingService.enqueueAutoGenerationTask(files,
                 DataType.valueOf(dataType),
                 Language.valueOf(language),
                 TargetDataType.DECK);
@@ -37,11 +37,11 @@ public class AutoGenerationController {
 
     @PostMapping(path= "quiz/generate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Void> generateQuizFromLectureMaterial(
-            @RequestPart("file") MultipartFile file,
+            @RequestPart("files") MultipartFile[] files,
             @RequestPart("dataType") String dataType,
             @RequestPart("language") String language) throws IOException {
 
-        mediaProcessingService.enqueueAutoGenerationTask(file,
+        mediaProcessingService.enqueueAutoGenerationTask(files,
                 DataType.valueOf(dataType),
                 Language.valueOf(language),
                 TargetDataType.QUIZ);
