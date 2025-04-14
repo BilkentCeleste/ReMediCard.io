@@ -1,12 +1,10 @@
 package com.celeste.remedicard.io.quiz.controller;
 
-import com.celeste.remedicard.io.quiz.controller.dto.AddQuestionRequestDTO;
-import com.celeste.remedicard.io.quiz.controller.dto.QuizCreateRequestDTO;
-import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseDTO;
-import com.celeste.remedicard.io.quiz.controller.dto.RemoveQuestionRequestDTO;
+import com.celeste.remedicard.io.quiz.controller.dto.*;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.mapper.QuizCreateMapper;
 import com.celeste.remedicard.io.quiz.mapper.QuizResponseMapper;
+import com.celeste.remedicard.io.quiz.mapper.QuizzesResponseMapper;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +25,15 @@ public class QuizController {
     }
 
     @GetMapping("/getByCurrentUser")
-    public Set<QuizResponseDTO> getByCurrentUser() {
+    public Set<QuizzesResponseDTO> getByCurrentUser() {
         Set<Quiz> quizSet = quizService.getByCurrentUserId();
-        return QuizResponseMapper.INSTANCE.toDTO(quizSet);
+        return QuizzesResponseMapper.INSTANCE.toDTO(quizSet);
     }
 
     @GetMapping("/getByUserId/{userId}")
-    public Set<QuizResponseDTO> getByUserId(@PathVariable Long userId) {
+    public Set<QuizzesResponseDTO> getByUserId(@PathVariable Long userId) {
         Set<Quiz> quizSet = quizService.getByUserId(userId);
-        return QuizResponseMapper.INSTANCE.toDTO(quizSet);
+        return QuizzesResponseMapper.INSTANCE.toDTO(quizSet);
     }
 
     @PostMapping("/create")

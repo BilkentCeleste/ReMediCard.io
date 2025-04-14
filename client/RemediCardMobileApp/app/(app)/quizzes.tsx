@@ -72,8 +72,6 @@ export default function Quizzes() {
   };
 
   const handleDeleteQuiz = () => {
-    console.log(selectedQuiz?.id);
-
     deleteQuiz(selectedQuiz?.id)
         .then((res) => {
           Alert.alert(t("success"), t("quiz_deleted"));
@@ -110,8 +108,6 @@ export default function Quizzes() {
   };
 
   const handleManualCreate = () => {
-    //Alert.alert("Manual", "Generate Manual");
-
     if (!newQuizTitle.trim()) {
       Alert.alert(t("error"), t("enter_deck_name"));
       return;
