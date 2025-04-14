@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
+import { createQuestion, editQuestion } from '@/apiHelper/backendHelper';
+
 
 export default function UpdateFlashcard() {
     const { t } = useTranslation('update_quiz_question');
@@ -10,28 +12,67 @@ export default function UpdateFlashcard() {
     const router = useRouter();
     const navigation = useNavigation();
     
-    React.useEffect(() => {
-    navigation.setOptions({ headerShown: false });
+    useEffect(() => {
+        navigation.setOptions({ headerShown: false });
     }, [navigation]);
-    const {question} = useLocalSearchParams();
-    console.log(question);
 
-    const [newQuestion, setNewQuestion] = useState('');
-    const [answers, setAnswers] = useState(['', '', '', '', '']);
+    const {question, quizId} = useLocalSearchParams();
+    const isNewQuestion = !question || question === 'undefined';
+    const parsedQuestion = !isNewQuestion ? JSON.parse(question) : null;
+
+    const [description, setDescription] = useState(isNewQuestion ? '' : parsedQuestion?.description);
+    const [options, setOptions] = useState(() => {
+        if (isNewQuestion) return ['', '', '', '', ''];
+        const parsedOptions = parsedQuestion?.options || [];
+        return [...parsedOptions, ...Array(5 - parsedOptions.length).fill('')].slice(0, 5);
+    });
+
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
 
     const handleBack = () => {
-        console.log('Back pressed');
+        router.push("/(app)/editquiz?quizId=" + quizId);
     };
 
-    const handleSave = () => {
-        console.log('Save pressed');
+    const handleSaveEdit = () => {
+        console.log("save edit");
+
+        const data = {
+            description: description,
+            options: options,
+            quizId: quizId
+        }
+
+        editQuestion(parsedQuestion?.id, data)
+            .then((response) => {
+                console.log('Question updated successfully');
+                router.push("/(app)/editquiz?quizId=" + quizId);
+            })
+            .catch((error) => {
+                console.error('Error updating question:', error);
+            });
+    }
+
+    const handleSaveCreate = () => {
+        const data = {
+            description: description,
+            options: options,
+            quizId: quizId
+        }
+
+        createQuestion(data)
+            .then((response) => {
+                console.log('Question created successfully');
+                router.push("/(app)/editquiz?quizId=" + quizId);
+            })
+            .catch((error) => {
+                console.error('Error creating question:', error);
+            });
     };
 
     const handleAnswerChange = (text, index) => {
-        const updatedAnswers = [...answers];
-        updatedAnswers[index] = text;
-        setAnswers(updatedAnswers);
+        const updatedOptions = [...options];
+        updatedOptions[index] = text;
+        setOptions(updatedOptions);
     };
 
     const selectCorrectAnswer = (index) => {
@@ -45,7 +86,7 @@ export default function UpdateFlashcard() {
                     <TouchableOpacity onPress={() => router.back()}><GoBackIcon/></TouchableOpacity>
                 </View>
 
-                <Text style={styles.menuText}>{t("create_question")}</Text>
+                <Text style={styles.menuText}>{isNewQuestion ? t("create_question") : t("edit_question")}</Text>
             
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
@@ -55,14 +96,14 @@ export default function UpdateFlashcard() {
             <TextInput
                 style={styles.qInput}
                 placeholder={t("enter_question")}
-                value={question?.description}
-                // onChangeText={setQuestion}
+                value={description}
+                onChangeText={setDescription}
                 placeholderTextColor='rgba(0, 0, 0, 0.5)'
                 multiline={true}
                 textAlignVertical='top'
             />
             
-            {answers.map((answer, index) => (
+            {options?.map((opt, index) => (
                 <View key={index} style={styles.answerRow}>
                     <TouchableOpacity
                         style={[styles.answerSelector, correctAnswerIndex === index && styles.selectedAnswer]}
@@ -73,7 +114,7 @@ export default function UpdateFlashcard() {
                     <TextInput
                         style={styles.aInput}
                         multiline={true}
-                        value={answer}
+                        value={opt}
                         onChangeText={(text) => handleAnswerChange(text, index)}
                         placeholder={t("answer") + (index + 1)}
                         placeholderTextColor='rgba(0, 0, 0, 0.5)'
@@ -85,7 +126,7 @@ export default function UpdateFlashcard() {
                 <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => router.back()}>
                     <Text style={styles.buttonText}>{t("cancel")}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSave}>
+                <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={isNewQuestion ? handleSaveCreate : handleSaveEdit}>
                     <Text style={styles.buttonText}>{t("save")}</Text>
                 </TouchableOpacity>
             </View>
@@ -211,4 +252,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
+
 });

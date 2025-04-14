@@ -2,7 +2,7 @@ package com.celeste.remedicard.io.autogeneration.dto;
 
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class QuestionCreationTask {
@@ -10,5 +10,5 @@ public class QuestionCreationTask {
     private String difficulty;
     private String description;
     private String answer;
-    private Set<String> options;
+    private List<String> options;
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +19,5 @@ public class QuestionResponseDTO {
     private String difficulty;
     private String description;
     private String answer;
-    private Set<String> options;
+    private List<String> options;
 }

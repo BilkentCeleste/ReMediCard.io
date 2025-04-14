@@ -17,12 +17,14 @@
     "last": "Last: ",
     "best": "Best: ",
     "start_quiz": "Start Quiz",
+    "edit_quiz": "Edit Quiz",
+    "delete_quiz": "Delete Quiz",
     "create_new_quiz": "Create New Quiz",
     "create_quiz": "Create Quiz",
     "create_manually": "Create Manually",
     "create_with_ai": "Create with AI",
     "cancel": "Cancel",
-    "new_quiz_name": "New Quiz Name",
+    "new_quiz_name": "New Quiz",
     "enter_quiz_title": "Enter quiz title",
-    "save_and_edit": "Save & Edit"
+    "save_and_edit": "Save"
 }

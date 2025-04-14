@@ -42,6 +42,8 @@ export const DELETE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/delete/${id}`;
 export const CREATE_QUIZ_PATH = () => `${BASE_URL}/quiz/create`;
 export const GET_QUIZ_BY_QUIZ_ID_PATH = (id) => `${BASE_URL}/quiz/get/${id}`;
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/quiz/removeQuestion/${id}`;
+export const CREATE_QUESTION_PATH = () => `${BASE_URL}/question/create`;
+export const EDIT_QUESTION_PATH = (id) => `${BASE_URL}/question/update/${id}`;
 
 // profile
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;

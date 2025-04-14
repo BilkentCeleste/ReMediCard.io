@@ -44,12 +44,12 @@ public class Quiz extends AuditableEntity {
     }
 
     public void addQuestion(Question question) {
-        questions.add(question);
+        this.questions.add(question);
         question.setQuiz(this);
     }
 
     public void removeQuestion(Question question) {
-        questions.remove(question);
+        this.questions.remove(question);
         question.setQuiz(null);
     }
 

@@ -124,3 +124,11 @@ export const autoGenerateQuiz = async (formData) => {
 export const getUserProfile = async () => {
   return await getFetcher(url.GET_USER_PROFILE());
 };
+
+export const createQuestion = async (data) => {
+    return await postFetcher(url.CREATE_QUESTION_PATH(), data);
+}
+
+export const editQuestion = async (id, data) => {
+    return await putFetcher(url.EDIT_QUESTION_PATH(id), data);
+}

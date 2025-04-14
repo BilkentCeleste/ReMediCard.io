@@ -8,8 +8,8 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,8 +31,9 @@ public class Question extends AuditableEntity {
 
     @ElementCollection
     @CollectionTable(name = "OPTIONS", joinColumns = @JoinColumn(name = "question_id"))
+//    @OrderColumn(name = "option_order")
     @Column(name = "option", columnDefinition = "TEXT")
-    private Set<String> options = new HashSet<>();
+    private List<String> options = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
@@ -40,6 +41,6 @@ public class Question extends AuditableEntity {
 
     public Question(Question question) {
         BeanUtils.copyProperties(question, this, "id", "quiz", "options");
-        this.options = new HashSet<>(question.getOptions());
+        this.options = new ArrayList<>(question.getOptions());
     }
 }

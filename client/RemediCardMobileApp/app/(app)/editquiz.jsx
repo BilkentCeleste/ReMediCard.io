@@ -42,10 +42,8 @@ export default function editQuiz() {
     } */
 
     const uploadUpdateQuestion = (questionId) => {
-        //Alert.alert("Create", "create");
-        // find the question with the matching id and send it to the update page
         const question = quiz?.questions?.find(q => q.id === questionId);
-        router.push(`/(app)/updatequizquestion?question=${question}`)
+        router.push(`/(app)/updatequizquestion?question=${encodeURIComponent(JSON.stringify(question))}&quizId=${quizId}`);
     }
 
     const handleToggleDeleteQuestionModal = (id) => {
@@ -59,7 +57,6 @@ export default function editQuiz() {
         }
         removeQuestion(quizId, data)
             .then((res) => {
-                console.log(res.data);
                 setDeleteQuestionModalVisible(false);
                 setQuiz(prevQuiz => ({
                     ...prevQuiz,
@@ -118,7 +115,7 @@ export default function editQuiz() {
                 renderItem={({ item }) => (
                     <View style={styles.questionCard}>
                         <Text style={styles.questionText}>{item?.description}</Text>
-                        <TouchableOpacity style={styles.editButton} onPress={() => uploadUpdateQuestion()}>
+                        <TouchableOpacity style={styles.editButton} onPress={() => uploadUpdateQuestion(item?.id)}>
                             <Text style={styles.editButtonText}>{t("edit")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.deleteButton} onPress={() => handleToggleDeleteQuestionModal(item?.id)}>
