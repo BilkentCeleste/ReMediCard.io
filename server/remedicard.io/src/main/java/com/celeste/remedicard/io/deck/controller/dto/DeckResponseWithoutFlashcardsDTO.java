@@ -23,7 +23,6 @@ public class DeckResponseWithoutFlashcardsDTO {
     private String difficulty;
     private int flashcardCount;
     private int popularity;
-    private Long userId;
     Set<FigureResponseDTO> figureSet;
     private boolean isSharedView;
 }
