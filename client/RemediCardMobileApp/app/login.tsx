@@ -27,7 +27,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 export default function Login() {
   const { t, i18n } = useTranslation("login");
 
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);

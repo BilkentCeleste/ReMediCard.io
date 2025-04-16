@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import login_en from "./en/login.json";
 import register_en from "./en/register.json";
@@ -51,7 +52,35 @@ import generate_decks_tr from "./tr/generate_decks.json";
 import card_tr from "./tr/card.json";
 import generate_quizzes_tr from "./tr/generate_quizzes.json";
 
-i18n.use(initReactI18next).init({
+const LANGUAGE_KEY = 'user-language';
+
+const languageDetector = {
+  type: 'languageDetector',
+  async: true,
+  detect: async (callback) => {
+    try {
+      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+      if (savedLanguage) {
+        callback(savedLanguage);
+      } else {
+        callback(Localization.locale.split('-')[0]); // fallback to device locale
+      }
+    } catch (error) {
+      console.log('Error reading language from AsyncStorage:', error);
+      callback('en'); // fallback if error
+    }
+  },
+  init: () => {},
+  cacheUserLanguage: async (lng) => {
+    try {
+      await AsyncStorage.setItem(LANGUAGE_KEY, lng);
+    } catch (error) {
+      console.log('Error saving language to AsyncStorage:', error);
+    }
+  },
+};
+
+i18n.use(languageDetector).use(initReactI18next).init({
   resources: {
     en: {
       login: login_en,
@@ -106,11 +135,15 @@ i18n.use(initReactI18next).init({
       generate_quizzes: generate_quizzes_tr,
     },
   },
-  lng: "en", // default language
   fallbackLng: "en", // if a language is not available
   interpolation: {
     escapeValue: false,
   },
 });
+
+// export const changeLanguage = async (lng) => {
+//   await AsyncStorage.setItem("language", lng);
+//   i18n.changeLanguage(lng);
+// };
 
 export default i18n;
