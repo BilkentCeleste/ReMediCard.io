@@ -2,8 +2,10 @@ package com.celeste.remedicard.io.deck.controller;
 
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
+import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
+import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,15 +28,15 @@ public class DeckController {
     }
 
     @GetMapping("/getByCurrentUser")
-    public Set<DeckResponseDTO> getDecksByCurrentUser() {
+    public Set<DeckResponseWithoutFlashcardsDTO> getDecksByCurrentUser() {
         Set<Deck> deckSet = deckService.getDeckByCurrentUser();
-        return DeckCreateMapper.INSTANCE.toDTO(deckSet);
+        return DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
     }
 
     @GetMapping("/getByUserId/{userId}")
-    public Set<DeckResponseDTO> getDecksByUserId(@PathVariable Long userId) {
+    public Set<DeckResponseWithoutFlashcardsDTO> getDecksByUserId(@PathVariable Long userId) {
         Set<Deck> deckSet = deckService.getDeckByUserId(userId);
-        return DeckCreateMapper.INSTANCE.toDTO(deckSet);
+        return DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
     }
 
     @GetMapping("/getByDeckId/{deckId}")

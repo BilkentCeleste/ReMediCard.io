@@ -25,6 +25,8 @@ public class FlashcardService {
     public void create(Flashcard flashcard, Long deckId) {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
         flashcard.setDeck(deck);
+        deck.setFlashcardCount(deck.getFlashcardCount() + 1);
+        deckRepository.save(deck);
         flashcardRepository.save(flashcard);
         spacedRepetitionService.create(deck.getUser(), flashcard);
     }
@@ -40,6 +42,10 @@ public class FlashcardService {
     }
 
     public void delete(Long flashcardId) {
+        Flashcard flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+        Deck deck = flashcard.getDeck();
+        deck.setFlashcardCount(deck.getFlashcardCount() - 1);
+        deckRepository.save(deck);
         flashcardRepository.deleteById(flashcardId);
     }
 

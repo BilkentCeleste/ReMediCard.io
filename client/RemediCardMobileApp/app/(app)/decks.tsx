@@ -189,7 +189,7 @@ export default function Decks() {
                   {t("last_accessed")} {item.lastAccessed}
                 </Text>
                 <Text style={styles.deckInfoText}>
-                  {item.flashcardSet.length} {t("cards")}
+                  {item.flashcardCount} {t("cards")}
                 </Text>
                 <Text style={styles.deckInfoText}>
                   {t("best")} {item.bestPerformance}% {t("last")}{" "}
