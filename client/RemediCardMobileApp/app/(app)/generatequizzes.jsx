@@ -56,7 +56,7 @@ export default function GenerateQuiz() {
     PDF: "LECTURE_NOTES_PDF",
     MP4: "VIDEO_RECORD",
     MP3: "VOICE_RECORD",
-    "JPG, PNG": "LECTURE_NOTE_IMAGES",
+    "JPG, PNG": "LECTURE_NOTES_IMAGES",
   };
 
   const fileFormatMap = {
