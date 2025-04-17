@@ -69,7 +69,7 @@ public class MediaProcessingService {
             return;
         }
 
-        if(dataType.equals(DataType.LECTURE_NOTE_IMAGES)){
+        if(dataType.equals(DataType.LECTURE_NOTES_IMAGES)){
             queueService.enqueueLectureNotesImages(dataProcessingTask);
             return;
         }

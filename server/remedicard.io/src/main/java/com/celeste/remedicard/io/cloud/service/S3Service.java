@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -32,12 +33,14 @@ public class S3Service {
 
         List<String> addresses = new ArrayList<>();
 
-        String fileName, key, fileAddress;
+        String fileName, key, fileAddress, folderName;
+
+        folderName = user.getId() + "/task_" + UUID.randomUUID();
 
         for(MultipartFile file : files) {
-            fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            fileName = file.getOriginalFilename();
 
-            key = "user_files" + "/" + user.getId() + "/" + fileName;
+            key = "media_processing_files" + "/" + folderName + "/" +  fileName;
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)

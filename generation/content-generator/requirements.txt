@@ -1,0 +1,4 @@
+redis
+boto3
+google-generativeai
+requests
