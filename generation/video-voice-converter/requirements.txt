@@ -1,0 +1,4 @@
+redis
+boto3
+imageio-ffmpeg
+moviepy==1.0.3

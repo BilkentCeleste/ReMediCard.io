@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  content-generator:
+    build:
+      context: .
+      dockerfile: content-generator/Dockerfile
+    container_name: content-generator
+    env_file:
+      - .env
+    networks:
+      - media-net
+    restart: unless-stopped
+
+  video-voice-converter:
+    build:
+      context: .
+      dockerfile: video-voice-converter/Dockerfile
+    container_name: video-voice-converter
+    env_file:
+      - .env
+    networks:
+      - media-net
+    restart: unless-stopped
+
+  image-text-extractor:
+    build:
+      context: .
+      dockerfile: image-text-extractor/Dockerfile
+    container_name: image-text-extractor
+    env_file:
+      - .env
+    networks:
+      - media-net
+    restart: unless-stopped
+
+  pdf-text-extractor:
+    build:
+      context: .
+      dockerfile: pdf-text-extractor/Dockerfile
+    container_name: pdf-text-extractor
+    env_file:
+      - .env
+    networks:
+      - media-net
+    restart: unless-stopped
+
+networks:
+  media-net:
+    driver: bridge

@@ -24,10 +24,10 @@ import {
   getDecksByCurrentUser,
   deleteDeck,
   createDeck,
-  shareDeck
+  shareDeck,
 } from "@/apiHelper/backendHelper";
 import { create } from "react-test-renderer";
-import { Share, Button } from 'react-native';
+import { Share, Button } from "react-native";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
 
@@ -135,17 +135,17 @@ export default function Decks() {
   const handleShareDeck = () => {
     if (selectedDeck) {
       shareDeck(selectedDeck?.id)
-          .then((res) => {
-            const shareUrl = res?.data;
-            const message = `Check out this deck on ReMediCard:\n\n${shareUrl}`;
-            Share.share({
-              message,
-              title: `Share Deck: ${selectedDeck.name}`,
-            });
-          })
-          .catch((err) => {
-            console.error('Error sharing deck:', err);
+        .then((res) => {
+          const shareUrl = res?.data;
+          const message = `Check out this deck on ReMediCard:\n\n${shareUrl}`;
+          Share.share({
+            message,
+            title: `Share Deck: ${selectedDeck.name}`,
           });
+        })
+        .catch((err) => {
+          console.error("Error sharing deck:", err);
+        });
     }
   };
 
@@ -293,7 +293,7 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleStartQuiz}
             >
-              <Text style={styles.modalButtonText}>{t("start_quiz")}</Text>
+              <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalButton}
@@ -302,8 +302,8 @@ export default function Decks() {
               <Text style={styles.modalButtonText}>{t("edit_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.modalButton}
-                onPress={handleShareDeck}
+              style={styles.modalButton}
+              onPress={handleShareDeck}
             >
               <Text style={styles.modalButtonText}>Share Deck</Text>
             </TouchableOpacity>

@@ -29,24 +29,14 @@ class RedisQueue:
     def get_queue_length(self, queue) -> int:
         return self.client.llen(queue)
 
-    def wait_message(self, queue='queue', host='localhost', port=6379, db=0, password=""):
+    def wait_message(self, queue):
         try:
-
-            r = redis.Redis(
-                host=host,
-                port=port,
-                db=db,
-                password=password,
-                decode_responses=True
-            )
-
             print(
                 f"Connected to Redis. Waiting for messages on queue '{queue}'...")
             print("Press Ctrl+C to stop")
 
             while True:
-
-                message = r.blpop(queue, timeout=0)
+                message = self.client.blpop(queue, timeout=0)
 
                 if message:
                     print(f"Received message: {message[1]}")
@@ -54,15 +44,5 @@ class RedisQueue:
                 else:
                     print("No message received (this shouldn't happen with timeout=0)")
 
-                time.sleep(0.1)
-
-        except redis.ConnectionError as e:
-            print(f"Failed to connect to Redis: {e}")
-        except KeyboardInterrupt:
-            print("\nStopping queue reader...")
         except Exception as e:
             print(f"An error occurred: {e}")
-        finally:
-            if 'r' in locals():
-                r.close()
-                print("Redis connection closed")

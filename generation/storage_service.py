@@ -67,3 +67,29 @@ class S3_Service:
             print(f"URL parsing error: {e}")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+
+    def upload_to_s3(self, file_path, bucket_name, s3_key):
+        
+        try:
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=self.aws_access_key_id,
+                aws_secret_access_key=self.aws_secret_access_key,
+                region_name=self.region_name
+            )
+            
+            print(f"Uploading {file_path} to s3://{bucket_name}/{s3_key}")
+            s3_client.upload_file(file_path, bucket_name, s3_key)
+            
+            print(f"Successfully uploaded to s3://{bucket_name}/{s3_key}")
+            return True
+            
+        except ClientError as e:
+            print(f"Failed to upload to S3: {e}")
+            return False
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+            return False
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return False
