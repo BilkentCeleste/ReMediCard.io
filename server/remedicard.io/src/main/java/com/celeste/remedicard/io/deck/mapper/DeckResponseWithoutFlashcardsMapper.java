@@ -1,7 +1,5 @@
 package com.celeste.remedicard.io.deck.mapper;
 
-import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
-import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import org.mapstruct.*;
@@ -13,11 +11,9 @@ import java.util.Set;
 public interface DeckResponseWithoutFlashcardsMapper {
     DeckResponseWithoutFlashcardsMapper INSTANCE = Mappers.getMapper(DeckResponseWithoutFlashcardsMapper.class);
 
-    @Mapping(target = "userId", source = "user.id")
     DeckResponseWithoutFlashcardsDTO toDTO(Deck deck, @Context boolean isSharedView);
 
     Set<DeckResponseWithoutFlashcardsDTO> toDTO(Set<Deck> deckSet);
 
     Deck toEntity(DeckResponseWithoutFlashcardsDTO dto);
-
 }

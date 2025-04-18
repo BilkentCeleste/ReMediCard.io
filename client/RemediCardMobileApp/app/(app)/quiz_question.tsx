@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   View,
   Text,
@@ -10,26 +10,41 @@ import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
+import { getQuizByQuizId } from "@/apiHelper/backendHelper";
 
 
 export default function QuizQuestion(props: any) {
   const { t } = useTranslation("quiz_question");
-
   const router = useRouter();
+  const { quizId } = useLocalSearchParams();
 
-  const {quiz} = useLocalSearchParams();
-  const parsedQuiz = JSON.parse(Array.isArray(quiz) ? quiz[0] : quiz);
-  const quizQuestions = parsedQuiz?.questions;
-  console.log(parsedQuiz);
-
-  const [timeRemaining] = useState("09:27");
+  const [quizData, setQuizData] = useState<any>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>(
-    () => Array(quizQuestions.length).fill(-1) // -1 indicates no selection
-  );
-  const totalQuestions = quizQuestions?.length || 0;
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [timeRemaining] = useState("09:27");
 
-  // Get the current question object
+  useEffect(() => {
+    if (quizId) {
+      getQuizByQuizId(quizId)
+        .then((res) => {
+          setQuizData(res?.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching quiz data:", error);
+        });
+    }
+  }, [quizId]);
+
+  if (!quizData || !quizData.questions) {
+    return (
+        <View style={styles.container}>
+          <Text style={{ color: "#fff", fontSize: 18 }}>{t("loading_quiz")}</Text>
+        </View>
+    );
+  }
+
+  const quizQuestions = quizData?.questions;
+  const totalQuestions = quizQuestions?.length || 0;
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const currentAnswerIndex = selectedAnswers[currentQuestionIndex];
 
@@ -64,7 +79,7 @@ export default function QuizQuestion(props: any) {
           <GoBackIcon />
         </TouchableOpacity>
 
-        <Text style={styles.quizTitle}>{parsedQuiz?.name || t("quiz")}</Text>
+        <Text style={styles.quizTitle}>{quizData?.name || t("quiz")}</Text>
 
         {/* Space or an icon */}
         <View style={{ width: 24, height: 24 }} />

@@ -1,5 +1,6 @@
 {
     "quiz": "Test",
     "question_text": "Soru metni",
-    "answer": "Cevap"
+    "answer": "Cevap",
+    "loading_quiz": "Test yükleniyor"
 }
