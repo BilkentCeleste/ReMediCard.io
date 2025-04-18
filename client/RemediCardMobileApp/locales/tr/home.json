@@ -1,8 +1,11 @@
 {
-    "title": "ReMediCard.io",
-    "decks": "Desteler",
-    "quizzes": "Testler",
-    "study_goals": "Çalışma Hedefleri",
-    "create": "Oluştur",
-    "search": "Ara"
+  "title": "ReMediCard.io",
+  "decks": "Desteler",
+  "quizzes": "Testler",
+  "study_goals": "Çalışma Hedefleri",
+  "create": "Oluştur",
+  "search": "Ara",
+  "click_to_view_deck": "Desteye gitmek için tıklayınız",
+  "click_to_view_quiz": "Teste gitmek için tıklayınız",
+  "no_results_found": "Sonuç bulunamadı."
 }

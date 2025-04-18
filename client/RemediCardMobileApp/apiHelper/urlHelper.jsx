@@ -47,3 +47,7 @@ export const EDIT_QUESTION_PATH = (id) => `${BASE_URL}/question/update/${id}`;
 
 // profile
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
+
+
+// search 
+export const SEARCH_PATH = (searchText) => `${BASE_URL}/search?searchtext=${searchText}`;

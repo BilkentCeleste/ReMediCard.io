@@ -1,8 +1,11 @@
 {
-    "title": "ReMediCard.io",
-    "decks": "Decks",
-    "quizzes": "Quizzes",
-    "study_goals": "Study Goals",
-    "create": "Create",
-    "search": "Search"
+  "title": "ReMediCard.io",
+  "decks": "Decks",
+  "quizzes": "Quizzes",
+  "study_goals": "Study Goals",
+  "create": "Create",
+  "search": "Search",
+  "click_to_view_deck": "Click to view the deck",
+  "click_to_view_quiz": "Click to view the quiz",
+  "no_results_found": "No results found."
 }
