@@ -11,6 +11,7 @@ import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.deck.repository.DeckShareLinkRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
+import com.celeste.remedicard.io.search.service.SearchService;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class DeckService {
     private final DeckShareLinkRepository shareLinkRepository;
     private final UserService userService;
     private final SpacedRepetitionService spacedRepetitionService;
+    private final SearchService searchService;
 
     @Value("${app.share-link-base-url}")
     private String shareLinkBaseUrl;
@@ -50,6 +52,7 @@ public class DeckService {
         User user = currentUserService.getCurrentUser();
         deck.setUser(user);
         deckRepository.save(deck);
+        searchService.saveSearchableDeck(deck);
         return deck;
     }
 
@@ -77,6 +80,7 @@ public class DeckService {
         }
 
         deckRepository.delete(deck);
+        searchService.deleteSearchableDeck(deckId);
     }
 
     public void generateDeck(MultipartFile file) {
@@ -235,6 +239,8 @@ public class DeckService {
         for(Flashcard flashcard: flashcards){
             spacedRepetitionService.create(user, flashcard);
         }
+
+        searchService.saveSearchableDeck(deck);
     }
 
 }

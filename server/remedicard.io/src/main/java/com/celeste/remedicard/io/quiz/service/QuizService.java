@@ -8,6 +8,7 @@ import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.repository.QuizRepository;
+import com.celeste.remedicard.io.search.service.SearchService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class QuizService {
     private final QuestionService questionService;
     private final CurrentUserService currentUserService;
     private final UserService userService;
+    private final SearchService searchService;
 
     public Quiz getById(Long quizId) {
         return quizRepository.findById(quizId)
@@ -51,6 +53,7 @@ public class QuizService {
         quiz.addUser(user);
 
         quizRepository.save(quiz);
+        searchService.saveSearchableQuiz(quiz);
         return quiz;
     }
 
@@ -60,6 +63,7 @@ public class QuizService {
 
         quiz.removeUser();
 
+        searchService.deleteSearchableQuiz(quizId);
         quizRepository.deleteById(quizId);
     }
 
@@ -80,6 +84,7 @@ public class QuizService {
         quiz.addQuestion(question);
 
         quizRepository.save(quiz);
+        searchService.addSearchableQuestion(quizId, question);
     }
 
     public void removeQuestion(Long questionId, Long quizId) {
@@ -89,6 +94,7 @@ public class QuizService {
         quiz.removeQuestion(question);
 
         quizRepository.save(quiz);
+        searchService.removeSearchableQuestion(quizId, question);
     }
 
 
@@ -112,7 +118,7 @@ public class QuizService {
                     .quiz(quiz)
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
-                    .answer(questionCreationTask.getAnswer().toLowerCase())
+                    .answer(questionCreationTask.getAnswer().toUpperCase())
                     .build());
         }
 
@@ -122,6 +128,8 @@ public class QuizService {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         quizRepository.save(quiz);
+
+        searchService.saveSearchableQuiz(quiz);
     }
 
 
