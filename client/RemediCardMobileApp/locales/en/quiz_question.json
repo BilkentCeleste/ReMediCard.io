@@ -1,5 +1,6 @@
 {
     "quiz": "Quiz",
     "question_text": "Question text",
-    "answer": "Answer"
+    "answer": "Answer",
+    "loading_quiz": "Loading quiz"
 }

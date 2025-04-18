@@ -85,10 +85,7 @@ export default function Quizzes() {
   const handleStartQuiz = () => {
     if (selectedQuiz) {
       setModalVisible(false);
-      router.push({
-        pathname: "/(app)/quiz_question",
-        params: { quiz: JSON.stringify(selectedQuiz) },
-      });
+      router.push("/(app)/quiz_question?quizId=" + selectedQuiz?.id);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
@@ -97,7 +94,7 @@ export default function Quizzes() {
   const handleEditQuiz = () => {
     if (selectedQuiz) {
       setModalVisible(false);
-      router.push("/(app)/editquiz?quizId=" + selectedQuiz.id);
+      router.push("/(app)/editquiz?quizId=" + selectedQuiz?.id);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }

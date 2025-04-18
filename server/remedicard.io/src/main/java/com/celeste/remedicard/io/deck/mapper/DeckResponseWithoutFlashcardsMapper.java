@@ -11,6 +11,8 @@ import java.util.Set;
 public interface DeckResponseWithoutFlashcardsMapper {
     DeckResponseWithoutFlashcardsMapper INSTANCE = Mappers.getMapper(DeckResponseWithoutFlashcardsMapper.class);
 
+    DeckResponseWithoutFlashcardsDTO toDTO(Deck deck, @Context boolean isSharedView);
+
     Set<DeckResponseWithoutFlashcardsDTO> toDTO(Set<Deck> deckSet);
 
     Deck toEntity(DeckResponseWithoutFlashcardsDTO dto);
