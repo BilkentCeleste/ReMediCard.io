@@ -1,7 +1,7 @@
 package com.celeste.remedicard.io.deckStats.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
-import com.celeste.remedicard.io.common.entity.AuditableEntity;
+import com.celeste.remedicard.io.common.entity.AbstractEntity;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "deck_stats")
-public class DeckStats extends AuditableEntity {
+public class DeckStats extends AbstractEntity {
 
     @Column
     private LocalDateTime accessDate;

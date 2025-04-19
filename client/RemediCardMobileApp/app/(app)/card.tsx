@@ -4,8 +4,9 @@ import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
-import { getFlashcardsInBatch, updateFlashcardReviews } from '@/apiHelper/backendHelper';
+import { getFlashcardsInBatch, updateFlashcardReviews, createDeckStats } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
+
 
 export default function Card( props: any ) {
     const { t } = useTranslation("card");
@@ -120,6 +121,17 @@ async function sendFlashcardReviews() {
 
     const handleEndSession = () => {
         sendFlashcardReviews();
+        
+        const deckStat = {
+            successRate: trueAnswers == 0 ? 0 : (trueAnswers / (trueAnswers + falseAnswers)) * 100,
+            deckId: parsedDeck.id,
+        }
+        createDeckStats(deckStat).then(() => {
+            console.log("Deck stats created successfully.");
+        }).catch((error) => {
+            console.error("Error creating deck stats:", error);
+        });
+
         router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
     }
 

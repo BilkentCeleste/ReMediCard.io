@@ -22,6 +22,9 @@ export const GET_DECK_BY_DECK_ID_PATH = (id) => `${BASE_URL}/deck/getByDeckId/${
 export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
 export const SHARE_DECK_PATH = (id) => `${BASE_URL}/deck/share/${id}`;
 
+// deck statistics
+export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
+
 // flashcard
 export const CREATE_FLASHCARD_PATH = () => `${BASE_URL}/flashcard/create`;
 export const UPDATE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/update/${id}`;

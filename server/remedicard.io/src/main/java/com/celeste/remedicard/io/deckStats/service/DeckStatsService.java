@@ -44,18 +44,10 @@ public class DeckStatsService {
     }
 
     public DeckStats getBestDeckStatsByDeckIdAndUserId(Long deckId, Long userId) {
-        return deckStatsRepository.findByDeckIdAndUserId(deckId, userId)
-                .orElseThrow(() -> new RuntimeException("Deck stats not found"))
-                .stream()
-                .max(Comparator.comparingDouble(DeckStats::getSuccessRate))
-                .orElseThrow(() -> new RuntimeException("No deck stats found"));
+        return deckStatsRepository.findBestByDeckIdAndUserId(deckId, userId).orElse(null);
     }
 
     public DeckStats getLastDeckStatsByDeckIdAndUserId(Long deckId, Long userId) {
-        return deckStatsRepository.findByDeckIdAndUserId(deckId, userId)
-                .orElseThrow(() -> new RuntimeException("Deck stats not found"))
-                .stream()
-                .max(Comparator.comparing(DeckStats::getAccessDate))
-                .orElseThrow(() -> new RuntimeException("No deck stats found"));
+        return deckStatsRepository.findLastByDeckIdAndUserId(deckId, userId).orElse(null);
     }
 }

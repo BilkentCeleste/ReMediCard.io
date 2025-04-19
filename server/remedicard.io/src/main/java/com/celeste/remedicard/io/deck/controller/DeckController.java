@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.deck.controller;
 
+import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
@@ -8,6 +9,7 @@ import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import com.celeste.remedicard.io.deckStats.entity.DeckStats;
+import com.celeste.remedicard.io.deckStats.mapper.DeckStatsResponseMapper;
 import com.celeste.remedicard.io.deckStats.service.DeckStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ public class DeckController {
 
     private final DeckService deckService;
     private final DeckStatsService deckStatsService;
+    private final CurrentUserService currentUserService;
 
     @PostMapping("/create")
     public ResponseEntity<DeckResponseDTO> create(@RequestBody DeckCreateRequestDTO dto) {
@@ -33,7 +36,15 @@ public class DeckController {
     @GetMapping("/getByCurrentUser")
     public Set<DeckResponseWithoutFlashcardsDTO> getDecksByCurrentUser() {
         Set<Deck> deckSet = deckService.getDeckByCurrentUser();
-        return DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
+        Set<DeckResponseWithoutFlashcardsDTO> response = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
+        Long userId = currentUserService.getCurrentUserId();
+        response.forEach(deck -> {
+            DeckStats bestDeckStats = deckStatsService.getBestDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            DeckStats lastDeckStats = deckStatsService.getLastDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            deck.setBestDeckStat(bestDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(bestDeckStats) : null);
+            deck.setLastDeckStat(lastDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(lastDeckStats) : null);
+        });
+        return response;
     }
 
     @GetMapping("/getByUserId/{userId}")
@@ -43,8 +54,8 @@ public class DeckController {
         response.forEach(deck -> {
             DeckStats bestDeckStats = deckStatsService.getBestDeckStatsByDeckIdAndUserId(deck.getId(), userId);
             DeckStats lastDeckStats = deckStatsService.getLastDeckStatsByDeckIdAndUserId(deck.getId(), userId);
-            deck.setBestSuccessRate(bestDeckStats.getSuccessRate());
-            deck.setLastSuccessRate(lastDeckStats.getSuccessRate());
+            deck.setBestDeckStat(bestDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(bestDeckStats) : null);
+            deck.setLastDeckStat(lastDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(lastDeckStats) : null);
         });
         return response;
     }

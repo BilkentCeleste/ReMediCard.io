@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.deck.controller.dto;
 
+import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsResponseDTO;
 import com.celeste.remedicard.io.figure.controller.dto.FigureResponseDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardResponseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,6 +26,6 @@ public class DeckResponseWithoutFlashcardsDTO {
     private int popularity;
     Set<FigureResponseDTO> figureSet;
     private boolean isSharedView;
-    private double bestSuccessRate;
-    private double lastSuccessRate;
+    private DeckStatsResponseDTO bestDeckStat;
+    private DeckStatsResponseDTO lastDeckStat;
 }

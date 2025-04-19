@@ -47,6 +47,11 @@ export const shareDeck = async (id) => {
   return await postFetcher(url.SHARE_DECK_PATH(id));
 };
 
+// deck statistics
+export const createDeckStats = async (data) => {
+  return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);
+};
+
 // flashcard
 export const createFlashcard = async (data) => {
   return await postFetcher(url.CREATE_FLASHCARD_PATH(), data);
