@@ -44,6 +44,9 @@ export const GET_QUIZ_BY_QUIZ_ID_PATH = (id) => `${BASE_URL}/quiz/get/${id}`;
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/quiz/removeQuestion/${id}`;
 export const CREATE_QUESTION_PATH = () => `${BASE_URL}/question/create`;
 export const EDIT_QUESTION_PATH = (id) => `${BASE_URL}/question/update/${id}`;
+export const GENERATE_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/quiz/generateShareToken/${id}`;
+export const GET_QUIZ_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/quiz/getByShareToken/${shareToken}`;
+export const ADD_USER_QUIZ_PATH = (id) => `${BASE_URL}/quiz/addUserQuiz/${id}`;
 
 // profile
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;

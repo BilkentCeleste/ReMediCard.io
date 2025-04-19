@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.celeste.remedicard.io.quiz.controller.dto.ShareQuizResponseDTO;
 
 import java.util.HashSet;
 import java.util.List;
@@ -124,6 +125,18 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    public ShareQuizResponseDTO generateShareToken(Long quizId) {
+        Quiz quiz = getById(quizId);
+        String shareToken = java.util.UUID.randomUUID().toString();
+        quiz.setShareToken(shareToken);
+        quizRepository.save(quiz);
+        return new ShareQuizResponseDTO(shareToken);
+    }
+
+    public Quiz getByShareToken(String shareToken) {
+        return quizRepository.findByShareToken(shareToken)
+                .orElseThrow(() -> new EntityNotFoundException("Quiz not found with share token: " + shareToken));
+    }
 
 //    public void update(Quiz quiz, Long quizId) {
 //        Quiz quizToUpdate = quizRepository.findById(quizId).orElseThrow();

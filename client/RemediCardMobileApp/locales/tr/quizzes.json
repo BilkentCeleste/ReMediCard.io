@@ -26,5 +26,7 @@
   "save_and_edit": "Kaydet",
   "start_quiz": "Testi Çöz",
   "edit_quiz": "Testi Düzenle",
-  "delete_quiz": "Testi Sil"
+  "delete_quiz": "Testi Sil",
+  "share_quiz": "Paylaş",
+  "share_failed": "Testi paylaşma başarısız oldu"
 }

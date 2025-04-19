@@ -132,3 +132,15 @@ export const createQuestion = async (data) => {
 export const editQuestion = async (id, data) => {
     return await putFetcher(url.EDIT_QUESTION_PATH(id), data);
 }
+
+export const generateShareToken = async (id) => {
+  return await postFetcher(url.GENERATE_SHARE_TOKEN_PATH(id));
+};
+
+export const getQuizByShareToken = async (shareToken) => {
+  return await getFetcher(url.GET_QUIZ_BY_SHARE_TOKEN_PATH(shareToken));
+};
+
+export const addUserQuiz = async (id) => {
+  return await postFetcher(url.ADD_USER_QUIZ_PATH(id));
+};

@@ -63,6 +63,17 @@ public class QuizController {
         quizService.addUserQuiz(quizId);
     }
 
+    @PostMapping("/generateShareToken/{quizId}")
+    public ShareQuizResponseDTO generateShareToken(@PathVariable Long quizId) {
+        return quizService.generateShareToken(quizId);
+    }
+
+    @GetMapping("/getByShareToken/{shareToken}")
+    public QuizResponseDTO getByShareToken(@PathVariable String shareToken) {
+        Quiz quiz = quizService.getByShareToken(shareToken);
+        return QuizResponseMapper.INSTANCE.toDTO(quiz);
+    }
+
 //    @PutMapping("/update/{quizId}")
 //    public void update(@RequestBody QuizCreateRequestDTO dto, @PathVariable Long quizId) {
 //        Quiz quiz = QuizCreateMapper.INSTANCE.toEntity(dto);

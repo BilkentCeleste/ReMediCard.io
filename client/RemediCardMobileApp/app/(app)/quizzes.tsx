@@ -24,6 +24,7 @@ import {
   deleteQuiz,
   getQuizzesByCurrentUser,
   createQuiz,
+  generateShareToken
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -95,6 +96,22 @@ export default function Quizzes() {
     if (selectedQuiz) {
       setModalVisible(false);
       router.push("/(app)/editquiz?quizId=" + selectedQuiz?.id);
+    } else {
+      Alert.alert(t("error"), t("quiz_info_missing"));
+    }
+  };
+
+  const handleShareQuiz = () => {
+    if (selectedQuiz) {
+      generateShareToken(selectedQuiz?.id)
+        .then((res) => {
+          setModalVisible(false);
+          router.push("/(app)/sharedquiz?shareToken=" + res?.data?.shareToken);
+        })
+        .catch((error) => {
+          console.error(error);
+          Alert.alert(t("error"), t("share_failed"));
+        });
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
@@ -288,6 +305,12 @@ export default function Quizzes() {
               onPress={handleEditQuiz}
             >
               <Text style={styles.modalButtonText}>{t("edit_quiz")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleShareQuiz}
+            >
+              <Text style={styles.modalButtonText}>{t("share_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}

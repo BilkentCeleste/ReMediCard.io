@@ -27,6 +27,9 @@ public class Quiz extends AuditableEntity {
     @Column
     private Integer popularity;
 
+    @Column
+    private String shareToken;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = false)
     private Set<Question> questions = new HashSet<>();
 

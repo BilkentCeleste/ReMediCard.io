@@ -26,6 +26,7 @@ import edit_quiz_en from "./en/edit_quiz.json";
 import generate_decks_en from "./en/generate_decks.json";
 import card_en from "./en/card.json";
 import generate_quizzes_en from "./en/generate_quizzes.json";
+import shared_quiz_en from "./en/shared_quiz.json";
 
 import login_tr from "./tr/login.json";
 import register_tr from "./tr/register.json";
@@ -51,6 +52,7 @@ import edit_quiz_tr from "./tr/edit_quiz.json";
 import generate_decks_tr from "./tr/generate_decks.json";
 import card_tr from "./tr/card.json";
 import generate_quizzes_tr from "./tr/generate_quizzes.json";
+import shared_quiz_tr from "./tr/shared_quiz.json";
 
 const LANGUAGE_KEY = 'user-language';
 
@@ -107,6 +109,7 @@ i18n.use(languageDetector).use(initReactI18next).init({
       generate_decks: generate_decks_en,
       card: card_en,
       generate_quizzes: generate_quizzes_en,
+      shared_quiz: shared_quiz_en,
     },
     tr: {
       login: login_tr,
@@ -133,6 +136,7 @@ i18n.use(languageDetector).use(initReactI18next).init({
       generate_decks: generate_decks_tr,
       card: card_tr,
       generate_quizzes: generate_quizzes_tr,
+      shared_quiz: shared_quiz_tr,
     },
   },
   fallbackLng: "en", // if a language is not available

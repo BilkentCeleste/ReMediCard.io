@@ -26,5 +26,7 @@
     "cancel": "Cancel",
     "new_quiz_name": "New Quiz",
     "enter_quiz_title": "Enter quiz title",
-    "save_and_edit": "Save"
+    "save_and_edit": "Save",
+    "share_quiz": "Share quiz",
+    "share_failed": "Failed to share quiz"
 }
