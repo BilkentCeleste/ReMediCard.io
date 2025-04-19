@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/auth/login",
+                                            "/auth/login_google",
                                             "/auth/register",
                                             "/auth/forgot_password",
                                             "/auth/verify_reset_passwordcode",

@@ -27,6 +27,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final CurrentUserService currentUserService;
+    private final GoogleVerifierService googleVerifierService;
 
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -59,6 +60,37 @@ public class AuthService {
 
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
+        String jwtToken = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .accessToken(jwtToken)
+                //.refreshToken(refreshToken)
+                .role(user.getRole())
+                .build();
+    }
+
+    public AuthResponse authenticateWithGoogle(GoogleAuthRequest request) throws Exception {
+
+        if(request.getIdToken() == null){
+            throw new IllegalArgumentException();
+        }
+
+        googleVerifierService.verify(request.getIdToken());
+
+        String username = request.getEmail().substring(0, request.getEmail().indexOf("@"));
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if(user == null){
+            user = User.builder()
+                    .username(request.getUsername())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(username)) //TODO remove in production
+                    .role(Role.USER)
+                    .build();
+
+            userRepository.save(user);
+        }
+
         String jwtToken = jwtService.generateToken(user);
 
         return AuthResponse.builder()
