@@ -19,12 +19,23 @@ services:
     networks:
       - app-network
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - node.name=es-node-1
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=remedielasticpass
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - mongo-data:/data/db
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
     networks:
       - app-network
 
@@ -42,7 +53,8 @@ services:
 volumes:
   redis-data:
   db-data:
-  mongo-data:
+  esdata:
+    driver: local
 
 networks:
   app-network:

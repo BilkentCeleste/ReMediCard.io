@@ -23,12 +23,7 @@ export default function Decks() {
         getDecksByCurrentUser()
             .then((decks) => {
                 const decks_info = decks.data;
-                console.log(decks_info);
-                decks_info.forEach((deck: any) => {
-                    deck.lastAccessed = "31.12.2024";
-                    deck.bestPerformance = 90;
-                    deck.lastPerformance = 40;
-                });
+
                 setDecks(decks_info);
             })
             .catch((error) => {
@@ -46,6 +41,14 @@ export default function Decks() {
     const uploadUpdateDeckPage = (id: any) => {
         router.push("/(app)/updatedeck?deckId=" + id);
     }
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
 
     return (
         <View style={styles.container}>
@@ -71,15 +74,24 @@ export default function Decks() {
                 <TouchableOpacity style={styles.deckComponent}>
                     <View>
                     <Text style={styles.deckTitle}>{item.name}</Text>
-                    <Text style={[styles.deckInfoText]}>
-                    {t("last_accessed")} {item.lastAccessed}
+                    {
+                    item.lastDeckStat &&
+                    <Text style={styles.deckInfoText}>
+                        {t("last_accessed")} {formatDate(item.lastDeckStat.accessDate)}
                     </Text>
-                    <Text style={[styles.deckInfoText]}>
-                        {item.flashcardCount} {t("cards")}
+                    }
+
+                    <Text style={styles.deckInfoText}>
+                    {item.flashcardCount} {t("cards")}
                     </Text>
-                    <Text style={[styles.deckInfoText]}>
-                    {t("best")} {item.bestPerformance}% {t("last")} {item.lastPerformance}%
+                    {
+                    item.lastDeckStat &&
+                    <Text style={styles.deckInfoText}>
+                        {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestDeckStat.successRate)}% 
+                        {" "}
+                        {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastDeckStat.successRate)}%
                     </Text>
+                    }
                     <TouchableOpacity style={[styles.chevronRightIcon, styles.iconLayout]} onPress={() => uploadUpdateDeckPage(item.id)}>
                         <EditIcon color="#111" />
                     </TouchableOpacity>

@@ -53,14 +53,7 @@ export default function Decks() {
   useEffect(() => {
     getDecksByCurrentUser()
       .then((decks) => {
-        const updatedDecks = decks?.data?.map((deck: any) => ({
-          ...deck,
-          lastAccessed: "31.12.2024",
-          bestPerformance: 90,
-          lastPerformance: 40,
-        }));
-
-        setDecks(updatedDecks);
+        setDecks(decks?.data);
         setShowLoading(false);
       })
       .catch((error) => {
@@ -149,6 +142,14 @@ export default function Decks() {
     }
   };
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <View style={styles.container}>
       {/* Header, Search, Sort */}
@@ -185,16 +186,25 @@ export default function Decks() {
             >
               <View>
                 <Text style={styles.deckTitle}>{item.name}</Text>
-                <Text style={styles.deckInfoText}>
-                  {t("last_accessed")} {item.lastAccessed}
-                </Text>
+                {
+                  item.lastDeckStat &&
+                  <Text style={styles.deckInfoText}>
+                    {t("last_accessed")} {formatDate(item.lastDeckStat.accessDate)}
+                  </Text>
+                }
+
                 <Text style={styles.deckInfoText}>
                   {item.flashcardCount} {t("cards")}
                 </Text>
-                <Text style={styles.deckInfoText}>
-                  {t("best")} {item.bestPerformance}% {t("last")}{" "}
-                  {item.lastPerformance}%
-                </Text>
+                {
+                  item.lastDeckStat &&
+                  <Text style={styles.deckInfoText}>
+                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestDeckStat.successRate)}% 
+                    {" "}
+                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastDeckStat.successRate)}%
+                  </Text>
+                }
+
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
                 </View>

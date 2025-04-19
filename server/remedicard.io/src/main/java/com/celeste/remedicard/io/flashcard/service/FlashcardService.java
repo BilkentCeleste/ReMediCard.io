@@ -7,6 +7,7 @@ import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardResponseDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardReviewDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.repository.FlashcardRepository;
+import com.celeste.remedicard.io.search.service.SearchService;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class FlashcardService {
     private final DeckRepository deckRepository;
     private final SpacedRepetitionService spacedRepetitionService;
     private final CurrentUserService currentUserService;
+    private final SearchService searchService;
 
     public void create(Flashcard flashcard, Long deckId) {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
@@ -29,6 +31,7 @@ public class FlashcardService {
         deckRepository.save(deck);
         flashcardRepository.save(flashcard);
         spacedRepetitionService.create(deck.getUser(), flashcard);
+        searchService.addSearchableFlashcard(deck.getId(), flashcard);
     }
 
     public List<FlashcardResponseDTO> getFlashcardsInBatch(Long deckId) {
@@ -47,6 +50,7 @@ public class FlashcardService {
         deck.setFlashcardCount(deck.getFlashcardCount() - 1);
         deckRepository.save(deck);
         flashcardRepository.deleteById(flashcardId);
+        searchService.removeSearchableFlashcard(deck.getId(), flashcard);
     }
 
     public void update(Flashcard flashcard, Long flashcardId) {

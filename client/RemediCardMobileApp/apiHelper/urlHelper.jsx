@@ -22,6 +22,9 @@ export const GET_DECK_BY_DECK_ID_PATH = (id) => `${BASE_URL}/deck/getByDeckId/${
 export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
 export const SHARE_DECK_PATH = (id) => `${BASE_URL}/deck/share/${id}`;
 
+// deck statistics
+export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
+
 // flashcard
 export const CREATE_FLASHCARD_PATH = () => `${BASE_URL}/flashcard/create`;
 export const UPDATE_FLASHCARD_PATH = (id) => `${BASE_URL}/flashcard/update/${id}`;
@@ -50,3 +53,7 @@ export const ADD_USER_QUIZ_PATH = (id) => `${BASE_URL}/quiz/addUserQuiz/${id}`;
 
 // profile
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
+
+
+// search 
+export const SEARCH_PATH = (searchText) => `${BASE_URL}/search?searchtext=${searchText}`;

@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", builder = @Builder(disableBuilder=true))
 public interface DeckResponseWithoutFlashcardsMapper {
     DeckResponseWithoutFlashcardsMapper INSTANCE = Mappers.getMapper(DeckResponseWithoutFlashcardsMapper.class);
 
