@@ -8,6 +8,7 @@ import { BASE_URL } from "@/constants/config";
 
 // auth
 export const LOGIN_PATH = () => `${BASE_URL}/auth/login`;
+export const LOGIN_GOOGLE_PATH = () => `${BASE_URL}/auth/login_google`;
 export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
 export const FORGOT_PASSWORD_PATH = () => `${BASE_URL}/auth/forgot_password`;
 export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_reset_passwordcode`;

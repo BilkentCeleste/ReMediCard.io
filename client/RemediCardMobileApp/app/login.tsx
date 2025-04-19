@@ -22,7 +22,6 @@ import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default function Login() {
   const { t, i18n } = useTranslation("login");
@@ -34,7 +33,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, loginAuth } = useAuth();
+  const { isLoggedIn, loginAuth, loginGoogleAuth } = useAuth();
 
   const handleLanguageSelection = (language) => {
     if (selectedLanguage === language) {
@@ -62,7 +61,9 @@ export default function Login() {
     loginAuth(body);
   };
 
-  const handleLoginWithGoogle = () => {};
+  const handleLoginWithGoogle = () => {
+    loginGoogleAuth();
+  };
 
   const uploadRegisterPage = () => {};
 
