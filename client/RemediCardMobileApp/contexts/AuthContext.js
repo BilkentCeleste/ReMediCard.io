@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         loginGoogle(body)
           .then((res) => {
             setIsLoggedIn(true);
-            console.log(res);
             addToken(res.data.access_token);
             GoogleSignin.signOut();
           })
