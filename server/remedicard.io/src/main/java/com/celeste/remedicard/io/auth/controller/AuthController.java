@@ -28,6 +28,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
+    @PostMapping("login_google")
+    public ResponseEntity<AuthResponse> authenticateWithGoogle(
+            @RequestBody GoogleAuthRequest request
+    ) throws Exception {
+        return ResponseEntity.ok(authService.authenticateWithGoogle(request));
+    }
+
     @PostMapping("forgot_password")
     public void generateResetPasswordCode(
             @RequestBody ResetPasswordRequest request
