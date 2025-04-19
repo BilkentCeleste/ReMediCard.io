@@ -82,7 +82,7 @@ public class AuthService {
 
         if(user == null){
             user = User.builder()
-                    .username(request.getUsername())
+                    .username(username)
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(username)) //TODO remove in production
                     .role(Role.USER)
