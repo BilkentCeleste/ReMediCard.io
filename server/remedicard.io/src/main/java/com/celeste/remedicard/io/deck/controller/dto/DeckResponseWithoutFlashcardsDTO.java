@@ -25,4 +25,6 @@ public class DeckResponseWithoutFlashcardsDTO {
     private int popularity;
     Set<FigureResponseDTO> figureSet;
     private boolean isSharedView;
+    private double bestSuccessRate;
+    private double lastSuccessRate;
 }

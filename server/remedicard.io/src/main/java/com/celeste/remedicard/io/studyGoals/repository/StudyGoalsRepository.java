@@ -8,6 +8,5 @@ import java.util.Set;
 
 public interface StudyGoalsRepository extends JpaRepository<StudyGoals, Long> {
     Set<StudyGoals> findByUserId(Long userId);
-
     Optional<StudyGoals> findByUserIdAndDeckId(Long userId, Long deckId);
 }

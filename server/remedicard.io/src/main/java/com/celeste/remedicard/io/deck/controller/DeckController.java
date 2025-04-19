@@ -7,6 +7,8 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
+import com.celeste.remedicard.io.deckStats.entity.DeckStats;
+import com.celeste.remedicard.io.deckStats.service.DeckStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DeckController {
 
     private final DeckService deckService;
+    private final DeckStatsService deckStatsService;
 
     @PostMapping("/create")
     public ResponseEntity<DeckResponseDTO> create(@RequestBody DeckCreateRequestDTO dto) {
@@ -36,7 +39,14 @@ public class DeckController {
     @GetMapping("/getByUserId/{userId}")
     public Set<DeckResponseWithoutFlashcardsDTO> getDecksByUserId(@PathVariable Long userId) {
         Set<Deck> deckSet = deckService.getDeckByUserId(userId);
-        return DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
+        Set<DeckResponseWithoutFlashcardsDTO> response = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deckSet);
+        response.forEach(deck -> {
+            DeckStats bestDeckStats = deckStatsService.getBestDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            DeckStats lastDeckStats = deckStatsService.getLastDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            deck.setBestSuccessRate(bestDeckStats.getSuccessRate());
+            deck.setLastSuccessRate(lastDeckStats.getSuccessRate());
+        });
+        return response;
     }
 
     @GetMapping("/getByDeckId/{deckId}")
