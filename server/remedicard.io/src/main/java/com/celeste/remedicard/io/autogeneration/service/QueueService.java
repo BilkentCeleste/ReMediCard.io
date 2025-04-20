@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.autogeneration.service;
 
+import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.autogeneration.config.DataType;
 import com.celeste.remedicard.io.autogeneration.dto.DataProcessingTask;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
@@ -7,6 +8,8 @@ import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
 import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;
 import com.celeste.remedicard.io.deck.service.DeckService;
+import com.celeste.remedicard.io.notification.entity.Notification;
+import com.celeste.remedicard.io.notification.service.NotificationService;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -34,6 +38,8 @@ public class QueueService {
 
     private final DeckService deckService;
     private final QuizService quizService;
+
+    private final NotificationService notificationService;
 
     private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
@@ -108,9 +114,13 @@ public class QueueService {
 
             mediaProcessingRecord.setIsProcessed(true);
             mediaProcessingRecordRepository.save(mediaProcessingRecord);
+
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            notificationService.sendNotification("Deck Generated", "Your new deck is generated: " + "Generated_" + deckCreationTask.getName(), user.getPushNotificationToken());
         }
 
-        log.info("Deck generation queue is empty");
+        //log.info("Deck generation queue is empty");
     }
 
     @Scheduled(fixedDelay = 30000)
@@ -122,9 +132,20 @@ public class QueueService {
             log.info("Processing auto-generation task for the quiz: " + quizCreationTask.getUserId() + ", " + quizCreationTask.getName());
 
             quizService.createQuiz(quizCreationTask);
+
+            MediaProcessingRecord mediaProcessingRecord = mediaProcessingRecordRepository.findById(quizCreationTask.getMediaProcessingRecordId()).orElseThrow(
+                    IllegalArgumentException::new
+            );
+
+            mediaProcessingRecord.setIsProcessed(true);
+            mediaProcessingRecordRepository.save(mediaProcessingRecord);
+
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            notificationService.sendNotification("Quiz Generated", "Your new quiz is generated: " + "Generated_" + quizCreationTask.getName(), user.getPushNotificationToken());
         }
 
-        log.info("Quiz generation queue is empty");
+        //log.info("Quiz generation queue is empty");
     }
 
 }

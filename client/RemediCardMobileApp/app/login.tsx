@@ -22,7 +22,8 @@ import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { EXPO_PUSH_TOKEN_KEY } from "@/constants/config";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login() {
   const { t, i18n } = useTranslation("login");
@@ -34,7 +35,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, loginAuth } = useAuth();
+  const { isLoggedIn, loginAuth, loginGoogleAuth } = useAuth();
 
   const handleLanguageSelection = (language) => {
     if (selectedLanguage === language) {
@@ -53,16 +54,23 @@ export default function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    const pushNotificationToken = await SecureStore.getItemAsync(
+      EXPO_PUSH_TOKEN_KEY
+    );
+
     const body = {
       username: username,
       password: password,
+      pushNotificationToken: pushNotificationToken,
     };
 
     loginAuth(body);
   };
 
-  const handleLoginWithGoogle = () => {};
+  const handleLoginWithGoogle = () => {
+    loginGoogleAuth();
+  };
 
   const uploadRegisterPage = () => {};
 

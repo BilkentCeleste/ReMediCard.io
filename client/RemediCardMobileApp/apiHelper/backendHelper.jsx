@@ -18,6 +18,10 @@ export const login = async (data) => {
   return await postFetcher(url.LOGIN_PATH(), data);
 };
 
+export const loginGoogle = async (data) => {
+  return await postFetcher(url.LOGIN_GOOGLE_PATH(), data);
+};
+
 export const register = async (data) => {
   return await postFetcher(url.REGISTER_PATH(), data);
 };
