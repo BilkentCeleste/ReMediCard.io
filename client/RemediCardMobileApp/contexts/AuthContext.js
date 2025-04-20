@@ -7,7 +7,7 @@ import {
   isErrorWithCode,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import { GOOGLE_WEB_CLIENT_ID } from "@/constants/config";
+import { EXPO_PUSH_TOKEN_KEY, GOOGLE_WEB_CLIENT_ID } from "@/constants/config";
 import { Alert } from "react-native";
 
 const AuthContext = createContext({
@@ -35,11 +35,15 @@ export const AuthProvider = ({ children }) => {
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
         const { idToken, user } = response.data;
+        const pushNotificationToken = await SecureStore.getItemAsync(
+          EXPO_PUSH_TOKEN_KEY
+        );
 
         const body = {
           email: user.email,
           username: user.name,
           idToken: idToken,
+          pushNotificationToken: pushNotificationToken,
         };
 
         removeToken();

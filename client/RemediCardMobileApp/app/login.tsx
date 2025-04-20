@@ -22,6 +22,8 @@ import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { EXPO_PUSH_TOKEN_KEY } from "@/constants/config";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login() {
   const { t, i18n } = useTranslation("login");
@@ -52,10 +54,15 @@ export default function Login() {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    const pushNotificationToken = await SecureStore.getItemAsync(
+      EXPO_PUSH_TOKEN_KEY
+    );
+
     const body = {
       username: username,
       password: password,
+      pushNotificationToken: pushNotificationToken,
     };
 
     loginAuth(body);
