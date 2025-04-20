@@ -51,15 +51,8 @@ export default function Quizzes() {
   useEffect(() => {
     getQuizzesByCurrentUser()
       .then((quizzes: any) => {
-        const updatedQuizzes = quizzes?.data?.map((quiz: any) => ({
-          ...quiz,
-          lastAccessed: "31.12.2024",
-          bestPerformance: 90,
-          lastPerformance: 40,
-        }));
-
         setShowLoading(false);
-        setQuizzes(updatedQuizzes);
+        setQuizzes(quizzes?.data);
       })
       .catch((error: any) => {
         setShowLoading(false);
@@ -152,6 +145,14 @@ export default function Quizzes() {
     { label: t("sort_by_worst_performance"), value: "worst" },
   ];
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>ReMediCard.io</Text>
@@ -186,16 +187,23 @@ export default function Quizzes() {
             >
               <View>
                 <Text style={styles.deckTitle}>{item.name}</Text>
-                <Text style={[styles.deckInfoText]}>
-                  {t("last_accessed")} {item.lastAccessed}
-                </Text>
+                {
+                  item.lastQuizStat &&
+                  <Text style={styles.deckInfoText}>
+                    {t("last_accessed")} {formatDate(item.lastQuizStat.accessDate)}
+                  </Text>
+                }
                 <Text style={[styles.deckInfoText]}>
                   {item?.questions?.length || 0} {t("cards")}
                 </Text>
-                <Text style={[styles.deckInfoText]}>
-                  {t("best")} {item.bestPerformance}% {t("last")}{" "}
-                  {item.lastPerformance}%
-                </Text>
+                {
+                  item.lastQuizStat &&
+                  <Text style={styles.deckInfoText}>
+                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestQuizStat.successRate)}% 
+                    {" "}
+                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastQuizStat.successRate)}%
+                  </Text>
+                }
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
                 </View>

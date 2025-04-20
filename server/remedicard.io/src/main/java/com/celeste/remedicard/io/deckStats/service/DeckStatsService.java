@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.Set;
 
 @Service
@@ -27,7 +26,6 @@ public class DeckStatsService {
         deckStats.setDeck(deck);
         deckStats.setUser(user);
         deckStats.setAccessDate(LocalDateTime.now());
-        System.out.println(deckStats);
         deckStatsRepository.save(deckStats);
     }
 
@@ -38,7 +36,6 @@ public class DeckStatsService {
     }
 
     public Set<DeckStats> getDeckStatsByDeckIdAndUserId(Long deckId, Long userId) {
-
         return deckStatsRepository.findByDeckIdAndUserId(deckId, userId)
                 .orElseThrow(() -> new RuntimeException("Deck stats not found"));
     }
