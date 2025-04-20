@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -164,33 +165,80 @@ public class DeckService {
         }
     }
 
+    @Transactional
     public String createShareLink(Long deckId) {
-        User currentUser = currentUserService.getCurrentUser();
         Deck deck = getDeckByDeckId(deckId);
+        Long userId = currentUserService.getCurrentUserId();
 
-        if (!deck.getUser().getId().equals(currentUser.getId())) {
-            throw new IllegalArgumentException("Only deck owner can create share links");
+        if (!deck.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("You can only share your own decks");
         }
 
         DeckShareLink shareLink = deck.createShareLink();
-        deckRepository.save(deck);
-
-        return shareLinkBaseUrl + shareLink.getShareToken();
+        shareLinkRepository.save(shareLink);
+        return shareLink.getShareToken();
     }
 
-    public Deck getSharedDeck(String shareToken) {
-        DeckShareLink shareLink = shareLinkRepository.findByShareToken(shareToken);
+    @Transactional
+    public Deck getDeckByShareToken(String shareToken) {
+        DeckShareLink shareLink = shareLinkRepository.findByShareToken(shareToken)
+                .orElseThrow(() -> new RuntimeException("Share link not found"));
 
-        if (!shareLink.isActive()) {
-            throw new IllegalArgumentException("Share link is expired");
+        if (!shareLink.isActive() || shareLink.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Share link is expired or inactive");
         }
 
         return shareLink.getDeck();
     }
 
-//    public Deck copySharedDeck(String shareToken) {
-//
-//    }
+    @Transactional
+    public Deck copySharedDeck(String shareToken) {
+        Deck sharedDeck = getDeckByShareToken(shareToken);
+        User currentUser = currentUserService.getCurrentUser();
+
+        // Create a new deck for the current user
+        Deck newDeck = Deck.builder()
+                .name(sharedDeck.getName() + " (Copy)")
+                .topic(sharedDeck.getTopic())
+                .difficulty(sharedDeck.getDifficulty())
+                .user(currentUser)
+                .popularity(0)
+                .build();
+
+        // Deep copy flashcards
+        Set<Flashcard> newFlashcards = new HashSet<>();
+        for (Flashcard originalFlashcard : sharedDeck.getFlashcardSet()) {
+            Side newFrontSide = Side.builder()
+                    .text(originalFlashcard.getFrontSide().getText())
+                    .build();
+
+            Side newBackSide = Side.builder()
+                    .text(originalFlashcard.getBackSide().getText())
+                    .build();
+
+            Flashcard newFlashcard = Flashcard.builder()
+                    .type(originalFlashcard.getType())
+                    .deck(newDeck)
+                    .topic(originalFlashcard.getTopic())
+                    .frequency(originalFlashcard.getFrequency())
+                    .frontSide(newFrontSide)
+                    .backSide(newBackSide)
+                    .build();
+
+            newFlashcards.add(newFlashcard);
+        }
+
+        newDeck.setFlashcardSet(newFlashcards);
+        deckRepository.save(newDeck);
+
+        // Create spaced repetition records for the new flashcards
+        for (Flashcard flashcard : newFlashcards) {
+            spacedRepetitionService.create(currentUser, flashcard);
+        }
+
+        searchService.saveSearchableDeck(newDeck);
+        return newDeck;
+    }
 
     @Transactional
     public void createDeck(DeckCreationTask deckCreationTask){

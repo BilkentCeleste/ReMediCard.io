@@ -88,20 +88,20 @@ public class DeckController {
     }
 
     @PostMapping("/share/{deckId}")
-    public ResponseEntity<String> createShareLink(@PathVariable Long deckId) {
-        String shareLink = deckService.createShareLink(deckId);
-        return ResponseEntity.ok(shareLink);
+    public ResponseEntity<String> shareDeck(@PathVariable Long deckId) {
+        String shareToken = deckService.createShareLink(deckId);
+        return ResponseEntity.ok(shareToken);
     }
 
     @GetMapping("/shared/{shareToken}")
-    public DeckResponseDTO getSharedDeck(@PathVariable String shareToken) {
-        Deck deck = deckService.getSharedDeck(shareToken);
-        return DeckCreateMapper.INSTANCE.toDTO(deck, true);
+    public ResponseEntity<DeckResponseDTO> getSharedDeck(@PathVariable String shareToken) {
+        Deck deck = deckService.getDeckByShareToken(shareToken);
+        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, true));
     }
 
-//    @PostMapping("/shared/{shareToken}/copy")
-//    public ResponseEntity<DeckResponseDTO> copySharedDeck(@PathVariable String shareToken) {
-//        DeckResponseDTO copiedDeck = deckService.copySharedDeck(shareToken);
-//        return ResponseEntity.ok(copiedDeck);
-//    }
+    @PostMapping("/copy/{shareToken}")
+    public ResponseEntity<DeckResponseDTO> copySharedDeck(@PathVariable String shareToken) {
+        Deck deck = deckService.copySharedDeck(shareToken);
+        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, false));
+    }
 }

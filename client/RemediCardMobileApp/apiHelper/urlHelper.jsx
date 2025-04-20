@@ -21,6 +21,8 @@ export const GET_DECKS_BY_USER_ID_PATH = (id) => `${BASE_URL}/deck/getByUserId/$
 export const GET_DECK_BY_DECK_ID_PATH = (id) => `${BASE_URL}/deck/getByDeckId/${id}`;
 export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
 export const SHARE_DECK_PATH = (id) => `${BASE_URL}/deck/share/${id}`;
+export const GET_SHARED_DECK_PATH = (shareToken) => `${BASE_URL}/deck/shared/${shareToken}`;
+export const COPY_SHARED_DECK_PATH = (shareToken) => `${BASE_URL}/deck/shared/${shareToken}/copy`;
 
 // deck statistics
 export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
