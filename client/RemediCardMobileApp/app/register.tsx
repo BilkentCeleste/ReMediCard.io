@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import {Redirect, useRouter} from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import {
   LockIcon,
   MailIcon,
@@ -20,6 +20,8 @@ import {
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { EXPO_PUSH_TOKEN_KEY } from "@/constants/config";
+import * as SecureStore from "expo-secure-store";
 
 export default function Register() {
   const { t } = useTranslation("register");
@@ -36,12 +38,17 @@ export default function Register() {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
+    const pushNotificationToken = await SecureStore.getItemAsync(
+      EXPO_PUSH_TOKEN_KEY
+    );
+
     const body = {
       username: username,
       email: email,
-      password: password
-    }
+      password: password,
+      pushNotificationToken: pushNotificationToken,
+    };
 
     registerAuth(body);
   };
@@ -49,16 +56,16 @@ export default function Register() {
   const uploadRegisterPage = () => {};
 
   return isLoggedIn ? (
-      <Redirect href="/(app)/home" />
+    <Redirect href="/(app)/home" />
   ) : (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('title')}</Text>
+      <Text style={styles.title}>{t("title")}</Text>
 
       <View style={styles.component}>
         <AtIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder={t('username')}
+          placeholder={t("username")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           value={username}
@@ -70,7 +77,7 @@ export default function Register() {
         <MailIcon />
         <TextInput
           style={[styles.usernametext]}
-          placeholder={t('email')}
+          placeholder={t("email")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           value={email}
           onChangeText={setMail}
@@ -81,7 +88,7 @@ export default function Register() {
         <LockIcon />
         <TextInput
           style={styles.passwordtext}
-          placeholder={t('password')}
+          placeholder={t("password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -102,7 +109,7 @@ export default function Register() {
         <LockIcon></LockIcon>
         <TextInput
           style={styles.passwordtext}
-          placeholder={t('confirm_password')}
+          placeholder={t("confirm_password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
           maxLength={16}
           secureTextEntry={!passwordVisible}
@@ -120,16 +127,16 @@ export default function Register() {
       </View>
 
       <TouchableOpacity style={styles.registercomponent} onPress={handleSignUp}>
-        <Text style={styles.registertext}>{t('sign_up')}</Text>
+        <Text style={styles.registertext}>{t("sign_up")}</Text>
       </TouchableOpacity>
 
       <View style={styles.bottomContainer}>
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
           <Text style={styles.seperatortext}>
-            {t('already_have_an_account')}
+            {t("already_have_an_account")}
             <Link href="/login" style={styles.link}>
-              <Text style={styles.link}> {t('log_in')}</Text>
+              <Text style={styles.link}> {t("log_in")}</Text>
             </Link>
           </Text>
           <View style={styles.separatorLine} />
@@ -233,7 +240,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontSize: 14,
     color: "#2518c7",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   bottomContainer: {
     width: "100%",

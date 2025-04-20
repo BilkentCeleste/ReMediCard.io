@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "804592801981",
+    "project_id": "remedicardiomobileapp",
+    "storage_bucket": "remedicardiomobileapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804592801981:android:0d90bb5eaf97fd38967fd4",
+        "android_client_info": {
+          "package_name": "io.remedicard.celeste"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1-E7mPhSE8SXIbIlCOrT0kr1yzFY8Fd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,7 @@
     "slug": "RemediCardMobileApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icons/remedicon.png",
     "scheme": "myapp",
     "deepLinking": true,
     "userInterfaceStyle": "automatic",
@@ -14,9 +14,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/remedicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "io.remedicard.celeste",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -28,15 +30,24 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/icons/remedicon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "87b48c47-7f1c-4b8f-be51-25d2701b7feb"
+      }
     }
   }
 }
