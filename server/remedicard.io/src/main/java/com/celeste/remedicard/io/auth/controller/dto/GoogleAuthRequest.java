@@ -8,4 +8,5 @@ public class GoogleAuthRequest {
     private String idToken;
     private String email;
     private String username;
+    private String pushNotificationToken;
 }

@@ -4,6 +4,7 @@ import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.entity.Role;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.notification.service.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,7 @@ public class AuthService {
     private final EmailService emailService;
     private final CurrentUserService currentUserService;
     private final GoogleVerifierService googleVerifierService;
+    private final NotificationService notificationService;
 
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -35,6 +37,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .pushNotificationToken(request.getPushNotificationToken())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -42,6 +45,8 @@ public class AuthService {
 
         //var refreshToken = jwtService.generateRefreshToken(user);
         //saveUserToken(savedUser, jwtToken);
+
+        notificationService.sendNotification("Welcome to ReMediCard.io",  "Welcome to ReMediCard.io " + user.getUsername(), user.getPushNotificationToken());
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
@@ -62,6 +67,11 @@ public class AuthService {
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
 
+        user.setPushNotificationToken(request.getPushNotificationToken());
+        userRepository.save(user);
+
+        notificationService.sendNotification("Welcome back to ReMediCard.io",  "Welcome back to ReMediCard.io " + user.getUsername(), user.getPushNotificationToken());
+
         return AuthResponse.builder()
                 .accessToken(jwtToken)
                 //.refreshToken(refreshToken)
@@ -80,6 +90,9 @@ public class AuthService {
         String username = request.getEmail().substring(0, request.getEmail().indexOf("@"));
         User user = userRepository.findByUsername(username).orElse(null);
 
+        String notificationTitle = "Welcome back to ReMediCard.io";
+        String notificationMessage = "Welcome back to ReMediCard.io " ;
+
         if(user == null){
             user = User.builder()
                     .username(username)
@@ -88,8 +101,15 @@ public class AuthService {
                     .role(Role.USER)
                     .build();
 
-            userRepository.save(user);
+
+            notificationTitle = "Welcome to ReMediCard.io";
+            notificationMessage = "Welcome to ReMediCard.io ";
         }
+
+        user.setPushNotificationToken(request.getPushNotificationToken());
+        userRepository.save(user);
+
+        notificationService.sendNotification(notificationTitle,  notificationMessage + user.getUsername(), user.getPushNotificationToken());
 
         String jwtToken = jwtService.generateToken(user);
 
