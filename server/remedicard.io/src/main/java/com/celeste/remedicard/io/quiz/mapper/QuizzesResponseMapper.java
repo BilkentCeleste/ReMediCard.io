@@ -1,6 +1,6 @@
 package com.celeste.remedicard.io.quiz.mapper;
 
-import com.celeste.remedicard.io.quiz.controller.dto.QuizzesResponseDTO;
+import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
@@ -13,9 +13,9 @@ public interface QuizzesResponseMapper {
 
     QuizzesResponseMapper INSTANCE = Mappers.getMapper(QuizzesResponseMapper.class);
 
-    QuizzesResponseDTO toDTO(Quiz quiz);
+    QuizResponseWithoutQuestionsDTO toDTO(Quiz quiz);
 
-    Set<QuizzesResponseDTO> toDTO(Set<Quiz> quizSet);
+    Set<QuizResponseWithoutQuestionsDTO> toDTO(Set<Quiz> quizSet);
 
-    Quiz toEntity(QuizzesResponseDTO dto);
+    Quiz toEntity(QuizResponseWithoutQuestionsDTO dto);
 }
