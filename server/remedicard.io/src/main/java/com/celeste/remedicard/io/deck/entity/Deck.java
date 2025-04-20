@@ -6,6 +6,7 @@ import com.celeste.remedicard.io.figure.entity.Figure;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +35,9 @@ public class Deck extends AuditableEntity {
     @Column
     private int popularity;
 
+    @Column
+    private String shareToken;
+
     @ManyToMany
     @JoinTable(
             name = "deck_figure",
@@ -49,18 +53,31 @@ public class Deck extends AuditableEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DeckShareLink> shareLinks = new HashSet<>();
+    public Deck(Deck deck) {
+        BeanUtils.copyProperties(deck, this, "id", "user", "flashcardSet", "figureSet");
+        Set<Flashcard> originalFlashcards = deck.getFlashcardSet();
+        for (Flashcard flashcard : originalFlashcards) {
+            this.addFlashcard(new Flashcard(flashcard));
+        }
+    }
 
-    public DeckShareLink createShareLink() {
-        DeckShareLink shareLink = DeckShareLink.builder()
-                .shareToken(java.util.UUID.randomUUID().toString())
-                .expiryDate(java.time.LocalDateTime.now().plusDays(7))
-                .deck(this)
-                .active(true)
-                .build();
+    public void addFlashcard(Flashcard flashcard) {
+        this.flashcardSet.add(flashcard);
+        flashcard.setDeck(this);
+    }
 
-        shareLinks.add(shareLink);
-        return shareLink;
+    public void removeFlashcard(Flashcard flashcard) {
+        this.flashcardSet.remove(flashcard);
+        flashcard.setDeck(null);
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+        user.getDecks().add(this);
+    }
+
+    public void removeUser() {
+        this.user.getDecks().remove(this);
+        this.user = null;
     }
 }

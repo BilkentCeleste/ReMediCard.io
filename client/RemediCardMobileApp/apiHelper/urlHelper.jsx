@@ -21,9 +21,9 @@ export const GET_DECKS_BY_CURRENT_USER = () => `${BASE_URL}/deck/getByCurrentUse
 export const GET_DECKS_BY_USER_ID_PATH = (id) => `${BASE_URL}/deck/getByUserId/${id}`;
 export const GET_DECK_BY_DECK_ID_PATH = (id) => `${BASE_URL}/deck/getByDeckId/${id}`;
 export const GENERATE_DECK_PATH = () => `${BASE_URL}/deck/generate`;
-export const SHARE_DECK_PATH = (id) => `${BASE_URL}/deck/share/${id}`;
-export const GET_SHARED_DECK_PATH = (shareToken) => `${BASE_URL}/deck/shared/${shareToken}`;
-export const COPY_SHARED_DECK_PATH = (shareToken) => `${BASE_URL}/deck/shared/${shareToken}/copy`;
+export const ADD_USER_DECK_PATH = (id) => `${BASE_URL}/deck/addUserDeck/${id}`;
+export const GENERATE_DECK_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/deck/generateShareToken/${id}`;
+export const GET_DECK_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/deck/getByShareToken/${shareToken}`;
 
 // deck statistics
 export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
@@ -50,7 +50,7 @@ export const GET_QUIZ_BY_QUIZ_ID_PATH = (id) => `${BASE_URL}/quiz/get/${id}`;
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/quiz/removeQuestion/${id}`;
 export const CREATE_QUESTION_PATH = () => `${BASE_URL}/question/create`;
 export const EDIT_QUESTION_PATH = (id) => `${BASE_URL}/question/update/${id}`;
-export const GENERATE_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/quiz/generateShareToken/${id}`;
+export const GENERATE_QUIZ_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/quiz/generateShareToken/${id}`;
 export const GET_QUIZ_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/quiz/getByShareToken/${shareToken}`;
 export const ADD_USER_QUIZ_PATH = (id) => `${BASE_URL}/quiz/addUserQuiz/${id}`;
 

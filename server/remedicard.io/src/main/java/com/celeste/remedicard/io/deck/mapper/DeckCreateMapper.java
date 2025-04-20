@@ -14,15 +14,10 @@ public interface DeckCreateMapper {
     DeckCreateMapper INSTANCE = Mappers.getMapper(DeckCreateMapper.class);
 
     @Mapping(target = "userId", source = "user.id")
-    DeckResponseDTO toDTO(Deck deck, @Context boolean isSharedView);
+    DeckResponseDTO toDTO(Deck deck);
 
     Set<DeckResponseDTO> toDTO(Set<Deck> deckSet);
 
 //    @Mapping(target = "user", ignore = true)
     Deck toEntity(DeckCreateRequestDTO dto);
-
-    @AfterMapping
-    default void setSharedView(@MappingTarget DeckResponseDTO dto, @Context boolean isSharedView) {
-        dto.setSharedView(isSharedView);
-    }
 }

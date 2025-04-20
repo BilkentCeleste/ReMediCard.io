@@ -24,10 +24,8 @@ import {
   getDecksByCurrentUser,
   deleteDeck,
   createDeck,
-  shareDeck,
+  generateDeckShareToken
 } from "@/apiHelper/backendHelper";
-import { create } from "react-test-renderer";
-import { Share, Button } from "react-native";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
 
@@ -71,7 +69,7 @@ export default function Decks() {
 
   const handleDeckPress = (deck: any) => {
     setSelectedDeck(deck);
-    setModalVisible(true); // Open Modal
+    setModalVisible(true);
   };
 
   const handleStartQuiz = () => {
@@ -89,7 +87,10 @@ export default function Decks() {
   const handleEditDeck = () => {
     if (selectedDeck) {
       setModalVisible(false);
-      router.push("/(app)/updatedeck?deckId=" + selectedDeck.id);
+        router.push({
+            pathname: "/(app)/updatedeck",
+            params: { deckId: selectedDeck.id },
+        });
     } else {
       Alert.alert(t("error"), t("deck_info_missing"));
     }
@@ -115,34 +116,46 @@ export default function Decks() {
       return;
     }
 
-    createDeck({
-      name: newDeckTitle,
-      topic: newDeckTitle,
-    }).then((res) => {
-      setManualCreateModalVisible(false);
-      setNewDeckTitle("");
-      router.push("/(app)/updatedeck?deckId=" + res.data.id);
-    });
+    const data = {
+        name: newDeckTitle,
+        topic: newDeckTitle,
+    }
+
+    createDeck(data)
+        .then((res) => {
+          setManualCreateModalVisible(false);
+          setNewDeckTitle("");
+            router.push({
+                pathname: "/(app)/updatedeck",
+                params: { deckId: res.data.id },
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            Alert.alert(t("error"), t("deck_creation_failed"));
+        });
   };
 
   const handleShareDeck = () => {
     if (selectedDeck) {
-      shareDeck(selectedDeck?.id)
+      generateDeckShareToken(selectedDeck?.id)
         .then((res) => {
-          const shareUrl = res?.data;
-          const message = `Check out this deck on ReMediCard:\n\n${shareUrl}`;
-          Share.share({
-            message,
-            title: `Share Deck: ${selectedDeck.name}`,
-          });
+          setModalVisible(false);
+            router.push({
+                pathname: "/(app)/shareddeck",
+                params: { shareToken: res?.data?.shareToken },
+            });
         })
         .catch((err) => {
-          console.error("Error sharing deck:", err);
+          console.error(err);
+          Alert.alert(t("error"), t("share_failed"));
         });
+    } else {
+      Alert.alert(t("error"), t("deck_info_missing"));
     }
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
@@ -199,7 +212,7 @@ export default function Decks() {
                 {
                   item.lastDeckStat &&
                   <Text style={styles.deckInfoText}>
-                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestDeckStat.successRate)}% 
+                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestDeckStat.successRate)}%
                     {" "}
                     {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastDeckStat.successRate)}%
                   </Text>

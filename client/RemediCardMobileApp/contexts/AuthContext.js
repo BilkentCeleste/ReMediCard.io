@@ -4,8 +4,6 @@ import * as SecureStore from "expo-secure-store";
 import {
   GoogleSignin,
   isSuccessResponse,
-  isErrorWithCode,
-  statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { EXPO_PUSH_TOKEN_KEY, GOOGLE_WEB_CLIENT_ID } from "@/constants/config";
 import { Alert } from "react-native";
@@ -23,6 +21,20 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const existingToken = await SecureStore.getItemAsync("token");
+        if (existingToken) {
+          setIsLoggedIn(true);
+          setToken(existingToken);
+        }
+      } catch (error) {
+        console.error("Error checking token:", error);
+      }
+    };
+
+    checkToken();
+    
     GoogleSignin.configure({
       webClientId: GOOGLE_WEB_CLIENT_ID,
     });

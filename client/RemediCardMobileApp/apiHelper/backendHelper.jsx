@@ -47,16 +47,16 @@ export const getDecksByUserId = async (id) => {
   return await getFetcher(url.GET_DECKS_BY_USER_ID_PATH(id));
 };
 
-export const shareDeck = async (id) => {
-  return await postFetcher(url.SHARE_DECK_PATH(id));
+export const generateDeckShareToken = async (id) => {
+  return await postFetcher(url.GENERATE_DECK_SHARE_TOKEN_PATH(id));
 };
 
-export const getSharedDeck = async (shareToken) => {
-  return await getFetcher(url.GET_SHARED_DECK_PATH(shareToken));
+export const getDeckByShareToken = async (shareToken) => {
+  return await getFetcher(url.GET_DECK_BY_SHARE_TOKEN_PATH(shareToken));
 };
 
-export const copySharedDeck = async (shareToken) => {
-  return await postFetcher(url.COPY_SHARED_DECK_PATH(shareToken));
+export const addUserDeck = async (id) => {
+  return await postFetcher(url.ADD_USER_DECK_PATH(id));
 };
 
 // deck statistics
@@ -162,8 +162,8 @@ export const generalSearch = async (searchText) => {
   return await getFetcher(url.SEARCH_PATH(searchText));
 };
 
-export const generateShareToken = async (id) => {
-  return await postFetcher(url.GENERATE_SHARE_TOKEN_PATH(id));
+export const generateQuizShareToken = async (id) => {
+  return await postFetcher(url.GENERATE_QUIZ_SHARE_TOKEN_PATH(id));
 };
 
 export const getQuizByShareToken = async (shareToken) => {

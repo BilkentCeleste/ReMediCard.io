@@ -44,6 +44,8 @@ export default function RootLayout() {
       <Stack.Screen name="create_goal" options={{ headerShown: false }} />
       <Stack.Screen name="updatedeck" options={{ headerShown: false }} />
       <Stack.Screen name="updateflashcard" options={{ headerShown: false }} />
+      <Stack.Screen name="shareddeck" options={{ headerShown: false }} />
+      <Stack.Screen name="sharedquiz" options={{ headerShown: false }} />
     </Stack>
   );
 }

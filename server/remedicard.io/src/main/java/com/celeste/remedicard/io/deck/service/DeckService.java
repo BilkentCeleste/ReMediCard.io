@@ -5,14 +5,14 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
+import com.celeste.remedicard.io.deck.controller.dto.ShareDeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
-import com.celeste.remedicard.io.deck.entity.DeckShareLink;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
-import com.celeste.remedicard.io.deck.repository.DeckShareLinkRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
 import com.celeste.remedicard.io.search.service.SearchService;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -21,12 +21,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,13 +39,9 @@ public class DeckService {
     private final GeminiAPIService geminiAPIService;
     private final DeckRepository deckRepository;
     private final CurrentUserService currentUserService;
-    private final DeckShareLinkRepository shareLinkRepository;
     private final UserService userService;
     private final SpacedRepetitionService spacedRepetitionService;
     private final SearchService searchService;
-
-    @Value("${app.share-link-base-url}")
-    private String shareLinkBaseUrl;
 
     public Deck create(Deck deck) {
         User user = currentUserService.getCurrentUser();
@@ -166,81 +160,6 @@ public class DeckService {
     }
 
     @Transactional
-    public String createShareLink(Long deckId) {
-        Deck deck = getDeckByDeckId(deckId);
-        Long userId = currentUserService.getCurrentUserId();
-
-        if (!deck.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("You can only share your own decks");
-        }
-
-        DeckShareLink shareLink = deck.createShareLink();
-        shareLinkRepository.save(shareLink);
-        return shareLink.getShareToken();
-    }
-
-    @Transactional
-    public Deck getDeckByShareToken(String shareToken) {
-        DeckShareLink shareLink = shareLinkRepository.findByShareToken(shareToken)
-                .orElseThrow(() -> new RuntimeException("Share link not found"));
-
-        if (!shareLink.isActive() || shareLink.getExpiryDate().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Share link is expired or inactive");
-        }
-
-        return shareLink.getDeck();
-    }
-
-    @Transactional
-    public Deck copySharedDeck(String shareToken) {
-        Deck sharedDeck = getDeckByShareToken(shareToken);
-        User currentUser = currentUserService.getCurrentUser();
-
-        // Create a new deck for the current user
-        Deck newDeck = Deck.builder()
-                .name(sharedDeck.getName() + " (Copy)")
-                .topic(sharedDeck.getTopic())
-                .difficulty(sharedDeck.getDifficulty())
-                .user(currentUser)
-                .popularity(0)
-                .build();
-
-        // Deep copy flashcards
-        Set<Flashcard> newFlashcards = new HashSet<>();
-        for (Flashcard originalFlashcard : sharedDeck.getFlashcardSet()) {
-            Side newFrontSide = Side.builder()
-                    .text(originalFlashcard.getFrontSide().getText())
-                    .build();
-
-            Side newBackSide = Side.builder()
-                    .text(originalFlashcard.getBackSide().getText())
-                    .build();
-
-            Flashcard newFlashcard = Flashcard.builder()
-                    .type(originalFlashcard.getType())
-                    .deck(newDeck)
-                    .topic(originalFlashcard.getTopic())
-                    .frequency(originalFlashcard.getFrequency())
-                    .frontSide(newFrontSide)
-                    .backSide(newBackSide)
-                    .build();
-
-            newFlashcards.add(newFlashcard);
-        }
-
-        newDeck.setFlashcardSet(newFlashcards);
-        deckRepository.save(newDeck);
-
-        // Create spaced repetition records for the new flashcards
-        for (Flashcard flashcard : newFlashcards) {
-            spacedRepetitionService.create(currentUser, flashcard);
-        }
-
-        searchService.saveSearchableDeck(newDeck);
-        return newDeck;
-    }
-
-    @Transactional
     public void createDeck(DeckCreationTask deckCreationTask){
 
         User user = userService.getUserById(deckCreationTask.getUserId());
@@ -291,4 +210,26 @@ public class DeckService {
         searchService.saveSearchableDeck(deck);
     }
 
+    public void addUserDeck(Long deckId) {
+        Deck originalDeck = getDeckByDeckId(deckId);
+        User user = currentUserService.getCurrentUser();
+
+        Deck newDeck = new Deck(originalDeck);
+        newDeck.addUser(user);
+
+        deckRepository.save(newDeck);
+    }
+
+    public ShareDeckResponseDTO generateShareToken(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        String shareToken = java.util.UUID.randomUUID().toString();
+        deck.setShareToken(shareToken);
+        deckRepository.save(deck);
+        return new ShareDeckResponseDTO(shareToken);
+    }
+
+    public Deck getByShareToken(String shareToken) {
+        return deckRepository.findByShareToken(shareToken)
+                .orElseThrow(() -> new EntityNotFoundException("Deck not found with share token: " + shareToken));
+    }
 }

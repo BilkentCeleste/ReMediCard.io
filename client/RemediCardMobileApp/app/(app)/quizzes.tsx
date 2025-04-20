@@ -24,7 +24,7 @@ import {
   deleteQuiz,
   getQuizzesByCurrentUser,
   createQuiz,
-  generateShareToken
+  generateQuizShareToken
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -103,7 +103,7 @@ export default function Quizzes() {
 
   const handleShareQuiz = () => {
     if (selectedQuiz) {
-      generateShareToken(selectedQuiz?.id)
+      generateQuizShareToken(selectedQuiz?.id)
         .then((res) => {
           setModalVisible(false);
           router.push("/(app)/sharedquiz?shareToken=" + res?.data?.shareToken);

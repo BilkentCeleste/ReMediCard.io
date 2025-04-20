@@ -4,6 +4,7 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
+import com.celeste.remedicard.io.deck.controller.dto.ShareDeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
@@ -30,7 +31,7 @@ public class DeckController {
     public ResponseEntity<DeckResponseDTO> create(@RequestBody DeckCreateRequestDTO dto) {
         Deck deck = DeckCreateMapper.INSTANCE.toEntity(dto);
         deck = deckService.create(deck);
-        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, false));
+        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck));
     }
 
     @GetMapping("/getByCurrentUser")
@@ -63,7 +64,7 @@ public class DeckController {
     @GetMapping("/getByDeckId/{deckId}")
     public DeckResponseDTO getDeckByDeckId(@PathVariable Long deckId) {
         Deck deck = deckService.getDeckByDeckId(deckId);
-        return DeckCreateMapper.INSTANCE.toDTO(deck, false);
+        return DeckCreateMapper.INSTANCE.toDTO(deck);
     }
 
     @PostMapping(value = "/generate", consumes = "multipart/form-data")
@@ -87,21 +88,19 @@ public class DeckController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/share/{deckId}")
-    public ResponseEntity<String> shareDeck(@PathVariable Long deckId) {
-        String shareToken = deckService.createShareLink(deckId);
-        return ResponseEntity.ok(shareToken);
+    @PostMapping("/addUserDeck/{deckId}")
+    public void addUserDeck(@PathVariable Long deckId) {
+        deckService.addUserDeck(deckId);
     }
 
-    @GetMapping("/shared/{shareToken}")
-    public ResponseEntity<DeckResponseDTO> getSharedDeck(@PathVariable String shareToken) {
-        Deck deck = deckService.getDeckByShareToken(shareToken);
-        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, true));
+    @PostMapping("/generateShareToken/{deckId}")
+    public ShareDeckResponseDTO generateShareToken(@PathVariable Long deckId) {
+        return deckService.generateShareToken(deckId);
     }
 
-    @PostMapping("/copy/{shareToken}")
-    public ResponseEntity<DeckResponseDTO> copySharedDeck(@PathVariable String shareToken) {
-        Deck deck = deckService.copySharedDeck(shareToken);
-        return ResponseEntity.ok(DeckCreateMapper.INSTANCE.toDTO(deck, false));
+    @GetMapping("/getByShareToken/{shareToken}")
+    public DeckResponseDTO getByShareToken(@PathVariable String shareToken) {
+        Deck deck = deckService.getByShareToken(shareToken);
+        return DeckCreateMapper.INSTANCE.toDTO(deck);
     }
 }
