@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
@@ -153,7 +153,13 @@ async function sendFlashcardReviews() {
             </View>
         </View>
 
-        {flashCardList.length > 0 && (
+        {flashCardList.length == 0? 
+            <View style={styles.modalContainer}>
+                <ActivityIndicator size={"large"} style={styles.indicator} />
+    
+            </View>
+             
+            : (
                 <>
                     <View style={styles.scoreTable}>
                         <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
@@ -325,5 +331,19 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
     },
+    modalContainer: {
+        width: 250,
+        height: 644,
+        padding: 20,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        transparent: true,
+      },
+    indicator: {
+        transform: [{ scale: 1.8 }],
+        margin: 20,
+        color: "#ffffff",
+      },
       
 });
