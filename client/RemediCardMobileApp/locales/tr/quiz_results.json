@@ -1,3 +1,8 @@
 {
-    "time_spent": "Geçen süre"
+  "time_spent": "Geçen süre",
+  "title": "Test Sonuçları",
+  "correct": "Doğru",
+  "incorrect": "Yanlış",
+  "retry": "Tekrar Çöz",
+  "score": "Skor"
 }

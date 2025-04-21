@@ -1,3 +1,8 @@
 {
-  "time_spent": "Time spent"
+  "time_spent": "Time spent",
+  "title": "Quiz Results",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
+  "retry": "Retry",
+  "score": "Score"
 }
