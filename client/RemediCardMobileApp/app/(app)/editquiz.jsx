@@ -25,7 +25,6 @@ export default function editQuiz() {
             getQuizByQuizId(quizId)
                 .then((res) => {
                     setQuiz(res?.data);
-                    // console.log(res.data)
                 })
                 .catch((error) => {
                     console.error(error);
