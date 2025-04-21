@@ -196,7 +196,7 @@ export default function Quizzes() {
               onPress={() => handleQuizPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
                 {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
                     {t("last_accessed")}{" "}
