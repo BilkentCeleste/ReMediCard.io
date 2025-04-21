@@ -18,6 +18,6 @@ public class QuestionResponseDTO {
     private Long id;
     private String difficulty;
     private String description;
-    private String answer;
+    private Integer correctAnswerIndex;
     private List<String> options;
 }

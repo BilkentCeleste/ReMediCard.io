@@ -5,13 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 import { getQuizByQuizId } from "@/apiHelper/backendHelper";
-
 
 export default function QuizQuestion(props: any) {
   const { t } = useTranslation("quiz_question");
@@ -21,13 +21,15 @@ export default function QuizQuestion(props: any) {
   const [quizData, setQuizData] = useState<any>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
-  const [timeRemaining] = useState("09:27");
+  const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes in seconds
+  const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
     if (quizId) {
       getQuizByQuizId(quizId)
         .then((res) => {
           setQuizData(res?.data);
+          setSelectedAnswers(new Array(res?.data?.questions?.length || 0).fill(-1));
         })
         .catch((error) => {
           console.error("Error fetching quiz data:", error);
@@ -35,18 +37,23 @@ export default function QuizQuestion(props: any) {
     }
   }, [quizId]);
 
-  if (!quizData || !quizData.questions) {
-    return (
-        <View style={styles.container}>
-          <Text style={{ color: "#fff", fontSize: 18 }}>{t("loading_quiz")}</Text>
-        </View>
-    );
-  }
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (timerActive && timeRemaining > 0) {
+      timer = setInterval(() => {
+        setTimeRemaining((prev) => prev - 1);
+      }, 1000);
+    } else if (timeRemaining === 0) {
+      handleQuizCompletion();
+    }
+    return () => clearInterval(timer);
+  }, [timeRemaining, timerActive]);
 
-  const quizQuestions = quizData?.questions;
-  const totalQuestions = quizQuestions?.length || 0;
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-  const currentAnswerIndex = selectedAnswers[currentQuestionIndex];
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
 
   const handleAnswerSelect = (index: number) => {
     const updatedSelectedAnswers = [...selectedAnswers];
@@ -64,24 +71,55 @@ export default function QuizQuestion(props: any) {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
-      console.log(
-        "Reached the end of the quiz. You could submit answers here."
-      );
+      handleQuizCompletion();
     }
   };
+
+  const handleQuizCompletion = () => {
+    setTimerActive(false);
+    let correctAnswers = 0;
+    quizData.questions.forEach((question: any, index: number) => {
+      if (selectedAnswers[index] === question.correctAnswerIndex) {
+        correctAnswers++;
+      }
+    });
+
+    const score = Math.round((correctAnswers / totalQuestions) * 100);
+    router.push({
+      pathname: "/(app)/quizresults",
+      params: {
+        quizId: quizId,
+        score: score,
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        timeSpent: 600 - timeRemaining
+      }
+    });
+  };
+
+  if (!quizData || !quizData.questions) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: "#fff", fontSize: 18 }}>{t("loading_quiz")}</Text>
+      </View>
+    );
+  }
+
+  const quizQuestions = quizData?.questions;
+  const totalQuestions = quizQuestions?.length || 0;
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const currentAnswerIndex = selectedAnswers[currentQuestionIndex];
 
   return (
     <View style={styles.container}>
       {/* Header row */}
       <View style={styles.headerRow}>
-        {/* Back arrow */}
         <TouchableOpacity onPress={() => router.back()}>
           <GoBackIcon />
         </TouchableOpacity>
 
         <Text style={styles.quizTitle}>{quizData?.name || t("quiz")}</Text>
 
-        {/* Space or an icon */}
         <View style={{ width: 24, height: 24 }} />
       </View>
 
@@ -89,7 +127,7 @@ export default function QuizQuestion(props: any) {
 
       {/* Timer and question count */}
       <View style={styles.infoRow}>
-        <Text style={styles.infoText}>{timeRemaining}</Text>
+        <Text style={styles.infoText}>{formatTime(timeRemaining)}</Text>
         <Text style={styles.infoText}>
           {currentQuestionIndex + 1}/{totalQuestions}
         </Text>
@@ -118,7 +156,7 @@ export default function QuizQuestion(props: any) {
             <Text style={styles.answerLabel}>
               {String.fromCharCode(65 + index)}
             </Text>
-            <Text style={styles.answerText}>{answer || t("answer") + index }</Text>
+            <Text style={styles.answerText}>{answer || t("answer") + index}</Text>
           </TouchableOpacity>
         ))}
       </View>

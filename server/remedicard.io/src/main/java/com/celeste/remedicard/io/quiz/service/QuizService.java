@@ -28,7 +28,6 @@ import java.util.Set;
 public class QuizService {
 
     private final QuizRepository quizRepository;
-    private final QuestionService questionService;
     private final CurrentUserService currentUserService;
     private final UserService userService;
     private final SearchService searchService;
@@ -44,15 +43,12 @@ public class QuizService {
 
     public Set<Quiz> getByCurrentUserId() {
         Long currentUserId = currentUserService.getCurrentUser().getId();
-
         return quizRepository.findByUserId(currentUserId);
     }
 
     public Quiz create(Quiz quiz) {
         User user = currentUserService.getCurrentUser();
-
         quiz.addUser(user);
-
         quizRepository.save(quiz);
         searchService.saveSearchableQuiz(quiz);
         return quiz;
@@ -61,9 +57,7 @@ public class QuizService {
     @Transactional
     public void delete(Long quizId) {
         Quiz quiz = getById(quizId);
-
         quiz.removeUser();
-
         searchService.deleteSearchableQuiz(quizId);
         quizRepository.deleteById(quizId);
     }
@@ -77,27 +71,6 @@ public class QuizService {
 
         quizRepository.save(newQuiz);
     }
-
-    public void addQuestion(Long questionId, Long quizId) {
-        Quiz quiz = getById(quizId);
-        Question question = questionService.getById(questionId);
-
-        quiz.addQuestion(question);
-
-        quizRepository.save(quiz);
-        searchService.addSearchableQuestion(quizId, question);
-    }
-
-    public void removeQuestion(Long questionId, Long quizId) {
-        Quiz quiz = getById(quizId);
-        Question question = questionService.getById(questionId);
-
-        quiz.removeQuestion(question);
-
-        quizRepository.save(quiz);
-        searchService.removeSearchableQuestion(quizId, question);
-    }
-
 
     @Transactional
     public void createQuiz(QuizCreationTask quizCreationTask) {
@@ -119,7 +92,7 @@ public class QuizService {
                     .quiz(quiz)
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
-                    .answer(questionCreationTask.getAnswer().toUpperCase())
+                    .correctAnswerIndex(questionCreationTask.getCorrectAnswerIndex())
                     .build());
         }
 
@@ -145,10 +118,4 @@ public class QuizService {
         return quizRepository.findByShareToken(shareToken)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found with share token: " + shareToken));
     }
-
-//    public void update(Quiz quiz, Long quizId) {
-//        Quiz quizToUpdate = quizRepository.findById(quizId).orElseThrow();
-//        BeanUtils.copyProperties(quizId, quizToUpdate, "id");
-//        quizRepository.save(quizToUpdate);
-//    }
 }

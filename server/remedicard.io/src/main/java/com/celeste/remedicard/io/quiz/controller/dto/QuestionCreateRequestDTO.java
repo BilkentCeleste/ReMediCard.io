@@ -17,7 +17,7 @@ public class QuestionCreateRequestDTO {
 
     private String difficulty;
     private String description;
-    private String answer;
+    private Integer correctAnswerIndex;
     private List<String> options;
     private Long quizId;
 }

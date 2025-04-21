@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
@@ -27,18 +27,22 @@ export default function UpdateFlashcard() {
         return [...parsedOptions, ...Array(5 - parsedOptions.length).fill('')].slice(0, 5);
     });
 
-    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
+    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(isNewQuestion ? null : parsedQuestion?.correctAnswerIndex);
 
     const handleBack = () => {
         router.push("/(app)/editquiz?quizId=" + quizId);
     };
 
     const handleSaveEdit = () => {
-        console.log("save edit");
+        if (correctAnswerIndex === null) {
+            Alert.alert(t("error"), t("select_correct_answer"));
+            return;
+        }
 
         const data = {
             description: description,
             options: options,
+            correctAnswerIndex: correctAnswerIndex,
             quizId: quizId
         }
 
@@ -53,9 +57,15 @@ export default function UpdateFlashcard() {
     }
 
     const handleSaveCreate = () => {
+        if (correctAnswerIndex === null) {
+            Alert.alert(t("error"), t("select_correct_answer"));
+            return;
+        }
+
         const data = {
             description: description,
             options: options,
+            correctAnswerIndex: correctAnswerIndex,
             quizId: quizId
         }
 
@@ -103,13 +113,24 @@ export default function UpdateFlashcard() {
                 textAlignVertical='top'
             />
             
+            <Text style={styles.correctAnswerLabel}>{t("select_correct_answer")}</Text>
+            
             {options?.map((opt, index) => (
                 <View key={index} style={styles.answerRow}>
                     <TouchableOpacity
-                        style={[styles.answerSelector, correctAnswerIndex === index && styles.selectedAnswer]}
+                        style={[
+                            styles.answerSelector,
+                            correctAnswerIndex === index && styles.selectedAnswer,
+                            correctAnswerIndex === index && styles.correctAnswer
+                        ]}
                         onPress={() => selectCorrectAnswer(index)}
                     >
-                        <Text style={styles.answerLabel}>{String.fromCharCode(65 + index)}</Text>
+                        <Text style={[
+                            styles.answerLabel,
+                            correctAnswerIndex === index && styles.selectedAnswerLabel
+                        ]}>
+                            {String.fromCharCode(65 + index)}
+                        </Text>
                     </TouchableOpacity>
                     <TextInput
                         style={styles.aInput}
@@ -166,9 +187,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 10,
+        borderWidth: 2,
+        borderColor: '#ddd',
     },
     selectedAnswer: {
-        backgroundColor: 'lightgreen',
+        borderColor: '#4CAF50',
     },
     answerLabel: {
         fontSize: 16,
@@ -187,7 +210,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     correctAnswer: {
-        backgroundColor: 'lightgreen',
+        backgroundColor: '#4CAF50',
     },
     menuComponent: {
         width: "75%",
@@ -252,5 +275,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
-
+    correctAnswerLabel: {
+        color: '#fff',
+        fontSize: 16,
+        marginBottom: 10,
+        marginTop: 20,
+        width: '75%',
+        textAlign: 'left',
+    },
+    selectedAnswerLabel: {
+        color: '#fff',
+    },
 });

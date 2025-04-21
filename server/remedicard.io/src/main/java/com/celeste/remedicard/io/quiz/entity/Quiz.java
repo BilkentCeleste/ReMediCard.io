@@ -30,6 +30,9 @@ public class Quiz extends AuditableEntity {
     @Column
     private String shareToken;
 
+    @Column
+    private Integer questionCount = 0;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = false)
     private Set<Question> questions = new HashSet<>();
 
@@ -38,7 +41,7 @@ public class Quiz extends AuditableEntity {
     private User user;
 
     public Quiz(Quiz quiz) {
-        BeanUtils.copyProperties(quiz, this, "id", "user", "questions");
+        BeanUtils.copyProperties(quiz, this, "id", "user", "questions", "questionCount");
         Set<Question> originalQuestions = quiz.getQuestions();
         for (Question question : originalQuestions) {
             this.addQuestion(new Question(question));
@@ -48,11 +51,13 @@ public class Quiz extends AuditableEntity {
     public void addQuestion(Question question) {
         this.questions.add(question);
         question.setQuiz(this);
+        this.questionCount++;
     }
 
     public void removeQuestion(Question question) {
         this.questions.remove(question);
         question.setQuiz(null);
+        this.questionCount--;
     }
 
     public void addUser(User user) {
