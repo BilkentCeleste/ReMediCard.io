@@ -18,8 +18,9 @@ export default function Card( props: any ) {
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);
+    const [maybeAnswers, setMaybeAnswers] = useState(0);
     const [flashCardList, setFlashCardList] = useState([]);
-    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; correct: boolean; lastReviewed: timestamp }[]>([]);
+    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; result: string; lastReviewed: timestamp }[]>([]);
 
     async function getFlashcards(deckId) {
         try {
@@ -84,7 +85,7 @@ async function sendFlashcardReviews() {
                 ...prevList,
                 {
                     id: flashCardList[currentCard].id,
-                    correct: true,
+                    result: "CORRECT",
                     lastReviewed: new Date().toISOString().slice(0, -1),
                 },
             ];
@@ -106,7 +107,7 @@ async function sendFlashcardReviews() {
             ...flashcardReviewList,
             {
                 id: flashCardList[currentCard].id,
-                correct: false,
+                result: "INCORRECT",
                 lastReviewed: new Date().toISOString().slice(0, -1),
             },
         ]);
@@ -119,7 +120,26 @@ async function sendFlashcardReviews() {
     };
 
     const handleMaybeAnswer = () => {
+        setMaybeAnswers(maybeAnswers + 1);
+        setFlashcardReviewList((prevList) => {
+            const updatedReviewList = [
+                ...prevList,
+                {
+                    id: flashCardList[currentCard].id,
+                    result: "PARTIALLY_CORRECT",
+                    lastReviewed: new Date().toISOString().slice(0, -1),
+                },
+            ];
+            return updatedReviewList;
+        }
+        );
 
+        if (currentCard < flashCardList.length - 1) {
+            setCurrentCard(currentCard + 1);
+        }
+        else {
+            setCurrentCard(0);
+        }
     };
 
     const handleEndSession = () => {
@@ -173,7 +193,7 @@ async function sendFlashcardReviews() {
                     {/* Uncertain */}
                     <View style={styles.scoreItem}>
                         <Text style={styles.uncertainIcon}>?</Text>
-                        <Text style={styles.scoreText}>5</Text>
+                        <Text style={styles.scoreText}>{maybeAnswers}</Text>
                     </View>
 
                     {/* False */}
