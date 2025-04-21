@@ -43,8 +43,7 @@ export default function Quizzes() {
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [manualCreateModalVisible, setManualCreateModalVisible] =
-    useState(false);
+  const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
   const [newQuizTitle, setNewQuizTitle] = useState("");
   const router = useRouter();
   const [updated, setUpdated] = useState(false);

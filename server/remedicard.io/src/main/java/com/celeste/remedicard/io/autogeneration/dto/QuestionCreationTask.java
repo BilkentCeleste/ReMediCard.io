@@ -9,6 +9,6 @@ public class QuestionCreationTask {
 
     private String difficulty;
     private String description;
-    private Integer correctAnswerIndex;
+    private String answer;
     private List<String> options;
 }

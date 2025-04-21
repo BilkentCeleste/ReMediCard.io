@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { GoBackIcon } from '@/constants/icons';
+import {useRouter, useLocalSearchParams, Link} from 'expo-router';
+import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
 import { getQuizByShareToken, addUserQuiz } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
 
@@ -63,11 +63,16 @@ export default function SharedQuiz() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <GoBackIcon />
-                </TouchableOpacity>
-                <Text style={styles.title}>{quiz?.name}</Text>
+            <View style={styles.menuComponent}>
+                <View style={[styles.menuIcon, styles.iconLayout]}>
+                    <Link href="/(app)/quizzes"><GoBackIcon  width={100} height={100} /></Link>
+                </View>
+
+                <Text style={styles.menuText}>{quiz?.name}</Text>
+
+                <View style={styles.separatorContainer}>
+                    <View style={styles.separatorLine} />
+                </View>
             </View>
 
             <View style={styles.questionsContainer}>
@@ -97,6 +102,18 @@ export default function SharedQuiz() {
                     <Text style={styles.buttonText}>{t("start_quiz")}</Text>
                 </TouchableOpacity>
             </View>
+
+            <View style={styles.navbarRow}>
+                <TouchableOpacity>
+                    <Link href="/(app)/home"><HomeIcon /></Link>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Link href="/(app)/profile"><ProfileIcon /></Link>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <SettingsIcon />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -111,6 +128,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+    },
+    navbarRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        width: '100%',
+        position: 'absolute',
+        bottom: 50,
+        backgroundColor: '#53789D',
     },
     title: {
         fontSize: 24,
@@ -142,6 +167,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 20,
+        marginBottom: 100,
     },
     button: {
         backgroundColor: '#fff',
@@ -158,5 +184,45 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         textAlign: 'center',
+    },
+    menuComponent: {
+        width: "75%",
+        height: 20,
+        padding: 10,
+        gap: 10,
+        alignItems: "center",
+        marginVertical: 40,
+    },
+    menuText: {
+        fontSize: 20,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
+        zIndex: 1,
+        top: 5,
+        position: "absolute",
+    },
+    iconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute"
+    },
+    menuIcon: {
+        right: "95%",
+        zIndex: 3,
+        top: 5
+    },
+    separatorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "100%",
+        marginVertical: 30,
+        justifyContent: 'center',
+    },
+    separatorLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#fff',
     },
 }); 

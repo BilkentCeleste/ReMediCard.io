@@ -48,7 +48,6 @@ export default function UpdateFlashcard() {
 
         editQuestion(parsedQuestion?.id, data)
             .then((response) => {
-                console.log('Question updated successfully');
                 router.push("/(app)/editquiz?quizId=" + quizId);
             })
             .catch((error) => {
@@ -71,7 +70,6 @@ export default function UpdateFlashcard() {
 
         createQuestion(data)
             .then((response) => {
-                console.log('Question created successfully');
                 router.push("/(app)/editquiz?quizId=" + quizId);
             })
             .catch((error) => {
