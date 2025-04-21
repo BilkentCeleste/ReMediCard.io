@@ -37,13 +37,18 @@ export default function Home() {
       generalSearch(debouncedSearchText)
         .then((res) => {
           setSearchResult(res.data);
-          console.log("RESULT", res.data.quizzes, res.data.decks);
         })
         .catch((e) => console.log(e));
     } else {
       setSearchResult(null);
     }
   }, [debouncedSearchText]);
+
+  const cleanSearch = () => {
+    setSearchText("");
+    setDebouncedSearchText("");
+    setSearchResult(null);
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -73,6 +78,16 @@ export default function Home() {
     router.push("/(app)/editdecklist");
   };
 
+  const handleQuizResultSelection = (id) => {
+    cleanSearch();
+    router.push(`/(app)/quizzes?quiz_selected=${id}`);
+  };
+
+  const handleDeckResultSelection = (id) => {
+    cleanSearch();
+    router.push(`/(app)/decks?deck_selected=${id}`);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>ReMediCard.io</Text>
@@ -99,13 +114,15 @@ export default function Home() {
         <>
           {searchResult && searchResult.quizzes.length > 0 && (
             <View style={styles.resultContainer}>
-              <Text style={styles.resultTitle}>Quizzes</Text>
+              <Text style={styles.resultTitle}>{t("quizzes")}</Text>
               <FlatList
                 data={searchResult.quizzes}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
                   return (
-                    <TouchableOpacity onPress={() => console.log(item.id)}>
+                    <TouchableOpacity
+                      onPress={() => handleQuizResultSelection(item.id)}
+                    >
                       <View style={styles.resultItem}>
                         <Text style={styles.resultItemText}>{item.name}</Text>
                         <Text style={styles.resultItemClickText}>
@@ -122,13 +139,15 @@ export default function Home() {
 
           {searchResult && searchResult.decks.length > 0 && (
             <View style={styles.resultContainer}>
-              <Text style={styles.resultTitle}>Decks</Text>
+              <Text style={styles.resultTitle}>{t("decks")}</Text>
               <FlatList
                 data={searchResult.decks}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
                   return (
-                    <TouchableOpacity onPress={() => console.log(item.id)}>
+                    <TouchableOpacity
+                      onPress={() => handleDeckResultSelection(item.id)}
+                    >
                       <View style={styles.resultItem}>
                         <Text style={styles.resultItemText}>{item.name}</Text>
                         <Text style={styles.resultItemClickText}>
@@ -203,10 +222,13 @@ export default function Home() {
       )}
 
       <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
+        <TouchableOpacity
+          onPress={() => {
+            cleanSearch();
+            router.push("/(app)/home");
+          }}
+        >
+          <HomeIcon />
         </TouchableOpacity>
         <TouchableOpacity>
           <Link href="/(app)/profile">
@@ -257,11 +279,12 @@ const styles = StyleSheet.create({
   },
   searchText: {
     left: "25%",
+    width: "100%",
     fontSize: 15,
     lineHeight: 22,
     fontFamily: "Inter-Regular",
     color: "#111",
-    textAlign: "center",
+    textAlign: "left",
     zIndex: 0,
   },
   searchPosition: {

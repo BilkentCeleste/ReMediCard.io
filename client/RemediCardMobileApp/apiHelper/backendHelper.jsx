@@ -162,6 +162,11 @@ export const addUserQuiz = async (id) => {
   return await postFetcher(url.ADD_USER_QUIZ_PATH(id));
 };
 
+// quiz statistics
+export const createQuizStats = async (data) => {
+  return await postFetcher(url.CREATE_QUIZ_STATS_PATH(), data);
+};
+
 // question
 export const removeQuestion = async (id, data) => {
   return await deleteFetcher(url.REMOVE_QUESTION_PATH(id), data);

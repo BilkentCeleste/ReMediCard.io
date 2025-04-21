@@ -17,7 +17,7 @@ import {
   useNavigation,
 } from "expo-router";
 import {
-  ChevronRightIcon,
+  PlusIcon,
   GoBackIcon,
   HomeIcon,
   ProfileIcon,
@@ -167,11 +167,12 @@ export default function editQuiz() {
       </Modal>
 
       <TouchableOpacity
-        style={styles.createParent}
-        onPress={() => uploadUpdateQuestion()}
-      >
-        <Text style={styles.buttonText}>{t("create_question")}</Text>
-      </TouchableOpacity>
+          style={styles.createButton}
+          onPress={() => uploadUpdateQuestion()}
+        >
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createButtonText}>{t("create_question")}</Text>
+        </TouchableOpacity>
 
       <View style={styles.navbarRow}>
         <TouchableOpacity>
@@ -270,20 +271,22 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#fff",
   },
-  createParent: {
+  createButton: {
     borderRadius: 20,
     backgroundColor: "#2916ff",
     width: "75%",
-    height: 40,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    bottom: "14%",
+    gap: 30,
+    height: 50,
+    bottom: "15%",
   },
-  buttonText: {
+  createButtonText: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
     color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    textAlign: "center",
   },
   menuComponent: {
     width: "75%",
@@ -292,7 +295,7 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 40,
+    marginTop: 40,
   },
   textComponent: {
     width: "75%",
@@ -322,7 +325,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    marginVertical: 15,
+    marginTop: 15,
   },
   separatorLine: {
     flex: 1,

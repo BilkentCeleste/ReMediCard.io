@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
-import { getQuizByQuizId } from "@/apiHelper/backendHelper";
+import { getQuizByQuizId, createQuizStats } from "@/apiHelper/backendHelper";
 
 export default function QuizQuestion(props: any) {
   const { t } = useTranslation("quiz_question");
@@ -84,7 +84,18 @@ export default function QuizQuestion(props: any) {
       }
     });
 
-    const score = Math.round((correctAnswers / totalQuestions) * 100);
+    const score = Math.round(correctAnswers == 0 ? 0 : (correctAnswers / totalQuestions) * 100);
+
+    const quizStatBody = {
+      successRate: score,
+      quizId: quizId,
+    }
+    createQuizStats(quizStatBody).then(() => {
+        console.log("Quiz stats created successfully.");
+    }).catch((error) => {
+        console.error("Error creating quiz stats:", error);
+    });
+
     router.push({
       pathname: "/(app)/quizresults",
       params: {
@@ -118,7 +129,9 @@ export default function QuizQuestion(props: any) {
           <GoBackIcon />
         </TouchableOpacity>
 
-        <Text style={styles.quizTitle}>{quizData?.name || t("quiz")}</Text>
+        <View style = {styles.textComponent}>
+        <Text style={styles.quizTitle} numberOfLines={2} ellipsizeMode="tail">{quizData?.name || t("quiz")}</Text>
+        </View>
 
         <View style={{ width: 24, height: 24 }} />
       </View>
@@ -156,7 +169,9 @@ export default function QuizQuestion(props: any) {
             <Text style={styles.answerLabel}>
               {String.fromCharCode(65 + index)}
             </Text>
-            <Text style={styles.answerText}>{answer || t("answer") + index}</Text>
+            <ScrollView style={styles.answerTextScroll} nestedScrollEnabled={true}>
+              <Text style={styles.answerText}>{answer || t("answer") + index}</Text>
+            </ScrollView>
           </TouchableOpacity>
         ))}
       </View>
@@ -217,7 +232,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginBottom: 20,
-    maxHeight: 150, // limit how tall the box can be
+    maxHeight: 130, // limit how tall the box can be
   },
   questionText: {
     fontSize: 14,
@@ -260,5 +275,13 @@ const styles = StyleSheet.create({
     bottom: 30,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  textComponent: {
+    width: "75%",
+    alignItems: "center",
+  },
+  answerTextScroll: {
+    maxHeight: 55, // kutu içi max boyut
+    flex: 1,
   },
 });

@@ -13,7 +13,7 @@
   "search": "Ara",
   "select_sort_option": "Sıralama Seçeneğini Belirleyin",
   "last_accessed": "Son Erişim: ",
-  "cards": "Kart",
+  "questions": "Soru",
   "last": "Son: ",
   "best": "En İyi: ",
   "create_new_quiz": "Yeni Test Oluştur",
@@ -28,5 +28,7 @@
   "edit_quiz": "Testi Düzenle",
   "delete_quiz": "Testi Sil",
   "share_quiz": "Paylaş",
-  "share_failed": "Testi paylaşma başarısız oldu"
+  "share_failed": "Testi paylaşma başarısız oldu",
+  "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?"
+
 }

@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
   SearchIcon,
   HomeIcon,
@@ -24,7 +24,7 @@ import {
   deleteQuiz,
   getQuizzesByCurrentUser,
   createQuiz,
-  generateQuizShareToken
+  generateQuizShareToken,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -33,6 +33,9 @@ const { width } = Dimensions.get("window");
 
 export default function Quizzes() {
   const { t } = useTranslation("quizzes");
+
+  const { quiz_selected } = useLocalSearchParams();
+  const [searchParamUsed, setSearchParamUsed] = useState(false);
 
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
@@ -52,6 +55,13 @@ export default function Quizzes() {
       .then((quizzes: any) => {
         setShowLoading(false);
         setQuizzes(quizzes?.data);
+        if (!searchParamUsed && quiz_selected !== undefined) {
+          setSearchParamUsed(true);
+          const selected = quizzes?.data.find(
+            (quiz) => quiz.id == quiz_selected
+          );
+          handleQuizPress(selected);
+        }
       })
       .catch((error: any) => {
         setShowLoading(false);
@@ -135,21 +145,21 @@ export default function Quizzes() {
     }
 
     const data = {
-      name: newQuizTitle
-    }
+      name: newQuizTitle,
+    };
 
     createQuiz(data)
-        .then((res) => {
-          setManualCreateModalVisible(false);
-          setNewQuizTitle("");
-          setUpdated((updated) => !updated);
-          setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
-          //router.push("/(app)/updatedeck?deckId=" + res.data.id);
-        })
-        .catch((error) => {
-            console.log(error);
-            Alert.alert("Error", "Failed to create quiz");
-        });
+      .then((res) => {
+        setManualCreateModalVisible(false);
+        setNewQuizTitle("");
+        setUpdated((updated) => !updated);
+        setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
+        //router.push("/(app)/updatedeck?deckId=" + res.data.id);
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert("Error", "Failed to create quiz");
+      });
   };
 
   const sortOptions = [
@@ -161,8 +171,8 @@ export default function Quizzes() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -200,24 +210,31 @@ export default function Quizzes() {
               onPress={() => handleQuizPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item?.name}</Text>
-                {
-                  item.lastQuizStat &&
+                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
+                {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("last_accessed")} {formatDate(item?.lastQuizStat?.accessDate)}
+                    {t("last_accessed")}{" "}
+                    {formatDate(item.lastQuizStat.accessDate)}
                   </Text>
-                }
+                )}
                 <Text style={[styles.deckInfoText]}>
-                  {item?.questionCount || 0} {t("cards")}
+                  {item?.questionCount || 0} {t("questions")}
                 </Text>
-                {
-                  item.lastQuizStat &&
+                {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item?.bestQuizStat?.successRate)}%
-                    {" "}
-                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item?.lastQuizStat?.successRate)}%
+                    {t("best")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.bestQuizStat.successRate)}
+                    % {t("last")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.lastQuizStat.successRate)}
+                    %
                   </Text>
-                }
+                )}
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
                 </View>
@@ -287,21 +304,20 @@ export default function Quizzes() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
-              {" "}
-              Are you sure about deleting the selected quiz?{" "}
+            {t("delete_quiz_message")}
             </Text>
 
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={handleDeleteQuiz}
             >
-              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={handlePopUpClose}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>

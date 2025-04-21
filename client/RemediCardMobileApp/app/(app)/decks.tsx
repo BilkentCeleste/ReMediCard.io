@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
   ChevronRightIcon,
   HomeIcon,
@@ -24,7 +24,7 @@ import {
   getDecksByCurrentUser,
   deleteDeck,
   createDeck,
-  generateDeckShareToken
+  generateDeckShareToken,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -33,6 +33,9 @@ const { width } = Dimensions.get("window");
 
 export default function Decks() {
   const { t } = useTranslation("decks");
+
+  const { deck_selected } = useLocalSearchParams();
+  const [searchParamUsed, setSearchParamUsed] = useState(false);
 
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [decks, setDecks] = useState<any[]>([]);
@@ -53,6 +56,11 @@ export default function Decks() {
       .then((decks) => {
         setDecks(decks?.data);
         setShowLoading(false);
+        if (!searchParamUsed && deck_selected !== undefined) {
+          setSearchParamUsed(true);
+          const selected = decks?.data.find((deck) => deck.id == deck_selected);
+          handleDeckPress(selected);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -87,10 +95,10 @@ export default function Decks() {
   const handleEditDeck = () => {
     if (selectedDeck) {
       setModalVisible(false);
-        router.push({
-            pathname: "/(app)/updatedeck",
-            params: { deckId: selectedDeck.id },
-        });
+      router.push({
+        pathname: "/(app)/updatedeck",
+        params: { deckId: selectedDeck.id },
+      });
     } else {
       Alert.alert(t("error"), t("deck_info_missing"));
     }
@@ -117,23 +125,23 @@ export default function Decks() {
     }
 
     const data = {
-        name: newDeckTitle,
-        topic: newDeckTitle,
-    }
+      name: newDeckTitle,
+      topic: newDeckTitle,
+    };
 
     createDeck(data)
-        .then((res) => {
-          setManualCreateModalVisible(false);
-          setNewDeckTitle("");
-            router.push({
-                pathname: "/(app)/updatedeck",
-                params: { deckId: res.data.id },
-            });
-        })
-        .catch((err) => {
-            console.error(err);
-            Alert.alert(t("error"), t("deck_creation_failed"));
+      .then((res) => {
+        setManualCreateModalVisible(false);
+        setNewDeckTitle("");
+        router.push({
+          pathname: "/(app)/updatedeck",
+          params: { deckId: res.data.id },
         });
+      })
+      .catch((err) => {
+        console.error(err);
+        Alert.alert(t("error"), t("deck_creation_failed"));
+      });
   };
 
   const handleShareDeck = () => {
@@ -141,10 +149,10 @@ export default function Decks() {
       generateDeckShareToken(selectedDeck?.id)
         .then((res) => {
           setModalVisible(false);
-            router.push({
-                pathname: "/(app)/shareddeck",
-                params: { shareToken: res?.data?.shareToken },
-            });
+          router.push({
+            pathname: "/(app)/shareddeck",
+            params: { shareToken: res?.data?.shareToken },
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -157,8 +165,8 @@ export default function Decks() {
 
   const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -198,25 +206,32 @@ export default function Decks() {
               onPress={() => handleDeckPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item.name}</Text>
-                {
-                  item.lastDeckStat &&
+                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
+                {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("last_accessed")} {formatDate(item.lastDeckStat.accessDate)}
+                    {t("last_accessed")}{" "}
+                    {formatDate(item.lastDeckStat.accessDate)}
                   </Text>
-                }
+                )}
 
                 <Text style={styles.deckInfoText}>
                   {item.flashcardCount} {t("cards")}
                 </Text>
-                {
-                  item.lastDeckStat &&
+                {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestDeckStat.successRate)}%
-                    {" "}
-                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastDeckStat.successRate)}%
+                    {t("best")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.bestDeckStat.successRate)}
+                    % {t("last")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.lastDeckStat.successRate)}
+                    %
                   </Text>
-                }
+                )}
 
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
@@ -328,7 +343,7 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleShareDeck}
             >
-              <Text style={styles.modalButtonText}>Share Deck</Text>
+              <Text style={styles.modalButtonText}>{t("share_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
@@ -492,6 +507,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
+  textComponent: {
+    width: "75%",
+    alignItems: "center",
+  },
   menuText: {
     left: "10%",
     fontSize: 12,
@@ -525,8 +544,9 @@ const styles = StyleSheet.create({
   },
   deckInfoText: {
     fontSize: 12,
+    lineHeight: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 4, // Spacing below title
   },
   deckTitle: {
     fontSize: 16,
@@ -538,7 +558,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#fff",
     width: "100%", // Adjusted width to fit screen
-    height: 120, // Increased height for sufficient spacing
+    height: 135, // Increased height for sufficient spacing
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
