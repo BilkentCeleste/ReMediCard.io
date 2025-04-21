@@ -77,10 +77,7 @@ export default function editQuiz() {
   };
 
   const handleDeleteQuestion = () => {
-    const data = {
-      questionId: selectedQuestion,
-    };
-    removeQuestion(quizId, data)
+    removeQuestion(selectedQuestion)
       .then((res) => {
         setDeleteQuestionModalVisible(false);
         setQuiz((prevQuiz) => ({

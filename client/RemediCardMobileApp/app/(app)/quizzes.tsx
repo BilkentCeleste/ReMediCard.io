@@ -64,6 +64,16 @@ export default function Quizzes() {
     setModalVisible(true);
   };
 
+  const handleModalClose = () => {
+    setModalVisible(false);
+    setSelectedQuiz(null);
+  };
+
+  const handlePopUpClose = () => {
+    setPopUpVisible(false);
+    setSelectedQuiz(null);
+  };
+
   const handleDeleteQuiz = () => {
     deleteQuiz(selectedQuiz?.id)
         .then((res) => {
@@ -77,8 +87,10 @@ export default function Quizzes() {
 
   const handleStartQuiz = () => {
     if (selectedQuiz) {
+      const quizId = selectedQuiz.id;
       setModalVisible(false);
-      router.push("/(app)/quiz_question?quizId=" + selectedQuiz?.id);
+      setSelectedQuiz(null);
+      router.push(`/(app)/quiz_question?quizId=${quizId}`);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
@@ -86,9 +98,10 @@ export default function Quizzes() {
 
   const handleEditQuiz = () => {
     if (selectedQuiz) {
+      const quizId = selectedQuiz.id;
       setModalVisible(false);
-      console.log(selectedQuiz)
-      router.push("/(app)/editquiz?quizId=" + selectedQuiz?.id);
+      setSelectedQuiz(null);
+      router.push(`/(app)/editquiz?quizId=${quizId}`);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
@@ -99,7 +112,8 @@ export default function Quizzes() {
       generateQuizShareToken(selectedQuiz?.id)
         .then((res) => {
           setModalVisible(false);
-          router.push("/(app)/sharedquiz?shareToken=" + res?.data?.shareToken);
+          setSelectedQuiz(null);
+          router.push(`/(app)/sharedquiz?shareToken=${res?.data?.shareToken}`);
         })
         .catch((error) => {
           console.error(error);
@@ -186,11 +200,11 @@ export default function Quizzes() {
               onPress={() => handleQuizPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={styles.deckTitle}>{item?.name}</Text>
                 {
                   item.lastQuizStat &&
                   <Text style={styles.deckInfoText}>
-                    {t("last_accessed")} {formatDate(item.lastQuizStat.accessDate)}
+                    {t("last_accessed")} {formatDate(item?.lastQuizStat?.accessDate)}
                   </Text>
                 }
                 <Text style={[styles.deckInfoText]}>
@@ -199,9 +213,9 @@ export default function Quizzes() {
                 {
                   item.lastQuizStat &&
                   <Text style={styles.deckInfoText}>
-                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestQuizStat.successRate)}% 
+                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item?.bestQuizStat?.successRate)}%
                     {" "}
-                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastQuizStat.successRate)}%
+                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item?.lastQuizStat?.successRate)}%
                   </Text>
                 }
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
@@ -268,7 +282,7 @@ export default function Quizzes() {
         transparent={true}
         visible={popUpVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={handlePopUpClose}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -285,7 +299,7 @@ export default function Quizzes() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
-              onPress={() => setPopUpVisible(false)}
+              onPress={handlePopUpClose}
             >
               <Text style={styles.modalCancelText}>Cancel</Text>
             </TouchableOpacity>
@@ -297,7 +311,7 @@ export default function Quizzes() {
         transparent={true}
         visible={modalVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={handleModalClose}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -328,7 +342,7 @@ export default function Quizzes() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
-              onPress={() => setModalVisible(false)}
+              onPress={handleModalClose}
             >
               <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
