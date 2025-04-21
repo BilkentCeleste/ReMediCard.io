@@ -15,7 +15,6 @@ export default function Card( props: any ) {
     const {deck} = useLocalSearchParams();
     const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
 
-
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);

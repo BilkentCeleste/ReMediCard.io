@@ -33,7 +33,7 @@ public class Quiz extends AuditableEntity {
     @Column
     private Integer questionCount = 0;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Question> questions = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -33,8 +33,8 @@ public class QuestionService {
         if (quiz != null) {
             quiz.removeQuestion(question);
             searchService.removeSearchableQuestion(quiz.getId(), question);
+            questionRepository.delete(question);
         }
-        questionRepository.deleteById(questionId);
     }
 
     public void update(Question question, Long questionId) {
