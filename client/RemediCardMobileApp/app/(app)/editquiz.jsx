@@ -77,8 +77,8 @@ export default function editQuiz() {
                 <Link href="/(app)/quizzes"><GoBackIcon  width={100} height={100} /></Link>
             </View>
 
-            <View style = {styles.deneme}>
-            <Text style={styles.menuText}>{quiz?.name}</Text>
+            <View style = {styles.textComponent}>
+            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{quiz?.name}</Text>
             </View>
         
             <View style={styles.separatorContainer}>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 40,
     },
-    deneme: {
+    textComponent: {
         width: "75%",
         alignItems: "center",
     },

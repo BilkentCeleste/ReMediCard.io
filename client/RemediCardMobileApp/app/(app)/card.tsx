@@ -144,8 +144,10 @@ async function sendFlashcardReviews() {
                 <Link href="/(app)/decks"><GoBackIcon/></Link>
             </View>
 
-            <Text style={styles.menuText}>{parsedDeck?.topic}</Text>
-        
+            <View style = {styles.textComponent}>
+            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{parsedDeck?.topic}</Text>
+            </View>
+
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
             </View>
@@ -174,8 +176,10 @@ async function sendFlashcardReviews() {
                     <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
                         <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
                         <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
-                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleEndSession}><CrossIcon /></TouchableOpacity>
                     </View>
+
+                    <TouchableOpacity style={styles.endSeesionPosition} onPress={handleEndSession}>
+                        <Text style = {styles.registertext}>End Session</Text></TouchableOpacity>
                 </>
             )}
 
@@ -194,11 +198,16 @@ const styles = StyleSheet.create({
     },
     menuComponent: {
         width: "75%",
-        height: 20,
+        minHeight: 20,
         padding: 10,
         gap: 10,
         alignItems: "center",
-        marginVertical: 30,
+        justifyContent: "center",
+        marginTop: 10,
+    },
+    textComponent: {
+        width: "75%",
+        alignItems: "center",
     },
     menuText: {
         fontSize: 20,
@@ -208,13 +217,13 @@ const styles = StyleSheet.create({
         textAlign: "left",
         zIndex: 1,
         top: 5,
-        position: "absolute",
+        position: "relative",
     },
     separatorContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         width: "100%",
-        marginVertical: 30,
+        marginTop: 10,
     },
     separatorLine: {
         flex: 1,
@@ -299,4 +308,22 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         left: 0
     },
+    endSeesionPosition: {
+        marginTop: 20,
+        backgroundColor: "orange",
+        borderRadius: 50,
+        paddingVertical: 12,
+        paddingHorizontal: 24,  
+        alignItems: "center",   
+        justifyContent: "center", 
+    },
+    registertext: {
+        fontSize: 17,
+        lineHeight: 22,
+        fontFamily: "InriaSans-Regular",
+        color: "#fff",
+        textAlign: "center",
+        fontWeight: "bold",
+    },
+      
 });

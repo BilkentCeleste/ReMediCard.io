@@ -40,7 +40,9 @@ export default function Updatedeck() {
                 <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
             </View>
 
-            <Text style={styles.menuText}>{deck?.name}</Text>
+            <View style = {styles.textComponent}>
+            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{deck?.name}</Text>
+            </View>
         
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
@@ -184,13 +186,18 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
       },
-    menuComponent: {
+      menuComponent: {
         width: "75%",
-        height: 20,
+        minHeight: 20,
         padding: 10,
         gap: 10,
         alignItems: "center",
-        marginVertical: 40,
+        justifyContent: "center",
+        marginTop: 40,
+    },
+    textComponent: {
+        width: "75%",
+        alignItems: "center",
     },
     menuText: {
         fontSize: 20,
@@ -200,7 +207,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         zIndex: 1,
         top: 5,
-        position: "absolute",
+        position: "relative",
     },
     iconLayout: {
         height: 24,
@@ -216,7 +223,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: "100%",
-        marginVertical: 30,
+        marginTop: 15,
     },
     separatorLine: {
         flex: 1,
