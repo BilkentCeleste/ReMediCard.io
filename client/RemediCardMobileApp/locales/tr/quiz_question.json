@@ -2,5 +2,8 @@
     "quiz": "Test",
     "question_text": "Soru metni",
     "answer": "Cevap",
-    "loading_quiz": "Test yükleniyor"
+    "loading_quiz": "Test yükleniyor",
+    "go_back": "Geri dön",
+    "no_quizzes_available": "Test yok",
+    "no_quizzes_available_message": "Test başlatmadan önce sorular eklemelisiniz."
 }
