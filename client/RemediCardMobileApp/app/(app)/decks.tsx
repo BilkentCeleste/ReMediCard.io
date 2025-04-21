@@ -328,7 +328,7 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleShareDeck}
             >
-              <Text style={styles.modalButtonText}>Share Deck</Text>
+              <Text style={styles.modalButtonText}>{t("share_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}

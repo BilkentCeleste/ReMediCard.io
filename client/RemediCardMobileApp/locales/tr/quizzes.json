@@ -28,5 +28,7 @@
   "edit_quiz": "Testi Düzenle",
   "delete_quiz": "Testi Sil",
   "share_quiz": "Paylaş",
-  "share_failed": "Testi paylaşma başarısız oldu"
+  "share_failed": "Testi paylaşma başarısız oldu",
+  "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?"
+
 }

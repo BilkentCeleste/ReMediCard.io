@@ -273,21 +273,20 @@ export default function Quizzes() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
-              {" "}
-              Are you sure about deleting the selected quiz?{" "}
+            {t("delete_quiz_message")}
             </Text>
 
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={handleDeleteQuiz}
             >
-              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setPopUpVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
