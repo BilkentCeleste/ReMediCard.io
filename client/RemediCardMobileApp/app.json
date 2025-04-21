@@ -5,6 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/remedicon.png",
+    "expo-notifications": {
+      "icon": "./assets/icons/remedismallicon.png",
+      "color": "#ffffff"
+    },
     "scheme": "myapp",
     "deepLinking": true,
     "userInterfaceStyle": "automatic",
