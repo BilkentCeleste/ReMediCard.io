@@ -13,7 +13,7 @@
     "search": "Search",
     "select_sort_option": "Select sort option",
     "last_accessed": "Last Accessed: ",
-    "cards": "Cards",
+    "questions": "Questions",
     "last": "Last: ",
     "best": "Best: ",
     "start_quiz": "Start Quiz",
@@ -28,5 +28,6 @@
     "enter_quiz_title": "Enter quiz title",
     "save_and_edit": "Save",
     "share_quiz": "Share quiz",
-    "share_failed": "Failed to share quiz"
+    "share_failed": "Failed to share quiz",
+    "delete_quiz_message": "Are you sure about deleting the selected quiz?"
 }

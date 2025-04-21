@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
@@ -113,33 +113,42 @@ export default function UpdateFlashcard() {
             
             <Text style={styles.correctAnswerLabel}>{t("select_correct_answer")}</Text>
             
-            {options?.map((opt, index) => (
-                <View key={index} style={styles.answerRow}>
-                    <TouchableOpacity
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={20} // adjust this based on your header height
+                >
+                <ScrollView contentContainerStyle={{ paddingBottom: 10 }}>
+                    {options?.map((opt, index) => (
+                    <View key={index} style={styles.answerRow}>
+                        <TouchableOpacity
                         style={[
                             styles.answerSelector,
                             correctAnswerIndex === index && styles.selectedAnswer,
                             correctAnswerIndex === index && styles.correctAnswer
                         ]}
                         onPress={() => selectCorrectAnswer(index)}
-                    >
+                        >
                         <Text style={[
                             styles.answerLabel,
                             correctAnswerIndex === index && styles.selectedAnswerLabel
                         ]}>
                             {String.fromCharCode(65 + index)}
                         </Text>
-                    </TouchableOpacity>
-                    <TextInput
+                        </TouchableOpacity>
+
+                        <TextInput
                         style={styles.aInput}
                         multiline={true}
                         value={opt}
                         onChangeText={(text) => handleAnswerChange(text, index)}
                         placeholder={t("answer") + (index + 1)}
                         placeholderTextColor='rgba(0, 0, 0, 0.5)'
-                    />
-                </View>
-            ))}
+                        />
+                    </View>
+                    ))}
+                </ScrollView>
+                </KeyboardAvoidingView>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => router.back()}>
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 10,
+        marginHorizontal: 10,
         borderWidth: 2,
         borderColor: '#ddd',
     },
@@ -196,7 +205,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     aInput: {
-        width: '85%',
+        width: '100%',
         height: 50,
         borderWidth: 1,
         borderColor: '#ddd',
@@ -254,7 +263,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '75%',
-        marginTop: 20,
+        marginTop: 720,
+        position: "absolute"
     },
     button: {
         flex: 0.48,
@@ -277,7 +287,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         marginBottom: 10,
-        marginTop: 20,
+        marginTop: 10,
         width: '75%',
         textAlign: 'left',
     },

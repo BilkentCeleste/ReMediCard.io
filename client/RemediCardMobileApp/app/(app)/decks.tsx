@@ -206,7 +206,7 @@ export default function Decks() {
               onPress={() => handleDeckPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
                 {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
                     {t("last_accessed")}{" "}
@@ -343,7 +343,7 @@ export default function Decks() {
               style={styles.modalButton}
               onPress={handleShareDeck}
             >
-              <Text style={styles.modalButtonText}>Share Deck</Text>
+              <Text style={styles.modalButtonText}>{t("share_deck")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
@@ -507,6 +507,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
+  textComponent: {
+    width: "75%",
+    alignItems: "center",
+  },
   menuText: {
     left: "10%",
     fontSize: 12,
@@ -540,8 +544,9 @@ const styles = StyleSheet.create({
   },
   deckInfoText: {
     fontSize: 12,
+    lineHeight: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 4, // Spacing below title
   },
   deckTitle: {
     fontSize: 16,
@@ -553,7 +558,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#fff",
     width: "100%", // Adjusted width to fit screen
-    height: 120, // Increased height for sufficient spacing
+    height: 135, // Increased height for sufficient spacing
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",

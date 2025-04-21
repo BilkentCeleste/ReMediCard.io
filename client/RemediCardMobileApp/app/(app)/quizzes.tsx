@@ -196,7 +196,7 @@ export default function Quizzes() {
               onPress={() => handleQuizPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle}>{item.name}</Text>
+                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
                 {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
                     {t("last_accessed")}{" "}
@@ -204,7 +204,7 @@ export default function Quizzes() {
                   </Text>
                 )}
                 <Text style={[styles.deckInfoText]}>
-                  {item?.questionCount || 0} {t("cards")}
+                  {item?.questionCount || 0} {t("questions")}
                 </Text>
                 {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
@@ -290,21 +290,20 @@ export default function Quizzes() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
-              {" "}
-              Are you sure about deleting the selected quiz?{" "}
+            {t("delete_quiz_message")}
             </Text>
 
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={handleDeleteQuiz}
             >
-              <Text style={[styles.modalButtonText]}>Delete Quiz</Text>
+              <Text style={[styles.modalButtonText]}>{t("delete_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setPopUpVisible(false)}
             >
-              <Text style={styles.modalCancelText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
