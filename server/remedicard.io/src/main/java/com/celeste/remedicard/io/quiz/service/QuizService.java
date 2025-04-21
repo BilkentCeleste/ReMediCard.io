@@ -72,6 +72,17 @@ public class QuizService {
         quizRepository.save(newQuiz);
     }
 
+    public Integer handleQuestionAnswerIndexing (String answer) {
+        return switch (answer) {
+            case "A" -> 0;
+            case "B" -> 1;
+            case "C" -> 2;
+            case "D" -> 3;
+            case "E" -> 4;
+            default -> throw new IllegalArgumentException("Invalid answer option: " + answer);
+        };
+    }
+
     @Transactional
     public void createQuiz(QuizCreationTask quizCreationTask) {
         User user = userService.getUserById(quizCreationTask.getUserId());
@@ -92,7 +103,7 @@ public class QuizService {
                     .quiz(quiz)
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
-                    .correctAnswerIndex(questionCreationTask.getCorrectAnswerIndex())
+                    .correctAnswerIndex(handleQuestionAnswerIndexing(questionCreationTask.getAnswer()))
                     .build());
         }
 
