@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
   SearchIcon,
   HomeIcon,
@@ -24,7 +24,7 @@ import {
   deleteQuiz,
   getQuizzesByCurrentUser,
   createQuiz,
-  generateQuizShareToken
+  generateQuizShareToken,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -33,6 +33,9 @@ const { width } = Dimensions.get("window");
 
 export default function Quizzes() {
   const { t } = useTranslation("quizzes");
+
+  const { quiz_selected } = useLocalSearchParams();
+  const [searchParamUsed, setSearchParamUsed] = useState(false);
 
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
@@ -53,7 +56,14 @@ export default function Quizzes() {
       .then((quizzes: any) => {
         setShowLoading(false);
         setQuizzes(quizzes?.data);
-        console.log(quizzes?.data);
+        //console.log(quizzes?.data);
+        if (!searchParamUsed && quiz_selected !== undefined) {
+          setSearchParamUsed(true);
+          const selected = quizzes?.data.find(
+            (quiz) => quiz.id == quiz_selected
+          );
+          handleQuizPress(selected);
+        }
       })
       .catch((error: any) => {
         setShowLoading(false);
@@ -67,14 +77,13 @@ export default function Quizzes() {
   };
 
   const handleDeleteQuiz = () => {
-    deleteQuiz(selectedQuiz?.id)
-        .then((res) => {
-          Alert.alert(t("success"), t("quiz_deleted"));
-          setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
-          setSelectedQuiz(null);
-          setPopUpVisible(false);
-          setModalVisible(false);
-        });
+    deleteQuiz(selectedQuiz?.id).then((res) => {
+      Alert.alert(t("success"), t("quiz_deleted"));
+      setQuizzes(quizzes.filter((q) => q.id !== selectedQuiz?.id));
+      setSelectedQuiz(null);
+      setPopUpVisible(false);
+      setModalVisible(false);
+    });
   };
 
   const handleStartQuiz = () => {
@@ -89,7 +98,7 @@ export default function Quizzes() {
   const handleEditQuiz = () => {
     if (selectedQuiz) {
       setModalVisible(false);
-      console.log(selectedQuiz)
+      console.log(selectedQuiz);
       router.push("/(app)/editquiz?quizId=" + selectedQuiz?.id);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
@@ -123,21 +132,21 @@ export default function Quizzes() {
     }
 
     const data = {
-      name: newQuizTitle
-    }
+      name: newQuizTitle,
+    };
 
     createQuiz(data)
-        .then((res) => {
-          setManualCreateModalVisible(false);
-          setNewQuizTitle("");
-          setUpdated((updated) => !updated);
-          setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
-          //router.push("/(app)/updatedeck?deckId=" + res.data.id);
-        })
-        .catch((error) => {
-            console.log(error);
-            Alert.alert("Error", "Failed to create quiz");
-        });
+      .then((res) => {
+        setManualCreateModalVisible(false);
+        setNewQuizTitle("");
+        setUpdated((updated) => !updated);
+        setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
+        //router.push("/(app)/updatedeck?deckId=" + res.data.id);
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert("Error", "Failed to create quiz");
+      });
   };
 
   const sortOptions = [
@@ -149,8 +158,8 @@ export default function Quizzes() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -189,23 +198,30 @@ export default function Quizzes() {
             >
               <View>
                 <Text style={styles.deckTitle}>{item.name}</Text>
-                {
-                  item.lastQuizStat &&
+                {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("last_accessed")} {formatDate(item.lastQuizStat.accessDate)}
+                    {t("last_accessed")}{" "}
+                    {formatDate(item.lastQuizStat.accessDate)}
                   </Text>
-                }
+                )}
                 <Text style={[styles.deckInfoText]}>
                   {item?.questionCount || 0} {t("cards")}
                 </Text>
-                {
-                  item.lastQuizStat &&
+                {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("best")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.bestQuizStat.successRate)}% 
-                    {" "}
-                    {t("last")}{new Intl.NumberFormat('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 1,}).format(item.lastQuizStat.successRate)}%
+                    {t("best")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.bestQuizStat.successRate)}
+                    % {t("last")}
+                    {new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(item.lastQuizStat.successRate)}
+                    %
                   </Text>
-                }
+                )}
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
                 </View>
