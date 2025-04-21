@@ -204,7 +204,7 @@ export default function Quizzes() {
                   </Text>
                 )}
                 <Text style={[styles.deckInfoText]}>
-                  {item?.questionCount || 0} {t("cards")}
+                  {item?.questionCount || 0} {t("questions")}
                 </Text>
                 {item.lastQuizStat && (
                   <Text style={styles.deckInfoText}>

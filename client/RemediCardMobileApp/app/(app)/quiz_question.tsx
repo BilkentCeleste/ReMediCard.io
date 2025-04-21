@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
-import { getQuizByQuizId } from "@/apiHelper/backendHelper";
+import { getQuizByQuizId, createQuizStats } from "@/apiHelper/backendHelper";
 
 export default function QuizQuestion(props: any) {
   const { t } = useTranslation("quiz_question");
@@ -84,7 +84,18 @@ export default function QuizQuestion(props: any) {
       }
     });
 
-    const score = Math.round((correctAnswers / totalQuestions) * 100);
+    const score = Math.round(correctAnswers == 0 ? 0 : (correctAnswers / totalQuestions) * 100);
+
+    const quizStatBody = {
+      successRate: score,
+      quizId: quizId,
+    }
+    createQuizStats(quizStatBody).then(() => {
+        console.log("Quiz stats created successfully.");
+    }).catch((error) => {
+        console.error("Error creating quiz stats:", error);
+    });
+
     router.push({
       pathname: "/(app)/quizresults",
       params: {

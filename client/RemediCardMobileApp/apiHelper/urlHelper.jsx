@@ -51,6 +51,9 @@ export const ADD_USER_QUIZ_PATH = (id) => `${BASE_URL}/quiz/addUserQuiz/${id}`;
 export const GENERATE_QUIZ_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/quiz/generateShareToken/${id}`;
 export const GET_QUIZ_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/quiz/getByShareToken/${shareToken}`;
 
+// deck statistics
+export const CREATE_QUIZ_STATS_PATH = () => `${BASE_URL}/quizStats/create`;
+
 // question
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/question/delete/${id}`;
 export const CREATE_QUESTION_PATH = () => `${BASE_URL}/question/create`;
