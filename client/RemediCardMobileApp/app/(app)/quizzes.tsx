@@ -53,6 +53,7 @@ export default function Quizzes() {
       .then((quizzes: any) => {
         setShowLoading(false);
         setQuizzes(quizzes?.data);
+        console.log(quizzes?.data);
       })
       .catch((error: any) => {
         setShowLoading(false);
@@ -195,7 +196,7 @@ export default function Quizzes() {
                   </Text>
                 }
                 <Text style={[styles.deckInfoText]}>
-                  {item?.questions?.length || 0} {t("cards")}
+                  {item?.questionCount || 0} {t("cards")}
                 </Text>
                 {
                   item.lastQuizStat &&

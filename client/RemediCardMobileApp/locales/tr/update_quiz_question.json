@@ -4,5 +4,6 @@
     "enter_question": "Soru Girin",
     "answer": "Cevap",
     "cancel": "İptal",
-    "save": "Kaydet"
+    "save": "Kaydet",
+    "select_correct_answer": "Doğru Cevabı Seçin"
 }

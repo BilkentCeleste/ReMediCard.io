@@ -19,5 +19,6 @@ public class QuizResponseDTO {
         private String name;
         private String difficulty;
         private Integer popularity;
+        private Integer questionCount;
         Set<QuestionResponseDTO> questions;
 }

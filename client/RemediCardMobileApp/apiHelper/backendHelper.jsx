@@ -134,10 +134,6 @@ export const getQuizByQuizId = async (id) => {
   return await getFetcher(url.GET_QUIZ_BY_QUIZ_ID_PATH(id));
 };
 
-export const removeQuestion = async (id, data) => {
-  return await postFetcher(url.REMOVE_QUESTION_PATH(id), data);
-};
-
 export const autoGenerateQuiz = async (formData) => {
   return await postFetcher(
     url.AUTO_GENERATE_QUIZ_PATH(),
@@ -148,14 +144,6 @@ export const autoGenerateQuiz = async (formData) => {
 
 export const getUserProfile = async () => {
   return await getFetcher(url.GET_USER_PROFILE());
-};
-
-export const createQuestion = async (data) => {
-  return await postFetcher(url.CREATE_QUESTION_PATH(), data);
-};
-
-export const editQuestion = async (id, data) => {
-  return await putFetcher(url.EDIT_QUESTION_PATH(id), data);
 };
 
 export const generalSearch = async (searchText) => {
@@ -172,4 +160,17 @@ export const getQuizByShareToken = async (shareToken) => {
 
 export const addUserQuiz = async (id) => {
   return await postFetcher(url.ADD_USER_QUIZ_PATH(id));
+};
+
+// question
+export const removeQuestion = async (id, data) => {
+  return await deleteFetcher(url.REMOVE_QUESTION_PATH(id), data);
+};
+
+export const createQuestion = async (data) => {
+  return await postFetcher(url.CREATE_QUESTION_PATH(), data);
+};
+
+export const editQuestion = async (id, data) => {
+  return await putFetcher(url.EDIT_QUESTION_PATH(id), data);
 };
