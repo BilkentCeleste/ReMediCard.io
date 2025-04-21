@@ -43,6 +43,7 @@ export default function Decks() {
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const [manualCreateModalVisible, setManualCreateModalVisible] =
     useState(false);
   const [newDeckTitle, setNewDeckTitle] = useState("");
@@ -66,7 +67,7 @@ export default function Decks() {
         console.log(error);
         setShowLoading(false);
       });
-  }, []);
+  }, [updated]);
 
   const sortOptions = [
     { label: t("sort_by_last_accessed"), value: "last" },
@@ -133,10 +134,8 @@ export default function Decks() {
       .then((res) => {
         setManualCreateModalVisible(false);
         setNewDeckTitle("");
-        router.push({
-          pathname: "/(app)/updatedeck",
-          params: { deckId: res.data.id },
-        });
+        setUpdated((updated) => !updated);
+        setDecks((prevDecks) => [...prevDecks, res.data]);
       })
       .catch((err) => {
         console.error(err);
