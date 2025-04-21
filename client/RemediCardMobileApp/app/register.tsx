@@ -27,6 +27,7 @@ export default function Register() {
   const { t } = useTranslation("register");
 
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +37,10 @@ export default function Register() {
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
   const handleSignUp = async () => {
@@ -67,7 +72,6 @@ export default function Register() {
           style={[styles.usernametext]}
           placeholder={t("username")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
           value={username}
           onChangeText={setUsername}
         ></TextInput>
@@ -90,7 +94,6 @@ export default function Register() {
           style={styles.passwordtext}
           placeholder={t("password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
           secureTextEntry={!passwordVisible}
           value={password}
           onChangeText={setPassword}
@@ -111,17 +114,16 @@ export default function Register() {
           style={styles.passwordtext}
           placeholder={t("confirm_password")}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
-          secureTextEntry={!passwordVisible}
+          secureTextEntry={!confirmPasswordVisible}
           value={passwordCheck}
           onChangeText={setPasswordCheck}
         ></TextInput>
         <TouchableOpacity
           style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
+          onPress={toggleConfirmPasswordVisibility}
         >
           <Text style={styles.toggleText}>
-            {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            {confirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </Text>
         </TouchableOpacity>
       </View>
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   usernametext: {
-    top: 5,
+    top: 15,
     left: 45,
     fontSize: 18,
     lineHeight: 22,
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   passwordtext: {
-    top: 5,
+    top: 15,
     left: 45,
     fontSize: 18,
     lineHeight: 22,
