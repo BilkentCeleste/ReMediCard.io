@@ -496,6 +496,25 @@ export function CrossIcon() {
   )
 }
 
+export function QuestionMarkIcon() {
+  return (
+    <Svg
+      width={70}
+      height={70}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M12 17v-.007M9.137 9C9.52 7.84 10.657 7 12 7c1.657 0 3 1.28 3 2.857 0 2.249-2.427 1.897-2.915 4.143M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        stroke="#fff"
+        strokeWidth={1}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
 export function CheckmarkIcon() {
   return (
     <Svg
@@ -720,6 +739,30 @@ export function FalseIcon({ width = 14 , height = 14}: FalseIconProps) {
       <Path
         d="M11.083 2.917l-8.166 8.166m0-8.166l8.166 8.166"
         stroke="#E30A17"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+interface UncertainIconProps {
+  width?: number;
+  height?: number; 
+}
+
+export function UncertainIcon({ width = 14 , height = 14}: UncertainIconProps) {
+  return (
+    <Svg
+      width={width}
+      height={height}
+      viewBox="0 0 14 14"
+      fill="none"
+    >
+      <Path
+        d="M12 19v-.01M12 16c0-4.5 4-3.5 4-7a4 4 0 00-7.874-1"
+        stroke="#fff"
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"

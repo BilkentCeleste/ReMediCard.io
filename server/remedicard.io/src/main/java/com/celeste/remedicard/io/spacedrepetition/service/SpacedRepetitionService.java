@@ -59,8 +59,12 @@ public class SpacedRepetitionService {
             SpacedRepetition sr = spacedRepetitionRepository
                     .findByUserIdAndFlashcardId(userId, review.getId());
 
-            int success = review.isCorrect() ? 1 : 0;
-
+            // since the library only allows int for success, we act as if 1 review is equal to 2 reviews
+            int success = switch (review.getResult()){
+                case CORRECT -> 2;
+                case PARTIALLY_CORRECT -> 1;
+                case INCORRECT -> 0;
+            };
 
             LocalDateTime lastReviewedTime = sr.getLastReviewed();
             LocalDateTime reviewTime = review.getLastReviewed();    // frontend returns time in UTC
@@ -74,11 +78,7 @@ public class SpacedRepetitionService {
             System.out.println("success: " + success);
 
             EbisuInterface model = EbisuUtils.fromJson(sr.getModel());
-            EbisuInterface updatedModel = Ebisu.updateRecall(model, success, 1, timeDifference);
-
-
-            System.out.println("Model: " + model);
-            System.out.println("Updated model: " + updatedModel);
+            EbisuInterface updatedModel = Ebisu.updateRecall(model, success, 2, timeDifference);    // total is 2 because we act as if 1 review is equal to 2 reviews
 
             sr.setModel(EbisuUtils.toJson((EbisuModel) updatedModel));
             sr.setLastReviewed(reviewTime);

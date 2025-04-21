@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
+import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon, QuestionMarkIcon, UncertainIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 import { getFlashcardsInBatch, updateFlashcardReviews, createDeckStats } from '@/apiHelper/backendHelper';
@@ -18,8 +18,9 @@ export default function Card( props: any ) {
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);
+    const [maybeAnswers, setMaybeAnswers] = useState(0);
     const [flashCardList, setFlashCardList] = useState([]);
-    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; correct: boolean; lastReviewed: timestamp }[]>([]);
+    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; result: string; lastReviewed: timestamp }[]>([]);
 
     async function getFlashcards(deckId) {
         try {
@@ -84,7 +85,7 @@ async function sendFlashcardReviews() {
                 ...prevList,
                 {
                     id: flashCardList[currentCard].id,
-                    correct: true,
+                    result: "CORRECT",
                     lastReviewed: new Date().toISOString().slice(0, -1),
                 },
             ];
@@ -106,10 +107,33 @@ async function sendFlashcardReviews() {
             ...flashcardReviewList,
             {
                 id: flashCardList[currentCard].id,
-                correct: false,
+                result: "INCORRECT",
                 lastReviewed: new Date().toISOString().slice(0, -1),
             },
         ]);
+        if (currentCard < flashCardList.length - 1) {
+            setCurrentCard(currentCard + 1);
+        }
+        else {
+            setCurrentCard(0);
+        }
+    };
+
+    const handleMaybeAnswer = () => {
+        setMaybeAnswers(maybeAnswers + 1);
+        setFlashcardReviewList((prevList) => {
+            const updatedReviewList = [
+                ...prevList,
+                {
+                    id: flashCardList[currentCard].id,
+                    result: "PARTIALLY_CORRECT",
+                    lastReviewed: new Date().toISOString().slice(0, -1),
+                },
+            ];
+            return updatedReviewList;
+        }
+        );
+
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
         }
@@ -161,11 +185,25 @@ async function sendFlashcardReviews() {
             : (
                 <>
                     <View style={styles.scoreTable}>
-                        <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
-                        <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon /></View>
-                        <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
-                        <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon /></View>
-                        <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
+                    <View style={styles.scoreItem}>
+                        <CorrectIcon />
+                        <Text style={styles.scoreText}>{trueAnswers}</Text>
+                    </View>
+
+                    {/* Uncertain */}
+                    <View style={styles.scoreItem}>
+                        <Text style={styles.uncertainIcon}>?</Text>
+                        <Text style={styles.scoreText}>{maybeAnswers}</Text>
+                    </View>
+
+                    {/* False */}
+                    <View style={styles.scoreItem}>
+                        <FalseIcon />
+                        <Text style={styles.scoreText}>{falseAnswers}</Text>
+                    </View>
+
+                    {/* Solved / Total */}
+                    <Text style={styles.scoreText}>{currentCard + 1}/{flashCardList.length}</Text>
                     </View>
 
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -179,8 +217,27 @@ async function sendFlashcardReviews() {
                     </View>
 
                     <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
-                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
-                        <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
+                    
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}>
+                            <CrossIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>False</Text>
+                    </View>
+
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.questionMarkIconPosition} onPress={handleMaybeAnswer}>
+                            <QuestionMarkIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>Uncertain</Text>
+                    </View>
+
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}>
+                            <CheckmarkIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>Correct</Text>
+                    </View>
                     </View>
 
                     <TouchableOpacity style={styles.endSeesionPosition} onPress={handleEndSession}>
@@ -251,42 +308,22 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        gap: 10,
-        marginBottom: 20
+        gap: 30,
+    },
+    scoreItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 6
+    },
+    uncertainIcon:{
+        color: "orange",
+        fontFamily: "Inter-Regular",
+        fontSize: 15,
     },
     scoreText: {
-        textAlign: "center",
         color: "#fff",
         fontFamily: "Inter-Regular",
-        lineHeight: 20,
         fontSize: 15,
-        position: "absolute"
-    },
-    scoreTableIconLayout: {
-        height: 14,
-        width: 14,
-        left: 10,
-        position: "absolute"
-    },
-    text1: {
-        top: "37.7%",
-        right: 10,
-        width: 55,
-        zIndex: 0
-    },
-    text2: {
-        top: "20%",
-        left: "15%"
-    },
-    text3: {
-        top: "70%",
-        left: "15%"
-    },
-    checkIcon: {
-        top: "25%",
-    },
-    crossIcon: {
-        top: "75%",
     },
     interactiveContainer: {
         flexDirection: "row", // Layout the children horizontally
@@ -313,9 +350,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         left: 0
     },
-    endSeesionPosition: {
-        marginTop: 20,
+    questionMarkIconPosition: {
         backgroundColor: "orange",
+        borderRadius: 50,
+        left: 0
+    },
+    endSeesionPosition: {
+        marginTop: 40,
+        backgroundColor: "blue",
         borderRadius: 50,
         paddingVertical: 12,
         paddingHorizontal: 24,  
@@ -344,5 +386,12 @@ const styles = StyleSheet.create({
         margin: 20,
         color: "#ffffff",
       },
-      
+    labelText: {
+        marginTop: 5,
+        fontSize: 12,
+        fontFamily: "InriaSans-Regular",
+        color: "#fff",
+        textAlign: "center",
+        fontWeight: "bold",
+    }
 });

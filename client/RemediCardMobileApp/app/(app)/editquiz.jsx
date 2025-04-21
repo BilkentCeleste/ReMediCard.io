@@ -9,6 +9,7 @@ import {
   FlatList,
   Alert,
   Modal,
+  BackHandler,
 } from "react-native";
 import {
   useRouter,
@@ -25,6 +26,7 @@ import {
 } from "@/constants/icons";
 import { getQuizByQuizId, removeQuestion } from "../../apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function editQuiz() {
   const { t } = useTranslation("edit_quiz");
@@ -54,13 +56,18 @@ export default function editQuiz() {
     }
   }, [quizId]);
 
-  /* const uploadUpdateFlashcard = (flashcard) => {
-        let path = '/updateflashcard?deckId=' + deckId;
-        if (flashcard) {
-            path += '&flashcard=' + encodeURIComponent(JSON.stringify(flashcard));
-        }
-        router.push({ pathname: path });
-    } */
+  useFocusEffect(() => {
+    const onBackPress = () => {
+      router.replace("/(app)/quizzes");
+      return true;
+    };
+  
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  });
 
   const uploadUpdateQuestion = (questionId) => {
     const question = quiz?.questions?.find((q) => q.id === questionId);

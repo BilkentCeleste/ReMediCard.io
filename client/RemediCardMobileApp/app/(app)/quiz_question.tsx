@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   selectedAnswer: {
-    backgroundColor: "#d1d5db", // Light gray for selected
+    backgroundColor: "#abd5ff", // Light gray for selected
   },
   answerLabel: {
     width: 30,
