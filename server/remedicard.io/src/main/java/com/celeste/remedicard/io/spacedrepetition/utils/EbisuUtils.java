@@ -7,7 +7,7 @@ public class EbisuUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final int DEFAULT_ALPHA = 3;
     private static final int DEFAULT_BETA = 3;
-    private static final int DEFAULT_TIME = 15; // in minutes
+    private static final int DEFAULT_TIME = 720; // 12 hours in minutes (half life)
 
     static {
         objectMapper.addMixIn(EbisuModel.class, EbisuModelMixin.class);

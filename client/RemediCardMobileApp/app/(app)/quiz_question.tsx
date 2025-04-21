@@ -29,6 +29,21 @@ export default function QuizQuestion(props: any) {
       getQuizByQuizId(quizId)
         .then((res) => {
           setQuizData(res?.data);
+          if (res?.data?.questions?.length === 0) {
+            Alert.alert(
+                t("no_quizzes_available"),
+                t("no_quizzes_available_message"),
+                [
+                  {
+                    text: t("go_back"),
+                    onPress: () => router.back(),
+                    style: "cancel"
+                  }
+                ],
+                { cancelable: false }
+            );
+          }
+
           setSelectedAnswers(new Array(res?.data?.questions?.length || 0).fill(-1));
         })
         .catch((error) => {
@@ -252,7 +267,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   selectedAnswer: {
-    backgroundColor: "#d1d5db", // Light gray for selected
+    backgroundColor: "#abd5ff", // Light gray for selected
   },
   answerLabel: {
     width: 30,

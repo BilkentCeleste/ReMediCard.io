@@ -2,5 +2,8 @@
     "quiz": "Quiz",
     "question_text": "Question text",
     "answer": "Answer",
-    "loading_quiz": "Loading quiz"
+    "go_back": "Go back",
+    "loading_quiz": "Loading quiz",
+    "no_quizzes_available": "No quizzes available",
+    "no_quizzes_available_message": "You need to add questions to the quiz before you can start it."
 }
