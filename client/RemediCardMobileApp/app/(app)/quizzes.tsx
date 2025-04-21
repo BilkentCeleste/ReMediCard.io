@@ -88,6 +88,7 @@ export default function Quizzes() {
   const handleEditQuiz = () => {
     if (selectedQuiz) {
       setModalVisible(false);
+      console.log(selectedQuiz)
       router.push("/(app)/editquiz?quizId=" + selectedQuiz?.id);
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));

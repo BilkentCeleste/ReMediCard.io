@@ -22,13 +22,14 @@ export default function editQuiz() {
 
     useEffect(() => {
         if (quizId) {
+            console.log("editquiz" + quizId)
             getQuizByQuizId(quizId)
                 .then((res) => {
                     setQuiz(res?.data);
                     // console.log(res.data)
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.error(32,error);
                 });
         }
     }, [quizId]);
@@ -76,7 +77,9 @@ export default function editQuiz() {
                 <Link href="/(app)/quizzes"><GoBackIcon  width={100} height={100} /></Link>
             </View>
 
+            <View style = {styles.deneme}>
             <Text style={styles.menuText}>{quiz?.name}</Text>
+            </View>
         
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
@@ -270,11 +273,16 @@ const styles = StyleSheet.create({
       },
     menuComponent: {
         width: "75%",
-        height: 20,
+        minHeight: 20,
         padding: 10,
         gap: 10,
         alignItems: "center",
+        justifyContent: "center",
         marginVertical: 40,
+    },
+    deneme: {
+        width: "75%",
+        alignItems: "center",
     },
     menuText: {
         fontSize: 20,
@@ -284,7 +292,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         zIndex: 1,
         top: 5,
-        position: "absolute",
+        position: "relative",
     },
     iconLayout: {
         height: 24,
@@ -294,13 +302,13 @@ const styles = StyleSheet.create({
     menuIcon: {
         right: "95%",
         zIndex: 3,
-        top: 5
+        top: 15
     },
     separatorContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         width: "100%",
-        marginVertical: 30,
+        marginVertical: 15,
     },
     separatorLine: {
         flex: 1,
