@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
         bottom: "14%"
     },
     buttonText: {
-        color: "#fff", // White text color for visibility
         fontSize: 16,
         fontWeight: "bold",
     },
@@ -255,6 +254,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 20,
+        marginBottom: 100,
     },
     button: {
         backgroundColor: '#fff',

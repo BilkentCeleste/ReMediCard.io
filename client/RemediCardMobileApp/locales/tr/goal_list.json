@@ -1,10 +1,10 @@
 {
-    "title": "ReMediCard.io",
-    "search": "Ara",
-    "select_sort_option": "Sıralama seçeneğini seçin",
-    "create_goal": "Yeni Hedef Oluştur",
-    "sort_by_longest": "En Uzuna Göre Sırala",
-    "sort_by_shortest": "En Kısa Olarak Sırala",
-    "sort_by_highest": "En Yüksek Hedef %'ye Göre Sırala",
-    "sort_by_lowest": "En Düşük Hedef %'ye Göre Sırala"
+  "title": "ReMediCard.io",
+  "search": "Ara",
+  "select_sort_option": "Sıralama Seçeneğini Belirleyin",
+  "create_goal": "Yeni Hedef Oluştur",
+  "sort_by_longest": "En Uzuna Göre Sırala",
+  "sort_by_shortest": "En Kısa Olarak Sırala",
+  "sort_by_highest": "En Yüksek Hedef %'ye Göre Sırala",
+  "sort_by_lowest": "En Düşük Hedef %'ye Göre Sırala"
 }
