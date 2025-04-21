@@ -118,7 +118,9 @@ export default function QuizQuestion(props: any) {
           <GoBackIcon />
         </TouchableOpacity>
 
-        <Text style={styles.quizTitle}>{quizData?.name || t("quiz")}</Text>
+        <View style = {styles.textComponent}>
+        <Text style={styles.quizTitle} numberOfLines={2} ellipsizeMode="tail">{quizData?.name || t("quiz")}</Text>
+        </View>
 
         <View style={{ width: 24, height: 24 }} />
       </View>
@@ -156,7 +158,9 @@ export default function QuizQuestion(props: any) {
             <Text style={styles.answerLabel}>
               {String.fromCharCode(65 + index)}
             </Text>
-            <Text style={styles.answerText}>{answer || t("answer") + index}</Text>
+            <ScrollView style={styles.answerTextScroll} nestedScrollEnabled={true}>
+              <Text style={styles.answerText}>{answer || t("answer") + index}</Text>
+            </ScrollView>
           </TouchableOpacity>
         ))}
       </View>
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginBottom: 20,
-    maxHeight: 150, // limit how tall the box can be
+    maxHeight: 130, // limit how tall the box can be
   },
   questionText: {
     fontSize: 14,
@@ -260,5 +264,13 @@ const styles = StyleSheet.create({
     bottom: 30,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  textComponent: {
+    width: "75%",
+    alignItems: "center",
+  },
+  answerTextScroll: {
+    maxHeight: 55, // kutu içi max boyut
+    flex: 1,
   },
 });
