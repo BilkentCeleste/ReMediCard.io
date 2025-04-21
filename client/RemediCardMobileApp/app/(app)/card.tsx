@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
+import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon, QuestionMarkIcon, UncertainIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 import { getFlashcardsInBatch, updateFlashcardReviews, createDeckStats } from '@/apiHelper/backendHelper';
@@ -119,6 +119,10 @@ async function sendFlashcardReviews() {
         }
     };
 
+    const handleMaybeAnswer = () => {
+
+    };
+
     const handleEndSession = () => {
         sendFlashcardReviews();
         
@@ -162,11 +166,25 @@ async function sendFlashcardReviews() {
             : (
                 <>
                     <View style={styles.scoreTable}>
-                        <Text style={[styles.text1, styles.scoreText]}>{currentCard + 1}/{flashCardList.length}</Text>
-                        <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon /></View>
-                        <Text style={[styles.text2, styles.scoreText]}>{trueAnswers}</Text>
-                        <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon /></View>
-                        <Text style={[styles.text3, styles.scoreText]}>{falseAnswers}</Text>
+                    <View style={styles.scoreItem}>
+                        <CorrectIcon />
+                        <Text style={styles.scoreText}>{trueAnswers}</Text>
+                    </View>
+
+                    {/* Uncertain */}
+                    <View style={styles.scoreItem}>
+                        <Text style={styles.uncertainIcon}>?</Text>
+                        <Text style={styles.scoreText}>5</Text>
+                    </View>
+
+                    {/* False */}
+                    <View style={styles.scoreItem}>
+                        <FalseIcon />
+                        <Text style={styles.scoreText}>{falseAnswers}</Text>
+                    </View>
+
+                    {/* Solved / Total */}
+                    <Text style={styles.scoreText}>{currentCard + 1}/{flashCardList.length}</Text>
                     </View>
 
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -180,8 +198,27 @@ async function sendFlashcardReviews() {
                     </View>
 
                     <View style={[styles.interactiveContainer, styles.interactiveContainerPosition]}>
-                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}><CrossIcon /></TouchableOpacity>
-                        <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}><CheckmarkIcon /></TouchableOpacity>
+                    
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}>
+                            <CrossIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>False</Text>
+                    </View>
+
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.questionMarkIconPosition} onPress={handleMaybeAnswer}>
+                            <QuestionMarkIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>Uncertain</Text>
+                    </View>
+
+                    <View style={{ alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}>
+                            <CheckmarkIcon />
+                        </TouchableOpacity>
+                        <Text style={styles.labelText}>Correct</Text>
+                    </View>
                     </View>
 
                     <TouchableOpacity style={styles.endSeesionPosition} onPress={handleEndSession}>
@@ -252,42 +289,22 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        gap: 10,
-        marginBottom: 20
+        gap: 30,
+    },
+    scoreItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 6
+    },
+    uncertainIcon:{
+        color: "orange",
+        fontFamily: "Inter-Regular",
+        fontSize: 15,
     },
     scoreText: {
-        textAlign: "center",
         color: "#fff",
         fontFamily: "Inter-Regular",
-        lineHeight: 20,
         fontSize: 15,
-        position: "absolute"
-    },
-    scoreTableIconLayout: {
-        height: 14,
-        width: 14,
-        left: 10,
-        position: "absolute"
-    },
-    text1: {
-        top: "37.7%",
-        right: 10,
-        width: 55,
-        zIndex: 0
-    },
-    text2: {
-        top: "20%",
-        left: "15%"
-    },
-    text3: {
-        top: "70%",
-        left: "15%"
-    },
-    checkIcon: {
-        top: "25%",
-    },
-    crossIcon: {
-        top: "75%",
     },
     interactiveContainer: {
         flexDirection: "row", // Layout the children horizontally
@@ -314,9 +331,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         left: 0
     },
-    endSeesionPosition: {
-        marginTop: 20,
+    questionMarkIconPosition: {
         backgroundColor: "orange",
+        borderRadius: 50,
+        left: 0
+    },
+    endSeesionPosition: {
+        marginTop: 40,
+        backgroundColor: "blue",
         borderRadius: 50,
         paddingVertical: 12,
         paddingHorizontal: 24,  
@@ -345,5 +367,12 @@ const styles = StyleSheet.create({
         margin: 20,
         color: "#ffffff",
       },
-      
+    labelText: {
+        marginTop: 5,
+        fontSize: 12,
+        fontFamily: "InriaSans-Regular",
+        color: "#fff",
+        textAlign: "center",
+        fontWeight: "bold",
+    }
 });
