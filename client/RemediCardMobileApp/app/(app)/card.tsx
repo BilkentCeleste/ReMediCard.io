@@ -163,10 +163,6 @@ async function sendFlashcardReviews() {
         <View style={styles.container}>
 
         <View style={styles.menuComponent}>
-            <View style={[styles.menuIcon, styles.iconLayout]}>
-                <Link href="/(app)/decks"><GoBackIcon/></Link>
-            </View>
-
             <View style = {styles.textComponent}>
             <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{parsedDeck?.topic}</Text>
             </View>

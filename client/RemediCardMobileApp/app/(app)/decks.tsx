@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     position: "absolute",
-    bottom: 50,
+    bottom: "4%",
     backgroundColor: "#53789D",
   },
   navbarContainer: {
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "75%",
     position: "absolute",
-    bottom: 50,
+    bottom: "4%",
     backgroundColor: "#53789D",
     height: 1,
   },
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 30,
     height: 50,
-    bottom: "15%",
+    bottom: "12%",
   },
   createNewDeck: {
     fontSize: 17,
