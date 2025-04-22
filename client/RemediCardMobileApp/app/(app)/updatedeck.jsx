@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
-import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
-import { getDeckByDeckId } from '../../apiHelper/backendHelper';
+import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon, PlusIcon } from '@/constants/icons';
+import { getDeckByDeckId, deleteFlashcard } from '../../apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,10 @@ export default function Updatedeck() {
     const [deck, setDeck] = useState();
     const router = useRouter();
     const { deckId } = useLocalSearchParams();
+    const [DeleteCardModal, setDeleteCardModalVisible] =
+        useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
+    
 
     useEffect(() => {
         if (deckId) {
@@ -32,6 +36,28 @@ export default function Updatedeck() {
         }
         router.push({ pathname: path });
     }
+
+    const handleDeleteCardModal = (id) => {
+        setDeleteCardModalVisible(!DeleteCardModal);
+        setSelectedCard(id);
+      };
+
+    const handleDeleteFlashcard = () => {
+            deleteFlashcard(selectedCard)
+                .then(() => {
+                    setDeleteCardModalVisible(false);
+                    setDeck((prevCards) => ({
+                        ...prevCards,
+                        flashcardSet: prevCards?.flashcardSet?.filter(
+                          (card) => card?.id !== selectedCard
+                        ),
+                      }));
+                      setSelectedCard(null);
+                })
+                .catch((error) => {
+                    console.error('Error deleting flashcard:', error);
+                });
+        }
 
     return (
         <View style={styles.container}>
@@ -57,24 +83,64 @@ export default function Updatedeck() {
                 columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: 10 }}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.flashcardComponent} onPress={() => uploadUpdateFlashcard(item)}>
+                    <View style={styles.flashcardComponent} onPress={() => uploadUpdateFlashcard(item)}>
                         <Flashcard
                             question={item?.frontSide?.text || ''}
                             answer={item?.backSide?.text || ''}
-                            width={120}
+                            width={110}
                             height={80}
                             textSize={8}
                         />
-                        <Text  
-                                style={{ justifyContent: "center", alignItems: "center" }}
-                            >
-                                <Text style={{ fontSize: 10, color: "#111", textAlign: "center" }}>{t("update_flashcard")}</Text>
-                            </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.editButton}
+                            onPress={() => uploadUpdateFlashcard(item)}
+                        >
+                            <Text style={styles.editButtonText}>{t("update_flashcard")}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() => handleDeleteCardModal(item.id)}
+                            //onPress handle delete
+                        >
+                        <Text style={styles.deleteButtonText}>{t("delete")}</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
             />
 
+            <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={DeleteCardModal}
+                    onRequestClose={() => {
+                      setDeleteCardModalVisible(!DeleteCardModal);
+                    }}
+                  >
+                    <View style={styles.modalContainer}>
+                      <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>
+                          {t("delete_card_consent")}
+                        </Text>
+                        <View style={styles.modalButtonContainer}>
+                          <TouchableOpacity
+                            style={styles.editButton}
+                            onPress={() => setDeleteCardModalVisible(false)}
+                          >
+                            <Text style={styles.editButtonText}>{t("cancel")}</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() => handleDeleteFlashcard()}
+                          >
+                            <Text style={styles.deleteButtonText}>{t("delete")}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+
             <TouchableOpacity style={styles.createParent} onPress={() => uploadUpdateFlashcard()}>
+                <PlusIcon></PlusIcon>
                 <Text style={styles.buttonText}>{t("create_flashcard")}</Text>
             </TouchableOpacity>
 
@@ -120,7 +186,7 @@ const styles = StyleSheet.create({
     flashcardComponent: {
         borderRadius: 20,
         backgroundColor: '#fff',
-        width: '49%',
+        width: '48%',
         minHeight: 80,
         flexDirection: 'column',
         justifyContent: 'center',
@@ -175,16 +241,18 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: "#2916ff",
         width: "75%",
-        height: 40,
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center", 
-        bottom: "14%"
+        gap: 30,
+        height: 50,
+        bottom: "15%",
       },
     buttonText: {
-        color: "#fff", // White text color for visibility
-        fontSize: 16,
-        fontWeight: "bold",
+        fontSize: 17,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
       },
       menuComponent: {
         width: "75%",
@@ -230,4 +298,52 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#fff',
     },
+    editButton: {
+        backgroundColor: "#4CAF50",
+        paddingVertical: 1,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginBottom: 2,
+    },
+    editButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+    textAlign: "center",
+    },
+    deleteButton: {
+        backgroundColor: "#C8102E",
+        paddingVertical: 1,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    deleteButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 14,
+        textAlign: "center",
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      },
+      modalContent: {
+        width: "80%",
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        padding: 20,
+        alignItems: "center",
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 20,
+      },
+      modalButtonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+      },
 });

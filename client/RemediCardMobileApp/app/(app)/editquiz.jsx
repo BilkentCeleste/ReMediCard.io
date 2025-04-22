@@ -360,11 +360,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 2,
+    width: "50%"
   },
   editButtonText: {
     color: "#fff",
     fontWeight: "bold",
-    width: 60,
+    fontSize: 14,
     textAlign: "center",
   },
   deleteButton: {
@@ -372,11 +373,12 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     paddingHorizontal: 20,
     borderRadius: 5,
+    width: "50%"
   },
   deleteButtonText: {
     color: "#fff",
     fontWeight: "bold",
-    width: 60,
+    fontSize: 14,
     textAlign: "center",
   },
   modalContainer: {

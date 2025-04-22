@@ -96,17 +96,6 @@ export default function UpdateFlashcard() {
             });
     }
 
-    const handleDelete = () => {
-        deleteFlashcard(flashcardId)
-            .then(() => {
-                console.log('Flashcard deleted');
-                router.push("/(app)/updatedeck?deckId=" + deckId);
-            })
-            .catch((error) => {
-                console.error('Error deleting flashcard:', error);
-            });
-    }
-
     const handleBack = () => {
         router.push("/(app)/updatedeck?deckId=" + deckId);
     }
@@ -149,8 +138,8 @@ export default function UpdateFlashcard() {
             />
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={isCreating ? handleBack : handleDelete}>
-                    <Text style={styles.buttonText}>{isCreating ? t("cancel") : t("delete")}</Text>
+                <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleBack}>
+                    <Text style={styles.buttonText}>{t("cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={isCreating ? handleSave : handleUpdate}>
                     <Text style={styles.buttonText}>{isCreating ? t("save") : t("update")}</Text>
