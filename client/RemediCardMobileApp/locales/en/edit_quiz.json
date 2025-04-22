@@ -1,7 +1,7 @@
 {
   "edit": "Edit",
   "create_question": "Create Question",
-  "delete_question_consent": "Are you sure you want to delete this",
+  "delete_question_consent": "Are you sure you want to delete this Question",
   "cancel": "Cancel",
   "delete": "Delete"
 }

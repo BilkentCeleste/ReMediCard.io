@@ -1,4 +1,7 @@
 {
-    "update_flashcard": "Update Flashcard",
-    "create_flashcard": "Create Flashcard"
+    "update_flashcard": "Update",
+    "create_flashcard": "Create Flashcard",
+    "delete": "Delete",
+    "cancel": "cancel",
+    "delete_card_consent": "Are you sure to delete selected flashcard?"
 }

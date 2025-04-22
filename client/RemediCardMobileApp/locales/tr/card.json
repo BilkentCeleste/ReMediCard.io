@@ -2,5 +2,12 @@
     "no_cards_available": "Kartlar Mevcut Değil",
     "no_cards_available_message": "Bu destede hiç kart yok.",
     "go_back": "Geri Dön",
-
+    "false": "Yanlış",
+    "uncertain": "Belirsiz",
+    "correct": "Doğru",
+    "end_session": "Oturumu Bitir",
+    "session_summary": "Oturum Özeti",
+    "retry": "Yeniden Dene",
+    "home": "Ana Menüye Dön",
+    "accuracy": "Başarı Yüzdesi"
 }

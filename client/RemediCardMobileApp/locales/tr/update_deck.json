@@ -1,4 +1,7 @@
 {
-    "update_flashcard": "Bilgi Kartını Güncelle",
-    "create_flashcard": "Bilgi Kartı Oluştur"
+    "update_flashcard": "Güncelle",
+    "create_flashcard": "Bilgi Kartı Oluştur",
+    "delete": "Sil",
+    "cancel": "İptal",
+    "delete_card_consent": "Bu kartı silmek istediğinize emin misiniz?"
 }

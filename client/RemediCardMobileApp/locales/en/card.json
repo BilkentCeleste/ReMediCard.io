@@ -2,5 +2,12 @@
     "no_cards_available": "No Cards Available",
     "no_cards_available_message": "There are no cards in this deck.",
     "go_back": "Go Back",
-
+    "false": "False",
+    "uncertain": "Uncertain",
+    "correct": "Correct",
+    "end_session": "End Session",
+    "session_summary": "Session Summary",
+    "retry": "Retry",
+    "home": "Return to Home Page",
+    "accuracy": "Accurcy"
 }
