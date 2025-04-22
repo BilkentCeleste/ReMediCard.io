@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
-import { ChevronRightIcon, GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
+import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import { getDeckByDeckId } from '../../apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
