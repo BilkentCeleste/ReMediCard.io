@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator, Modal } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon, QuestionMarkIcon, UncertainIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
 import { getFlashcardsInBatch, updateFlashcardReviews, createDeckStats } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
+import PieChart from 'react-native-pie-chart';
 
 
 export default function Card( props: any ) {
@@ -21,6 +22,23 @@ export default function Card( props: any ) {
     const [maybeAnswers, setMaybeAnswers] = useState(0);
     const [flashCardList, setFlashCardList] = useState([]);
     const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; result: string; lastReviewed: timestamp }[]>([]);
+    const [showSummaryModal, setShowSummaryModal] = useState(false);
+    const [sessionStats, setSessionStats] = useState({
+        correct: 0,
+        uncertain: 0,
+        incorrect: 0,
+        accuracy: 0
+    });
+
+    const widthAndHeight = 200;
+    
+    const series = [
+        { value: sessionStats.correct, color: 'green' },
+        { value: sessionStats.uncertain, color: 'orange' },
+        { value: sessionStats.incorrect, color: 'red' },
+    ].filter(stat => stat.value > 0);
+
+    const hasValidData = series.length > 0;
 
     async function getFlashcards(deckId) {
         try {
@@ -155,8 +173,27 @@ async function sendFlashcardReviews() {
             console.error("Error creating deck stats:", error);
         });
 
-        router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
+        const totalAnswers = trueAnswers + falseAnswers + maybeAnswers;
+        const accuracy = totalAnswers === 0 ? 0 : ((trueAnswers + 0.5 * maybeAnswers) / totalAnswers) * 100;
+
+        setSessionStats({
+            correct: trueAnswers,
+            uncertain: maybeAnswers,
+            incorrect: falseAnswers,
+            accuracy: accuracy.toFixed(2),
+        });
+    
+        setShowSummaryModal(true);
+        //router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
     }
+
+    const handleRetry = () => {
+        router.push(`/(app)/card?deck=${deck}`);
+    };
+
+    const handleHomePage = () => {
+        router.push(`/(app)/home`);
+    };
 
 
     return (
@@ -218,29 +255,75 @@ async function sendFlashcardReviews() {
                         <TouchableOpacity style={styles.crossIconPosition} onPress={handleFalseAnswer}>
                             <CrossIcon />
                         </TouchableOpacity>
-                        <Text style={styles.labelText}>False</Text>
+                        <Text style={styles.labelText}>{t("false")}</Text>
                     </View>
 
                     <View style={{ alignItems: 'center' }}>
                         <TouchableOpacity style={styles.questionMarkIconPosition} onPress={handleMaybeAnswer}>
                             <QuestionMarkIcon />
                         </TouchableOpacity>
-                        <Text style={styles.labelText}>Uncertain</Text>
+                        <Text style={styles.labelText}>{t("uncertain")}</Text>
                     </View>
 
                     <View style={{ alignItems: 'center' }}>
                         <TouchableOpacity style={styles.checkMarkIconPosition} onPress={handleTrueAnswer}>
                             <CheckmarkIcon />
                         </TouchableOpacity>
-                        <Text style={styles.labelText}>Correct</Text>
+                        <Text style={styles.labelText}>{t("correct")}</Text>
                     </View>
                     </View>
 
                     <TouchableOpacity style={styles.endSeesionPosition} onPress={handleEndSession}>
-                        <Text style = {styles.registertext}>End Session</Text></TouchableOpacity>
+                        <Text style = {styles.registertext}>{t("end_session")}</Text></TouchableOpacity>
                 </>
             )}
 
+            {showSummaryModal && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={showSummaryModal}
+                    onRequestClose={() => setShowSummaryModal(false)}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>{t("session_summary")}</Text>
+                            <View style={{ alignItems: 'center', marginTop: 20 }}>
+                            <PieChart
+                                widthAndHeight={widthAndHeight}
+                                series={hasValidData ? series : [{ value: 1, color: '#D3D3D3' }]}
+                            />
+                            <Text style={{ marginTop: 10, fontSize: 16 }}>
+                                {t("accuracy")}: {sessionStats.accuracy}%
+                            </Text>
+                            <View style={{ marginTop: 10 }}>
+                                <Text style={{ color: 'green', fontWeight: "bold", fontSize: 16 }}>{t("correct")}: {sessionStats.correct}</Text>
+                                <Text style={{ color: 'orange', fontWeight: "bold", fontSize: 16 }}>{t("uncertain")}: {sessionStats.uncertain}</Text>
+                                <Text style={{ color: 'red', fontWeight: "bold", fontSize: 16 }}>{t("false")}: {sessionStats.incorrect}</Text>
+                            </View>
+                        </View>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={() => {
+                                    setShowSummaryModal(false);
+                                    handleRetry();
+                                }}
+                            >
+                                <Text style={styles.modalButtonText}>{t("retry")}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={() => {
+                                    setShowSummaryModal(false);
+                                    handleHomePage();
+                                }}
+                            >
+                                <Text style={styles.modalButtonText}>{t("home")}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+)}
 
         </View>
     );
@@ -389,5 +472,45 @@ const styles = StyleSheet.create({
         color: "#fff",
         textAlign: "center",
         fontWeight: "bold",
-    }
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalText: {
+        fontSize: 16,
+        marginVertical: 5,
+    },
+    modalButton: {
+        borderRadius: 20,
+        backgroundColor: "#2916ff",
+        width: "75%",
+        alignItems: "center",
+        justifyContent:"center",
+        gap: 30,
+        height: 45,
+        marginTop: 10
+    },
+    modalButtonText: {
+        fontSize: 17,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
+    },
+    
 });
