@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirecting...</title>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const quizId = params.get('selected_quiz');
+      const appUrl = `myapp://quizzes?selected_quiz=${quizId}`;
+
+      console.log("Params", params)
+
+      window.location.href = appUrl;
+
+      setTimeout(() => {
+        document.getElementById('fallback').style.display = 'block';
+      }, 2000);
+    </script>
+  </head>
+  <body>
+    <p>Opening app ReMediCard.io...</p>
+    <div id="fallback" style="display:none;">
+      <p>If nothing happens, <a href="myapp://quizzes?selected_quiz=1">tap here</a>.</p>
+    </div>
+  </body>
+</html>
