@@ -44,9 +44,6 @@ export default function Card( props: any ) {
         try {
             const response = await getFlashcardsInBatch(deckId);
             setFlashCardList(response.data.sort((a, b) => a.recallProbability - b.recallProbability));
-            response.data.forEach((card) => {
-                console.log("Card:", card.id, card.frontSide.text, card.recallProbability);
-            });
     
             if (response.data.length === 0) {
                 Alert.alert(

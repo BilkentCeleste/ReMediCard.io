@@ -225,6 +225,9 @@ public class DeckService {
 
     public String generateShareToken(Long deckId) {
         Deck deck = getDeckByDeckId(deckId);
+        if (deck.getShareToken() != null) {
+            return shareUrlBase + "?sharedItem=deck&shareToken=" + deck.getShareToken();
+        }
         String shareToken = java.util.UUID.randomUUID().toString();
         deck.setShareToken(shareToken);
         deckRepository.save(deck);

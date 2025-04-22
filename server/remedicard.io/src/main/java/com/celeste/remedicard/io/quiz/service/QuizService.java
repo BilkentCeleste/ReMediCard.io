@@ -122,6 +122,9 @@ public class QuizService {
 
     public String generateShareToken(Long quizId) {
         Quiz quiz = getById(quizId);
+        if (quiz.getShareToken() != null) {
+            return shareUrlBase + "?sharedItem=quiz&shareToken=" + quiz.getShareToken();
+        }
         String shareToken = java.util.UUID.randomUUID().toString();
         quiz.setShareToken(shareToken);
         quizRepository.save(quiz);
