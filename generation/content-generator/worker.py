@@ -22,7 +22,7 @@ def main():
         message = json.loads(message[1])
 
         if message["targetDataType"] == "DECK":
-            prompt = f"Generate an array of flashcards (not specifically basic question forms—try to form complex front and back pairs) in the form of an array of JSON objects for the following text (which is a video transcript for an educative video). Don't add any other comment; I just want an array of JSON objects with fields `front` and `back`, make sure you generate the content in this language: {message['language']}, so the answer must be like [{{\"back\": \"\", \"front\": \"\"}}]. Here is the text: {message['text']}"
+            prompt = f"Generate an array of at least 20 flashcards (not specifically basic question forms—try to form complex front and back pairs) in the form of an array of JSON objects for the following text (which is a video transcript for an educative video). Don't add any other comment; I just want an array of JSON objects with fields `front` and `back`, make sure you generate the content in this language: {message['language']}, so the answer must be like [{{\"back\": \"\", \"front\": \"\"}}]. Here is the text: {message['text']}"
             response = generationService.generate_content(prompt)
 
             response_text = response.text
@@ -38,7 +38,7 @@ def main():
             queue.enqueue(DECK_QUEUE_NAME, deckTask)
 
         elif message["targetDataType"] == "QUIZ":
-            prompt = f"Generate an array of test questions (not necessarily basic forms — try to form complex text-based questions) in the form of an array of JSON objects for the following text (which is a video transcript for an educative video). Make sure you generate the content in this language: {message['language']}. Don't add any other comment, I just want an array of JSON objects with fields: `descriptipn` (which is the question text), `options` (as an array of five texts), and `answer` (which must be a letter from a to e for the five options). So the answer must be like [{{\"description\": \"\", \"options\": [\"\", \"\", \"\", \"\", \"\"], \"answer\": \"\"}}]. Here is the text: {message['text']}"
+            prompt = f"Generate an array of at least 20 test questions (not necessarily basic forms — try to form complex text-based questions) in the form of an array of JSON objects for the following text (which is a video transcript for an educative video). Make sure you generate the content in this language: {message['language']}. Don't add any other comment, I just want an array of JSON objects with fields: `descriptipn` (which is the question text), `options` (as an array of five texts), and `answer` (which must be a letter from a to e for the five options). So the answer must be like [{{\"description\": \"\", \"options\": [\"\", \"\", \"\", \"\", \"\"], \"answer\": \"\"}}]. Here is the text: {message['text']}"
             response = generationService.generate_content(prompt)
 
             response_text = response.text

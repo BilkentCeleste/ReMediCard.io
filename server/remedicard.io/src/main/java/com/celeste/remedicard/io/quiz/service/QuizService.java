@@ -103,10 +103,11 @@ public class QuizService {
                     .quiz(quiz)
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
-                    .correctAnswerIndex(handleQuestionAnswerIndexing(questionCreationTask.getAnswer()))
+                    .correctAnswerIndex(handleQuestionAnswerIndexing(questionCreationTask.getAnswer().toUpperCase()))
                     .build());
         }
 
+        quiz.setQuestionCount(questions.size());
         quiz.setQuestions(questions);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
