@@ -9,6 +9,7 @@ import {
   Modal,
   Alert,
   Dimensions,
+  Share
 } from "react-native";
 import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
@@ -58,7 +59,7 @@ export default function Quizzes() {
         if (!searchParamUsed && quiz_selected !== undefined) {
           setSearchParamUsed(true);
           const selected = quizzes?.data.find(
-            (quiz) => quiz.id == quiz_selected
+            (quiz: any) => quiz.id == quiz_selected
           );
           handleQuizPress(selected);
         }
@@ -123,12 +124,19 @@ export default function Quizzes() {
         .then((res) => {
           setModalVisible(false);
           setSelectedQuiz(null);
-          router.push(`/(app)/sharedquiz?shareToken=${res?.data?.shareToken}`);
-        })
+          const shareUrl = res?.data;
+          Share.share({
+            message: shareUrl,
+            url: shareUrl,
+            title: selectedQuiz.name
+          }, {
+            dialogTitle: 'Share Quiz',
+            subject: selectedQuiz.name
+          })})
         .catch((error) => {
-          console.error(error);
-          Alert.alert(t("error"), t("share_failed"));
-        });
+            console.error('Error sharing:', error);
+            Alert.alert(t("error"), t("share_failed"));
+          });
     } else {
       Alert.alert(t("error"), t("quiz_info_missing"));
     }
@@ -169,7 +177,7 @@ export default function Quizzes() {
     { label: t("sort_by_worst_performance"), value: "worst" },
   ];
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed

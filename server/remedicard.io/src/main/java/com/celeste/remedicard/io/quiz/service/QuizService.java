@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.celeste.remedicard.io.quiz.controller.dto.ShareQuizResponseDTO;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +31,9 @@ public class QuizService {
     private final CurrentUserService currentUserService;
     private final UserService userService;
     private final SearchService searchService;
+
+    @Value("${app.share-url-base}")
+    private String shareUrlBase;
 
     public Quiz getById(Long quizId) {
         return quizRepository.findById(quizId)
@@ -117,12 +120,12 @@ public class QuizService {
         searchService.saveSearchableQuiz(quiz);
     }
 
-    public ShareQuizResponseDTO generateShareToken(Long quizId) {
+    public String generateShareToken(Long quizId) {
         Quiz quiz = getById(quizId);
         String shareToken = java.util.UUID.randomUUID().toString();
         quiz.setShareToken(shareToken);
         quizRepository.save(quiz);
-        return new ShareQuizResponseDTO(shareToken);
+        return shareUrlBase + "?sharedItem=quiz&shareToken=" + shareToken;
     }
 
     public Quiz getByShareToken(String shareToken) {
