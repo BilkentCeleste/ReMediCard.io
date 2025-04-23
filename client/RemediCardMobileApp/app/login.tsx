@@ -22,7 +22,7 @@ import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { EXPO_PUSH_TOKEN_KEY } from "@/constants/config";
+import { EXPO_PUSH_TOKEN_KEY, LANGUAGE_KEY } from "@/constants/config";
 import * as SecureStore from "expo-secure-store";
 
 export default function Login() {
@@ -59,10 +59,15 @@ export default function Login() {
       EXPO_PUSH_TOKEN_KEY
     );
 
+    const language = await SecureStore.getItemAsync(
+              LANGUAGE_KEY
+            );
+
     const body = {
       username: username,
       password: password,
       pushNotificationToken: pushNotificationToken,
+      language: language === "en" ? "ENGLISH" : "TURKISH"
     };
 
     loginAuth(body);
@@ -243,12 +248,12 @@ const styles = StyleSheet.create({
     left: 45,
     fontSize: 18,
     lineHeight: 22,
-    width: "100%",
+    width: "75%",
     fontFamily: "Inter-Regular",
     color: "#111",
     textAlign: "left",
     zIndex: 1,
-    position: "absolute",
+    position: "absolute"
   },
   logincomponent: {
     height: 50,
@@ -350,6 +355,7 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 14,
     color: "#2916FF",
+    right: -15
   },
   languageOption: {
     flexDirection: "row",

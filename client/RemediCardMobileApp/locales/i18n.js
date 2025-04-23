@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import * as Localization from "expo-localization";
+import * as SecureStore from "expo-secure-store";
 
 import login_en from "./en/login.json";
 import register_en from "./en/register.json";
@@ -58,14 +59,14 @@ import shared_quiz_tr from "./tr/shared_quiz.json";
 import shared_deck_tr from "./tr/shared_deck.json";
 import quiz_results_tr from "./tr/quiz_results.json";
 
-const LANGUAGE_KEY = 'user-language';
+import { LANGUAGE_KEY } from "@/constants/config"
 
 const languageDetector = {
   type: 'languageDetector',
   async: true,
   detect: async (callback) => {
     try {
-      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+      const savedLanguage = await SecureStore.getItemAsync(LANGUAGE_KEY);
       if (savedLanguage) {
         callback(savedLanguage);
       } else {
@@ -79,7 +80,7 @@ const languageDetector = {
   init: () => {},
   cacheUserLanguage: async (lng) => {
     try {
-      await AsyncStorage.setItem(LANGUAGE_KEY, lng);
+      await SecureStore.setItemAsync(LANGUAGE_KEY, lng);
     } catch (error) {
       console.log('Error saving language to AsyncStorage:', error);
     }
