@@ -6,5 +6,5 @@
   "delete": "Sil",
   "delete_failed": "Silme işlemi başarısız oldu",
   "name_required": "İsim gerekli",
-  "update_failed": "Güncelleme işlemi başarısız oldu",
+  "update_failed": "Güncelleme işlemi başarısız oldu"
 }

@@ -6,5 +6,5 @@
   "delete": "Delete",
   "delete_failed": "Delete failed",
   "name_required": "Name is required",
-  "update_failed": "Update failed",
+  "update_failed": "Update failed"
 }

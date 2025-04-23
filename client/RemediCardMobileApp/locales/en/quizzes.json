@@ -31,5 +31,5 @@
     "share_quiz": "Share quiz",
     "share_failed": "Failed to share quiz",
     "delete_quiz_message": "Are you sure about deleting the selected quiz?",
-    "quiz_create_failed": "Failed to create quiz",
+    "quiz_create_failed": "Failed to create quiz"
 }
