@@ -1,9 +1,10 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import {useEffect, useState} from "react";
+import { getQuizByQuizId } from "@/apiHelper/backendHelper";
+
 import {
   GoBackIcon,
-  CorrectIcon,
-  FalseIcon,
   HomeIcon,
   ProfileIcon,
   SettingsIcon,
@@ -37,6 +38,26 @@ export default function QuizResults() {
     router.push("/(app)/home");
   };
 
+  const [quizData, setQuizData] = useState<any>(null);
+  
+  useEffect(() => {
+      if (quizId) {
+        getQuizByQuizId(quizId)
+          .then((res) => {
+          setQuizData(res?.data);         
+          })
+          .catch((error) => {
+            console.error("Error fetching quiz data:", error);
+          });
+      }
+    }, [quizId]);
+
+  const [expandedQuestionId, setExpandedQuestionId] = useState<number | null>(null);
+
+  const toggleExpand = (id: number) => {
+    setExpandedQuestionId(prev => (prev === id ? null : id));
+  };
+    
   return (
     <View style={styles.container}>
       <View style={styles.menuComponent}>
@@ -54,26 +75,67 @@ export default function QuizResults() {
       </View>
 
       <View style={styles.resultBox}>
-      <Text style={{ fontSize: 14 }}>
-      {t("accuracy")}: <Text style={styles.valueText}>{score}%</Text>
-      </Text>
-      <Text style={{ marginTop: 10, fontSize: 14 }}>
-      {t("correct")}: <Text style={styles.valueText}>{correctAnswers}/{totalQuestions}</Text>
-      </Text>
-      <Text style={{ marginTop: 10, fontSize: 14 }}>
-      {t("incorrect")}: <Text style={styles.valueText}>{totalQuestions - correctAnswers}/{totalQuestions}</Text>
-      </Text>
-      <Text style={{ marginTop: 10, fontSize: 14 }}>
-      {t("pass")}: <Text style={styles.valueText}>
-        {totalQuestions - (totalQuestions - correctAnswers) - correctAnswers}/{totalQuestions}
-      </Text>
-      </Text>
-      <Text style={{ marginTop: 10, fontSize: 14 }}>
-      {t("total")}: <Text style={styles.valueText}>{totalQuestions}</Text>
-      </Text>
-      <Text style={{ marginVertical: 10, fontSize: 14 }}>
-      {t("time_spent")}: <Text style={styles.valueText}>{formatTime(Number(timeSpent))}</Text>
-      </Text>
+      <View style={styles.columnContainer}>
+        {/* Left Column */}
+        <View style={styles.column}>
+          <Text style={styles.labelText}>
+            {t("correct")}: <Text style={styles.valueText}>{correctAnswers}/{totalQuestions}</Text>
+          </Text>
+          <Text style={styles.labelText}>
+            {t("incorrect")}: <Text style={styles.valueText}>{totalQuestions - correctAnswers}/{totalQuestions}</Text>
+          </Text>
+          <Text style={styles.labelText}>
+            {t("pass")}: <Text style={styles.valueText}>
+                {totalQuestions - (totalQuestions - correctAnswers) - correctAnswers}/{totalQuestions}
+          </Text>
+          </Text>
+        </View>
+
+        {/* Right Column */}
+        <View style={styles.column}>
+          <Text style={styles.labelText}>
+            {t("accuracy")}: <Text style={styles.valueText}>{score}%</Text>
+          </Text>
+          <Text style={styles.labelText}>
+            {t("total")}: <Text style={styles.valueText}>{totalQuestions}</Text>
+          </Text>
+          <Text style={styles.labelText}>
+            {t("time_spent")}: <Text style={styles.valueText}>{formatTime(Number(timeSpent))}</Text>
+          </Text>
+        </View>
+      </View>
+    </View>
+
+
+      <View style={styles.questionsContainer}>
+      <FlatList
+          data={quizData?.questions}
+          keyExtractor={(item) => item?.id?.toString()}
+          renderItem={({ item }) => {
+            const isExpanded = expandedQuestionId === item?.id;
+
+            return (
+              <TouchableOpacity onPress={() => toggleExpand(item.id)} activeOpacity={0.7}>
+                <View style={styles.questionItem}>
+                <Text style={styles.questionText} numberOfLines={isExpanded ? undefined : 3}
+                >
+                  {item?.description}
+                </Text>
+                
+                  {isExpanded && (
+                    <View style={styles.optionsContainer}>
+                      {item?.options?.map((option: string, index: number) => (
+                        <Text key={index} style={styles.optionText}>
+                          {String.fromCharCode(65 + index)}. {option}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
       </View>
 
       <View style={styles.buttonContainer}>
@@ -192,7 +254,7 @@ const styles = StyleSheet.create({
     width: "75%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
   retryButton: {
     backgroundColor: "#2916ff",
@@ -244,5 +306,40 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
-  }
+  },
+  questionsContainer: {
+    marginTop: 10,
+    width: "75%",
+    height: "52%"
+},
+questionItem: {
+    backgroundColor: '#fff',
+    width: "100%",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+},
+questionText: {
+    fontSize: 16,
+    marginBottom: 10,
+},
+optionsContainer: {
+    marginLeft: 10,
+},
+optionText: {
+    fontSize: 14,
+    marginBottom: 5,
+},
+columnContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+},
+column: {
+  flex: 1,
+  gap: 10,
+  paddingHorizontal: 8,
+},
+labelText: {
+  fontSize: 14,
+},
 });
