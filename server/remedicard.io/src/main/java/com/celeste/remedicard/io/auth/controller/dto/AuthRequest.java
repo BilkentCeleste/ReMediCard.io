@@ -1,6 +1,7 @@
 package com.celeste.remedicard.io.auth.controller.dto;
 
 
+import com.celeste.remedicard.io.autogeneration.config.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class AuthRequest {
     private String email;
     private String password;
     private String pushNotificationToken;
+    private Language language;
 }

@@ -117,7 +117,7 @@ public class QueueService {
 
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            notificationService.sendNotification("Deck Generated", "Your new deck is generated: " + "Generated_" + deckCreationTask.getName(), user.getPushNotificationToken());
+            notificationService.sendNotification("Deck Generated", "Your new deck is generated: " + "Generated_" + deckCreationTask.getName(), new String[]{deckCreationTask.getName()}, user.getPushNotificationToken());
         }
 
         //log.info("Deck generation queue is empty");
@@ -142,7 +142,7 @@ public class QueueService {
 
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            notificationService.sendNotification("Quiz Generated", "Your new quiz is generated: " + "Generated_" + quizCreationTask.getName(), user.getPushNotificationToken());
+            notificationService.sendNotification("Quiz Generated", "Your new quiz is generated: " + "Generated_" + quizCreationTask.getName(), new String[]{quizCreationTask.getName()}, user.getPushNotificationToken());
         }
 
         //log.info("Quiz generation queue is empty");

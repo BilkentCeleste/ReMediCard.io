@@ -7,7 +7,11 @@
     "icon": "./assets/icons/remedicon.png",
     "expo-notifications": {
       "icon": "./assets/icons/remedismallicon.png",
-      "color": "#ffffff"
+      "color": "#2596be"
+    },
+    "notification": {
+      "icon": "./assets/icons/remedismallicon.png",
+      "color": "#2596be"
     },
     "scheme": "remedicardio",
     "deepLinking": true,
@@ -19,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/remedicon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#2596be"
       },
       "package": "io.remedicard.celeste",
       "googleServicesFile": "./google-services.json"
@@ -27,7 +31,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/icons/remedismallicon.png"
     },
     "plugins": [
       "expo-router",
@@ -37,10 +41,17 @@
           "image": "./assets/icons/remedicon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#2596be"
         }
       ],
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icons/remedismallicon.png",
+          "color": "#2596be"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
