@@ -138,6 +138,39 @@ export default function QuizQuestion(props: any) {
     setShowSummaryModal(true);
   };
 
+  const handleQuizReults = () => {
+    setTimerActive(false);
+    let correctAnswers = 0;
+    quizData.questions.forEach((question: any, index: number) => {
+      if (selectedAnswers[index] === question.correctAnswerIndex) {
+        correctAnswers++;
+      }
+    });
+
+    const score = Math.round(correctAnswers == 0 ? 0 : (correctAnswers / totalQuestions) * 100);
+
+    const quizStatBody = {
+      successRate: score,
+      quizId: quizId,
+    }
+    createQuizStats(quizStatBody).then(() => {
+        console.log("Quiz stats created successfully.");
+    }).catch((error) => {
+        console.error("Error creating quiz stats:", error);
+    });
+
+    router.push({
+      pathname: "/(app)/quizresults",
+      params: {
+        quizId: quizId,
+        score: score,
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        timeSpent: 600 - timeRemaining
+      }
+    });
+  }
+
   const handleRetry = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers([])
@@ -256,7 +289,7 @@ export default function QuizQuestion(props: any) {
                   <Text style={{ marginVertical: 10, fontSize: 16 }}>
                   {t("time_spent")}: <Text style={styles.valueText}>{formatTime(Number(sessionStats.timeSpent))}</Text>
                   </Text>
-              </View>
+                  </View>
 
                   <TouchableOpacity
                       style={styles.modalButton}
@@ -275,6 +308,15 @@ export default function QuizQuestion(props: any) {
                       }}
                   >
                       <Text style={styles.modalButtonText}>{t("home")}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => {
+                          setShowSummaryModal(false);
+                          handleQuizReults();
+                      }}
+                  >
+                      <Text style={styles.modalButtonText}>{t("results")}</Text>
                   </TouchableOpacity>
               </View>
           </View>
