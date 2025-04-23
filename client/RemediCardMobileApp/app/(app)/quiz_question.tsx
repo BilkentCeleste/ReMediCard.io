@@ -29,7 +29,9 @@ export default function QuizQuestion(props: any) {
           score: 0,
           correctAnswers: 0,
           totalQuestions: 0,
-          timeSpent: 0
+          timeSpent: 0,
+          skippedQuestions: 0,
+          incorrectQuestions: 0
       });
 
   useEffect(() => {
@@ -134,22 +136,13 @@ export default function QuizQuestion(props: any) {
           console.error("Error creating quiz stats:", error);
         });
 
-    /* router.push({
-      pathname: "/(app)/quizresults",
-      params: {
-        quizId: quizId,
-        score: score,
-        correctAnswers: correctAnswers,
-        totalQuestions: totalQuestions,
-        timeSpent: 600 - timeRemaining
-      }
-    }); */
-
     setSessionStats({
         score: score,
-        correctAnswers: correctAnswers,
+        correctAnswers: correct,
         totalQuestions: totalQuestions,
-        timeSpent: 600 - timeRemaining
+        timeSpent: 600 - timeRemaining,
+        skippedQuestions: skipped,
+        incorrectQuestions: incorrect
   });
 
     setShowSummaryModal(true);
@@ -157,6 +150,22 @@ export default function QuizQuestion(props: any) {
 
   const handleQuizReults = () => {
     setTimerActive(false);
+    
+    let correct = 0;
+    let incorrect = 0;
+    let skipped = 0;
+
+    quizData.questions.forEach((question: any, index: number) => {
+      const selected = selectedAnswers[index];
+      if (selected === -1) {
+        skipped++;
+      } else if (selected === question.correctAnswerIndex) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    });
+
     let correctAnswers = 0;
     quizData.questions.forEach((question: any, index: number) => {
       if (selectedAnswers[index] === question.correctAnswerIndex) {
@@ -201,7 +210,9 @@ export default function QuizQuestion(props: any) {
       score: 0,
       correctAnswers: 0,
       totalQuestions: 0,
-      timeSpent: 0
+      timeSpent: 0,
+      skippedQuestions: 0,
+      incorrectQuestions: 0
     })
   };
 
@@ -296,11 +307,11 @@ export default function QuizQuestion(props: any) {
                   {t("correct")}: <Text style={styles.valueText}>{sessionStats.correctAnswers}/{sessionStats.totalQuestions}</Text>
                   </Text>
                   <Text style={{ marginTop: 10, fontSize: 16 }}>
-                  {t("incorrect")}: <Text style={styles.valueText}>{sessionStats.totalQuestions - sessionStats.correctAnswers}/{sessionStats.totalQuestions}</Text>
+                  {t("incorrect")}: <Text style={styles.valueText}>{sessionStats.incorrectQuestions}/{sessionStats.totalQuestions}</Text>
                   </Text>
                   <Text style={{ marginTop: 10, fontSize: 16 }}>
                   {t("pass")}: <Text style={styles.valueText}>
-                    {sessionStats.totalQuestions - (sessionStats.totalQuestions - sessionStats.correctAnswers) - sessionStats.correctAnswers}/{sessionStats.totalQuestions}
+                    {sessionStats.skippedQuestions}/{sessionStats.totalQuestions}
                   </Text>
                   </Text>
                   <Text style={{ marginTop: 10, fontSize: 16 }}>
