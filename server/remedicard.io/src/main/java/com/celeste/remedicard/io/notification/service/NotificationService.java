@@ -1,12 +1,21 @@
 package com.celeste.remedicard.io.notification.service;
 
+import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.auth.service.CurrentUserService;
+import com.celeste.remedicard.io.autogeneration.config.Language;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Locale;
 
 @RequiredArgsConstructor
 @Service
@@ -16,8 +25,16 @@ public class NotificationService {
     private String EXPO_PUSH_URL;
 
     private final RestTemplate restTemplate;
+    private final CurrentUserService currentUserService;
+    private final MessageSource messageSource;
 
-    public void sendNotification(String title, String message, String pushNotificationToken) {
+    public void sendNotification(String notificationTitle, String notificationMessage, String[] args, String pushNotificationToken) {
+
+        User user = currentUserService.getCurrentUser();
+        Locale locale = new Locale(user.getLanguage().equals(Language.ENGLISH) ? "en": "tr");
+
+        String title = messageSource.getMessage(notificationTitle, args, locale);
+        String message = messageSource.getMessage(notificationMessage, args, locale);
 
         if(pushNotificationToken == null || pushNotificationToken.isEmpty()) {
             return;
