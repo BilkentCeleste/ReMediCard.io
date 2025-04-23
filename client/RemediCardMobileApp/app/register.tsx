@@ -20,7 +20,7 @@ import {
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
-import { EXPO_PUSH_TOKEN_KEY } from "@/constants/config";
+import { EXPO_PUSH_TOKEN_KEY, LANGUAGE_KEY } from "@/constants/config";
 import * as SecureStore from "expo-secure-store";
 
 export default function Register() {
@@ -48,11 +48,16 @@ export default function Register() {
       EXPO_PUSH_TOKEN_KEY
     );
 
+    const language = await SecureStore.getItemAsync(
+                  LANGUAGE_KEY
+                );
+
     const body = {
       username: username,
       email: email,
       password: password,
       pushNotificationToken: pushNotificationToken,
+      language: language === "en" ? "ENGLISH" : "TURKISH"
     };
 
     registerAuth(body);

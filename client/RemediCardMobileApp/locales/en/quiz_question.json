@@ -6,5 +6,14 @@
     "loading_quiz": "Loading quiz",
     "no_quizzes_available": "No quizzes available",
     "no_quizzes_available_message": "You need to add questions to the quiz before you can start it.",
-    "end_session": "End Session"
+    "end_session": "End Session",
+    "accuracy": "Accuracy Rate",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "pass" : "Pass",
+    "total": "Total Questions",
+    "time_spent": "Time Spent",
+    "session_summary": "Session Summary",
+    "retry": "Retry the Quiz" ,
+    "home": "Return to Home Page"
 }

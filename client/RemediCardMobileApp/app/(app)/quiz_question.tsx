@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Modal
 } from "react-native";
 import { useRouter } from "expo-router";
 import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
@@ -23,6 +24,13 @@ export default function QuizQuestion(props: any) {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [timeRemaining, setTimeRemaining] = useState(600);
   const [timerActive, setTimerActive] = useState(true);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+  const [sessionStats, setSessionStats] = useState({
+          score: 0,
+          correctAnswers: 0,
+          totalQuestions: 0,
+          timeSpent: 0
+      });
 
   useEffect(() => {
     if (quizId) {
@@ -126,6 +134,48 @@ export default function QuizQuestion(props: any) {
           console.error("Error creating quiz stats:", error);
         });
 
+    /* router.push({
+      pathname: "/(app)/quizresults",
+      params: {
+        quizId: quizId,
+        score: score,
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        timeSpent: 600 - timeRemaining
+      }
+    }); */
+
+    setSessionStats({
+        score: score,
+        correctAnswers: correctAnswers,
+        totalQuestions: totalQuestions,
+        timeSpent: 600 - timeRemaining
+  });
+
+    setShowSummaryModal(true);
+  };
+
+  const handleQuizReults = () => {
+    setTimerActive(false);
+    let correctAnswers = 0;
+    quizData.questions.forEach((question: any, index: number) => {
+      if (selectedAnswers[index] === question.correctAnswerIndex) {
+        correctAnswers++;
+      }
+    });
+
+    const score = Math.round(correctAnswers == 0 ? 0 : (correctAnswers / totalQuestions) * 100);
+
+    const quizStatBody = {
+      successRate: score,
+      quizId: quizId,
+    }
+    createQuizStats(quizStatBody).then(() => {
+        console.log("Quiz stats created successfully.");
+    }).catch((error) => {
+        console.error("Error creating quiz stats:", error);
+    });
+
     router.push({
       pathname: "/(app)/quizresults",
       params: {
@@ -139,6 +189,24 @@ export default function QuizQuestion(props: any) {
         selectedAnswers: selectedAnswers
       }
     });
+  }
+
+  const handleRetry = () => {
+    setCurrentQuestionIndex(0);
+    setSelectedAnswers([])
+    setTimeRemaining(600)
+    setTimerActive(true)
+    setShowSummaryModal(false)
+    setSessionStats({
+      score: 0,
+      correctAnswers: 0,
+      totalQuestions: 0,
+      timeSpent: 0
+    })
+  };
+
+  const handleHomePage = () => {
+    router.push("/(app)/home");
   };
 
   if (!quizData || !quizData.questions) {
@@ -208,6 +276,72 @@ export default function QuizQuestion(props: any) {
           </TouchableOpacity>
         ))}
       </View>
+      
+      {showSummaryModal && (
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showSummaryModal}
+          onRequestClose={() => setShowSummaryModal(false)}
+      >
+          <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>{t("session_summary")}</Text>
+                  <View style={{ alignItems: 'center', marginTop: 20 }}>
+
+                  <Text style={{ fontSize: 16 }}>
+                  {t("accuracy")}: <Text style={styles.valueText}>{sessionStats.score}%</Text>
+                  </Text>
+                  <Text style={{ marginTop: 10, fontSize: 16 }}>
+                  {t("correct")}: <Text style={styles.valueText}>{sessionStats.correctAnswers}/{sessionStats.totalQuestions}</Text>
+                  </Text>
+                  <Text style={{ marginTop: 10, fontSize: 16 }}>
+                  {t("incorrect")}: <Text style={styles.valueText}>{sessionStats.totalQuestions - sessionStats.correctAnswers}/{sessionStats.totalQuestions}</Text>
+                  </Text>
+                  <Text style={{ marginTop: 10, fontSize: 16 }}>
+                  {t("pass")}: <Text style={styles.valueText}>
+                    {sessionStats.totalQuestions - (sessionStats.totalQuestions - sessionStats.correctAnswers) - sessionStats.correctAnswers}/{sessionStats.totalQuestions}
+                  </Text>
+                  </Text>
+                  <Text style={{ marginTop: 10, fontSize: 16 }}>
+                  {t("total")}: <Text style={styles.valueText}>{sessionStats.totalQuestions}</Text>
+                  </Text>
+                  <Text style={{ marginVertical: 10, fontSize: 16 }}>
+                  {t("time_spent")}: <Text style={styles.valueText}>{formatTime(Number(sessionStats.timeSpent))}</Text>
+                  </Text>
+                  </View>
+
+                  <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => {
+                          setShowSummaryModal(false);
+                          handleRetry();
+                      }}
+                  >
+                      <Text style={styles.modalButtonText}>{t("retry")}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => {
+                          setShowSummaryModal(false);
+                          handleHomePage();
+                      }}
+                  >
+                      <Text style={styles.modalButtonText}>{t("home")}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => {
+                          setShowSummaryModal(false);
+                          handleQuizReults();
+                      }}
+                  >
+                      <Text style={styles.modalButtonText}>{t("results")}</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+      </Modal>
+)}
 
       {/* Bottom nav row for previous/next question */}
       <View style={styles.bottomNavRow}>
@@ -336,4 +470,48 @@ registertext: {
     textAlign: "center",
     fontWeight: "bold",
 },
+modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+modalContent: {
+  width: '80%',
+  padding: 20,
+  backgroundColor: 'white',
+  borderRadius: 10,
+  alignItems: 'center',
+},
+modalTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},
+modalText: {
+  fontSize: 16,
+  marginVertical: 5,
+},
+modalButton: {
+  borderRadius: 20,
+  backgroundColor: "#2916ff",
+  width: "75%",
+  alignItems: "center",
+  justifyContent:"center",
+  gap: 30,
+  height: 45,
+  marginTop: 10
+},
+modalButtonText: {
+  fontSize: 17,
+  lineHeight: 22,
+  fontFamily: "Inter-Regular",
+  color: "#fff",
+  textAlign: "center",
+},
+valueText: {
+  fontWeight: 'bold',
+  color: '#2916ff', // or a color you want to stand out
+},
+
 });

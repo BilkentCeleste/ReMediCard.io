@@ -5,7 +5,7 @@ import {
   GoogleSignin,
   isSuccessResponse,
 } from "@react-native-google-signin/google-signin";
-import { EXPO_PUSH_TOKEN_KEY, GOOGLE_WEB_CLIENT_ID } from "@/constants/config";
+import { EXPO_PUSH_TOKEN_KEY, GOOGLE_WEB_CLIENT_ID, LANGUAGE_KEY } from "@/constants/config";
 import { Alert } from "react-native";
 
 const AuthContext = createContext({
@@ -13,6 +13,7 @@ const AuthContext = createContext({
   loginAuth: (body) => {},
   registerAuth: (body) => {},
   logoutAuth: () => {},
+  loginGoogleAuth: (body) => {}
 });
 
 export const AuthProvider = ({ children }) => {
@@ -51,11 +52,16 @@ export const AuthProvider = ({ children }) => {
           EXPO_PUSH_TOKEN_KEY
         );
 
+        const language = await SecureStore.getItemAsync(
+          LANGUAGE_KEY
+        );
+
         const body = {
           email: user.email,
           username: user.name,
           idToken: idToken,
           pushNotificationToken: pushNotificationToken,
+          language: language === "en" ? "ENGLISH" : "TURKISH"
         };
 
         removeToken();

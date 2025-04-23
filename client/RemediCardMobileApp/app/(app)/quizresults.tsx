@@ -13,8 +13,13 @@ import { useTranslation } from "react-i18next";
 export default function QuizResults() {
   const { t } = useTranslation("quiz_results");
   const router = useRouter();
-  const { quizId, score, correctAnswers, totalQuestions, timeSpent } =
-    useLocalSearchParams();
+  const searchParams = useLocalSearchParams();
+
+  const quizId = Number(searchParams.quizId);
+  const score = Number(searchParams.score);
+  const correctAnswers = Number(searchParams.correctAnswers);
+  const totalQuestions = Number(searchParams.totalQuestions);
+  const timeSpent = Number(searchParams.timeSpent);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -48,30 +53,28 @@ export default function QuizResults() {
         </View>
       </View>
 
-      <View style={styles.scoreTable}>
-        <View style={styles.scoreTableIconLayout}>
-          <CorrectIcon width={20} height={20} />
-        </View>
-        <Text style={[styles.text2, styles.scoreText]}>
-          {t("correct")} {correctAnswers}/{totalQuestions}
-        </Text>
-      </View>
-
-      <View style={styles.scoreTable}>
-        <View style={styles.scoreTableIconLayout}>
-          <FalseIcon width={20} height={20} />
-        </View>
-        <Text style={[styles.text3, styles.scoreText]}>
-          {t("incorrect")} {totalQuestions - correctAnswers}/{totalQuestions}
-        </Text>
-      </View>
-
-      <Text style={styles.scoreText}>
-        {t("score")} {score}%
+      <View style={styles.resultBox}>
+      <Text style={{ fontSize: 14 }}>
+      {t("accuracy")}: <Text style={styles.valueText}>{score}%</Text>
       </Text>
-      <Text style={styles.timeText}>
-        {t("time_spent")} {formatTime(Number(timeSpent))}
+      <Text style={{ marginTop: 10, fontSize: 14 }}>
+      {t("correct")}: <Text style={styles.valueText}>{correctAnswers}/{totalQuestions}</Text>
       </Text>
+      <Text style={{ marginTop: 10, fontSize: 14 }}>
+      {t("incorrect")}: <Text style={styles.valueText}>{totalQuestions - correctAnswers}/{totalQuestions}</Text>
+      </Text>
+      <Text style={{ marginTop: 10, fontSize: 14 }}>
+      {t("pass")}: <Text style={styles.valueText}>
+        {totalQuestions - (totalQuestions - correctAnswers) - correctAnswers}/{totalQuestions}
+      </Text>
+      </Text>
+      <Text style={{ marginTop: 10, fontSize: 14 }}>
+      {t("total")}: <Text style={styles.valueText}>{totalQuestions}</Text>
+      </Text>
+      <Text style={{ marginVertical: 10, fontSize: 14 }}>
+      {t("time_spent")}: <Text style={styles.valueText}>{formatTime(Number(timeSpent))}</Text>
+      </Text>
+      </View>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
@@ -231,4 +234,15 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#fff",
   },
+  valueText: {
+    fontWeight: 'bold',
+    color: '#2916ff',
+  },
+  resultBox:{
+    width: '80%',
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  }
 });

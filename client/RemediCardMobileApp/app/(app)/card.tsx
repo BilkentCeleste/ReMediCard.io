@@ -178,7 +178,18 @@ export default function Card( props: any ) {
     }
 
     const handleRetry = () => {
-        router.push(`/(app)/card?deck=${deck}`);
+        setCurrentCard(0);
+        setTrueAnswers(0);
+        setFalseAnswers(0);
+        setMaybeAnswers(0);
+        setFlashcardReviewList([])
+        setShowSummaryModal(false)
+        setSessionStats({
+            correct: 0,
+            uncertain: 0,
+            incorrect: 0,
+            accuracy: 0
+        })
     };
 
     const handleHomePage = () => {

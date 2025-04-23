@@ -38,15 +38,17 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .pushNotificationToken(request.getPushNotificationToken())
+                .language(request.getLanguage())
                 .build();
 
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
+        currentUserService.setCurrentUser(user);
         String jwtToken = jwtService.generateToken(user);
 
         //var refreshToken = jwtService.generateRefreshToken(user);
         //saveUserToken(savedUser, jwtToken);
 
-        notificationService.sendNotification("Welcome to ReMediCard.io",  "Welcome to ReMediCard.io " + user.getUsername(), user.getPushNotificationToken());
+        notificationService.sendNotification("welcome",  "welcome", new String[]{user.getUsername()}, user.getPushNotificationToken());
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
@@ -68,9 +70,11 @@ public class AuthService {
         String jwtToken = jwtService.generateToken(user);
 
         user.setPushNotificationToken(request.getPushNotificationToken());
+        user.setLanguage(request.getLanguage());
         userRepository.save(user);
+        currentUserService.setCurrentUser(user);
 
-        notificationService.sendNotification("Welcome back to ReMediCard.io",  "Welcome back to ReMediCard.io " + user.getUsername(), user.getPushNotificationToken());
+        notificationService.sendNotification("welcome_back",  "welcome_back", new String[]{user.getUsername()}, user.getPushNotificationToken());
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
@@ -90,8 +94,8 @@ public class AuthService {
         String username = request.getEmail().substring(0, request.getEmail().indexOf("@"));
         User user = userRepository.findByUsername(username).orElse(null);
 
-        String notificationTitle = "Welcome back to ReMediCard.io";
-        String notificationMessage = "Welcome back to ReMediCard.io " ;
+        String notificationTitle = "welcome_back";
+        String notificationMessage = "welcome_back" ;
 
         if(user == null){
             user = User.builder()
@@ -102,14 +106,15 @@ public class AuthService {
                     .build();
 
 
-            notificationTitle = "Welcome to ReMediCard.io";
-            notificationMessage = "Welcome to ReMediCard.io ";
+            notificationTitle = "welcome";
+            notificationMessage = "welcome";
         }
 
         user.setPushNotificationToken(request.getPushNotificationToken());
+        user.setLanguage(request.getLanguage());
         userRepository.save(user);
-
-        notificationService.sendNotification(notificationTitle,  notificationMessage + user.getUsername(), user.getPushNotificationToken());
+        currentUserService.setCurrentUser(user);
+        notificationService.sendNotification(notificationTitle,  notificationMessage, new String[]{user.getUsername()}, user.getPushNotificationToken());
 
         String jwtToken = jwtService.generateToken(user);
 
