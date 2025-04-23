@@ -1,11 +1,12 @@
 {
     "success": "Success",
     "error": "Error",
-    "quiz_deleted": "Selected quiz is successfully deleted!",
-    "quiz_info_missing": "Quiz information is missing.!",
+    "quiz_deleted": "Selected quiz is successfully deleted",
+    "quiz_delete_failed": "Failed to delete quiz",
+    "quiz_info_missing": "Quiz information is missing",
     "ai": "AI",
     "ai_message": "Generate With AI",
-    "enter_deck_name": "Please enter a deck name",
+    "enter_quiz_name": "Please enter a quiz name",
     "sort_by_last_accessed": "Sort by Last Accessed",
     "sort_by_newly_accessed": "Sort by Newly Accessed",
     "sort_by_best_performance": "Sort by Best Performance",
@@ -29,5 +30,6 @@
     "save_and_edit": "Save",
     "share_quiz": "Share quiz",
     "share_failed": "Failed to share quiz",
-    "delete_quiz_message": "Are you sure about deleting the selected quiz?"
+    "delete_quiz_message": "Are you sure about deleting the selected quiz?",
+    "quiz_create_failed": "Failed to create quiz"
 }

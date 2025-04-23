@@ -288,4 +288,13 @@ public class DeckService {
 
         searchableDeckRepository.delete(searchableDeck);
     }
+
+    @Transactional
+    public Deck updateDeckName(Long deckId, String name) {
+        Deck deck = getDeckByDeckId(deckId);
+        deck.setName(name);
+        deckRepository.save(deck);
+        saveSearchableDeck(deck);
+        return deck;
+    }
 }

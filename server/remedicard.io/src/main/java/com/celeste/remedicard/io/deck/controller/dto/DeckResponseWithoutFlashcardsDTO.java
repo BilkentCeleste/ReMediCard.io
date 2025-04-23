@@ -25,7 +25,6 @@ public class DeckResponseWithoutFlashcardsDTO {
     private int flashcardCount;
     private int popularity;
     Set<FigureResponseDTO> figureSet;
-    private boolean isSharedView;
     private DeckStatsResponseDTO bestDeckStat;
     private DeckStatsResponseDTO lastDeckStat;
 }

@@ -27,5 +27,6 @@
   "new_deck_name": "Yeni Deste Adı",
   "enter_deck_title": "Deste başlığını girin",
   "save_and_edit": "Kaydet ve Düzenle",
-  "share_deck":"Desteyi Paylaş"
+  "share_deck":"Desteyi Paylaş",
+  "deck_deletion_failed": "Deste silme işlemi başarısız oldu. Lütfen tekrar deneyin."
 }
