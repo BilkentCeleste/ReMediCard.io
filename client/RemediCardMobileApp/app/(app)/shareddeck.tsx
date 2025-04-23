@@ -8,10 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 export default function SharedDeck() {
     const { t } = useTranslation('shared_deck');
-
-    const [deck, setDeck] = useState();
     const router = useRouter();
     const { shareToken } = useLocalSearchParams();
+
+    const [deck, setDeck] = useState();
 
     useEffect(() => {
         if (shareToken) {

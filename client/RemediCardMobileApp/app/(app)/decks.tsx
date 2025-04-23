@@ -36,6 +36,7 @@ const { width } = Dimensions.get("window");
 export default function Decks() {
   const { t } = useTranslation("decks");
   const { deck_selected } = useLocalSearchParams();
+  const router = useRouter();
 
   const [searchParamUsed, setSearchParamUsed] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>("");
@@ -50,8 +51,6 @@ export default function Decks() {
   const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
-
-  const router = useRouter();
 
   useEffect(() => {
     getDecksByCurrentUser()
@@ -139,13 +138,18 @@ export default function Decks() {
   };
 
   const handleDeleteDeck = () => {
-    deleteDeck(selectedDeck.id).then((res) => {
-      Alert.alert(t("success"), t("success_message"));
-      setDecks(decks.filter((d) => d.id !== selectedDeck.id));
-      setSelectedDeck(null);
-      setPopUpVisible(false);
-      setModalVisible(false);
-    });
+    deleteDeck(selectedDeck.id)
+        .then((res) => {
+          Alert.alert(t("success"), t("success_message"));
+          setDecks(decks.filter((d) => d.id !== selectedDeck.id));
+          setSelectedDeck(null);
+          setPopUpVisible(false);
+          setModalVisible(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          Alert.alert(t("error"), t("deck_deletion_failed"));
+        });
   };
 
   const uploadGeneratePage = () => {

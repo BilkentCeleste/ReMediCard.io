@@ -1,19 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable, ActivityIndicator, Modal } from 'react-native';
-import { useRouter, Link } from 'expo-router';
-import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon, QuestionMarkIcon, UncertainIcon} from "@/constants/icons";
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Alert, Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useRouter} from 'expo-router';
+import {CheckmarkIcon, CorrectIcon, CrossIcon, FalseIcon, QuestionMarkIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
-import { useLocalSearchParams, useSearchParams } from 'expo-router/build/hooks';
-import { getFlashcardsInBatch, updateFlashcardReviews, createDeckStats } from '@/apiHelper/backendHelper';
-import { useTranslation } from 'react-i18next';
+import {useLocalSearchParams} from 'expo-router/build/hooks';
+import {createDeckStats, getFlashcardsInBatch, updateFlashcardReviews} from '@/apiHelper/backendHelper';
+import {useTranslation} from 'react-i18next';
 import PieChart from 'react-native-pie-chart';
-
 
 export default function Card( props: any ) {
     const { t } = useTranslation("card");
     const router = useRouter();
-
     const {deck} = useLocalSearchParams();
+
     const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
 
     const [currentCard, setCurrentCard] = useState(0);
@@ -64,15 +63,14 @@ export default function Card( props: any ) {
         }
     }
 
-async function sendFlashcardReviews() {
-    console.log("Sending flashcard reviews:", flashcardReviewList);
-    try {
-        await updateFlashcardReviews(flashcardReviewList);
-        setFlashcardReviewList([]); // Clear list after sending
-    } catch (error) {
-        console.error("Error updating flashcard reviews:", error);
+    async function sendFlashcardReviews() {
+        try {
+            await updateFlashcardReviews(flashcardReviewList);
+            setFlashcardReviewList([]);
+        } catch (error) {
+            console.error("Error updating flashcard reviews:", error);
+        }
     }
-}
 
     useEffect(() => {
         getFlashcards(parsedDeck.id);
@@ -82,11 +80,10 @@ async function sendFlashcardReviews() {
     useEffect(() => {
         if ((flashcardReviewList.length % 10 === 0 || currentCard === 0) && flashcardReviewList.length > 0) {
             const updateAndFetch = async () => {
-                await sendFlashcardReviews(); // Ensure this completes first
+                await sendFlashcardReviews();
                 if (currentCard === 0) {
-                    setFlashCardList([]); // Clear the list to force a re-fetch
-                    console.log("Getting flashcards after sending reviews.");
-                    await getFlashcards(parsedDeck.id); // Wait for database to update before fetching
+                    setFlashCardList([]);
+                    await getFlashcards(parsedDeck.id);
                 }
             };
             updateAndFetch();
@@ -96,7 +93,7 @@ async function sendFlashcardReviews() {
     const handleTrueAnswer = () => {
         setTrueAnswers(trueAnswers + 1);
         setFlashcardReviewList((prevList) => {
-            const updatedReviewList = [
+                return [
                 ...prevList,
                 {
                     id: flashCardList[currentCard].id,
@@ -104,9 +101,7 @@ async function sendFlashcardReviews() {
                     lastReviewed: new Date().toISOString().slice(0, -1),
                 },
             ];
-            return updatedReviewList;
-        }
-        );
+        });
 
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
@@ -137,7 +132,7 @@ async function sendFlashcardReviews() {
     const handleMaybeAnswer = () => {
         setMaybeAnswers(maybeAnswers + 1);
         setFlashcardReviewList((prevList) => {
-            const updatedReviewList = [
+                return [
                 ...prevList,
                 {
                     id: flashCardList[currentCard].id,
@@ -145,9 +140,7 @@ async function sendFlashcardReviews() {
                     lastReviewed: new Date().toISOString().slice(0, -1),
                 },
             ];
-            return updatedReviewList;
-        }
-        );
+        });
 
         if (currentCard < flashCardList.length - 1) {
             setCurrentCard(currentCard + 1);
@@ -191,7 +184,6 @@ async function sendFlashcardReviews() {
     const handleHomePage = () => {
         router.push(`/(app)/home`);
     };
-
 
     return (
         <View style={styles.container}>
