@@ -3,5 +3,9 @@
     "create_flashcard": "Bilgi Kartı Oluştur",
     "delete": "Sil",
     "cancel": "İptal",
-    "delete_card_consent": "Bu kartı silmek istediğinize emin misiniz?"
+    "delete_card_consent": "Bu kartı silmek istediğinize emin misiniz?",
+    "update_failed": "Güncelleme başarısız oldu",
+    "name_required": "İsim gerekli",
+    "delete_failed": "Silme başarısız oldu",
+    "saveName": "Kaydet"
 }

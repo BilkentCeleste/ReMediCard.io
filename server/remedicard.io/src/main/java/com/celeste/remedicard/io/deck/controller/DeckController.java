@@ -4,6 +4,7 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
+import com.celeste.remedicard.io.deck.controller.dto.UpdateDeckNameRequestDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
@@ -84,5 +85,11 @@ public class DeckController {
     public DeckResponseDTO getByShareToken(@PathVariable String shareToken) {
         Deck deck = deckService.getByShareToken(shareToken);
         return DeckCreateMapper.INSTANCE.toDTO(deck);
+    }
+
+    @PutMapping("/updateName/{deckId}")
+    public DeckResponseDTO updateDeckName(@PathVariable Long deckId, @RequestBody UpdateDeckNameRequestDTO dto) {
+        Deck updatedDeck = deckService.updateDeckName(deckId, dto.getName());
+        return DeckCreateMapper.INSTANCE.toDTO(updatedDeck);
     }
 }
