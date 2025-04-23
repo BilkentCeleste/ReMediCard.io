@@ -65,3 +65,5 @@ export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile
 
 // search 
 export const SEARCH_PATH = (searchText) => `${BASE_URL}/search?searchtext=${searchText}`;
+export const SEARCH_DECKS_PATH = (searchText) => `${BASE_URL}/search/deck?searchtext=${searchText}`;
+export const SEARCH_QUIZZES_PATH = (searchText) => `${BASE_URL}/search/quiz?searchtext=${searchText}`;

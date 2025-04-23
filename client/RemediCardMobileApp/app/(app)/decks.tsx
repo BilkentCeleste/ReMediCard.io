@@ -26,6 +26,7 @@ import {
   deleteDeck,
   createDeck,
   generateDeckShareToken,
+  decksSearch,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -51,6 +52,9 @@ export default function Decks() {
 
   const [showLoading, setShowLoading] = useState(true);
 
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+
   const router = useRouter();
 
   useEffect(() => {
@@ -69,6 +73,38 @@ export default function Decks() {
         setShowLoading(false);
       });
   }, [updated]);
+
+  useEffect(() => {
+        if (debouncedSearchText.trim() !== "") {
+          setShowLoading(true);
+          decksSearch(debouncedSearchText)
+            .then((res) => {
+              setShowLoading(false);
+              setDecks(res.data);
+            })
+            .catch((e) => {
+              console.log(e)
+              setShowLoading(false);
+            });
+        } else {
+          setUpdated(!updated);
+        }
+      }, [debouncedSearchText]);
+    
+  useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedSearchText(searchText);
+      }, 700);
+  
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [searchText]);
+
+  const cleanSearch = () => {
+    setSearchText("");
+    setDebouncedSearchText("");
+  };
 
   const sortOptions = [
     { label: t("sort_by_last_accessed"), value: "last" },
@@ -185,8 +221,18 @@ export default function Decks() {
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
           placeholder={t("search")}
+          value={searchText}
+          onChangeText={setSearchText}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         />
+        {searchText.length > 0 && (
+          <TouchableOpacity
+            onPress={cleanSearch}
+            style={styles.clearButton}
+          >
+            <Text style={styles.clearButtonText}>✕</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <DropDown
@@ -655,5 +701,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Regular",
     color: "#fff",
     textAlign: "center",
+  },
+  clearButton: {
+    paddingHorizontal: 6,
+    position: "absolute",
+    right: 8,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: "#888",
   },
 });

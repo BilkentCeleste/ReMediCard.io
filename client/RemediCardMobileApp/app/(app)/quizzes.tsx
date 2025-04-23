@@ -29,6 +29,7 @@ import {
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
+import { quizzesSearch } from "@/apiHelper/backendHelper";
 
 const { width } = Dimensions.get("window");
 
@@ -51,6 +52,9 @@ export default function Quizzes() {
 
   const [showLoading, setShowLoading] = useState(true);
 
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+
   useEffect(() => {
     getQuizzesByCurrentUser()
       .then((quizzes: any) => {
@@ -69,6 +73,38 @@ export default function Quizzes() {
         console.log(error);
       });
   }, [updated]);
+
+  useEffect(() => {
+      if (debouncedSearchText.trim() !== "") {
+        setShowLoading(true);
+        quizzesSearch(debouncedSearchText)
+          .then((res) => {
+            setShowLoading(false);
+            setQuizzes(res.data);
+          })
+          .catch((e) => {
+            console.log(e)
+            setShowLoading(false);
+          });
+      } else {
+        setUpdated(!updated);
+      }
+    }, [debouncedSearchText]);
+  
+  useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedSearchText(searchText);
+      }, 700);
+  
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [searchText]);
+
+  const cleanSearch = () => {
+    setSearchText("");
+    setDebouncedSearchText("");
+  };
 
   const handleQuizPress = (quiz: any) => {
     setSelectedQuiz(quiz);
@@ -194,8 +230,18 @@ export default function Quizzes() {
         <TextInput
           style={[styles.searchText, styles.searchPosition]}
           placeholder={t("search")}
+          value={searchText}
+          onChangeText={setSearchText}
           placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
         ></TextInput>
+        {searchText.length > 0 && (
+          <TouchableOpacity
+            onPress={cleanSearch}
+            style={styles.clearButton}
+          >
+            <Text style={styles.clearButtonText}>✕</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <DropDown
@@ -658,5 +704,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Regular",
     color: "#fff",
     textAlign: "center",
+  },
+  clearButton: {
+    paddingHorizontal: 6,
+    position: "absolute",
+    right: 8,
+  },
+  clearButtonText: {
+    fontSize: 16,
+    color: "#888",
   },
 });

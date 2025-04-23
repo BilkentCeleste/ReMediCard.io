@@ -150,6 +150,14 @@ export const generalSearch = async (searchText) => {
   return await getFetcher(url.SEARCH_PATH(searchText));
 };
 
+export const decksSearch = async (searchText) => {
+  return await getFetcher(url.SEARCH_DECKS_PATH(searchText));
+};
+
+export const quizzesSearch = async (searchText) => {
+  return await getFetcher(url.SEARCH_QUIZZES_PATH(searchText));
+};
+
 export const generateQuizShareToken = async (id) => {
   return await postFetcher(url.GENERATE_QUIZ_SHARE_TOKEN_PATH(id));
 };
