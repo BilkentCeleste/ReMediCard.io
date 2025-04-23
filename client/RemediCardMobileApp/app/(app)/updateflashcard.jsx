@@ -55,12 +55,8 @@ export default function UpdateFlashcard() {
 
         }
 
-        console.log("creating: ");
-        console.log(data);
-
         createFlashcard(data)
             .then(() => {
-                console.log('Flashcard created');
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
@@ -69,7 +65,6 @@ export default function UpdateFlashcard() {
     }
 
     const handleUpdate = () => {
-        console.log("update");
         const data = {
             id: flashcardId,
             frontSide: {
@@ -88,7 +83,6 @@ export default function UpdateFlashcard() {
 
         updateFlashcard(flashcardId, data)
             .then(() => {
-                console.log('Flashcard updated');
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {

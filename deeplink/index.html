@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Redirecting...</title>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const quizId = params.get('selected_quiz');
-      const appUrl = `myapp://quizzes?selected_quiz=${quizId}`;
+<head>
+  <title>Redirecting...</title>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sharedItem = params.get('sharedItem');
+    const shareToken = params.get('shareToken');
 
-      console.log("Params", params)
+    let path = '';
+    if (sharedItem === 'quiz') {
+      path = 'sharedquiz';
+    } else if (sharedItem === 'deck') {
+      path = 'shareddeck';
+    } else {
+      path = 'home';
+    }
 
-      window.location.href = appUrl;
+    const appUrl = `myapp://${path}?shareToken=${shareToken}`;
 
-      setTimeout(() => {
-        document.getElementById('fallback').style.display = 'block';
-      }, 2000);
-    </script>
-  </head>
-  <body>
-    <p>Opening app ReMediCard.io...</p>
-    <div id="fallback" style="display:none;">
-      <p>If nothing happens, <a href="myapp://quizzes?selected_quiz=1">tap here</a>.</p>
-    </div>
-  </body>
+    console.log("Redirecting to:", appUrl);
+
+    window.location.href = appUrl;
+
+    setTimeout(() => {
+      const fallbackDiv = document.getElementById('fallback');
+      const fallbackLink = document.getElementById('fallback-link');
+      fallbackLink.href = appUrl;
+      fallbackDiv.style.display = 'block';
+    }, 2000);
+  </script>
+</head>
+<body>
+<p>Opening app ReMediCard.io...</p>
+<div id="fallback" style="display:none;">
+  <p>If nothing happens, <a id="fallback-link" href="#">tap here</a>.</p>
+</div>
+</body>
 </html>

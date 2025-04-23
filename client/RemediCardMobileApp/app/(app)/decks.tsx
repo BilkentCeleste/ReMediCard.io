@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert,
   Dimensions,
+  Share,
 } from "react-native";
 import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
@@ -148,11 +149,15 @@ export default function Decks() {
       generateDeckShareToken(selectedDeck?.id)
         .then((res) => {
           setModalVisible(false);
-          router.push({
-            pathname: "/(app)/shareddeck",
-            params: { shareToken: res?.data?.shareToken },
-          });
-        })
+          const shareUrl = res?.data;
+          Share.share({
+            message: shareUrl,
+            url: shareUrl,
+            title: selectedDeck?.name,
+          }, {
+            dialogTitle: 'Share Deck',
+            subject: selectedDeck?.name,
+          })})
         .catch((err) => {
           console.error(err);
           Alert.alert(t("error"), t("share_failed"));

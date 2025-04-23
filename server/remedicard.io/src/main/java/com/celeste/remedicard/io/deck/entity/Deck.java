@@ -54,7 +54,7 @@ public class Deck extends AuditableEntity {
     private User user;
 
     public Deck(Deck deck) {
-        BeanUtils.copyProperties(deck, this, "id", "user", "flashcardSet", "figureSet");
+        BeanUtils.copyProperties(deck, this, "id", "user", "flashcardSet", "figureSet", "shareToken");
         Set<Flashcard> originalFlashcards = deck.getFlashcardSet();
         for (Flashcard flashcard : originalFlashcards) {
             this.addFlashcard(new Flashcard(flashcard));

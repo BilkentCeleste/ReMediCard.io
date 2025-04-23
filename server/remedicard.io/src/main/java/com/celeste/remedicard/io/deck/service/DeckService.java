@@ -5,7 +5,6 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
-import com.celeste.remedicard.io.deck.controller.dto.ShareDeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
@@ -17,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,6 +42,9 @@ public class DeckService {
     private final UserService userService;
     private final SpacedRepetitionService spacedRepetitionService;
     private final SearchService searchService;
+
+    @Value("${app.share-url-base}")
+    private String shareUrlBase;
 
     public Deck create(Deck deck) {
         User user = currentUserService.getCurrentUser();
@@ -220,12 +223,15 @@ public class DeckService {
         deckRepository.save(newDeck);
     }
 
-    public ShareDeckResponseDTO generateShareToken(Long deckId) {
+    public String generateShareToken(Long deckId) {
         Deck deck = getDeckByDeckId(deckId);
+        if (deck.getShareToken() != null) {
+            return shareUrlBase + "?sharedItem=deck&shareToken=" + deck.getShareToken();
+        }
         String shareToken = java.util.UUID.randomUUID().toString();
         deck.setShareToken(shareToken);
         deckRepository.save(deck);
-        return new ShareDeckResponseDTO(shareToken);
+        return shareUrlBase + "?sharedItem=deck&shareToken=" + shareToken;
     }
 
     public Deck getByShareToken(String shareToken) {

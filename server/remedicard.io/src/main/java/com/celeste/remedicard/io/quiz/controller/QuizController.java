@@ -75,7 +75,7 @@ public class QuizController {
     }
 
     @PostMapping("/generateShareToken/{quizId}")
-    public ShareQuizResponseDTO generateShareToken(@PathVariable Long quizId) {
+    public String generateShareToken(@PathVariable Long quizId) {
         return quizService.generateShareToken(quizId);
     }
 

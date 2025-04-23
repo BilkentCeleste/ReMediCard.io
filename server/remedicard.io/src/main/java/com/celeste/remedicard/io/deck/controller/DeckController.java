@@ -4,7 +4,6 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
-import com.celeste.remedicard.io.deck.controller.dto.ShareDeckResponseDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
@@ -94,7 +93,7 @@ public class DeckController {
     }
 
     @PostMapping("/generateShareToken/{deckId}")
-    public ShareDeckResponseDTO generateShareToken(@PathVariable Long deckId) {
+    public String generateShareToken(@PathVariable Long deckId) {
         return deckService.generateShareToken(deckId);
     }
 
