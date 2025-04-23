@@ -1,12 +1,16 @@
 package com.celeste.remedicard.io.search.controller;
 
+import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
+import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.search.dto.GeneralSearchResponseDTO;
 import com.celeste.remedicard.io.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
-@RequestMapping("/search")
+@RequestMapping("search")
 @RequiredArgsConstructor
 public class SearchController {
 
@@ -18,12 +22,12 @@ public class SearchController {
     }
 
     @GetMapping("deck")
-    public GeneralSearchResponseDTO searchDecks(@RequestParam("searchtext") String searchText) {
+    public Set<DeckResponseWithoutFlashcardsDTO> searchDecks(@RequestParam("searchtext") String searchText) {
         return searchService.searchDecks(searchText);
     }
 
-    @GetMapping("quiz/")
-    public GeneralSearchResponseDTO searchQuizzes(@RequestParam("searchtext") String searchText) {
+    @GetMapping("quiz")
+    public Set<QuizResponseWithoutQuestionsDTO> searchQuizzes(@RequestParam("searchtext") String searchText) {
         return searchService.searchQuizzes(searchText);
     }
 }

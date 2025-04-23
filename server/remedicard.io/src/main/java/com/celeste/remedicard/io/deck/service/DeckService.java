@@ -5,11 +5,18 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
+import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
+import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
+import com.celeste.remedicard.io.deckStats.entity.DeckStats;
+import com.celeste.remedicard.io.deckStats.mapper.DeckStatsResponseMapper;
+import com.celeste.remedicard.io.deckStats.service.DeckStatsService;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
-import com.celeste.remedicard.io.search.service.SearchService;
+import com.celeste.remedicard.io.search.entity.SearchableDeck;
+import com.celeste.remedicard.io.search.entity.SearchableFlashcard;
+import com.celeste.remedicard.io.search.repository.SearchableDeckRepository;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -25,12 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +43,11 @@ public class DeckService {
 
     private final GeminiAPIService geminiAPIService;
     private final DeckRepository deckRepository;
+    private final SearchableDeckRepository searchableDeckRepository;
     private final CurrentUserService currentUserService;
     private final UserService userService;
     private final SpacedRepetitionService spacedRepetitionService;
-    private final SearchService searchService;
+    private final DeckStatsService deckStatsService;
 
     @Value("${app.share-url-base}")
     private String shareUrlBase;
@@ -50,7 +56,7 @@ public class DeckService {
         User user = currentUserService.getCurrentUser();
         deck.setUser(user);
         deckRepository.save(deck);
-        searchService.saveSearchableDeck(deck);
+        saveSearchableDeck(deck);
         return deck;
     }
 
@@ -68,6 +74,10 @@ public class DeckService {
         return deckRepository.findAllByUserId(userId);
     }
 
+    public Set<Deck> findDecksByIds(Set<Long> ids){
+        return new HashSet<>(deckRepository.findAllById(ids));
+    }
+
     public void removeDeck(Long deckId) {
         Long userId = currentUserService.getCurrentUserId();
 
@@ -78,7 +88,7 @@ public class DeckService {
         }
 
         deckRepository.delete(deck);
-        searchService.deleteSearchableDeck(deckId);
+        deleteSearchableDeck(deckId);
     }
 
     public void generateDeck(MultipartFile file) {
@@ -210,7 +220,7 @@ public class DeckService {
             spacedRepetitionService.create(user, flashcard);
         }
 
-        searchService.saveSearchableDeck(deck);
+        saveSearchableDeck(deck);
     }
 
     public void addUserDeck(Long deckId) {
@@ -237,5 +247,45 @@ public class DeckService {
     public Deck getByShareToken(String shareToken) {
         return deckRepository.findByShareToken(shareToken)
                 .orElseThrow(() -> new EntityNotFoundException("Deck not found with share token: " + shareToken));
+    }
+
+    public Set<DeckResponseWithoutFlashcardsDTO> convertFromDeckToDeckResponseWithoutFlashcardsDTO(Set<Deck> decks, Long userId){
+        Set<DeckResponseWithoutFlashcardsDTO> response = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(decks);
+        response.forEach(deck -> {
+            DeckStats bestDeckStats = deckStatsService.getBestDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            DeckStats lastDeckStats = deckStatsService.getLastDeckStatsByDeckIdAndUserId(deck.getId(), userId);
+            deck.setBestDeckStat(bestDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(bestDeckStats) : null);
+            deck.setLastDeckStat(lastDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(lastDeckStats) : null);
+        });
+
+        return response;
+    }
+
+
+    public void saveSearchableDeck(Deck deck){
+        User user = currentUserService.getCurrentUser();
+
+        SearchableDeck searchableDeck = SearchableDeck.builder()
+                .id(deck.getId())
+                .userId(user.getId())
+                .name(deck.getName())
+                .flashcards(deck.getFlashcardSet() == null? new ArrayList<>() : deck.getFlashcardSet().stream().map(
+                        flashcard -> SearchableFlashcard.builder()
+                                .id(flashcard.getId())
+                                .back(flashcard.getBackSide().getText())
+                                .front(flashcard.getFrontSide().getText())
+                                .build()
+                ).collect(Collectors.toList()))
+                .build();
+
+        searchableDeckRepository.save(searchableDeck);
+    }
+
+    public void deleteSearchableDeck(Long id) {
+        SearchableDeck searchableDeck = searchableDeckRepository.findById(id).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        searchableDeckRepository.delete(searchableDeck);
     }
 }

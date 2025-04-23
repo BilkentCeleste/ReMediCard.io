@@ -5,10 +5,17 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.QuestionCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
+import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
+import com.celeste.remedicard.io.quiz.mapper.QuizzesResponseMapper;
 import com.celeste.remedicard.io.quiz.repository.QuizRepository;
-import com.celeste.remedicard.io.search.service.SearchService;
+import com.celeste.remedicard.io.quizStats.entity.QuizStats;
+import com.celeste.remedicard.io.quizStats.mapper.QuizStatsResponseMapper;
+import com.celeste.remedicard.io.quizStats.service.QuizStatsService;
+import com.celeste.remedicard.io.search.entity.SearchableQuestion;
+import com.celeste.remedicard.io.search.entity.SearchableQuiz;
+import com.celeste.remedicard.io.search.repository.SearchableQuizRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +26,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class QuizService {
 
     private final QuizRepository quizRepository;
+    private final SearchableQuizRepository searchableQuizRepository;
     private final CurrentUserService currentUserService;
     private final UserService userService;
-    private final SearchService searchService;
+    private final QuizStatsService quizStatsService;
 
     @Value("${app.share-url-base}")
     private String shareUrlBase;
@@ -53,7 +60,7 @@ public class QuizService {
         User user = currentUserService.getCurrentUser();
         quiz.addUser(user);
         quizRepository.save(quiz);
-        searchService.saveSearchableQuiz(quiz);
+        saveSearchableQuiz(quiz);
         return quiz;
     }
 
@@ -61,7 +68,7 @@ public class QuizService {
     public void delete(Long quizId) {
         Quiz quiz = getById(quizId);
         quiz.removeUser();
-        searchService.deleteSearchableQuiz(quizId);
+        deleteSearchableQuiz(quizId);
         quizRepository.deleteById(quizId);
     }
 
@@ -117,8 +124,7 @@ public class QuizService {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         quizRepository.save(quiz);
-
-        searchService.saveSearchableQuiz(quiz);
+        saveSearchableQuiz(quiz);
     }
 
     public String generateShareToken(Long quizId) {
@@ -135,5 +141,48 @@ public class QuizService {
     public Quiz getByShareToken(String shareToken) {
         return quizRepository.findByShareToken(shareToken)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz not found with share token: " + shareToken));
+    }
+
+    public Set<Quiz> findQuizzesByIds(Set<Long> ids) {
+        return new HashSet<>(quizRepository.findAllById(ids));
+    }
+
+    public Set<QuizResponseWithoutQuestionsDTO> convertFromQuizToQuizResponseWithoutFlashcardsDTO(Set<Quiz> quizzes, Long userId){
+        Set<QuizResponseWithoutQuestionsDTO> response = QuizzesResponseMapper.INSTANCE.toDTO(quizzes);
+        response.forEach(quiz -> {
+            QuizStats bestQuizStats = quizStatsService.getBestQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
+            QuizStats lastQuizStats = quizStatsService.getLastQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
+            quiz.setBestQuizStat(bestQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(bestQuizStats) : null);
+            quiz.setLastQuizStat(lastQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(lastQuizStats) : null);
+        });
+
+        return response;
+    }
+
+    public void saveSearchableQuiz(Quiz quiz){
+        User user = currentUserService.getCurrentUser();
+
+        SearchableQuiz searchableQuiz = SearchableQuiz.builder()
+                .id(quiz.getId())
+                .userId(user.getId())
+                .name(quiz.getName())
+                .questions(quiz.getQuestions() == null? new ArrayList<>() : quiz.getQuestions().stream().map(
+                        question -> SearchableQuestion.builder()
+                                .id(question.getId())
+                                .description(question.getDescription())
+                                .options(question.getOptions())
+                                .build()
+                ).collect(Collectors.toList()))
+                .build();
+
+        searchableQuizRepository.save(searchableQuiz);
+    }
+
+    public void deleteSearchableQuiz(Long id) {
+        SearchableQuiz searchableQuiz = searchableQuizRepository.findById(id).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        searchableQuizRepository.delete(searchableQuiz);
     }
 }

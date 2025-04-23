@@ -5,11 +5,7 @@ import com.celeste.remedicard.io.quiz.controller.dto.*;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.mapper.QuizCreateMapper;
 import com.celeste.remedicard.io.quiz.mapper.QuizResponseMapper;
-import com.celeste.remedicard.io.quiz.mapper.QuizzesResponseMapper;
 import com.celeste.remedicard.io.quiz.service.QuizService;
-import com.celeste.remedicard.io.quizStats.entity.QuizStats;
-import com.celeste.remedicard.io.quizStats.mapper.QuizStatsResponseMapper;
-import com.celeste.remedicard.io.quizStats.service.QuizStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +18,6 @@ public class QuizController {
 
     private final QuizService quizService;
     private final CurrentUserService currentUserService;
-    private final QuizStatsService quizStatsService;
 
     @GetMapping("/get/{quizId}")
     public QuizResponseDTO getById(@PathVariable Long quizId) {
@@ -33,28 +28,14 @@ public class QuizController {
     @GetMapping("/getByCurrentUser")
     public Set<QuizResponseWithoutQuestionsDTO> getByCurrentUser() {
         Set<Quiz> quizSet = quizService.getByCurrentUserId();
-        Set<QuizResponseWithoutQuestionsDTO> response = QuizzesResponseMapper.INSTANCE.toDTO(quizSet);
         Long userId = currentUserService.getCurrentUserId();
-        response.forEach(quiz -> {
-            QuizStats bestQuizStats = quizStatsService.getBestQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
-            QuizStats lastQuizStats = quizStatsService.getLastQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
-            quiz.setBestQuizStat(bestQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(bestQuizStats) : null);
-            quiz.setLastQuizStat(lastQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(lastQuizStats) : null);
-        });
-        return response;
+        return quizService.convertFromQuizToQuizResponseWithoutFlashcardsDTO(quizSet, userId);
     }
 
     @GetMapping("/getByUserId/{userId}")
     public Set<QuizResponseWithoutQuestionsDTO> getByUserId(@PathVariable Long userId) {
         Set<Quiz> quizSet = quizService.getByUserId(userId);
-        Set<QuizResponseWithoutQuestionsDTO> response = QuizzesResponseMapper.INSTANCE.toDTO(quizSet);
-        response.forEach(quiz -> {
-            QuizStats bestQuizStats = quizStatsService.getBestQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
-            QuizStats lastQuizStats = quizStatsService.getLastQuizStatsByQuizIdAndUserId(quiz.getId(), userId);
-            quiz.setBestQuizStat(bestQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(bestQuizStats) : null);
-            quiz.setLastQuizStat(lastQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(lastQuizStats) : null);
-        });
-        return response;
+        return quizService.convertFromQuizToQuizResponseWithoutFlashcardsDTO(quizSet, userId);
     }
 
     @PostMapping("/create")
