@@ -5,5 +5,6 @@
     "loading_quiz": "Test yükleniyor",
     "go_back": "Geri dön",
     "no_quizzes_available": "Test yok",
-    "no_quizzes_available_message": "Test başlatmadan önce sorular eklemelisiniz."
+    "no_quizzes_available_message": "Testi başlatmadan önce soru eklemelisiniz.",
+    "end_session": "Oturumu Bitir"
 }

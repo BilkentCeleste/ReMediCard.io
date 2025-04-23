@@ -63,7 +63,9 @@ export default function SharedDeck() {
                     <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
                 </View>
 
-                <Text style={styles.menuText}>{deck?.name}</Text>
+                <View style = {styles.textComponent}>
+                <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{deck?.name}</Text>
+                </View>
 
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
@@ -82,7 +84,7 @@ export default function SharedDeck() {
                         <Flashcard
                             question={item?.frontSide?.text || ''}
                             answer={item?.backSide?.text || ''}
-                            width={120}
+                            width={110}
                             height={80}
                             textSize={8}
                         />
@@ -203,16 +205,24 @@ const styles = StyleSheet.create({
         bottom: "14%"
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 14,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
         fontWeight: "bold",
     },
     menuComponent: {
         width: "75%",
-        height: 20,
+        minHeight: 20,
         padding: 10,
         gap: 10,
         alignItems: "center",
-        marginVertical: 40,
+        justifyContent: "center",
+        marginTop: 40,
+    },
+    textComponent: {
+        width: "75%",
+        alignItems: "center",
     },
     menuText: {
         fontSize: 20,
@@ -222,7 +232,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         zIndex: 1,
         top: 5,
-        position: "absolute",
+        position: "relative",
     },
     iconLayout: {
         height: 24,
@@ -238,7 +248,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: "100%",
-        marginVertical: 30,
+        marginTop: 15,
     },
     separatorLine: {
         flex: 1,
@@ -252,15 +262,23 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'center', 
+        alignItems: 'center',
         marginTop: 20,
         marginBottom: 100,
+        gap: 10,
+        width: 200,
+        alignSelf: 'center',
     },
     button: {
-        backgroundColor: '#fff',
-        padding: 15,
-        borderRadius: 10,
-        width: '45%',
-        alignItems: 'center',
+        borderRadius: 20,
+        backgroundColor: "#2916ff",
+        width: "75%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 30,
+        height: 50,
+        bottom: "15%",
     }
 });

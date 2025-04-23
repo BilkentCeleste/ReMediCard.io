@@ -85,9 +85,7 @@ export default function QuizQuestion(props: any) {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-    } else {
-      handleQuizCompletion();
-    }
+    } 
   };
 
   const handleQuizCompletion = () => {
@@ -196,6 +194,9 @@ export default function QuizQuestion(props: any) {
         <TouchableOpacity onPress={handlePrevQuestion}>
           <NextQuestionIcon rotation={180}/>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.endQuizButton} onPress={handleQuizCompletion}>
+          <Text style = {styles.registertext}>{t("end_session")}</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleNextQuestion}>
           <NextQuestionIcon/>
         </TouchableOpacity>
@@ -299,4 +300,20 @@ const styles = StyleSheet.create({
     maxHeight: 55, // kutu içi max boyut
     flex: 1,
   },
+  endQuizButton: {
+    backgroundColor: "blue",
+    borderRadius: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 24,  
+    alignItems: "center",   
+    justifyContent: "center", 
+},
+registertext: {
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "InriaSans-Regular",
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+},
 });
