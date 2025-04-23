@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,6 +25,6 @@ public class DeckResponseDTO {
         private int flashcardCount;
         private int popularity;
         private Long userId;
-        Set<FlashcardResponseDTO> flashcardSet;
+        List<FlashcardResponseDTO> flashcardSet;
         Set<FigureResponseDTO> figureSet;
 }

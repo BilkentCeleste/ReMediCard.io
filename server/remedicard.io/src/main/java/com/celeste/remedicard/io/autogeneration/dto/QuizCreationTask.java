@@ -1,8 +1,7 @@
 package com.celeste.remedicard.io.autogeneration.dto;
 
 import lombok.Data;
-
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class QuizCreationTask {
@@ -11,5 +10,5 @@ public class QuizCreationTask {
     private String name;
     private Integer difficulty;
     private Integer popularity;
-    private Set<QuestionCreationTask> questions;
+    private List<QuestionCreationTask> questions;
 }

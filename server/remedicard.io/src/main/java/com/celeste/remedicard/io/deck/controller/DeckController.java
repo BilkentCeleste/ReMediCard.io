@@ -8,7 +8,6 @@ import com.celeste.remedicard.io.deck.controller.dto.UpdateDeckNameRequestDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
-import com.celeste.remedicard.io.deckStats.service.DeckStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class DeckController {
 
     private final DeckService deckService;
-    private final DeckStatsService deckStatsService;
     private final CurrentUserService currentUserService;
 
     @PostMapping("/create")

@@ -9,5 +9,6 @@ import java.util.Set;
 
 public interface DeckRepository extends JpaRepository<Deck, Long> {
     Set<Deck> findAllByUserId(Long userId);
+    Set<Deck> findAllByUserIdOrderByIdAsc(Long userId);
     Optional<Deck> findByShareToken(String shareToken);
 }

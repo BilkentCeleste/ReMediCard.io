@@ -21,7 +21,7 @@ export default function QuizQuestion(props: any) {
   const [quizData, setQuizData] = useState<any>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
-  const [timeRemaining, setTimeRemaining] = useState(600); // 10 minutes in seconds
+  const [timeRemaining, setTimeRemaining] = useState(600);
   const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
@@ -71,9 +71,15 @@ export default function QuizQuestion(props: any) {
   };
 
   const handleAnswerSelect = (index: number) => {
-    const updatedSelectedAnswers = [...selectedAnswers];
-    updatedSelectedAnswers[currentQuestionIndex] = index;
-    setSelectedAnswers(updatedSelectedAnswers);
+    setSelectedAnswers((prev) => {
+      const updated = [...prev];
+      if (updated[currentQuestionIndex] === index) {
+        updated[currentQuestionIndex] = -1;
+      } else {
+        updated[currentQuestionIndex] = index;
+      }
+      return updated;
+    });
   };
 
   const handlePrevQuestion = () => {
@@ -90,33 +96,47 @@ export default function QuizQuestion(props: any) {
 
   const handleQuizCompletion = () => {
     setTimerActive(false);
-    let correctAnswers = 0;
+    let correct = 0;
+    let incorrect = 0;
+    let skipped = 0;
+
     quizData.questions.forEach((question: any, index: number) => {
-      if (selectedAnswers[index] === question.correctAnswerIndex) {
-        correctAnswers++;
+      const selected = selectedAnswers[index];
+      if (selected === -1) {
+        skipped++;
+      } else if (selected === question.correctAnswerIndex) {
+        correct++;
+      } else {
+        incorrect++;
       }
     });
 
-    const score = Math.round(correctAnswers == 0 ? 0 : (correctAnswers / totalQuestions) * 100);
+    const score = Math.round(correct === 0 ? 0 : (correct / totalQuestions) * 100);
 
     const quizStatBody = {
       successRate: score,
       quizId: quizId,
     }
-    createQuizStats(quizStatBody).then(() => {
-        console.log("Quiz stats created successfully.");
-    }).catch((error) => {
-        console.error("Error creating quiz stats:", error);
-    });
+
+    createQuizStats(quizStatBody)
+        .then(() => {
+          console.log("Quiz stats created successfully.");
+        })
+        .catch((error) => {
+          console.error("Error creating quiz stats:", error);
+        });
 
     router.push({
       pathname: "/(app)/quizresults",
       params: {
         quizId: quizId,
         score: score,
-        correctAnswers: correctAnswers,
+        correctAnswers: correct,
+        incorrectAnswers: incorrect,
+        skippedQuestions: skipped,
         totalQuestions: totalQuestions,
-        timeSpent: 600 - timeRemaining
+        timeSpent: 600 - timeRemaining,
+        selectedAnswers: selectedAnswers
       }
     });
   };

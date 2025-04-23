@@ -65,13 +65,13 @@ public class DeckService {
     }
 
     public Set<Deck> getDeckByUserId(Long userId) {
-        return deckRepository.findAllByUserId(userId);
+        return deckRepository.findAllByUserIdOrderByIdAsc(userId);
     }
 
     public Set<Deck> getDeckByCurrentUser() {
         Long userId = currentUserService.getCurrentUserId();
 
-        return deckRepository.findAllByUserId(userId);
+        return deckRepository.findAllByUserIdOrderByIdAsc(userId);
     }
 
     public Set<Deck> findDecksByIds(Set<Long> ids){
@@ -121,7 +121,7 @@ public class DeckService {
         //deck = deckRepository.save(deck);
 
         //TODO CHECK ATTRIBUTES
-        Set<Flashcard> flashcards = new HashSet<>();
+        List<Flashcard> flashcards = new ArrayList<>();
 
         for (String pair : questionAnswerPairs) {
             String[] parts = pair.split(" /// ");
@@ -185,7 +185,7 @@ public class DeckService {
                 .popularity(0)
                 .build();
 
-        Set<Flashcard> flashcards = new HashSet<>();
+        List<Flashcard> flashcards = new ArrayList<>();
 
         for (FlashcardCreationTask flashcardCreationTask : deckCreationTask.getFlashcards()) {
 
