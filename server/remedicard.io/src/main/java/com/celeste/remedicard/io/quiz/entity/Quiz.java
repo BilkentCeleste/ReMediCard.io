@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +34,7 @@ public class Quiz extends AuditableEntity {
     private Integer questionCount = 0;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Question> questions = new HashSet<>();
+    private List<Question> questions = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -42,7 +42,7 @@ public class Quiz extends AuditableEntity {
 
     public Quiz(Quiz quiz) {
         BeanUtils.copyProperties(quiz, this, "id", "user", "questions", "questionCount", "shareToken");
-        Set<Question> originalQuestions = quiz.getQuestions();
+        List<Question> originalQuestions = quiz.getQuestions();
         for (Question question : originalQuestions) {
             this.addQuestion(new Question(question));
         }

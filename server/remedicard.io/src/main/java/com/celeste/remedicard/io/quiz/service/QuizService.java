@@ -48,12 +48,12 @@ public class QuizService {
     }
 
     public Set<Quiz> getByUserId(Long userId) {
-        return quizRepository.findByUserId(userId);
+        return quizRepository.findByUserIdOrderByIdAsc(userId);
     }
 
     public Set<Quiz> getByCurrentUserId() {
         Long currentUserId = currentUserService.getCurrentUser().getId();
-        return quizRepository.findByUserId(currentUserId);
+        return quizRepository.findByUserIdOrderByIdAsc(currentUserId);
     }
 
     public Quiz create(Quiz quiz) {
@@ -97,7 +97,7 @@ public class QuizService {
     public void createQuiz(QuizCreationTask quizCreationTask) {
         User user = userService.getUserById(quizCreationTask.getUserId());
 
-        Set<Question> questions = new HashSet<>();
+        List<Question> questions = new ArrayList<>();
 
         Quiz quiz = Quiz.builder()
                 .name(quizCreationTask.getName())

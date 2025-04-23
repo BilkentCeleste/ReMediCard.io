@@ -8,7 +8,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,7 +49,7 @@ public class Deck extends AuditableEntity {
     private Set<Figure> figureSet = new HashSet<>();
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Flashcard> flashcardSet = new HashSet<>();
+    private List<Flashcard> flashcardSet = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -55,7 +57,7 @@ public class Deck extends AuditableEntity {
 
     public Deck(Deck deck) {
         BeanUtils.copyProperties(deck, this, "id", "user", "flashcardSet", "figureSet", "shareToken");
-        Set<Flashcard> originalFlashcards = deck.getFlashcardSet();
+        List<Flashcard> originalFlashcards = deck.getFlashcardSet();
         for (Flashcard flashcard : originalFlashcards) {
             this.addFlashcard(new Flashcard(flashcard));
         }

@@ -222,18 +222,7 @@ public class AuthService {
         user.getDecks().clear();
         user.getUsageStats().clear();
 
-//        user.getQuizzes().forEach(quiz -> {
-//            quiz.getQuestions().clear();
-//            quiz.setUser(null);
-//        });
-
         user.getQuizzes().clear();
-
-//        Set<Quiz> quizzes = user.getQuizzes();
-//        quizzes.forEach(Quiz::removeUser);
-//        quizRepository.saveAll(quizzes);
-
-        //user.getQuizzes().clear();
 
         userRepository.save(user);
         userRepository.delete(user);

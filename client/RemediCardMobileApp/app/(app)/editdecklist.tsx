@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { AtIcon, MailIcon, ChevronDown, EditProfileIcon, SubscriptionIcon, ContactIcon, ProfileIcon, SettingsIcon,
-    LanguageIcon, SearchIcon, HomeIcon, PlusIcon,
-    EditIcon} from "@/constants/icons";
-import DropDown from "../../components/DropDown"; // Path to the custom DropDown component
+import { ProfileIcon, SettingsIcon, SearchIcon, HomeIcon, PlusIcon, EditIcon} from "@/constants/icons";
+import DropDown from "../../components/DropDown";
 import { getDecksByCurrentUser } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
 
@@ -15,21 +13,19 @@ export default function Decks() {
     const [selectedSort, setSelectedSort] = useState<string>("");
     const [decks, setDecks] = useState<any[]>([]);
 
-    const uploadGeneratePage = () => {
-        router.push("/(app)/generatedecks");
-    };
-
     useEffect(() => {
         getDecksByCurrentUser()
             .then((decks) => {
-                const decks_info = decks.data;
-
-                setDecks(decks_info);
+                setDecks(decks?.data);
             })
             .catch((error) => {
                 console.log(error);
             });
-        }, []);
+    }, []);
+
+    const uploadGeneratePage = () => {
+        router.push("/(app)/generatedecks");
+    };
 
     const sortOptions = [
         { label: t("sort_by_last_accessed"), value: "last" },
@@ -39,13 +35,16 @@ export default function Decks() {
     ];
 
     const uploadUpdateDeckPage = (id: any) => {
-        router.push("/(app)/updatedeck?deckId=" + id);
+        router.push({
+            pathname: "/(app)/updatedeck",
+            params: { deckId: id },
+        });
     }
 
-    const formatDate = (dateStr) => {
+    const formatDate = (dateStr: any) => {
         const date = new Date(dateStr);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
       };
@@ -67,9 +66,9 @@ export default function Decks() {
 
         <FlatList
             style={styles.flatListContainer}
-            contentContainerStyle={styles.flatListContent} // Style for inner FlatList items
+            contentContainerStyle={styles.flatListContent}
             data={decks}
-            keyExtractor={(item, index) => index.toString()} // Add padding to avoid overlap with navbar
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.deckComponent}>
                     <View>

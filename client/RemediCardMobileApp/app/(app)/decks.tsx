@@ -59,7 +59,7 @@ export default function Decks() {
         setShowLoading(false);
         if (!searchParamUsed && deck_selected !== undefined) {
           setSearchParamUsed(true);
-          const selected = decks?.data.find((deck) => deck.id == deck_selected);
+          const selected = decks?.data.find((deck: any) => deck.id == deck_selected);
           handleDeckPress(selected);
         }
       })

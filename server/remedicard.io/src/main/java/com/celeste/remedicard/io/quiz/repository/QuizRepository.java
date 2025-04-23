@@ -10,6 +10,6 @@ import java.util.Set;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     Set<Quiz> findByUserId(Long userId);
-    
+    Set<Quiz> findByUserIdOrderByIdAsc(Long userId);
     Optional<Quiz> findByShareToken(String shareToken);
 }

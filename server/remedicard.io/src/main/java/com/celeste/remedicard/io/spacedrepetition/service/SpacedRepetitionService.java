@@ -30,7 +30,7 @@ public class SpacedRepetitionService {
         spacedRepetition.setUser(user);
         spacedRepetition.setFlashcard(flashcard);
         spacedRepetition.setModel(EbisuUtils.defaultEbisuModel());
-        spacedRepetition.setLastReviewed(LocalDateTime.now(ZoneId.of("UTC")));  // use UTC time zone
+        spacedRepetition.setLastReviewed(LocalDateTime.now(ZoneId.of("UTC")));
         spacedRepetitionRepository.save(spacedRepetition);
     }
 
@@ -38,7 +38,6 @@ public class SpacedRepetitionService {
     public List<FlashcardResponseDTO> getFlashcardsInBatch(Long userId, Long deckId, int batchSize) {
         List<SpacedRepetition> spacedRepetitions = spacedRepetitionRepository.findByUserIdAndDeckId(userId, deckId);
 
-        // caculate recall probability for each flashcard and return the bottom batchSize flashcards
         return spacedRepetitions.stream()
                 .map(sr -> {
                     FlashcardResponseDTO flashcardResponseDTO = FlashcardResponseMapper.INSTANCE.toDTO(sr.getFlashcard());
@@ -59,7 +58,6 @@ public class SpacedRepetitionService {
             SpacedRepetition sr = spacedRepetitionRepository
                     .findByUserIdAndFlashcardId(userId, review.getId());
 
-            // since the library only allows int for success, we act as if 1 review is equal to 2 reviews
             int success = switch (review.getResult()){
                 case CORRECT -> 2;
                 case PARTIALLY_CORRECT -> 1;
@@ -67,18 +65,12 @@ public class SpacedRepetitionService {
             };
 
             LocalDateTime lastReviewedTime = sr.getLastReviewed();
-            LocalDateTime reviewTime = review.getLastReviewed();    // frontend returns time in UTC
+            LocalDateTime reviewTime = review.getLastReviewed();
 
-            // time difference in minutes
-            double timeDifference = Duration.between(lastReviewedTime, reviewTime).toSeconds() / 60.0 + 1e-2; // add small value to avoid zero case
-
-            System.out.println("Last reviewed: " + lastReviewedTime);
-            System.out.println("Review time: " + reviewTime);
-            System.out.println("Time difference: " + timeDifference);
-            System.out.println("success: " + success);
+            double timeDifference = Duration.between(lastReviewedTime, reviewTime).toSeconds() / 60.0 + 1e-2;
 
             EbisuInterface model = EbisuUtils.fromJson(sr.getModel());
-            EbisuInterface updatedModel = Ebisu.updateRecall(model, success, 2, timeDifference);    // total is 2 because we act as if 1 review is equal to 2 reviews
+            EbisuInterface updatedModel = Ebisu.updateRecall(model, success, 2, timeDifference);
 
             sr.setModel(EbisuUtils.toJson((EbisuModel) updatedModel));
             sr.setLastReviewed(reviewTime);
@@ -86,5 +78,4 @@ public class SpacedRepetitionService {
             spacedRepetitionRepository.save(sr);
         }
     }
-
 }
