@@ -35,10 +35,9 @@ const { width } = Dimensions.get("window");
 
 export default function Decks() {
   const { t } = useTranslation("decks");
-
   const { deck_selected } = useLocalSearchParams();
-  const [searchParamUsed, setSearchParamUsed] = useState(false);
 
+  const [searchParamUsed, setSearchParamUsed] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [decks, setDecks] = useState<any[]>([]);
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
@@ -46,12 +45,9 @@ export default function Decks() {
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [updated, setUpdated] = useState(false);
-  const [manualCreateModalVisible, setManualCreateModalVisible] =
-    useState(false);
+  const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
   const [newDeckTitle, setNewDeckTitle] = useState("");
-
   const [showLoading, setShowLoading] = useState(true);
-
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
 

@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, Alert } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon, PlusIcon } from '@/constants/icons';
-import { getDeckByDeckId, deleteFlashcard } from '../../apiHelper/backendHelper';
+import { getDeckByDeckId, deleteFlashcard, updateDeckName } from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
 
 export default function Updatedeck() {
     const { t } = useTranslation('update_deck');
-    
-    const [deck, setDeck] = useState();
     const router = useRouter();
     const { deckId } = useLocalSearchParams();
-    const [DeleteCardModal, setDeleteCardModalVisible] =
-        useState(false);
+
+    const [deck, setDeck] = useState();
+    const [DeleteCardModal, setDeleteCardModalVisible] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [editedName, setEditedName] = useState("");
 
     useEffect(() => {
         if (deckId) {
@@ -55,24 +55,95 @@ export default function Updatedeck() {
                       setSelectedCard(null);
                 })
                 .catch((error) => {
+                    Alert.alert(t("error"), t("delete_failed"));
                     console.error('Error deleting flashcard:', error);
                 });
         }
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.menuComponent}>
-            <View style={[styles.menuIcon, styles.iconLayout]}>
-                <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
-            </View>
+    const handleNameEdit = () => {
+        setIsEditingName(true);
+        setEditedName(deck?.name || "");
+    };
 
-            <View style = {styles.textComponent}>
-            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{deck?.name}</Text>
-            </View>
-        
-            <View style={styles.separatorContainer}>
-                <View style={styles.separatorLine} />
-            </View>
+    const handleNameSave = () => {
+        if (!editedName) {
+            Alert.alert(t("error"), t("name_required"));
+            return;
+        }
+
+        const data = {
+            name: editedName,
+        };
+
+        updateDeckName(deckId, data)
+            .then((res) => {
+                setDeck(prev => ({
+                    ...prev,
+                    name: editedName
+                }));
+                setIsEditingName(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                Alert.alert(t("error"), t("update_failed"));
+            });
+    };
+
+    return (
+        <TouchableOpacity 
+            style={styles.container}
+            activeOpacity={1}
+            onPress={() => {
+                if (isEditingName) {
+                    setIsEditingName(false);
+                }
+            }}
+        >
+            <View style={styles.menuComponent}>
+                <View style={[styles.menuIcon, styles.iconLayout]}>
+                    <Link href="/(app)/decks"><GoBackIcon width={100} height={100} /></Link>
+                </View>
+
+                <View style={styles.textComponent}>
+                    {isEditingName ? (
+                        <TouchableOpacity 
+                            style={styles.nameEditContainer}
+                            activeOpacity={1}
+                            onPress={(e) => e.stopPropagation()}
+                        >
+                            <TextInput
+                                style={styles.nameInput}
+                                value={editedName}
+                                onChangeText={setEditedName}
+                                autoFocus
+                            />
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                                onPress={(e) => {
+                                    e.stopPropagation();
+                                    handleNameSave();
+                                }}
+                            >
+                                <Text style={styles.saveButtonText}>{t("saveName")}</Text>
+                            </TouchableOpacity>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity 
+                            onPress={(e) => {
+                                e.stopPropagation();
+                                handleNameEdit();
+                            }}
+                        >
+                            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">
+                                {deck?.name}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
+                <View style={styles.separatorContainer}>
+                    <View style={styles.separatorLine} />
+                </View>
             </View>
 
             <FlatList
@@ -159,7 +230,7 @@ export default function Updatedeck() {
             <View style={styles.navbarContainer}>
                 <View style={styles.navbarLine} />
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 
@@ -346,4 +417,30 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         width: "100%",
       },
+    nameEditContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+    },
+    nameInput: {
+        flex: 1,
+        fontSize: 20,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        padding: 5,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    saveButton: {
+        backgroundColor: '#4CAF50',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    saveButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
 });

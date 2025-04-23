@@ -1,11 +1,12 @@
 {
   "success": "Başarılı",
   "error": "Hata",
-  "quiz_deleted": "Seçilen test başarıyla silindi!",
-  "quiz_info_missing": "Test bilgileri eksik.!",
+  "quiz_deleted": "Seçilen test başarıyla silindi",
+  "quiz_delete_failed": "Testi silme işlemi başarısız oldu",
+  "quiz_info_missing": "Test bilgileri eksik",
   "ai": "YZ",
   "ai_message": "Yapay Zeka ile Oluştur",
-  "enter_deck_name": "Lütfen bir deste adı girin",
+  "enter_quiz_name": "Lütfen bir test adı girin",
   "sort_by_last_accessed": "Son Erişim Tarihine Göre Sırala",
   "sort_by_newly_accessed": "Yeni Erişim Tarihine Göre Sırala",
   "sort_by_best_performance": "En İyi Performansa Göre Sırala",
@@ -29,6 +30,6 @@
   "delete_quiz": "Testi Sil",
   "share_quiz": "Paylaş",
   "share_failed": "Testi paylaşma başarısız oldu",
-  "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?"
-
+  "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?",
+  "quiz_create_failed": "Test oluşturma işlemi başarısız oldu"
 }

@@ -35,9 +35,8 @@ const { width } = Dimensions.get("window");
 
 export default function Quizzes() {
   const { t } = useTranslation("quizzes");
-
   const { quiz_selected } = useLocalSearchParams();
-  const [searchParamUsed, setSearchParamUsed] = useState(false);
+  const router = useRouter();
 
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
@@ -47,11 +46,9 @@ export default function Quizzes() {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
   const [newQuizTitle, setNewQuizTitle] = useState("");
-  const router = useRouter();
   const [updated, setUpdated] = useState(false);
-
+  const [searchParamUsed, setSearchParamUsed] = useState(false);
   const [showLoading, setShowLoading] = useState(true);
-
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
 
@@ -129,6 +126,10 @@ export default function Quizzes() {
           setSelectedQuiz(null);
           setPopUpVisible(false);
           setModalVisible(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          Alert.alert(t("error"), t("quiz_delete_failed"));
         });
   };
 
@@ -184,7 +185,7 @@ export default function Quizzes() {
 
   const handleManualCreate = () => {
     if (!newQuizTitle.trim()) {
-      Alert.alert(t("error"), t("enter_deck_name"));
+      Alert.alert(t("error"), t("enter_quiz_name"));
       return;
     }
 
@@ -198,11 +199,10 @@ export default function Quizzes() {
         setNewQuizTitle("");
         setUpdated((updated) => !updated);
         setQuizzes((prevQuizzes) => [...prevQuizzes, res.data]);
-        //router.push("/(app)/updatedeck?deckId=" + res.data.id);
       })
       .catch((error) => {
         console.log(error);
-        Alert.alert("Error", "Failed to create quiz");
+        Alert.alert("Error", t("quiz_create_failed"));
       });
   };
 
@@ -216,7 +216,7 @@ export default function Quizzes() {
   const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };

@@ -59,6 +59,10 @@ export const addUserDeck = async (id) => {
   return await postFetcher(url.ADD_USER_DECK_PATH(id));
 };
 
+export const updateDeckName = async (id, data) => {
+  return await putFetcher(url.UPDATE_DECK_NAME_PATH(id), data);
+};
+
 // deck statistics
 export const createDeckStats = async (data) => {
   return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);
@@ -168,6 +172,10 @@ export const getQuizByShareToken = async (shareToken) => {
 
 export const addUserQuiz = async (id) => {
   return await postFetcher(url.ADD_USER_QUIZ_PATH(id));
+};
+
+export const updateQuizName = async (id, data) => {
+  return await putFetcher(url.UPDATE_QUIZ_NAME_PATH(id), data);
 };
 
 // quiz statistics

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
   FlatList,
@@ -24,23 +23,23 @@ import {
   ProfileIcon,
   SettingsIcon,
 } from "@/constants/icons";
-import { getQuizByQuizId, removeQuestion } from "../../apiHelper/backendHelper";
+import { getQuizByQuizId, removeQuestion, updateQuizName } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function editQuiz() {
   const { t } = useTranslation("edit_quiz");
-
-  const [quiz, setQuiz] = useState();
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [DeleteQuestionModalVisible, setDeleteQuestionModalVisible] =
-    useState(false);
-
   const router = useRouter();
   const navigation = useNavigation();
   const { quizId } = useLocalSearchParams();
 
-  React.useEffect(() => {
+  const [quiz, setQuiz] = useState();
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [DeleteQuestionModalVisible, setDeleteQuestionModalVisible] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState("");
+
+  useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
@@ -96,12 +95,52 @@ export default function editQuiz() {
         setSelectedQuestion(null);
       })
       .catch((error) => {
+        Alert.alert(t("error"), t("delete_failed"));
         console.error(error);
       });
   };
 
+  const handleNameEdit = () => {
+    setIsEditingName(true);
+    setEditedName(quiz?.name || "");
+  };
+
+  const handleNameSave = async () => {
+
+    if (!editedName) {
+        Alert.alert(t("error"), t("name_required"));
+        return;
+    }
+
+    const data = {
+        name: editedName,
+    }
+
+    updateQuizName(quizId, data)
+        .then((res) => {
+          console.log(res?.data);
+            setQuiz(prev => ({
+              ...prev,
+              name: editedName
+            }));
+            setIsEditingName(false);
+        })
+        .catch((error) => {
+            console.error(error);
+            Alert.alert(t("error"), t("update_failed"));
+        });
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity 
+      style={styles.container}
+      activeOpacity={1}
+      onPress={() => {
+        if (isEditingName) {
+          setIsEditingName(false);
+        }
+      }}
+    >
       <View style={styles.menuComponent}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
           <Link href="/(app)/quizzes">
@@ -109,8 +148,41 @@ export default function editQuiz() {
           </Link>
         </View>
 
-        <View style = {styles.textComponent}>
-        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{quiz?.name}</Text>
+        <View style={styles.textComponent}>
+          {isEditingName ? (
+            <TouchableOpacity 
+              style={styles.nameEditContainer}
+              activeOpacity={1}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <TextInput
+                style={styles.nameInput}
+                value={editedName}
+                onChangeText={setEditedName}
+                autoFocus
+              />
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  handleNameSave();
+                }}
+              >
+                <Text style={styles.saveButtonText}>{t("save")}</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity 
+              onPress={(e) => {
+                e.stopPropagation();
+                handleNameEdit();
+              }}
+            >
+              <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">
+                {quiz?.name}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={styles.separatorContainer}>
@@ -200,7 +272,7 @@ export default function editQuiz() {
       <View style={styles.navbarContainer}>
         <View style={styles.navbarLine} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -403,5 +475,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+  },
+  nameEditContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  nameInput: {
+    flex: 1,
+    fontSize: 20,
+    lineHeight: 22,
+    fontFamily: "Inter-Regular",
+    color: "#fff",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    padding: 5,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  saveButton: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 5,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

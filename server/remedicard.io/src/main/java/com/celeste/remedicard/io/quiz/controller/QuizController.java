@@ -66,9 +66,9 @@ public class QuizController {
         return QuizResponseMapper.INSTANCE.toDTO(quiz);
     }
 
-//    @PutMapping("/update/{quizId}")
-//    public void update(@RequestBody QuizCreateRequestDTO dto, @PathVariable Long quizId) {
-//        Quiz quiz = QuizCreateMapper.INSTANCE.toEntity(dto);
-//        quizService.update(quiz, quizId);
-//    }
+    @PutMapping("/updateName/{quizId}")
+    public QuizResponseDTO updateQuizName(@PathVariable Long quizId, @RequestBody UpdateQuizNameRequestDTO dto) {
+        Quiz updatedQuiz = quizService.updateQuizName(quizId, dto.getName());
+        return QuizResponseMapper.INSTANCE.toDTO(updatedQuiz);
+    }
 }

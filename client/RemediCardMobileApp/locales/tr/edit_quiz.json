@@ -3,5 +3,8 @@
   "create_question": "Soru Oluştur",
   "delete_question_consent": "Bu soruyu silmek istediğinize emin misiniz?",
   "cancel": "İptal",
-  "delete": "Sil"
+  "delete": "Sil",
+  "delete_failed": "Silme işlemi başarısız oldu",
+  "name_required": "İsim gerekli",
+  "update_failed": "Güncelleme işlemi başarısız oldu",
 }

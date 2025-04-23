@@ -3,5 +3,9 @@
     "create_flashcard": "Create Flashcard",
     "delete": "Delete",
     "cancel": "cancel",
-    "delete_card_consent": "Are you sure to delete selected flashcard?"
+    "delete_card_consent": "Are you sure to delete selected flashcard?",
+    "update_failed": "Update failed",
+    "name_required": "Name is required",
+    "delete_failed": "Delete failed",
+    "saveName": "Save",
 }

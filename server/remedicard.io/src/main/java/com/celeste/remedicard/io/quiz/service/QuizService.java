@@ -185,4 +185,13 @@ public class QuizService {
 
         searchableQuizRepository.delete(searchableQuiz);
     }
+
+    @Transactional
+    public Quiz updateQuizName(Long quizId, String name) {
+        Quiz quiz = getById(quizId);
+        quiz.setName(name);
+        quizRepository.save(quiz);
+        saveSearchableQuiz(quiz);
+        return quiz;
+    }
 }
