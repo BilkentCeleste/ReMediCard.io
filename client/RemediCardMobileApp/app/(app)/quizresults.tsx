@@ -24,12 +24,9 @@ export default function QuizResults() {
   const skippedQuestions = Number(searchParams.skippedQuestions);
   const totalQuestions = Number(searchParams.totalQuestions);
   const timeSpent = Number(searchParams.timeSpent);
-/*   const selectedAnswers = searchParams.selectedAnswers
-  console.log(selectedAnswers) */
   const selectedAnswers = (searchParams.selectedAnswers as string)
   .split(",")
   .map((val) => parseInt(val, 10));
-
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -145,7 +142,6 @@ export default function QuizResults() {
       </View>
     </View>
 
-
       <View style={styles.questionsContainer}>
       <FlatList
           data={quizData?.questions}
@@ -153,9 +149,7 @@ export default function QuizResults() {
           renderItem={({ item, index }) => {
             const isExpanded = expandedQuestionId === item?.id;
             const selectedAnswerIndex = selectedAnswers[index];
-            //console.log(selectedAnswerIndex)
-            const correctAnswerIndex = item.correctAnswerIndex; 
-            //console.log(correctAnswerIndex)
+            const correctAnswerIndex = item.correctAnswerIndex;
             const isPass = selectedAnswerIndex === -1;
             const isCorrect = selectedAnswerIndex === correctAnswerIndex;
 

@@ -31,5 +31,8 @@
   "share_quiz": "Paylaş",
   "share_failed": "Testi paylaşma başarısız oldu",
   "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?",
-  "quiz_create_failed": "Test oluşturma işlemi başarısız oldu"
+  "quiz_create_failed": "Test oluşturma işlemi başarısız oldu",
+  "no_quizzes_available": "Bu Testte Soru Yok",
+  "no_quizzes_available_message": "Testi çözmeye başlamadan önce soru eklemelisiniz.",
+  "ok": "Tamam"
 }

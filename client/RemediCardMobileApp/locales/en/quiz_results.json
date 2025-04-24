@@ -4,5 +4,7 @@
   "correct": "Correct",
   "incorrect": "Incorrect",
   "retry": "Retry",
-  "score": "Score"
+  "pass": "Skipped",
+  "total": "Total Questions",
+  "accuracy": "Accuracy"
 }

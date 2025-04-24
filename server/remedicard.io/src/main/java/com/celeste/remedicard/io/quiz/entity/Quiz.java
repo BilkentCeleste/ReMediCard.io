@@ -47,7 +47,7 @@ public class Quiz extends AuditableEntity {
     private User user;
 
     public Quiz(Quiz quiz) {
-        BeanUtils.copyProperties(quiz, this, "id", "user", "questions", "questionCount", "shareToken");
+        BeanUtils.copyProperties(quiz, this, "id", "user", "questions", "questionCount", "shareToken", "quizStats");
         List<Question> originalQuestions = quiz.getQuestions();
         for (Question question : originalQuestions) {
             this.addQuestion(new Question(question));
