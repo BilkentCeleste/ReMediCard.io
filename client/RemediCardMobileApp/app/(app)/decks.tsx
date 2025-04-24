@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Alert,
   Dimensions,
+  Animated,
+  Easing,
   Share,
 } from "react-native";
 import { useRouter, Link, useLocalSearchParams } from "expo-router";
@@ -19,6 +21,7 @@ import {
   SettingsIcon,
   SearchIcon,
   PlusIcon,
+  ChevronDown
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {
@@ -52,6 +55,8 @@ export default function Decks() {
   const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  const [isRotated, setIsRotated] = useState(false);
+  const rotation = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     getDecksByCurrentUser()
@@ -104,7 +109,23 @@ export default function Decks() {
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    Animated.timing(rotation, {
+      toValue: isRotated ? 0 : 1,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+    setIsRotated(!isRotated);
   }
+
+  const rotateInterpolate = rotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  });
+
+  const iconStyle = {
+    transform: [{ rotate: rotateInterpolate }],
+  };
 
   const sortOptions = [
     { label: t("sort_by_access_date"), value: "access" },
@@ -281,13 +302,15 @@ export default function Decks() {
         options={sortOptions}
         placeholder={t("select_sort_option")}
         onSelect={(value) => setSelectedSort(value)}
+        showChevron = {false}
       />
 
       <TouchableOpacity
-          style={styles.modalButton}
           onPress={toggleSortOrder}
       >
-        <Text style={styles.modalButtonText}>{t("toggle_sort")}</Text>
+        <Animated.View style={iconStyle}>
+          <ChevronDown />
+        </Animated.View>
       </TouchableOpacity>
 
       {/* Decks List */}
