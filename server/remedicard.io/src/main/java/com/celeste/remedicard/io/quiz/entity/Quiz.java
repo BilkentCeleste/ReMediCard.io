@@ -34,7 +34,7 @@ public class Quiz extends AuditableEntity {
     private String shareToken;
 
     @Column
-    private int questionCount = 0;
+    private Integer questionCount = 0;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
