@@ -66,6 +66,10 @@ public class Quiz extends AuditableEntity {
         this.questionCount--;
     }
 
+    public void incrementQuestionCount() {
+        this.questionCount++;
+    }
+
     public void addUser(User user) {
         this.user = user;
         user.getQuizzes().add(this);
