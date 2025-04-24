@@ -6,5 +6,7 @@
     "delete": "Sil",
     "update": "Güncelle",
     "front_message": "Ön Yüz Metnini Girin",
-    "back_message": "Arka Yüz Metnini Girin"
+    "back_message": "Arka Yüz Metnini Girin",
+    "select_front_image": "Ön Yüz Görseli Seçin (Opsiyonel)",
+    "select_back_image": "Arka Yüz Görseli Seçin (Opsiyonel)"
 }

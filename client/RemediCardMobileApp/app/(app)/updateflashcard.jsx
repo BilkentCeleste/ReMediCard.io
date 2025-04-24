@@ -177,10 +177,12 @@ export default function UpdateFlashcard() {
            {/*  <Text style={styles.title}>{isCreating ? 'Create Flashcard' : 'Update Flashcard'}</Text> */}
 
             <TextInput
-                style={styles.qInput}
+                style={styles.aInput}
                 placeholder={isCreating ? t("front_message") : ''}
                 value={cardFrontSide}
                 onChangeText={setCardFrontSide}
+                multiline={true}
+                textAlignVertical="top"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
             <View style={styles.selectComponent}>
@@ -191,8 +193,9 @@ export default function UpdateFlashcard() {
                     {frontImage == null && <UploadIcon></UploadIcon>}
                 </View>
             </View>
+
             <TextInput
-                style={styles.aInput}
+                style={[styles.aInput, {marginTop: 50}]}
                 placeholder={isCreating ? t("back_message") : ''}
                 value={cardBackSide}
                 onChangeText={setCardBackSide}
@@ -270,7 +273,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '90%',
         position: 'absolute',
-        bottom: 30,
+        top: 675
     },
     button: {
         flex: 0.48,
