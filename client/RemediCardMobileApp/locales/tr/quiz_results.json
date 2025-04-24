@@ -1,8 +1,10 @@
 {
-  "time_spent": "Geçen süre",
   "title": "Test Sonuçları",
   "correct": "Doğru",
   "incorrect": "Yanlış",
-  "retry": "Tekrar Çöz",
-  "score": "Skor"
+  "pass": "Boş",
+  "retry": "Yeniden Çöz",
+  "accuracy": "Başarı Yüzdesi",
+  "total": "Toplam Soru",
+  "time_spent": "Geçen süre"
 }
