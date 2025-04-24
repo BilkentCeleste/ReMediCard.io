@@ -37,17 +37,6 @@ export default function SharedDeck() {
         }
     };
 
-    const handleStartQuiz = () => {
-        if (deck?.id) {
-            router.push({
-                pathname: "/(app)/card",
-                params: { deck: JSON.stringify(deck) },
-            });
-        } else {
-            console.error("Deck ID is not available.");
-        }
-    };
-
     if (!deck) {
         return (
             <View style={styles.container}>
@@ -113,9 +102,6 @@ export default function SharedDeck() {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleAddToMyDecks}>
                     <Text style={styles.buttonText}>{t("add_to_my_decks")}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleStartQuiz}>
-                    <Text style={styles.buttonText}>{t("start_deck")}</Text>
                 </TouchableOpacity>
             </View>
 

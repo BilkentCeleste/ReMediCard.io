@@ -24,4 +24,12 @@ public class SideService {
         side.setImageURL(imageURL);
         sideRepository.save(side);
     }
+
+    public void copySideImage(Side side){
+        if(side.getImageURL() != null) {
+            String newImageURL = s3Service.copyS3Object(side.getImageURL(), "side-images");
+            side.setImageURL(newImageURL);
+            sideRepository.save(side);
+        }
+    }
 }

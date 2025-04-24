@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -80,5 +81,25 @@ public class S3Service {
                 .bucket(bucketName)
                 .key(key)
                 .build());
+    }
+
+    public String copyS3Object(String sourceUrl, String keyPrefix) {
+        User user = currentUserService.getCurrentUser();
+
+        String sourceKey = sourceUrl.substring(sourceUrl.indexOf(".com/") + 5);
+
+        String fileName = sourceKey.substring(sourceKey.lastIndexOf("/") + 1);
+        String destinationKey = keyPrefix + "/" + user.getId() + "/task_" + UUID.randomUUID() + "/" + fileName;
+
+        CopyObjectRequest copyRequest = CopyObjectRequest.builder()
+                .sourceBucket(bucketName)
+                .sourceKey(sourceKey)
+                .destinationBucket(bucketName)
+                .destinationKey(destinationKey)
+                .build();
+
+        s3Client.copyObject(copyRequest);
+
+        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + destinationKey;
     }
 }
