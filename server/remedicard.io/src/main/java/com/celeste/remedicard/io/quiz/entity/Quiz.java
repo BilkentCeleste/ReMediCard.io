@@ -2,12 +2,15 @@ package com.celeste.remedicard.io.quiz.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
+import com.celeste.remedicard.io.quizStats.entity.QuizStats;
 import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,6 +38,9 @@ public class Quiz extends AuditableEntity {
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuizStats> quizStats = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

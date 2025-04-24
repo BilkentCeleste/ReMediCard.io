@@ -25,6 +25,9 @@ public class Side extends AuditableEntity {
     @Column(name = "URL")
     private Set<String> urlSet;
 
+    @Column
+    private String imageURL;
+
     public Side(Side frontSide) {
         BeanUtils.copyProperties(frontSide, this, "id", "urlSet");
         this.urlSet = new HashSet<>(frontSide.getUrlSet());

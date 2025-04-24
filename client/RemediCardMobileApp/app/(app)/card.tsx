@@ -242,7 +242,9 @@ export default function Card( props: any ) {
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
                         <Flashcard
                             question={flashCardList[currentCard]?.frontSide?.text}
+                            frontImageURL={flashCardList[currentCard]?.frontSide?.imageURL}
                             answer={flashCardList[currentCard]?.backSide?.text}
+                            backImageURL={flashCardList[currentCard]?.backSide?.imageURL}
                             width={250}
                             height={400}
                             key={currentCard}

@@ -70,11 +70,11 @@ export const createDeckStats = async (data) => {
 
 // flashcard
 export const createFlashcard = async (data) => {
-  return await postFetcher(url.CREATE_FLASHCARD_PATH(), data);
+  return await postFetcher(url.CREATE_FLASHCARD_PATH(), data, "multipart/form-data");
 };
 
 export const updateFlashcard = async (id, data) => {
-  return await putFetcher(url.UPDATE_FLASHCARD_PATH(id), data);
+  return await putFetcher(url.UPDATE_FLASHCARD_PATH(id), data, "multipart/form-data");
 };
 
 export const deleteFlashcard = async (id, data) => {

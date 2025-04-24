@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Animated } from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Animated, Image } from "react-native";
 
 interface FlashcardProps {
     question: string;
+    frontImageURL: string;
     answer: string;
+    backImageURL: string;
     width?: number;
     height?: number;
     textSize?: number;
@@ -11,7 +13,9 @@ interface FlashcardProps {
 
 const Flashcard: React.FC<FlashcardProps> = ({
     question,
+    frontImageURL,
     answer,
+    backImageURL,
     width = 300, // Default width
     height = 200, // Default height
     textSize = 20
@@ -68,6 +72,12 @@ const Flashcard: React.FC<FlashcardProps> = ({
                         { width, height, transform: [{ rotateY: frontInterpolate }] },
                     ]}
                 >
+                    {frontImageURL && 
+                        <Image
+                            source={{ uri: frontImageURL}}
+                            style={{ width: 200, height: 200, borderRadius: 10 }}
+                        />
+                    }
                     <Text style={[styles.text, { fontSize: textSize }]}>{question}</Text>
                 </Animated.View>
 
@@ -79,6 +89,12 @@ const Flashcard: React.FC<FlashcardProps> = ({
                         { width, height, transform: [{ rotateY: backInterpolate }] },
                     ]}
                 >
+                    {backImageURL && 
+                        <Image
+                            source={{ uri: backImageURL}}
+                            style={{ width: 200, height: 200, borderRadius: 10 }}
+                        />
+                    }
                     <Text style={[styles.text, { fontSize: textSize }]}>{answer}</Text>
                 </Animated.View>
             </View>
