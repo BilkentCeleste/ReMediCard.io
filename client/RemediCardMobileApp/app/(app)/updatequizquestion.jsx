@@ -62,6 +62,17 @@ export default function UpdateFlashcard() {
             return;
         }
 
+        const allAnswersFilled = options.every(opt => opt.trim() !== '');
+        if (!allAnswersFilled) {
+            Alert.alert(t("error"), t("please_fill_all_answers"));
+            return;
+        }
+
+        if (description.trim() === '') {
+            Alert.alert(t("error"), t("please_fill_question"));
+            return;
+        }
+
         const data = {
             description: description,
             options: options,
