@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { Rect, G, Path, Defs, ClipPath } from "react-native-svg"
+import Svg, { Rect, G, Path, Defs, ClipPath, Circle } from "react-native-svg"
  
 export function LockIcon() {
     return (
@@ -793,3 +793,29 @@ export function NextQuestionIcon({ width = 50, height = 50, rotation = 0 }: Next
     </Svg>
   )
 }
+
+interface InfoIconProps {
+  width?: number;
+  height?: number;
+  rotation?: number; // New property for rotation
+}
+
+export function InfoIcon() {
+  return (
+    <Svg
+      width={27}
+      height={27}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M12 7.01V7m0 10v-6m9 1a9 9 0 11-18 0 9 9 0 0118 0z"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+ </Svg>
+ )
+}
+

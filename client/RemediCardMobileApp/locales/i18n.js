@@ -30,6 +30,7 @@ import generate_quizzes_en from "./en/generate_quizzes.json";
 import shared_quiz_en from "./en/shared_quiz.json";
 import shared_deck_en from "./en/shared_deck.json";
 import quiz_results_en from "./en/quiz_results.json";
+import tutorial_en from "./en/tutorial.json"
 
 import login_tr from "./tr/login.json";
 import register_tr from "./tr/register.json";
@@ -58,6 +59,7 @@ import generate_quizzes_tr from "./tr/generate_quizzes.json";
 import shared_quiz_tr from "./tr/shared_quiz.json";
 import shared_deck_tr from "./tr/shared_deck.json";
 import quiz_results_tr from "./tr/quiz_results.json";
+import tutorial_tr from "./tr/tutorial.json"
 
 import { LANGUAGE_KEY } from "@/constants/config"
 
@@ -116,7 +118,8 @@ i18n.use(languageDetector).use(initReactI18next).init({
       generate_quizzes: generate_quizzes_en,
       shared_quiz: shared_quiz_en,
       shared_deck: shared_deck_en,
-      quiz_results: quiz_results_en
+      quiz_results: quiz_results_en,
+      tutorial: tutorial_en
     },
     tr: {
       login: login_tr,
@@ -145,7 +148,8 @@ i18n.use(languageDetector).use(initReactI18next).init({
       generate_quizzes: generate_quizzes_tr,
       shared_quiz: shared_quiz_tr,
       shared_deck: shared_deck_tr,
-      quiz_results: quiz_results_tr
+      quiz_results: quiz_results_tr,
+      tutorial: tutorial_tr
     },
   },
   fallbackLng: "en", // if a language is not available
