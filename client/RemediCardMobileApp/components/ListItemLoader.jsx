@@ -10,7 +10,7 @@ const ListItemLoader = ({ width = 380 }) => (
       height={80}
       viewBox={`0 0 ${width} 80`}
       backgroundColor="#f3f3f3"
-      foregroundColor="#ecebeb"
+      foregroundColor="#454444"
     >
       <Rect x="80" y="20" rx="4" ry="4" width="200" height="10" />
       <Rect x="80" y="40" rx="3" ry="3" width="150" height="10" />

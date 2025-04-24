@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import {addUserDeck, getDeckByShareToken} from '@/apiHelper/backendHelper';
@@ -37,21 +37,28 @@ export default function SharedDeck() {
         }
     };
 
-    const handleStartQuiz = () => {
-        if (deck?.id) {
-            router.push({
-                pathname: "/(app)/card",
-                params: { deck: JSON.stringify(deck) },
-            });
-        } else {
-            console.error("Deck ID is not available.");
-        }
-    };
-
     if (!deck) {
         return (
             <View style={styles.container}>
-                <Text style={styles.loadingText}>{t('loading_deck')}</Text>
+                <View style={styles.loadingContainer}>
+                        <ActivityIndicator size={"large"} style={styles.indicator}/>
+                        <Text style={styles.loadingText}>{t('loading_deck')}</Text>
+                    </View>
+    
+                    <View style={styles.navbarRow}>
+                        <TouchableOpacity>
+                            <Link href="/(app)/home"><HomeIcon /></Link>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Link href="/(app)/profile"><ProfileIcon /></Link>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <SettingsIcon />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.navbarContainer}>
+                        <View style={styles.navbarLine} />
+                    </View>
             </View>
         );
     }
@@ -95,9 +102,6 @@ export default function SharedDeck() {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleAddToMyDecks}>
                     <Text style={styles.buttonText}>{t("add_to_my_decks")}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleStartQuiz}>
-                    <Text style={styles.buttonText}>{t("start_quiz")}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -280,5 +284,15 @@ const styles = StyleSheet.create({
         gap: 30,
         height: 50,
         bottom: "15%",
-    }
+    },
+    loadingContainer: {
+        width: "60%",
+        height: "50%",
+        justifyContent: "center"
+    },
+    indicator: {
+        transform: [{ scale: 2.2 }],
+        margin: 20,
+        color: "#fff",    
+      },
 });
