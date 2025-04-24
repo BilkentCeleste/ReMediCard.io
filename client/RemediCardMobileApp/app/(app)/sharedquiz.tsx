@@ -48,12 +48,6 @@ export default function SharedQuiz() {
         }
     };
 
-    const handleStartQuiz = () => {
-        if (quiz?.id) {
-            router.push(`/(app)/quiz_question?quizId=${quiz.id}`);
-        }
-    };
-
     if (!quiz) {
         return (
             <View style={styles.container}>
@@ -118,9 +112,6 @@ export default function SharedQuiz() {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleAddToMyQuizzes}>
                     <Text style={styles.buttonText}>{t("add_to_my_quizzes")}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={handleStartQuiz}>
-                    <Text style={styles.buttonText}>{t("start_quiz")}</Text>
                 </TouchableOpacity>
             </View>
 
