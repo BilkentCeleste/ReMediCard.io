@@ -15,4 +15,5 @@ public class SideResponseDTO {
 
     private String text;
     private Set<String> urlSet;
+    private String imageURL;
 }

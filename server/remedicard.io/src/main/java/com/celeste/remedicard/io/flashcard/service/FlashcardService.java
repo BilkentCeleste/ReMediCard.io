@@ -1,8 +1,10 @@
 package com.celeste.remedicard.io.flashcard.service;
 
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
+import com.celeste.remedicard.io.cloud.service.S3Service;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
+import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardCreateRequestDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardResponseDTO;
 import com.celeste.remedicard.io.flashcard.controller.dto.FlashcardReviewDTO;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
@@ -11,7 +13,9 @@ import com.celeste.remedicard.io.search.service.SearchService;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,13 +27,23 @@ public class FlashcardService {
     private final SpacedRepetitionService spacedRepetitionService;
     private final CurrentUserService currentUserService;
     private final SearchService searchService;
+    private final SideService sideService;
+    private final S3Service s3Service;
 
-    public void create(Flashcard flashcard, Long deckId) {
+    public void create(Flashcard flashcard, Long deckId, MultipartFile frontImage, MultipartFile backImage) throws IOException {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
         flashcard.setDeck(deck);
         deck.setFlashcardCount(deck.getFlashcardCount() + 1);
         deckRepository.save(deck);
         flashcardRepository.save(flashcard);
+
+        if(frontImage != null){
+            sideService.uploadImage(flashcard.getFrontSide(), frontImage);
+        }
+        if(backImage != null){
+            sideService.uploadImage(flashcard.getBackSide(), backImage);
+        }
+
         spacedRepetitionService.create(deck.getUser(), flashcard);
         searchService.addSearchableFlashcard(deck.getId(), flashcard);
     }
@@ -49,18 +63,39 @@ public class FlashcardService {
         Deck deck = flashcard.getDeck();
         deck.setFlashcardCount(deck.getFlashcardCount() - 1);
         deckRepository.save(deck);
+
+        // delete images from S3
+        String frontImageUrl = flashcard.getFrontSide().getImageURL();
+        String backImageUrl = flashcard.getBackSide().getImageURL();
+        if(frontImageUrl != null) {
+            s3Service.deleteFile(frontImageUrl);
+        }
+        if(backImageUrl != null) {
+            s3Service.deleteFile(backImageUrl);
+        }
+
         flashcardRepository.deleteById(flashcardId);
         searchService.removeSearchableFlashcard(deck.getId(), flashcard);
     }
 
-    public void update(Flashcard flashcard, Long flashcardId) {
+    public void update(FlashcardCreateRequestDTO dto, Long flashcardId) throws IOException {
         Flashcard flashcardToUpdate = flashcardRepository.findById(flashcardId)
                 .orElseThrow(() -> new RuntimeException("Flashcard not found"));
-        flashcardToUpdate.setTopic(flashcard.getTopic());
-        flashcardToUpdate.setType(flashcard.getType());
-        flashcardToUpdate.setFrequency(flashcard.getFrequency());
-        flashcardToUpdate.setFrontSide(flashcard.getFrontSide());
-        flashcardToUpdate.setBackSide(flashcard.getBackSide());
+        flashcardToUpdate.setTopic(dto.getTopic());
+        flashcardToUpdate.setType(dto.getType());
+        flashcardToUpdate.setFrequency(dto.getFrequency());
+
+        flashcardToUpdate.getFrontSide().setText(dto.getFrontSide().getText());
+        flashcardToUpdate.getBackSide().setText(dto.getBackSide().getText());
+        flashcardToUpdate.getFrontSide().setUrlSet(dto.getFrontSide().getUrlSet());
+        flashcardToUpdate.getBackSide().setUrlSet(dto.getBackSide().getUrlSet());
+        if (dto.getFrontSide().getImage() != null) {
+            sideService.uploadImage(flashcardToUpdate.getFrontSide(), dto.getFrontSide().getImage());
+        }
+        if (dto.getBackSide().getImage() != null) {
+            sideService.uploadImage(flashcardToUpdate.getBackSide(), dto.getBackSide().getImage());
+        }
+
         flashcardRepository.save(flashcardToUpdate);
     }
 }

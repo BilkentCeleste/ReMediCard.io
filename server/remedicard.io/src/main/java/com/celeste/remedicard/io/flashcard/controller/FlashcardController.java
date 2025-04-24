@@ -7,8 +7,10 @@ import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.mapper.FlashcardCreateMapper;
 import com.celeste.remedicard.io.flashcard.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,10 +20,10 @@ public class FlashcardController {
 
     private final FlashcardService flashcardService;
 
-    @PostMapping("/create")
-    public void create(@RequestBody FlashcardCreateRequestDTO dto) {
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void create(@ModelAttribute FlashcardCreateRequestDTO dto) throws IOException {
         Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
-        flashcardService.create(flashcard, dto.getDeckId());
+        flashcardService.create(flashcard, dto.getDeckId(), dto.getFrontSide().getImage(), dto.getBackSide().getImage());
     }
 
     @GetMapping("/getFlashcardsInBatch/{deckId}")
@@ -39,9 +41,8 @@ public class FlashcardController {
         flashcardService.delete(flashcardId);
     }
 
-    @PutMapping("/update/{flashcardId}")
-    public void update(@RequestBody FlashcardCreateRequestDTO dto, @PathVariable Long flashcardId) {
-        Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
-        flashcardService.update(flashcard, flashcardId);
+    @PutMapping(value = "/update/{flashcardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void update(@ModelAttribute FlashcardCreateRequestDTO dto, @PathVariable Long flashcardId) throws IOException {
+        flashcardService.update(dto, flashcardId);
     }
 }

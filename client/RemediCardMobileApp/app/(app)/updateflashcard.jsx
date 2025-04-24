@@ -2,8 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, deleteFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
-import { GoBackIcon} from '@/constants/icons';
+import { GoBackIcon, UploadIcon} from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
+import * as ImagePicker from "expo-image-picker";
 
 
 export default function UpdateFlashcard() {
@@ -13,6 +14,8 @@ export default function UpdateFlashcard() {
     const [cardBackSide, setCardBackSide] = useState('');
     const [flashcardId, setFlashcardId] = useState('');
     const [isCreating, setIsCreating] = useState(true);
+    const [frontImage, setFrontImage] = useState(null);
+    const [backImage, setBackImage] = useState(null);
     const router = useRouter();
 
     const { flashcard, deckId } = useLocalSearchParams();
@@ -33,29 +36,43 @@ export default function UpdateFlashcard() {
     }, [flashcard]);
 
     const handleSave = () => {
-        const data = {
-            topic: "random",
-            type: "random",
-            frequency: 1.0,
-            deckId: deckId,
-            frontSide: {
-                text: cardFrontSide,
-                urlSet: [
-                    "aaaaaaa",
-                    "aaaaaaa2"
-                ]
-            },
-            backSide: {
-                text: cardBackSide,
-                urlSet: [
-                    "aaaaaaa",
-                    "aaaaaaa2"
-                ]
-            }
+        const formData = new FormData();
 
+        // Top-level fields
+        formData.append("topic", "random");
+        formData.append("type", "random");
+        formData.append("frequency", "1.0");
+        formData.append("deckId", deckId.toString()); // if it's a number, stringify it
+        
+        // Front side fields
+        formData.append("frontSide.text", cardFrontSide);
+        formData.append("frontSide.urlSet", "aaaaaaa");
+        formData.append("frontSide.urlSet", "aaaaaaa2");
+        
+        // Front side image
+        if(frontImage != null) {
+            formData.append("frontSide.image", {
+                uri: frontImage,
+                type: "image/jpeg", // use the correct MIME type
+                name: "image"  + frontImage.substring(frontImage.lastIndexOf(".")),
+            });
+        }
+        
+        // Back side fields
+        formData.append("backSide.text", cardBackSide);
+        formData.append("backSide.urlSet", "aaaaaaa");
+        formData.append("backSide.urlSet", "aaaaaaa2");
+
+        // Back side image
+        if(backImage != null) {
+            formData.append("backSide.image", {
+                uri: backImage,
+                type: "image/jpeg", // use the correct MIME type
+                name: "image"  + backImage.substring(backImage.lastIndexOf(".")),
+            });
         }
 
-        createFlashcard(data)
+        createFlashcard(formData)
             .then(() => {
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
@@ -65,23 +82,43 @@ export default function UpdateFlashcard() {
     }
 
     const handleUpdate = () => {
-        const data = {
-            id: flashcardId,
-            frontSide: {
-                text: cardFrontSide,
-                urlSet: ["a", "b"],
-            },
-            backSide: {
-                text: cardBackSide,
-                urlSet: ["a", "b"],
-            },
-            deckId: deckId,
-            type: "type",
-            topic: "topic",
-            frequency: 0.5,
+       const formData = new FormData();
+
+        // Top-level fields
+        formData.append("topic", "random");
+        formData.append("type", "random");
+        formData.append("frequency", "1.0");
+        formData.append("deckId", deckId.toString()); // if it's a number, stringify it
+        
+        // Front side fields
+        formData.append("frontSide.text", cardFrontSide);
+        formData.append("frontSide.urlSet", "aaaaaaa");
+        formData.append("frontSide.urlSet", "aaaaaaa2");
+        
+        // Front side image
+        if(frontImage != null) {
+            formData.append("frontSide.image", {
+                uri: frontImage,
+                type: "image/jpeg", // use the correct MIME type
+                name: "image"  + frontImage.substring(frontImage.lastIndexOf(".")),
+            });
+        }
+        
+        // Back side fields
+        formData.append("backSide.text", cardBackSide);
+        formData.append("backSide.urlSet", "aaaaaaa");
+        formData.append("backSide.urlSet", "aaaaaaa2");
+
+        // Back side image
+        if(backImage != null) {
+            formData.append("backSide.image", {
+                uri: backImage,
+                type: "image/jpeg", // use the correct MIME type
+                name: "image"  + backImage.substring(backImage.lastIndexOf(".")),
+            });
         }
 
-        updateFlashcard(flashcardId, data)
+        updateFlashcard(flashcardId, formData)
             .then(() => {
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
@@ -93,6 +130,31 @@ export default function UpdateFlashcard() {
     const handleBack = () => {
         router.push("/(app)/updatedeck?deckId=" + deckId);
     }
+
+    const pickImage = async (setImage) => {
+        const permissionResult =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+        if (permissionResult.granted === false) {
+          Alert.alert(
+            "Permission Denied",
+            "Permission to access camera roll is required!"
+          );
+          return;
+        }
+    
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.Images,
+          allowsEditing: true,
+          allowsMultipleSelection: false,
+          quality: 1,
+        });
+    
+        if (!result.canceled) {
+          const imageUri = result.assets[0].uri;
+          setImage(imageUri);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -121,6 +183,14 @@ export default function UpdateFlashcard() {
                 onChangeText={setCardFrontSide}
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
+            <View style={styles.selectComponent}>
+                <Text onPress={() => pickImage(setFrontImage)}>
+                    {frontImage? t("front_image_selected") : t("select_front_image")}{" "}
+                </Text>
+                <View>
+                    {frontImage == null && <UploadIcon></UploadIcon>}
+                </View>
+            </View>
             <TextInput
                 style={styles.aInput}
                 placeholder={isCreating ? t("back_message") : ''}
@@ -130,6 +200,14 @@ export default function UpdateFlashcard() {
                 textAlignVertical="top"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
+            <View style={styles.selectComponent}>
+                <Text onPress={() => pickImage(setBackImage)}>
+                    {backImage? t("back_image_selected") : t("select_back_image")}{" "}
+                </Text>
+                <View>
+                    {backImage == null && <UploadIcon></UploadIcon>}
+                </View>
+            </View>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleBack}>
@@ -249,5 +327,15 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: '#fff',
+    },
+    selectComponent: {
+        borderRadius: 20,
+        backgroundColor: "rgba(207, 207, 207, 0.3)",
+        width: "100%",
+        height: 45,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "5%",
     },
 });

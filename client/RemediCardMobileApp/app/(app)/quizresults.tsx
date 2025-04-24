@@ -19,6 +19,8 @@ export default function QuizResults() {
   const quizId = Number(searchParams.quizId);
   const score = Number(searchParams.score);
   const correctAnswers = Number(searchParams.correctAnswers);
+  const incorrectAnswers = Number(searchParams.incorrectAnswers);
+  const skippedQuestions = Number(searchParams.skippedQuestions);
   const totalQuestions = Number(searchParams.totalQuestions);
   const timeSpent = Number(searchParams.timeSpent);
 
@@ -82,11 +84,11 @@ export default function QuizResults() {
             {t("correct")}: <Text style={styles.valueText}>{correctAnswers}/{totalQuestions}</Text>
           </Text>
           <Text style={styles.labelText}>
-            {t("incorrect")}: <Text style={styles.valueText}>{totalQuestions - correctAnswers}/{totalQuestions}</Text>
+            {t("incorrect")}: <Text style={styles.valueText}>{incorrectAnswers}/{totalQuestions}</Text>
           </Text>
           <Text style={styles.labelText}>
             {t("pass")}: <Text style={styles.valueText}>
-                {totalQuestions - (totalQuestions - correctAnswers) - correctAnswers}/{totalQuestions}
+                {skippedQuestions}/{totalQuestions}
           </Text>
           </Text>
         </View>

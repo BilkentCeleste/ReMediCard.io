@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.deck.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
+import com.celeste.remedicard.io.deckStats.entity.DeckStats;
 import com.celeste.remedicard.io.figure.entity.Figure;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import jakarta.persistence.*;
@@ -50,6 +51,9 @@ public class Deck extends AuditableEntity {
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Flashcard> flashcardSet = new ArrayList<>();
+
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<DeckStats> deckStatsSet = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

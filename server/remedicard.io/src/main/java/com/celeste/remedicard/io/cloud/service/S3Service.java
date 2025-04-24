@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -55,5 +56,29 @@ public class S3Service {
         }
 
         return addresses;
+    }
+
+    public String uploadFile(MultipartFile file, String keyPrefix) throws IOException {
+        User user = currentUserService.getCurrentUser();
+
+        String fileName = file.getOriginalFilename();
+        String key = keyPrefix + "/" + user.getId() + "/task_" + UUID.randomUUID() + "/" + fileName;
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
+    }
+
+    public void deleteFile(String filePath) {
+        String key = filePath.substring(filePath.indexOf(".com/") + 5);
+        s3Client.deleteObject(DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build());
     }
 }
