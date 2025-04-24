@@ -11,9 +11,10 @@
     "correct": "Doğru",
     "incorrect": "Yanlış",
     "total": "Toplam Soru",
-    "pass" : "Cevapsız",
+    "pass" : "Boş",
     "time_spent": "Geçirilen Zaman",
     "session_summary": "Oturum Özeti",
     "retry": "Yeniden Çöz" ,
-    "home": "Ana Menüye Dön"
+    "home": "Ana Menüye Dön",
+    "results": "Sonuçlar"
 }
