@@ -26,7 +26,6 @@ public class QuizStatsService {
         quizStats.setQuiz(quiz);
         quizStats.setUser(user);
         quizStats.setAccessDate(LocalDateTime.now());
-        System.out.println(quizStats);
         quizStatsRepository.save(quizStats);
     }
 
