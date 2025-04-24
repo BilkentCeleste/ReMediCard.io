@@ -29,5 +29,8 @@
   "enter_deck_title": "Deste başlığını girin",
   "save_and_edit": "Kaydet ve Düzenle",
   "share_deck":"Desteyi Paylaş",
-  "deck_deletion_failed": "Deste silme işlemi başarısız oldu. Lütfen tekrar deneyin."
+  "deck_deletion_failed": "Deste silme işlemi başarısız oldu. Lütfen tekrar deneyin.",
+  "no_cards_available": "Kartlar Mevcut Değil",
+  "no_cards_available_message": "Bu destede hiç kart yok.",
+  "ok": "Tamam"
 }

@@ -29,5 +29,8 @@
     "enter_deck_title": "Enter deck title",
     "save_and_edit": "Save & Edit",
     "share_deck":"Share Deck",
-    "deck_deletion_failed": "Deck deletion failed. Please try again."
+    "deck_deletion_failed": "Deck deletion failed. Please try again.",
+    "no_cards_available": "No Cards Available",
+    "no_cards_available_message": "There are no cards in this deck.",
+    "ok": "OK"
 }

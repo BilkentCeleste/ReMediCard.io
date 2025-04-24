@@ -136,6 +136,14 @@ export default function Quizzes() {
 
   const handleStartQuiz = () => {
     if (selectedQuiz) {
+      if(selectedQuiz.questionCount === 0){
+        Alert.alert(t("no_quizzes_available"), t("no_quizzes_available_message"), 
+        [{text: t("ok"), 
+          style: "cancel" }],
+        { cancelable: false })
+          return
+        }
+
       const quizId = selectedQuiz.id;
       setModalVisible(false);
       setSelectedQuiz(null);

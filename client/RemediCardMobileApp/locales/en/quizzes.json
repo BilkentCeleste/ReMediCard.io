@@ -32,5 +32,8 @@
     "share_quiz": "Share quiz",
     "share_failed": "Failed to share quiz",
     "delete_quiz_message": "Are you sure about deleting the selected quiz?",
-    "quiz_create_failed": "Failed to create quiz"
+    "quiz_create_failed": "Failed to create quiz",
+    "no_quizzes_available": "No quizzes available",
+    "no_quizzes_available_message": "You need to add questions to the quiz before you can start it.",
+    "ok": "OK"
 }

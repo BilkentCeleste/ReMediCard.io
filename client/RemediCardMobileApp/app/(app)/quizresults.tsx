@@ -70,16 +70,29 @@ export default function QuizResults() {
     correctIndex: number
   ): string => {
     if (selectedIndex === -1) {
-      return index === correctIndex ? "blue" : "#000"; 
+      return index === correctIndex ? "orange" : "#000"; 
     }
     if (selectedIndex === correctIndex) {
       return index === correctIndex ? "green" : "#000"; 
     }
-    if (index === correctIndex) return "blue"; 
+    if (index === correctIndex) return "green"; 
 
     if (index === selectedIndex) return "red";
     return "#000"; 
   };
+
+  const getOptionFontWeight = (
+    index: number,
+    selectedIndex: number,
+    correctIndex: number
+  ): "bold" | "normal" => {
+    // Apply bold to colored (non-default) options
+    if (selectedIndex === -1 && index === correctIndex) return "bold";
+    if (selectedIndex === correctIndex && index === correctIndex) return "bold";
+    if (selectedIndex !== correctIndex && (index === selectedIndex || index === correctIndex)) return "bold";
+    return "normal";
+  };
+  
     
   return (
     <View style={styles.container}>
@@ -170,7 +183,13 @@ export default function QuizResults() {
                       {item?.options?.map((option: string, i: number) => (
                       <Text
                           key={i}
-                          style={[styles.optionText, { color: getOptionColor(i, selectedAnswerIndex, correctAnswerIndex) }]}
+                          style={[
+                            styles.optionText,
+                            {
+                              color: getOptionColor(i, selectedAnswerIndex, correctAnswerIndex),
+                              fontWeight: getOptionFontWeight(i, selectedAnswerIndex, correctAnswerIndex)
+                            }
+                          ]}
                         >                          
                         {String.fromCharCode(65 + i)}. {option}
                         </Text>
