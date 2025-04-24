@@ -19,7 +19,6 @@ import com.celeste.remedicard.io.quiz.service.QuizService;
 import com.celeste.remedicard.io.quizStats.entity.QuizStats;
 import com.celeste.remedicard.io.quizStats.service.QuizStatsService;
 import jakarta.transaction.Transactional;
-import org.apache.commons.codec.language.bm.Lang;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -117,6 +116,7 @@ public class DevDatabasePopulator implements CommandLineRunner {
                 .name("Test Quiz")
                 .difficulty("Test difficulty")
                 .popularity(0)
+                .questionCount(0)
                 .build();
 
         // QuizStats
