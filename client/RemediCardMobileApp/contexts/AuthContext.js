@@ -25,7 +25,9 @@ export const AuthProvider = ({ children }) => {
     const checkToken = async () => {
       try {
         const existingToken = await SecureStore.getItemAsync("token");
-        if (existingToken) {
+        const tokenTime = parseInt(await SecureStore.getItemAsync("tokenTime"));
+
+        if (existingToken && tokenTime + 86400000 > Date.now()) { // 24 hours in milliseconds
           setIsLoggedIn(true);
           setToken(existingToken);
         }
@@ -92,10 +94,13 @@ export const AuthProvider = ({ children }) => {
 
   const addToken = async (token) => {
     await SecureStore.setItemAsync("token", token);
+    const time = Date.now();
+    await SecureStore.setItemAsync("tokenTime", time.toString());
   };
 
   const removeToken = async () => {
     await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("tokenTime");
   };
 
   const loginAuth = async (body) => {
