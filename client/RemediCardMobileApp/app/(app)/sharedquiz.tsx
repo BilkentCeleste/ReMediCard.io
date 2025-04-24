@@ -4,6 +4,7 @@ import {useRouter, useLocalSearchParams, Link} from 'expo-router';
 import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
 import { getQuizByShareToken, addUserQuiz } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
+import { ActivityIndicator } from 'react-native';
 
 interface Question {
     id: number;
@@ -56,8 +57,26 @@ export default function SharedQuiz() {
     if (!quiz) {
         return (
             <View style={styles.container}>
-                <Text style={styles.loadingText}>{t('loading_quiz')}</Text>
-            </View>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size={"large"} style={styles.indicator}/>
+                    <Text style={styles.loadingText}>{t('loading_quiz')}</Text>
+                </View>
+
+                <View style={styles.navbarRow}>
+                    <TouchableOpacity>
+                        <Link href="/(app)/home"><HomeIcon /></Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Link href="/(app)/profile"><ProfileIcon /></Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <SettingsIcon />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.navbarContainer}>
+                    <View style={styles.navbarLine} />
+                </View>
+        </View>
         );
     }
 
@@ -203,6 +222,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         textAlign: 'center',
+        marginTop: 15
     },
     menuComponent: {
         width: "75%",
@@ -261,5 +281,15 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: "#fff",
-    }
+    },
+    loadingContainer: {
+        width: "60%",
+        height: "50%",
+        justifyContent: "center"
+    },
+    indicator: {
+        transform: [{ scale: 2.2 }],
+        margin: 20,
+        color: "#fff",    
+      },
 }); 
