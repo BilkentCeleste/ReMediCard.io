@@ -113,8 +113,16 @@ export default function Decks() {
     setModalVisible(true);
   };
 
-  const handleStartQuiz = () => {
+  const handleStartDeck = () => {
     if (selectedDeck) {
+      if(selectedDeck.flashcardCount === 0){
+         Alert.alert(t("no_cards_available"), 
+         t("no_cards_available_message"), 
+         [{text: t("ok"), style: "cancel"}], { cancelable: false }
+        );
+        return
+      }
+      
       setModalVisible(false);
       router.push({
         pathname: "/(app)/card",
@@ -379,7 +387,7 @@ export default function Decks() {
             <Text style={styles.modalTitle}>{selectedDeck?.topic}</Text>
             <TouchableOpacity
               style={styles.modalButton}
-              onPress={handleStartQuiz}
+              onPress={handleStartDeck}
             >
               <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
             </TouchableOpacity>
