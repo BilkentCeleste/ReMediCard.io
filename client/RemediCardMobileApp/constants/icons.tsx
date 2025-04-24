@@ -651,13 +651,18 @@ export function SaveIcon() {
   )
 }
 
-export function ChevronDown() {
+interface ChevronDownProps {
+  rotation?: number; // New property for rotation
+}
+
+export function ChevronDown({rotation = 0 }: ChevronDownProps) {
   return (
     <Svg
       width={24}
       height={24}
       viewBox="0 0 24 24"
       fill="none"
+      transform={`rotate(${rotation} 15 15)`} // Apply rotation around the center (15, 15)
     >
       <Path
         d="M17 10l-5 5-5-5"
