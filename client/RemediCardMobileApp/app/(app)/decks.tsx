@@ -39,7 +39,8 @@ export default function Decks() {
   const router = useRouter();
 
   const [searchParamUsed, setSearchParamUsed] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<string>("");
+  const [selectedSort, setSelectedSort] = useState<string>("access");
+  const [sortOrder, setSortOrder] = useState<string>("desc");
   const [decks, setDecks] = useState<any[]>([]);
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -101,12 +102,45 @@ export default function Decks() {
     setDebouncedSearchText("");
   };
 
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  }
+
   const sortOptions = [
-    { label: t("sort_by_last_accessed"), value: "last" },
-    { label: t("sort_by_newly_accessed"), value: "newest" },
+    { label: t("sort_by_access_date"), value: "access" },
+    { label: t("sort_by_recent_performance"), value: "recent" },
     { label: t("sort_by_best_performance"), value: "best" },
-    { label: t("sort_by_worst_performance"), value: "worst" },
+    { label: t("sort_by_alphabetical"), value: "alphabetical" },
   ];
+
+  const sortedDecks = sortDecks(decks, selectedSort, sortOrder);
+
+  function sortDecks(decks, sortBy = 'access', order = 'desc') {
+    return decks.slice().sort((a, b) => {
+      const getDate = stat => stat ? new Date(stat.accessDate) : new Date(0);
+      const getRate = stat => stat ? stat.successRate : -1;
+
+      let compare = 0;
+
+      if (sortBy === 'access') {
+        const aDate = getDate(a.lastDeckStat || a.bestDeckStat);
+        const bDate = getDate(b.lastDeckStat || b.bestDeckStat);
+        compare = aDate - bDate;
+      } else if (sortBy === 'recent') {
+        const aRate = getRate(a.lastDeckStat);
+        const bRate = getRate(b.lastDeckStat);
+        compare = aRate - bRate;
+      } else if (sortBy === 'best') {
+        const aRate = getRate(a.bestDeckStat);
+        const bRate = getRate(b.bestDeckStat);
+        compare = aRate - bRate;
+      } else if (sortBy === 'alphabetical') {
+        compare = a.name.localeCompare(b.name);
+      }
+
+      return order === 'asc' ? compare : -compare;
+    });
+  }
 
   const handleDeckPress = (deck: any) => {
     setSelectedDeck(deck);
@@ -206,7 +240,7 @@ export default function Decks() {
   const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -241,6 +275,13 @@ export default function Decks() {
         onSelect={(value) => setSelectedSort(value)}
       />
 
+      <TouchableOpacity
+          style={styles.modalButton}
+          onPress={toggleSortOrder}
+      >
+        <Text style={styles.modalButtonText}>{t("toggle_sort")}</Text>
+      </TouchableOpacity>
+
       {/* Decks List */}
       {showLoading ? (
         <ListLoader count={6} width={width} />
@@ -248,7 +289,7 @@ export default function Decks() {
         <FlatList
           style={styles.flatListContainer}
           contentContainerStyle={styles.flatListContent}
-          data={decks}
+          data={sortedDecks}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
