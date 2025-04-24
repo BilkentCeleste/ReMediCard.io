@@ -15,6 +15,7 @@ import com.celeste.remedicard.io.deckStats.mapper.DeckStatsResponseMapper;
 import com.celeste.remedicard.io.deckStats.service.DeckStatsService;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
 import com.celeste.remedicard.io.flashcard.entity.Side;
+import com.celeste.remedicard.io.flashcard.service.SideService;
 import com.celeste.remedicard.io.search.entity.SearchableDeck;
 import com.celeste.remedicard.io.search.entity.SearchableFlashcard;
 import com.celeste.remedicard.io.search.repository.SearchableDeckRepository;
@@ -50,6 +51,7 @@ public class DeckService {
     private final SpacedRepetitionService spacedRepetitionService;
     private final DeckStatsService deckStatsService;
     private final S3Service s3Service;
+    private final SideService sideService;
 
     @Value("${app.share-url-base}")
     private String shareUrlBase;
@@ -245,6 +247,13 @@ public class DeckService {
         newDeck.addUser(user);
 
         deckRepository.save(newDeck);
+        saveSearchableDeck(newDeck);
+
+        newDeck.getFlashcardSet().forEach(flashcard -> {
+            spacedRepetitionService.create(user, flashcard);
+            sideService.copySideImage(flashcard.getFrontSide());
+            sideService.copySideImage(flashcard.getBackSide());
+        });
     }
 
     public String generateShareToken(Long deckId) {
