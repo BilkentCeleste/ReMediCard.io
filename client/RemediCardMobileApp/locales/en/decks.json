@@ -1,8 +1,9 @@
 {
-    "sort_by_last_accessed": "Sort by Last Accessed",
-    "sort_by_newly_accessed": "Sort by Newly Accessed",
+    "sort_by_access_date": "Sort by Access Date",
+    "sort_by_recent_performance": "Sort by Recent Performance",
     "sort_by_best_performance": "Sort by Best Performance",
-    "sort_by_worst_performance": "Sort by Worst Performance",
+    "sort_by_alphabetical": "Sort by Alphabetical Order",
+    "toggle_sort": "Toggle Sort",
     "error": "Error",
     "deck_info_missing": "Deck information is missing.",
     "success": "Success",
@@ -28,5 +29,8 @@
     "enter_deck_title": "Enter deck title",
     "save_and_edit": "Save & Edit",
     "share_deck":"Share Deck",
-    "deck_deletion_failed": "Deck deletion failed. Please try again."
+    "deck_deletion_failed": "Deck deletion failed. Please try again.",
+    "no_cards_available": "No Cards Available",
+    "no_cards_available_message": "There are no cards in this deck.",
+    "ok": "OK"
 }

@@ -170,7 +170,7 @@ export default function GenerateQuiz() {
   return (
     <View style={styles.container}>
       <View
-        style={[styles.menuComponent, { top: "20%" }, { position: "absolute" }]}
+        style={[styles.menuComponent]}
       >
         <View style={[styles.menuIcon, styles.iconLayout]}>
           <TouchableOpacity
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     padding: 10,
     gap: 10,
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 50,
   },
   menuText: {
     fontSize: 18,
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#fff",
     width: "75%",
-    height: "35%",
+    height: "45%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

@@ -7,10 +7,11 @@
   "ai": "YZ",
   "ai_message": "Yapay Zeka ile Oluştur",
   "enter_quiz_name": "Lütfen bir test adı girin",
-  "sort_by_last_accessed": "Son Erişim Tarihine Göre Sırala",
-  "sort_by_newly_accessed": "Yeni Erişim Tarihine Göre Sırala",
+  "sort_by_access_date": "Son Erişim Tarihine Göre Sırala",
+  "sort_by_recent_performance": "Son Performansa Göre Sırala",
   "sort_by_best_performance": "En İyi Performansa Göre Sırala",
-  "sort_by_worst_performance": "En Kötü Performansa Göre Sırala",
+  "sort_by_alphabetical": "Alfabetik Sıraya Göre Sırala",
+  "toggle_sort": "Sıralamayı Değiştir",
   "search": "Ara",
   "select_sort_option": "Sıralama Seçeneğini Belirleyin",
   "last_accessed": "Son Erişim: ",
@@ -31,5 +32,8 @@
   "share_quiz": "Paylaş",
   "share_failed": "Testi paylaşma başarısız oldu",
   "delete_quiz_message": "Seçilen testi silmek istediğinize emin misiniz?",
-  "quiz_create_failed": "Test oluşturma işlemi başarısız oldu"
+  "quiz_create_failed": "Test oluşturma işlemi başarısız oldu",
+  "no_quizzes_available": "Bu Testte Soru Yok",
+  "no_quizzes_available_message": "Testi çözmeye başlamadan önce soru eklemelisiniz.",
+  "ok": "Tamam"
 }

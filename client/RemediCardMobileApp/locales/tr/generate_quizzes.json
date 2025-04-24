@@ -6,14 +6,14 @@
   "file_type_must_be_selected": "Dosya türü seçilmelidir",
   "queued_message": "Test oluşturma isteği sıraya alındı, test oluşturulduğunda test menüsünde bulabilirsiniz",
   "generate_new_quiz": "Yeni Test Oluştur",
-  "choose_file": "Test sorusu oluşturmak için bir dosya seçin",
-  "select_file_type": "Dosya Türünü Seçin",
-  "select_file": "Bir Dosya Seçin",
+  "choose_file": "Test sorusu oluşturmak için bir dosya seçiniz",
+  "select_file_type": "Dosya Türünü Seçiniz",
+  "select_file": "Bir Dosya Seçiniz",
   "supported_file_types": "ReMediCard.io .pdf .png .jpeg .mp3 .mp4 uzantılarını destekler",
   "file_transfer": "Dosya transferi tamamlanana kadar lütfen bekleyiniz",
   "confirm_auto_generation": "Yapay Zeka ile Oluştur",
-  "content_language": "Select the Content Language",
-  "images_selected": " images selected",
-  "english": "English",
-  "turkish": "Turkish"
+  "content_language": "İçerik Dilini Seçiniz / Varsayılan Seçildi",
+  "images_selected": " Görsel seçildi",
+  "english": "İngilizce",
+  "turkish": "Türkçe"
 }

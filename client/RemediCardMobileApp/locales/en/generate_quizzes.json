@@ -12,8 +12,8 @@
   "supported_file_types": "ReMediCard.io supports .pdf .png .jpeg .mp3 .mp4",
   "file_transfer": "Please wait until the file transfer is complete",
   "confirm_auto_generation": "Confirm Auto Generation",
-  "content_language": "Select the Content Language",
-  "images_selected": " images selected",
+  "content_language": "Select the Content Language / Default Selected",
+  "images_selected": " Images selected",
   "english": "English",
   "turkish": "Turkish"
 }

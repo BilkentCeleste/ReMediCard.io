@@ -6,5 +6,7 @@
     "delete": "Delete",
     "update": "Update",
     "front_message": "Enter Front Side Text",
-    "back_message": "Enter Back Side Text"
+    "back_message": "Enter Back Side Text",
+    "select_front_image": "Select Image for Front Side (Optional)",
+    "select_back_image": "Select Image for Back Side (Optional)"
 }

@@ -38,7 +38,8 @@ export default function Quizzes() {
   const { quiz_selected } = useLocalSearchParams();
   const router = useRouter();
 
-  const [selectedSort, setSelectedSort] = useState<string>("");
+  const [selectedSort, setSelectedSort] = useState<string>("access");
+  const [sortOrder, setSortOrder] = useState<string>("desc");
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
@@ -135,6 +136,14 @@ export default function Quizzes() {
 
   const handleStartQuiz = () => {
     if (selectedQuiz) {
+      if(selectedQuiz.questionCount === 0){
+        Alert.alert(t("no_quizzes_available"), t("no_quizzes_available_message"), 
+        [{text: t("ok"), 
+          style: "cancel" }],
+        { cancelable: false })
+          return
+        }
+
       const quizId = selectedQuiz.id;
       setModalVisible(false);
       setSelectedQuiz(null);
@@ -206,12 +215,45 @@ export default function Quizzes() {
       });
   };
 
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  }
+
   const sortOptions = [
-    { label: t("sort_by_last_accessed"), value: "last" },
-    { label: t("sort_by_newly_accessed"), value: "newest" },
+    { label: t("sort_by_access_date"), value: "access" },
+    { label: t("sort_by_recent_performance"), value: "recent" },
     { label: t("sort_by_best_performance"), value: "best" },
-    { label: t("sort_by_worst_performance"), value: "worst" },
+    { label: t("sort_by_alphabetical"), value: "alphabetical" },
   ];
+
+  const sortedQuizzes = sortQuizzes(quizzes, selectedSort, sortOrder);
+
+  function sortQuizzes(quizzes, sortBy = 'access', order = 'desc') {
+    return quizzes.slice().sort((a, b) => {
+      const getDate = stat => stat ? new Date(stat.accessDate) : new Date(0);
+      const getRate = stat => stat ? stat.successRate : -1;
+
+      let compare = 0;
+
+      if (sortBy === 'access') {
+        const aDate = getDate(a.lastQuizStat || a.bestQuizStat);
+        const bDate = getDate(b.lastQuizStat || b.bestQuizStat);
+        compare = aDate - bDate;
+      } else if (sortBy === 'recent') {
+        const aRate = getRate(a.lastQuizStat);
+        const bRate = getRate(b.lastQuizStat);
+        compare = aRate - bRate;
+      } else if (sortBy === 'best') {
+        const aRate = getRate(a.bestQuizStat);
+        const bRate = getRate(b.bestQuizStat);
+        compare = aRate - bRate;
+      } else if (sortBy === 'alphabetical') {
+        compare = a.name.localeCompare(b.name);
+      }
+
+      return order === 'asc' ? compare : -compare;
+    });
+  }
 
   const formatDate = (dateStr: any) => {
     const date = new Date(dateStr);
@@ -250,13 +292,20 @@ export default function Quizzes() {
         onSelect={(value) => setSelectedSort(value)}
       />
 
+      <TouchableOpacity
+          style={styles.modalButton}
+          onPress={toggleSortOrder}
+      >
+        <Text style={styles.modalButtonText}>{t("toggle_sort")}</Text>
+      </TouchableOpacity>
+
       {showLoading ? (
         <ListLoader count={6} width={width} />
       ) : (
         <FlatList
           style={styles.flatListContainer}
           contentContainerStyle={styles.flatListContent}
-          data={quizzes}
+          data={sortedQuizzes}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
