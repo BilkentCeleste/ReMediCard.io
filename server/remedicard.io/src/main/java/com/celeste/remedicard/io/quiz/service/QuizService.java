@@ -58,7 +58,7 @@ public class QuizService {
 
     public Quiz create(Quiz quiz) {
         User user = currentUserService.getCurrentUser();
-        quiz.addUser(user);
+        quiz.setUser(user);
         quizRepository.save(quiz);
         saveSearchableQuiz(quiz);
         return quiz;

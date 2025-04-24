@@ -5,5 +5,7 @@
     "answer": "Answer",
     "cancel": "Cancel",
     "save": "Save",
-    "select_correct_answer": "Select Correct Answer"
+    "select_correct_answer": "Select Correct Answer",
+    "please_fill_all_answers": "Please fill all answers",
+    "please_fill_question": "Please fill question"
 }

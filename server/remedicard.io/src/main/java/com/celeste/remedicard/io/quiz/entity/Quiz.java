@@ -34,7 +34,7 @@ public class Quiz extends AuditableEntity {
     private String shareToken;
 
     @Column
-    private Integer questionCount = 0;
+    private int questionCount = 0;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
@@ -64,6 +64,10 @@ public class Quiz extends AuditableEntity {
         this.questions.remove(question);
         question.setQuiz(null);
         this.questionCount--;
+    }
+
+    public void incrementQuestionCount() {
+        this.questionCount++;
     }
 
     public void addUser(User user) {

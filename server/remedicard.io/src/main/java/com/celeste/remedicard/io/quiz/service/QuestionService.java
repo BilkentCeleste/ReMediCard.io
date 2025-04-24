@@ -27,7 +27,8 @@ public class QuestionService {
     public Question create(Question question, Quiz quiz) {
         question.setQuiz(quiz);
         question = questionRepository.save(question);
-        quiz.addQuestion(question);
+        question.setQuiz(quiz);
+        quiz.incrementQuestionCount();
         addSearchableQuestion(quiz.getId(), question);
         return question;
     }
