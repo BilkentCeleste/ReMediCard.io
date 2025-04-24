@@ -1,4 +1,6 @@
 {
     "loading_quiz": "Test yükleniyor...",
-    "add_to_my_quizzes": "Testlerime ekle"
+    "add_to_my_quizzes": "Testlerime ekle",
+    "add_quiz_failed": "Test eklenemedi",
+    "not_found": "Paylaşılan test silinmiş veya mevcut değil"
 }
