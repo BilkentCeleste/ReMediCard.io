@@ -2,6 +2,7 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import {useEffect, useState} from "react";
 import { getQuizByQuizId } from "@/apiHelper/backendHelper";
+import { CorrectIcon, FalseIcon, QuestionMarkIcon } from "@/constants/icons";
 
 import {
   GoBackIcon,
@@ -23,6 +24,12 @@ export default function QuizResults() {
   const skippedQuestions = Number(searchParams.skippedQuestions);
   const totalQuestions = Number(searchParams.totalQuestions);
   const timeSpent = Number(searchParams.timeSpent);
+/*   const selectedAnswers = searchParams.selectedAnswers
+  console.log(selectedAnswers) */
+  const selectedAnswers = (searchParams.selectedAnswers as string)
+  .split(",")
+  .map((val) => parseInt(val, 10));
+
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -58,6 +65,23 @@ export default function QuizResults() {
 
   const toggleExpand = (id: number) => {
     setExpandedQuestionId(prev => (prev === id ? null : id));
+  };
+
+  const getOptionColor = (
+    index: number,
+    selectedIndex: number,
+    correctIndex: number
+  ): string => {
+    if (selectedIndex === -1) {
+      return index === correctIndex ? "blue" : "#000"; 
+    }
+    if (selectedIndex === correctIndex) {
+      return index === correctIndex ? "green" : "#000"; 
+    }
+    if (index === correctIndex) return "blue"; 
+
+    if (index === selectedIndex) return "red";
+    return "#000"; 
   };
     
   return (
@@ -113,22 +137,48 @@ export default function QuizResults() {
       <FlatList
           data={quizData?.questions}
           keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             const isExpanded = expandedQuestionId === item?.id;
+            const selectedAnswerIndex = selectedAnswers[index];
+            //console.log(selectedAnswerIndex)
+            const correctAnswerIndex = item.correctAnswerIndex; 
+            //console.log(correctAnswerIndex)
+            const isPass = selectedAnswerIndex === -1;
+            const isCorrect = selectedAnswerIndex === correctAnswerIndex;
+
+            let StatusIcon = null;
+
+            if (isPass) {
+              StatusIcon = <Text style={styles.uncertainIcon}>?</Text>;
+            } else if (isCorrect) {
+              StatusIcon = <CorrectIcon />;
+            } else {
+              StatusIcon = <FalseIcon />;
+            }
 
             return (
               <TouchableOpacity onPress={() => toggleExpand(item.id)} activeOpacity={0.7}>
-                <View style={styles.questionItem}>
+                <View
+                  style={[
+                    styles.questionItem]}
+                >
+                
+                <View style={styles.questionRow}>
                 <Text style={styles.questionText} numberOfLines={isExpanded ? undefined : 3}
                 >
                   {item?.description}
                 </Text>
+                {StatusIcon}
+                </View>
                 
                   {isExpanded && (
                     <View style={styles.optionsContainer}>
-                      {item?.options?.map((option: string, index: number) => (
-                        <Text key={index} style={styles.optionText}>
-                          {String.fromCharCode(65 + index)}. {option}
+                      {item?.options?.map((option: string, i: number) => (
+                      <Text
+                          key={i}
+                          style={[styles.optionText, { color: getOptionColor(i, selectedAnswerIndex, correctAnswerIndex) }]}
+                        >                          
+                        {String.fromCharCode(65 + i)}. {option}
                         </Text>
                       ))}
                     </View>
@@ -322,6 +372,7 @@ questionItem: {
     marginBottom: 10,
 },
 questionText: {
+    maxWidth: "90%",
     fontSize: 16,
     marginBottom: 10,
 },
@@ -343,5 +394,15 @@ column: {
 },
 labelText: {
   fontSize: 14,
+},
+questionRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+},
+uncertainIcon:{
+  color: "orange",
+  fontFamily: "Inter-Regular",
+  fontSize: 15,
 },
 });

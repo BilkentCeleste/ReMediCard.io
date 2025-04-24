@@ -4,6 +4,7 @@ import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
 import { createQuestion, editQuestion } from '@/apiHelper/backendHelper';
+import TutorialInfoButton from '../../components/TutorialInfoButton';
 
 
 export default function UpdateFlashcard() {
@@ -99,6 +100,14 @@ export default function UpdateFlashcard() {
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
                 </View>
+
+                <View style={styles.tutorialIconLayout}>
+                    <TutorialInfoButton tutorialTitle = {"test_title"} tutorialTexts={["test", "test", "test"]} tutorialImages={[
+                        require('@/assets/images/tutorial/tutorial_example_pic.jpg'), 
+                        require('@/assets/images/tutorial/tutorial_example_pic2.jpg'),
+                        require('@/assets/images/tutorial/tutorial_example_pic.jpg')]}/>
+                </View>
+
             </View>
             
             <TextInput
@@ -242,6 +251,14 @@ const styles = StyleSheet.create({
         height: 24,
         width: 24,
         position: "absolute"
+    },
+    tutorialIconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute",
+        left: "95%",
+        zIndex: 3,
+        top: 5
     },
     menuIcon: {
         right: "95%",
