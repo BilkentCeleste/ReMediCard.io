@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert} from 'react-native';
 import {useRouter, useLocalSearchParams, Link} from 'expo-router';
 import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
 import { getQuizByShareToken, addUserQuiz } from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator } from 'react-native';
+import NotFound from "@/components/NotFound";
 
 interface Question {
     id: number;
@@ -22,16 +23,19 @@ export default function SharedQuiz() {
     const { t } = useTranslation('shared_quiz');
     const router = useRouter();
     const { shareToken } = useLocalSearchParams();
+
     const [quiz, setQuiz] = useState<Quiz | null>(null);
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
         if (shareToken) {
             getQuizByShareToken(shareToken)
                 .then((res) => {
                     setQuiz(res?.data);
+                    setNotFound(false);
                 })
                 .catch((error: Error) => {
-                    console.error(error);
+                    setNotFound(true);
                 });
         }
     }, [shareToken]);
@@ -43,10 +47,19 @@ export default function SharedQuiz() {
                     router.push('/(app)/quizzes');
                 })
                 .catch((error: Error) => {
+                    Alert.alert(t('error'), t('add_quiz_failed'));
                     console.error(error);
                 });
         }
     };
+
+    if (notFound) {
+        return (
+            <NotFound
+                message={t("not_found")}
+            />
+        );
+    }
 
     if (!quiz) {
         return (

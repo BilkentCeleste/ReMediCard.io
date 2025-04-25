@@ -8,5 +8,8 @@
     "front_message": "Ön Yüz Metnini Girin",
     "back_message": "Arka Yüz Metnini Girin",
     "select_front_image": "Ön Yüz Görseli Seçin (Opsiyonel)",
-    "select_back_image": "Arka Yüz Görseli Seçin (Opsiyonel)"
+    "select_back_image": "Arka Yüz Görseli Seçin (Opsiyonel)",
+    "front_image_selected": "Ön Yüz Görseli Seçildi",
+    "back_image_selected": "Arka Yüz Görseli Seçildi",
+    "file_transfer": "Bilgi kartları oluşturulurken lütfen bekleyin. Bu işlem, görsellerin boyutuna bağlı olarak birkaç saniye sürebilir.",
 }

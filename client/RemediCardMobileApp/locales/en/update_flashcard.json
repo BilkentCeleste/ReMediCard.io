@@ -8,5 +8,8 @@
     "front_message": "Enter Front Side Text",
     "back_message": "Enter Back Side Text",
     "select_front_image": "Select Image for Front Side (Optional)",
-    "select_back_image": "Select Image for Back Side (Optional)"
+    "select_back_image": "Select Image for Back Side (Optional)",
+    "front_image_selected": "Front Side Image Selected",
+    "back_image_selected": "Back Side Image Selected",
+    "file_transfer": "Please wait wihle the flashcards are being created. This may take a few seconds depending on the size of the images."
 }

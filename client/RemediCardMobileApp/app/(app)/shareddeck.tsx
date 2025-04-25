@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, Alert} from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import {addUserDeck, getDeckByShareToken} from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
+import NotFound from "@/components/NotFound";
 
 export default function SharedDeck() {
     const { t } = useTranslation('shared_deck');
@@ -12,15 +13,17 @@ export default function SharedDeck() {
     const { shareToken } = useLocalSearchParams();
 
     const [deck, setDeck] = useState();
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
         if (shareToken) {
             getDeckByShareToken(shareToken)
                 .then((res) => {
                     setDeck(res?.data);
+                    setNotFound(false);
                 })
                 .catch((error) => {
-                    console.error(error);
+                    setNotFound(true);
                 });
         }
     }, [shareToken]);
@@ -32,10 +35,19 @@ export default function SharedDeck() {
                     router.push('/(app)/decks');
                 })
                 .catch((error: Error) => {
+                    Alert.alert(t('error'), t('add_deck_failed'));
                     console.error(error);
                 });
         }
     };
+
+    if (notFound) {
+        return (
+            <NotFound
+                message={t("not_found")}
+            />
+        );
+    }
 
     if (!deck) {
         return (

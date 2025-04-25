@@ -1,4 +1,6 @@
 {
   "loading_deck": "Deste yükleniyor...",
-  "add_to_my_decks": "Kendi destelerime ekle"
+  "add_to_my_decks": "Kendi destelerime ekle",
+  "add_deck_failed": "Deste eklenemedi",
+  "not_found": "Paylaşılan deste silinmiş veya mevcut değil"
 }
