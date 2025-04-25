@@ -476,7 +476,7 @@ export default function Quizzes() {
               <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                   <Text style={styles.modalTitle}> {t("change_public_visibility_message")}</Text>
-                  <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedQuiz?.isPubliclyVisible ? "public" : "private")}</Text>
+                  <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedQuiz?.isPubliclyVisible ? "private": "public")}</Text>
                   <TouchableOpacity
                     style={[styles.modalButton]}
                     onPress={handleChangeVisibility}

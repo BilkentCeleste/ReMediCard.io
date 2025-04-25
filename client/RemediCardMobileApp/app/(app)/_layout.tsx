@@ -47,6 +47,7 @@ export default function RootLayout() {
       <Stack.Screen name="updateflashcard" options={{ headerShown: false }} />
       <Stack.Screen name="shareddeck" options={{ headerShown: false }} />
       <Stack.Screen name="sharedquiz" options={{ headerShown: false }} />
+      <Stack.Screen name="discover" options={{ headerShown: false }} />
     </Stack>
   );
 }

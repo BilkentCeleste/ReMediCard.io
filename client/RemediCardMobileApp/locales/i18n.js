@@ -31,6 +31,7 @@ import shared_quiz_en from "./en/shared_quiz.json";
 import shared_deck_en from "./en/shared_deck.json";
 import quiz_results_en from "./en/quiz_results.json";
 import tutorial_en from "./en/tutorial.json"
+import discover_en from "./en/discover.json"
 
 import login_tr from "./tr/login.json";
 import register_tr from "./tr/register.json";
@@ -60,6 +61,7 @@ import shared_quiz_tr from "./tr/shared_quiz.json";
 import shared_deck_tr from "./tr/shared_deck.json";
 import quiz_results_tr from "./tr/quiz_results.json";
 import tutorial_tr from "./tr/tutorial.json"
+import discover_tr from "./tr/discover.json"
 
 import { LANGUAGE_KEY } from "@/constants/config"
 
@@ -119,7 +121,8 @@ i18n.use(languageDetector).use(initReactI18next).init({
       shared_quiz: shared_quiz_en,
       shared_deck: shared_deck_en,
       quiz_results: quiz_results_en,
-      tutorial: tutorial_en
+      tutorial: tutorial_en,
+      discover: discover_en
     },
     tr: {
       login: login_tr,
@@ -149,7 +152,8 @@ i18n.use(languageDetector).use(initReactI18next).init({
       shared_quiz: shared_quiz_tr,
       shared_deck: shared_deck_tr,
       quiz_results: quiz_results_tr,
-      tutorial: tutorial_tr
+      tutorial: tutorial_tr,
+      discover: discover_tr
     },
   },
   fallbackLng: "en", // if a language is not available

@@ -78,6 +78,11 @@ export default function Home() {
     router.push("/(app)/editdecklist");
   };
 
+  const uploadDiscoverPage = () => {
+    console.log("discover")
+    router.push("/(app)/discover");
+  };
+
   const handleQuizResultSelection = (id) => {
     cleanSearch();
     router.push(`/(app)/quizzes?quiz_selected=${id}`);
@@ -211,10 +216,10 @@ export default function Home() {
 
               <TouchableOpacity
                 style={styles.mainComponent}
-                onPress={uploadGeneralEditPage}
+                onPress={uploadDiscoverPage}
               >
                 <CreateIcon></CreateIcon>
-                <Text style={[styles.mainComponentText]}>{t("create")}</Text>
+                <Text style={[styles.mainComponentText]}>{t("discover")}</Text>
               </TouchableOpacity>
             </View>
           </View>

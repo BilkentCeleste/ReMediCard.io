@@ -37,16 +37,15 @@ import ListLoader from "../../components/ListLoader";
 
 const { width } = Dimensions.get("window");
 
-export default function Decks() {
-  const { t } = useTranslation("decks");
-  const { deck_selected } = useLocalSearchParams();
+export default function Discover() {
+  const { t } = useTranslation("discover");
+  
   const router = useRouter();
 
-  const [searchParamUsed, setSearchParamUsed] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<string>("access");
-  const [sortOrder, setSortOrder] = useState<string>("desc");
-  const [decks, setDecks] = useState<any[]>([]);
-  const [selectedDeck, setSelectedDeck] = useState<any>(null);
+  const [selectedSort, setSelectedSort] = useState("access");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [decks, setDecks] = useState([]);
+  const [selectedDeck, setSelectedDeck] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [visibilityPopUpVisible, setVisibilityPopUpVisible] = useState(false);
@@ -60,6 +59,8 @@ export default function Decks() {
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
 
+  const [listType, setListType] = useState("deck")
+
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -67,11 +68,6 @@ export default function Decks() {
       .then((decks) => {
         setDecks(decks?.data);
         setShowLoading(false);
-        if (!searchParamUsed && deck_selected !== undefined) {
-          setSearchParamUsed(true);
-          const selected = decks?.data.find((deck: any) => deck.id == deck_selected);
-          handleDeckPress(selected);
-        }
       })
       .catch((error) => {
         console.log(error);
@@ -181,7 +177,7 @@ export default function Decks() {
     });
   }
 
-  const handleDeckPress = (deck: any) => {
+  const handleDeckPress = (deck) => {
     setSelectedDeck(deck);
     setModalVisible(true);
   };
@@ -284,7 +280,7 @@ export default function Decks() {
     }
   };
 
-  const formatDate = (dateStr: any) => {
+  const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -383,13 +379,22 @@ export default function Decks() {
       )}
 
       {showLoading ? null : (
+        <>
         <TouchableOpacity
           style={styles.createButton}
-          onPress={() => setCreateModalVisible(true)}
+          onPress={() => setListType("quizzes")}
         >
           <PlusIcon></PlusIcon>
-          <Text style={styles.createNewDeck}>{t("create_new_deck")}</Text>
+          <Text style={styles.createNewDeck}>{t("quizzes")}</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => setListType("deck")}
+        >
+          <PlusIcon></PlusIcon>
+          <Text style={styles.createNewDeck}>{t("decks")}</Text>
+        </TouchableOpacity>
+        </>
       )}
 
       <Modal
@@ -467,7 +472,7 @@ export default function Decks() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}> {t("change_public_visibility_message")}</Text>
-            <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedDeck?.isPubliclyVisible ? "private" : "public")}</Text>
+            <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedDeck?.isPubliclyVisible ? "public" : "private")}</Text>
             <TouchableOpacity
               style={[styles.modalButton]}
               onPress={handleChangeVisibility}
