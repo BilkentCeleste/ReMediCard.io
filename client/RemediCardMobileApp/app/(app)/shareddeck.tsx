@@ -44,6 +44,7 @@ export default function SharedDeck() {
     if (notFound) {
         return (
             <NotFound
+                title={t("not_found_title")}
                 message={t("not_found")}
             />
         );
