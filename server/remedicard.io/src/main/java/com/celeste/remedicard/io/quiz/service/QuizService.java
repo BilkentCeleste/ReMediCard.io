@@ -5,6 +5,7 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.QuestionCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
+import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
@@ -126,7 +127,7 @@ public class QuizService {
         quizRepository.save(quiz);
         saveSearchableQuiz(quiz);
     }
-
+    
     public String generateShareToken(Long quizId) {
         Quiz quiz = getById(quizId);
         if (quiz.getShareToken() != null) {
@@ -193,5 +194,49 @@ public class QuizService {
         quizRepository.save(quiz);
         saveSearchableQuiz(quiz);
         return quiz;
+    }
+
+    public void changePublicVisibility(Long quizId) {
+        Quiz quiz = getById(quizId);
+
+        if(quiz.getIsPubliclyVisible() == null){
+            quiz.setIsPubliclyVisible(true);
+        }
+
+        quiz.setIsPubliclyVisible(!quiz.getIsPubliclyVisible());
+
+        quizRepository.save(quiz);
+    }
+
+    public void addLikeToQuiz(Long quizId) {
+        Quiz quiz = getById(quizId);
+        User user = currentUserService.getCurrentUser();
+        quiz.getLikerIds().remove(user.getId());
+        quiz.setLikeCount((long)quiz.getLikerIds().size());
+        quizRepository.save(quiz);
+    }
+
+    public void removeLikeFromQuiz(Long quizId) {
+        Quiz quiz = getById(quizId);
+        User user = currentUserService.getCurrentUser();
+        quiz.getLikerIds().remove(user.getId());
+        quiz.setLikeCount((long)quiz.getLikerIds().size());
+        quizRepository.save(quiz);
+    }
+
+    public void addDisLikeToQuiz(Long quizId) {
+        Quiz quiz = getById(quizId);
+        User user = currentUserService.getCurrentUser();
+        quiz.getDislikerIds().remove(user.getId());
+        quiz.setDislikeCount((long)quiz.getDislikerIds().size());
+        quizRepository.save(quiz);
+    }
+
+    public void removeDisLikeFromQuiz(Long quizId) {
+        Quiz quiz = getById(quizId);
+        User user = currentUserService.getCurrentUser();
+        quiz.getDislikerIds().remove(user.getId());
+        quiz.setDislikeCount((long)quiz.getDislikerIds().size());
+        quizRepository.save(quiz);
     }
 }

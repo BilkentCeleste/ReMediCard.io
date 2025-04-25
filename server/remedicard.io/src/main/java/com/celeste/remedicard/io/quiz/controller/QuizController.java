@@ -55,6 +55,29 @@ public class QuizController {
         quizService.addUserQuiz(quizId);
     }
 
+    @PatchMapping("/change_public_visibility/{quizId}")
+    public void changePublicVisibility(@PathVariable Long quizId) {
+        quizService.changePublicVisibility(quizId);
+    }
+
+    @PatchMapping("/like_quiz/{quizId}")
+    public void likeQuiz(@PathVariable Long quizId) {
+        quizService.addLikeToQuiz(quizId);
+    }
+
+    @PatchMapping("/unlike_quiz/{quizId}")
+    public void unlikeQuiz(@PathVariable Long quizId) {
+        quizService.removeLikeFromQuiz(quizId);
+    }
+
+    @PatchMapping("/dislike_quiz/{quizId}")
+    public void dislikeQuiz(@PathVariable Long quizId) {quizService.addDisLikeToQuiz(quizId);}
+
+    @PatchMapping("/undislike_quiz/{quizId}")
+    public void unDislikeQuiz(@PathVariable Long quizId) {
+        quizService.removeDisLikeFromQuiz(quizId);
+    }
+
     @PostMapping("/generateShareToken/{quizId}")
     public String generateShareToken(@PathVariable Long quizId) {
         return quizService.generateShareToken(quizId);

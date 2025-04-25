@@ -284,7 +284,6 @@ public class DeckService {
         return response;
     }
 
-
     public void saveSearchableDeck(Deck deck){
         User user = currentUserService.getCurrentUser();
 
@@ -319,5 +318,49 @@ public class DeckService {
         deckRepository.save(deck);
         saveSearchableDeck(deck);
         return deck;
+    }
+
+    public void changePublicVisibility(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+
+        if(deck.getIsPubliclyVisible() == null){
+            deck.setIsPubliclyVisible(true);
+        }
+
+        deck.setIsPubliclyVisible(!deck.getIsPubliclyVisible());
+
+        deckRepository.save(deck);
+    }
+
+    public void addLikeToDeck(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        User user = currentUserService.getCurrentUser();
+        deck.getLikerIds().add(user.getId());
+        deck.setLikeCount((long)deck.getLikerIds().size());
+        deckRepository.save(deck);
+    }
+
+    public void removeLikeFromDeck(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        User user = currentUserService.getCurrentUser();
+        deck.getLikerIds().remove(user.getId());
+        deck.setLikeCount((long)deck.getLikerIds().size());
+        deckRepository.save(deck);
+    }
+
+    public void addDisLikeToDeck(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        User user = currentUserService.getCurrentUser();
+        deck.getDislikerIds().add(user.getId());
+        deck.setLikeCount((long)deck.getDislikerIds().size());
+        deckRepository.save(deck);
+    }
+
+    public void removeDisLikeFromDeck(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        User user = currentUserService.getCurrentUser();
+        deck.getDislikerIds().remove(user.getId());
+        deck.setLikeCount((long)deck.getDislikerIds().size());
+        deckRepository.save(deck);
     }
 }

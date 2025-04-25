@@ -33,13 +33,28 @@ public class Deck extends AuditableEntity {
     private String difficulty;
 
     @Column
-    private int flashcardCount;
+    private Integer flashcardCount;
 
     @Column
-    private int popularity;
+    private Integer popularity;
 
     @Column
     private String shareToken;
+
+    @Column
+    private Boolean isPubliclyVisible = false;
+
+    @Column
+    private Long likeCount = 0L;
+
+    @Column
+    private Long disLikeCount = 0L;
+
+    @ElementCollection
+    private Set<Long> likerIds = new HashSet<>();
+
+    @ElementCollection
+    private Set<Long> dislikerIds = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

@@ -27,4 +27,5 @@ public class DeckResponseWithoutFlashcardsDTO {
     Set<FigureResponseDTO> figureSet;
     private DeckStatsResponseDTO bestDeckStat;
     private DeckStatsResponseDTO lastDeckStat;
+    private Boolean isPubliclyVisible;
 }

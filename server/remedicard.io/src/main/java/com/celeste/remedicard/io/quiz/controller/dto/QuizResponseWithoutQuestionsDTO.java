@@ -21,4 +21,5 @@ public class QuizResponseWithoutQuestionsDTO {
     private Integer questionCount;
     private QuizStatsResponseDTO bestQuizStat;
     private QuizStatsResponseDTO lastQuizStat;
+    private Boolean isPubliclyVisible;
 }

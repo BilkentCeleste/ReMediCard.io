@@ -74,6 +74,30 @@ public class DeckController {
         deckService.addUserDeck(deckId);
     }
 
+
+    @PatchMapping("/change_public_visibility/{deckId}")
+    public void changePublicVisibility(@PathVariable Long deckId) {
+        deckService.changePublicVisibility(deckId);
+    }
+
+    @PatchMapping("/like_deck/{deckId}")
+    public void likeDeck(@PathVariable Long deckId) {
+        deckService.addLikeToDeck(deckId);
+    }
+
+    @PatchMapping("/unlike_deck/{deckId}")
+    public void unlikeDeck(@PathVariable Long deckId) {
+        deckService.removeLikeFromDeck(deckId);
+    }
+
+    @PatchMapping("/dislike_deck/{deckId}")
+    public void dislikeDeck(@PathVariable Long deckId) {deckService.addDisLikeToDeck(deckId);}
+
+    @PatchMapping("/undislike_deck/{deckId}")
+    public void unDislikeDeck(@PathVariable Long deckId) {
+        deckService.removeDisLikeFromDeck(deckId);
+    }
+
     @PostMapping("/generateShareToken/{deckId}")
     public String generateShareToken(@PathVariable Long deckId) {
         return deckService.generateShareToken(deckId);

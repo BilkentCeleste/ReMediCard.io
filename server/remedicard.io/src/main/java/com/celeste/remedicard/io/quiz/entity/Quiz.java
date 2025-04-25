@@ -36,6 +36,21 @@ public class Quiz extends AuditableEntity {
     @Column
     private Integer questionCount = 0;
 
+    @Column
+    private Boolean isPubliclyVisible;
+
+    @Column
+    private Long likeCount;
+
+    @Column
+    private Long dislikeCount;
+
+    @ElementCollection
+    private Set<Long> likerIds;
+
+    @ElementCollection
+    private Set<Long> dislikerIds;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
