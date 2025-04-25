@@ -2,5 +2,6 @@
     "loading_quiz": "Loading quiz...",
     "add_to_my_quizzes": "Add to my quizzes",
     "add_quiz_failed": "Failed to add quiz",
-    "not_found": "Shared quiz has been deleted or is not available"
+    "not_found": "Shared quiz has been deleted or is not available",
+    "not_found_title": "Oops! Something went wrong"
 }

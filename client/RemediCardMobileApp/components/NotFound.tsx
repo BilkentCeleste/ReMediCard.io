@@ -4,14 +4,15 @@ import { Link } from 'expo-router';
 import { HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 
 interface NotFoundPageProps {
+    title: string;
     message: string;
 }
 
-const NotFound: React.FC<NotFoundPageProps> = ({ message }) => {
+const NotFound: React.FC<NotFoundPageProps> = ({ title, message }) => {
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Oops, something went wrong</Text>
+                <Text style={styles.titleText}>{title}</Text>
             </View>
 
             <View style={styles.messageContainer}>

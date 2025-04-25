@@ -41,5 +41,6 @@
   "next_public_visibility": "Seçilecek Görünüm: ",
   "public": "Herkese Açık",
   "private": "Gizli, sadece siz görebilirsiniz",
-  "change_visibility": "Değiştir"
+  "change_visibility": "Değiştir",
+  "change_visibility_failed": "Görünürlük değiştirirken hata oluştu"
 }
