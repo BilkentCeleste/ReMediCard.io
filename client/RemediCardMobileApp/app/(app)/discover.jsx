@@ -21,7 +21,9 @@ import {
   SettingsIcon,
   SearchIcon,
   PlusIcon,
-  ChevronDown
+  ChevronDown,
+  LikeIcon,
+  DislikeIcon
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {
@@ -202,83 +204,6 @@ export default function Discover() {
     }
   };
 
-  const handleEditDeck = () => {
-    if (selectedDeck) {
-      setModalVisible(false);
-      router.push({
-        pathname: "/(app)/updatedeck",
-        params: { deckId: selectedDeck.id },
-      });
-    } else {
-      Alert.alert(t("error"), t("deck_info_missing"));
-    }
-  };
-
-  const handleDeleteDeck = () => {
-    deleteDeck(selectedDeck.id)
-        .then((res) => {
-          Alert.alert(t("success"), t("success_message"));
-          setDecks(decks.filter((d) => d.id !== selectedDeck.id));
-          setSelectedDeck(null);
-          setPopUpVisible(false);
-          setModalVisible(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          Alert.alert(t("error"), t("deck_deletion_failed"));
-        });
-  };
-
-  const uploadGeneratePage = () => {
-    router.push("/(app)/generatedecks");
-  };
-
-  const handleManualCreate = () => {
-    if (!newDeckTitle.trim()) {
-      Alert.alert(t("error"), t("enter_deck_name"));
-      return;
-    }
-
-    const data = {
-      name: newDeckTitle,
-      topic: newDeckTitle,
-    };
-
-    createDeck(data)
-      .then((res) => {
-        setManualCreateModalVisible(false);
-        setNewDeckTitle("");
-        setUpdated((updated) => !updated);
-        setDecks((prevDecks) => [...prevDecks, res.data]);
-      })
-      .catch((err) => {
-        console.error(err);
-        Alert.alert(t("error"), t("deck_creation_failed"));
-      });
-  };
-
-  const handleShareDeck = () => {
-    if (selectedDeck) {
-      generateDeckShareToken(selectedDeck?.id)
-        .then((res) => {
-          setModalVisible(false);
-          const shareUrl = res?.data;
-          Share.share({
-            message: shareUrl,
-            url: shareUrl,
-            title: selectedDeck?.name,
-          }, {
-            dialogTitle: 'Share Deck',
-            subject: selectedDeck?.name,
-          })})
-        .catch((err) => {
-          console.error(err);
-          Alert.alert(t("error"), t("share_failed"));
-        });
-    } else {
-      Alert.alert(t("error"), t("deck_info_missing"));
-    }
-  };
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -345,8 +270,8 @@ export default function Discover() {
                 <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
                 {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("last_accessed")}{" "}
-                    {formatDate(item.lastDeckStat.accessDate)}
+                    {t("create_time")}{" "}
+                    22.07.2002
                   </Text>
                 )}
 
@@ -355,17 +280,8 @@ export default function Discover() {
                 </Text>
                 {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
-                    {t("best")}
-                    {new Intl.NumberFormat("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 1,
-                    }).format(item.bestDeckStat.successRate)}
-                    % {t("last")}
-                    {new Intl.NumberFormat("en-US", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 1,
-                    }).format(item.lastDeckStat.successRate)}
-                    %
+                    {t("like")}: 50 {" "}
+                    {t("dislike")}: 15
                   </Text>
                 )}
 
@@ -379,115 +295,42 @@ export default function Discover() {
       )}
 
       {showLoading ? null : (
-        <>
+        <View style={styles.toggleContainer}>
         <TouchableOpacity
-          style={styles.createButton}
+          style={[
+            styles.createButton,
+            listType === "quizzes" && styles.activeButton,
+          ]}
           onPress={() => setListType("quizzes")}
         >
-          <PlusIcon></PlusIcon>
-          <Text style={styles.createNewDeck}>{t("quizzes")}</Text>
+          <Text
+            style={[
+              styles.createNewDeck,
+              listType === "quizzes" && styles.activeText,
+            ]}
+          >
+            {t("quizzes")}
+          </Text>
         </TouchableOpacity>
+    
         <TouchableOpacity
-          style={styles.createButton}
+          style={[
+            styles.createButton,
+            listType === "deck" && styles.activeButton,
+          ]}
           onPress={() => setListType("deck")}
         >
-          <PlusIcon></PlusIcon>
-          <Text style={styles.createNewDeck}>{t("decks")}</Text>
+          <Text
+            style={[
+              styles.createNewDeck,
+              listType === "deck" && styles.activeText,
+            ]}
+          >
+            {t("decks")}
+          </Text>
         </TouchableOpacity>
-        </>
+      </View>
       )}
-
-      <Modal
-        transparent={true}
-        visible={createModalVisible}
-        animationType="slide"
-        onRequestClose={() => setCreateModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("create_deck")}</Text>
-
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setCreateModalVisible(false);
-                setManualCreateModalVisible(true);
-              }}
-            >
-              <Text style={styles.modalButtonText}>{t("create_manually")}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setCreateModalVisible(false);
-                uploadGeneratePage();
-              }}
-            >
-              <Text style={styles.modalButtonText}>{t("create_with_ai")}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalCancel}
-              onPress={() => setCreateModalVisible(false)}
-            >
-              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        transparent={true}
-        visible={popUpVisible}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}> {t("delete_deck_message")} </Text>
-
-            <TouchableOpacity
-              style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
-              onPress={handleDeleteDeck}
-            >
-              <Text style={[styles.modalButtonText]}>{t("delete_deck")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalCancel}
-              onPress={() => setPopUpVisible(false)}
-            >
-              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        transparent={true}
-        visible={visibilityPopUpVisible}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}> {t("change_public_visibility_message")}</Text>
-            <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedDeck?.isPubliclyVisible ? "public" : "private")}</Text>
-            <TouchableOpacity
-              style={[styles.modalButton]}
-              onPress={handleChangeVisibility}
-            >
-              <Text style={[styles.modalButtonText]}>{t("change_visibility")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalCancel}
-              onPress={() => setVisibilityPopUpVisible(false)}
-            >
-              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
       <Modal
         transparent={true}
@@ -504,69 +347,19 @@ export default function Discover() {
             >
               <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleEditDeck}
-            >
-              <Text style={styles.modalButtonText}>{t("edit_deck")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleShareDeck}
-            >
-              <Text style={styles.modalButtonText}>{t("share_deck")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton]}
-              onPress={() => setVisibilityPopUpVisible(true)}
-            >
-              <Text style={[styles.modalButtonText]}>{t("change_public_visibility")}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
-              onPress={() => setPopUpVisible(true)}
-            >
-              <Text style={[styles.modalButtonText]}>{t("delete_deck")}</Text>
-            </TouchableOpacity>
+            <View style={styles.likeContainer}>
+              <TouchableOpacity style={styles.modalButton2}>
+                <LikeIcon />
+                <Text style={styles.modalButtonText}>{t("like")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton2}>
+                <DislikeIcon />
+                <Text style={styles.modalButtonText}>{t("dislike")}</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
-        transparent={true}
-        visible={manualCreateModalVisible}
-        animationType="slide"
-        onRequestClose={() => setManualCreateModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("new_deck_name")}</Text>
-            <TextInput
-              style={[
-                styles.searchComponent,
-                { width: "100%", marginBottom: 10 },
-              ]}
-              placeholder={t("enter_deck_title")}
-              value={newDeckTitle}
-              onChangeText={setNewDeckTitle}
-            />
-
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleManualCreate}
-            >
-              <Text style={styles.modalButtonText}>{t("save_and_edit")}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalCancel}
-              onPress={() => setManualCreateModalVisible(false)}
             >
               <Text style={styles.modalCancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
@@ -800,6 +593,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: "center",
   },
+  modalButton2: {
+    backgroundColor: "#2916ff",
+    padding: 10,
+    borderRadius: 10,
+    width: "48%",
+    marginVertical: 5,
+    alignItems: "center",
+  },
   modalButtonText: {
     color: "#fff",
     fontSize: 16,
@@ -812,22 +613,41 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  likeContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between',  
+    alignItems: 'center',  
+    width: "100%"
+  },
   createButton: {
-    borderRadius: 20,
-    backgroundColor: "#2916ff",
-    width: "75%",
+    width: "40%",
     flexDirection: "row",
     alignItems: "center",
-    gap: 30,
+    justifyContent: "center",
+    gap: 10,
     height: 50,
+  },
+  
+  createNewDeck: {
+    color: "white",
+    fontWeight: "normal",
+    fontSize: 18,
+    alignSelf: "center", // Ensure the text stays centered within the button
+
+  },
+  activeText: {
+    fontWeight: "bold",
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: "75%",
     bottom: "12%",
   },
-  createNewDeck: {
-    fontSize: 17,
-    lineHeight: 22,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "center",
+  activeButton: {
+    borderBottomWidth: 2,  // Underline effect on active state
+    borderColor: "#fff", // Matching color for underline
   },
   clearButton: {
     paddingHorizontal: 6,
