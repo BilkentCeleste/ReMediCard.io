@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, deleteFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon, UploadIcon} from '@/constants/icons';
@@ -16,6 +16,7 @@ export default function UpdateFlashcard() {
     const [isCreating, setIsCreating] = useState(true);
     const [frontImage, setFrontImage] = useState(null);
     const [backImage, setBackImage] = useState(null);
+    const [showIndicator, setShowIndicator] = useState(false);
     const router = useRouter();
 
     const { flashcard, deckId } = useLocalSearchParams();
@@ -36,6 +37,10 @@ export default function UpdateFlashcard() {
     }, [flashcard]);
 
     const handleSave = () => {
+        if( frontImage || backImage){
+            setShowIndicator(true);
+        }
+
         const formData = new FormData();
 
         // Top-level fields
@@ -74,6 +79,7 @@ export default function UpdateFlashcard() {
 
         createFlashcard(formData)
             .then(() => {
+                setShowIndicator(false);
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
@@ -82,7 +88,11 @@ export default function UpdateFlashcard() {
     }
 
     const handleUpdate = () => {
-       const formData = new FormData();
+        if( frontImage || backImage){
+            setShowIndicator(true);
+        }        
+        
+        const formData = new FormData();
 
         // Top-level fields
         formData.append("topic", "random");
@@ -120,6 +130,7 @@ export default function UpdateFlashcard() {
 
         updateFlashcard(flashcardId, formData)
             .then(() => {
+                setShowIndicator(false);
                 router.push("/(app)/updatedeck?deckId=" + deckId);
             })
             .catch((error) => {
@@ -211,6 +222,22 @@ export default function UpdateFlashcard() {
                     {backImage == null && <UploadIcon></UploadIcon>}
                 </View>
             </View>
+            
+            <Modal
+                transparent={true}
+                visible={showIndicator}
+                animationType="slide"
+                onRequestClose={() => setShowIndicator(false)}
+            >
+                <View style={styles.modalOverlay}>
+                <View style={styles.modalContainer}>
+                    <ActivityIndicator size={"large"} style={styles.indicator} />
+
+                    <Text style={styles.indicatorText}> {t("file_transfer")}</Text>
+                </View>
+                </View>
+            </Modal>
+
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleBack}>
@@ -340,5 +367,23 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: "5%",
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalContainer: {
+        backgroundColor: "#fff",
+        width: "80%",
+        padding: 20,
+        borderRadius: 20,
+        alignItems: "center",
+    },
+    indicator: {
+        transform: [{ scale: 1.8 }],
+        margin: 20,
+        color: "#888888",
     },
 });
