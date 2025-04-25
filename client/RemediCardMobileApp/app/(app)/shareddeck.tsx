@@ -1,32 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, Alert} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert} from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
-import {addUserDeck, getDeckByShareToken} from '@/apiHelper/backendHelper';
+import {addUserDeck, getDeckByDeckId, getDeckByShareToken} from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
 import NotFound from "@/components/NotFound";
+import Loading from "@/components/Loading";
 
 export default function SharedDeck() {
     const { t } = useTranslation('shared_deck');
     const router = useRouter();
-    const { shareToken } = useLocalSearchParams();
+    const { shareToken, id } = useLocalSearchParams();
 
     const [deck, setDeck] = useState();
     const [notFound, setNotFound] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (shareToken) {
+            setLoading(true);
             getDeckByShareToken(shareToken)
                 .then((res) => {
                     setDeck(res?.data);
                     setNotFound(false);
+                    setLoading(false);
                 })
                 .catch((error) => {
                     setNotFound(true);
+                    setLoading(false);
                 });
         }
     }, [shareToken]);
+
+    useEffect(() => {
+        if (id) {
+            setLoading(true);
+            getDeckByDeckId(id)
+                .then((res) => {
+                    setDeck(res?.data);
+                    setNotFound(false);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setNotFound(true);
+                    setLoading(false);
+                });
+        }
+    }, [id]);
 
     const handleAddToMyDecks = () => {
         if (deck?.id) {
@@ -50,29 +71,11 @@ export default function SharedDeck() {
         );
     }
 
-    if (!deck) {
+    if (loading) {
         return (
-            <View style={styles.container}>
-                <View style={styles.loadingContainer}>
-                        <ActivityIndicator size={"large"} style={styles.indicator}/>
-                        <Text style={styles.loadingText}>{t('loading_deck')}</Text>
-                    </View>
-    
-                    <View style={styles.navbarRow}>
-                        <TouchableOpacity>
-                            <Link href="/(app)/home"><HomeIcon /></Link>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Link href="/(app)/profile"><ProfileIcon /></Link>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <SettingsIcon />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.navbarContainer}>
-                        <View style={styles.navbarLine} />
-                    </View>
-            </View>
+            <Loading
+                message={t('loading_deck')}
+            />
         );
     }
 

@@ -41,5 +41,6 @@
     "next_public_visibility": "Visibility will be: ",
     "public": "Public",
     "private": "Private, only visible to you",
-    "change_visibility": "Change"
+    "change_visibility": "Change",
+    "change_visibility_failed": "Error changing visibility"
 }
