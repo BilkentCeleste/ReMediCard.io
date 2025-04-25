@@ -1,5 +1,6 @@
 package com.celeste.remedicard.io.deck.mapper;
 
+import com.celeste.remedicard.io.deck.controller.dto.DeckExploreResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import org.mapstruct.*;
@@ -12,6 +13,8 @@ public interface DeckResponseWithoutFlashcardsMapper {
     DeckResponseWithoutFlashcardsMapper INSTANCE = Mappers.getMapper(DeckResponseWithoutFlashcardsMapper.class);
 
     DeckResponseWithoutFlashcardsDTO toDTO(Deck deck);
+
+    DeckExploreResponseDTO toDeckExploreResponseDTO(Deck deck);
 
     Set<DeckResponseWithoutFlashcardsDTO> toDTO(Set<Deck> deckSet);
 

@@ -2,10 +2,7 @@ package com.celeste.remedicard.io.deck.controller;
 
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
-import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
-import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
-import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
-import com.celeste.remedicard.io.deck.controller.dto.UpdateDeckNameRequestDTO;
+import com.celeste.remedicard.io.deck.controller.dto.*;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
@@ -105,11 +102,11 @@ public class DeckController {
     }
 
     @GetMapping("/discover/{sorting_option}")
-    public List<DeckResponseWithoutFlashcardsDTO> unDislikeQuiz(@PathVariable SortingOption sorting_option) {
-        return deckService.discoverDecks(sorting_option)
-                .stream()
-                .map(DeckResponseWithoutFlashcardsMapper.INSTANCE::toDTO)
-                .collect(Collectors.toList());
+    public List<DeckExploreResponseDTO> discoverDecks(@PathVariable SortingOption sorting_option) {
+        List<Deck> decks = deckService.discoverDecks(sorting_option);
+        Long userId = currentUserService.getCurrentUserId();
+
+        return deckService.convertFromDeckToDeckExploreResponseDTO(decks, userId);
     }
 
     @PostMapping("/generateShareToken/{deckId}")

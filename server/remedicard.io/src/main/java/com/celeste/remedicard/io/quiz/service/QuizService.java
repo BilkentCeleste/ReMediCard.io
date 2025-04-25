@@ -6,6 +6,7 @@ import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.QuestionCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
 import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
+import com.celeste.remedicard.io.quiz.controller.dto.QuizExploreResponseDTO;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
@@ -156,6 +157,17 @@ public class QuizService {
             quiz.setBestQuizStat(bestQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(bestQuizStats) : null);
             quiz.setLastQuizStat(lastQuizStats != null ? QuizStatsResponseMapper.INSTANCE.toDTO(lastQuizStats) : null);
         });
+
+        return response;
+    }
+
+    public List<QuizExploreResponseDTO> convertFromQuizToQuizExploreResponseDTO(List<Quiz> quizzes, Long userId){
+        List<QuizExploreResponseDTO> response = quizzes.stream().map(quiz -> {
+            QuizExploreResponseDTO quizExploreResponseDTO = QuizzesResponseMapper.INSTANCE.toQuizExploreResponseDTO(quiz);
+            quizExploreResponseDTO.setIsLiked(quiz.getLikerIds().contains(userId));
+            quizExploreResponseDTO.setIsDisliked(quiz.getDislikerIds().contains(userId));
+            return quizExploreResponseDTO;
+        }).toList();
 
         return response;
     }

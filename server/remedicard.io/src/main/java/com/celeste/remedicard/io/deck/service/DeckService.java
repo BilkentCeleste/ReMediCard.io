@@ -7,6 +7,7 @@ import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
 import com.celeste.remedicard.io.cloud.service.S3Service;
 import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
+import com.celeste.remedicard.io.deck.controller.dto.DeckExploreResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
@@ -281,6 +282,18 @@ public class DeckService {
             deck.setBestDeckStat(bestDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(bestDeckStats) : null);
             deck.setLastDeckStat(lastDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(lastDeckStats) : null);
         });
+
+        return response;
+    }
+
+    public List<DeckExploreResponseDTO> convertFromDeckToDeckExploreResponseDTO(List<Deck> decks, Long userId){
+        List<DeckExploreResponseDTO> response = decks.stream().map(deck -> {
+            DeckExploreResponseDTO deckExploreResponseDTO = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDeckExploreResponseDTO(deck);
+            deckExploreResponseDTO.setIsLiked(deck.getLikerIds().contains(userId));
+            deckExploreResponseDTO.setIsDisliked(deck.getDislikerIds().contains(userId));
+            return deckExploreResponseDTO;
+        }
+        ).toList();
 
         return response;
     }

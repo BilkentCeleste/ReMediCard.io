@@ -36,4 +36,33 @@ public interface SearchableQuizRepository extends ElasticsearchRepository<Search
             }
             """)
     List<SearchableQuiz> findSearchableQuizContaining(String keyword, Long userId);
+
+
+    @Query("""
+            {
+              "bool": {
+                "filter": [
+                      { "term": { "userId": "?1" } }
+                    ],
+                "should": [
+                  { "match": { "name": "?0" }},
+                  {
+                    "nested": {
+                      "path": "questions",
+                      "query": {
+                        "bool": {
+                          "should": [
+                            { "match": { "question.description": "?0" }},
+                            { "match": { "question.options": "?0" }}
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ],
+                "minimum_should_match": 1
+              }
+            }
+            """)
+    List<SearchableQuiz> findSearchableQuizContainingButNotOwnedBy(String keyword, Long userId);
 }

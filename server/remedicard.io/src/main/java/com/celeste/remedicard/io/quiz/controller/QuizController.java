@@ -83,11 +83,10 @@ public class QuizController {
     }
 
     @GetMapping("/discover/{sorting_option}")
-    public List<QuizResponseWithoutQuestionsDTO> unDislikeQuiz(@PathVariable SortingOption sorting_option) {
-        return quizService.discoverQuizzes(sorting_option)
-                .stream()
-                .map(QuizzesResponseMapper.INSTANCE::toDTO)
-                .collect(Collectors.toList());
+    public List<QuizExploreResponseDTO> discoverQuizzes(@PathVariable SortingOption sorting_option) {
+        List<Quiz> quizzes =  quizService.discoverQuizzes(sorting_option);
+        Long userId = currentUserService.getCurrentUserId();
+        return quizService.convertFromQuizToQuizExploreResponseDTO(quizzes, userId);
     }
 
     @PostMapping("/generateShareToken/{quizId}")

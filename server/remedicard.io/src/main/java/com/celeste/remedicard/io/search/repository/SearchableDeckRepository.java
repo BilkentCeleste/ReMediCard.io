@@ -39,4 +39,37 @@ public interface SearchableDeckRepository extends ElasticsearchRepository<Search
             }
             """)
     List<SearchableDeck> findSearchableDeckContaining(String keyword, Long userId);
+
+
+    @Query("""
+            {
+              "bool": {
+                "filter": [
+                    { "term": { "userId": "?1" } }
+                  ],
+                "should": [
+                  { "match": { "name": "?0" }},
+                  { "match": { "description": "?0" }},
+                  {
+                    "nested": {
+                      "path": "flashcards",
+                      "query": {
+                        "bool": {
+                          "should": [
+                            { "match": { "flashcards.front": "?0" }},
+                            { "match": { "flashcards.back": "?0" }}
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ],
+                "minimum_should_match": 1
+              }
+            }
+            """)
+    List<SearchableDeck> findSearchableDeckContainingButNotOwnedBy(String keyword, Long userId);
+
+
+
 }

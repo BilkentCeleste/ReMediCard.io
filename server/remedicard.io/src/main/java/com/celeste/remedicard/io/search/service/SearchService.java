@@ -93,4 +93,24 @@ public class SearchService {
 
         searchableDeckRepository.save(searchableDeck);
     }
+
+    public Set<DeckResponseWithoutFlashcardsDTO> searchOthersDecks(String searchText){
+        Long userId = currentUserService.getCurrentUserId();
+
+        List<SearchableDeck> searchableDecks = searchableDeckRepository.findSearchableDeckContainingButNotOwnedBy(searchText, userId);
+
+        Set<Deck> decks = deckService.findDecksByIds(searchableDecks.stream().map(SearchableDeck::getId).collect(Collectors.toSet()));
+
+        return  deckService.convertFromDeckToDeckResponseWithoutFlashcardsDTO(decks, userId);
+    }
+
+    public Set<QuizResponseWithoutQuestionsDTO> searchOthersQuizzes(String searchText){
+        Long userId = currentUserService.getCurrentUserId();
+
+        List<SearchableQuiz> searchableQuizzes = searchableQuizRepository.findSearchableQuizContainingButNotOwnedBy(searchText, userId);
+
+        Set<Quiz> quizzes = quizService.findQuizzesByIds(searchableQuizzes.stream().map(SearchableQuiz::getId).collect(Collectors.toSet()));
+
+        return  quizService.convertFromQuizToQuizResponseWithoutFlashcardsDTO(quizzes, userId);
+    }
 }

@@ -30,4 +30,14 @@ public class SearchController {
     public Set<QuizResponseWithoutQuestionsDTO> searchQuizzes(@RequestParam("searchtext") String searchText) {
         return searchService.searchQuizzes(searchText);
     }
+
+    @GetMapping("others/deck")
+    public Set<DeckResponseWithoutFlashcardsDTO> searchOthersDecks(@RequestParam("searchtext") String searchText) {
+        return searchService.searchOthersDecks(searchText);
+    }
+
+    @GetMapping("others/quiz")
+    public Set<QuizResponseWithoutQuestionsDTO> searchOthersQuizzes(@RequestParam("searchtext") String searchText) {
+        return searchService.searchOthersQuizzes(searchText);
+    }
 }
