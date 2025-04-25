@@ -5,7 +5,7 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.QuestionCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.QuizCreationTask;
-import com.celeste.remedicard.io.deck.entity.Deck;
+import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Question;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
@@ -200,7 +200,7 @@ public class QuizService {
         Quiz quiz = getById(quizId);
 
         if(quiz.getIsPubliclyVisible() == null){
-            quiz.setIsPubliclyVisible(true);
+            quiz.setIsPubliclyVisible(false);
         }
 
         quiz.setIsPubliclyVisible(!quiz.getIsPubliclyVisible());
@@ -238,5 +238,20 @@ public class QuizService {
         quiz.getDislikerIds().remove(user.getId());
         quiz.setDislikeCount((long)quiz.getDislikerIds().size());
         quizRepository.save(quiz);
+    }
+
+    public List<Quiz> discoverQuizzes(SortingOption option){
+
+        User user = currentUserService.getCurrentUser();
+
+        if(option.equals(SortingOption.LIKE_COUNT)){
+            return quizRepository.findAllByIsPubliclyVisibleAndUserNotOrderByLikeCountDesc(true, user);
+        }
+
+        if(option.equals(SortingOption.PUBLICATION_DATE)){
+            return quizRepository.findAllByIsPubliclyVisibleAndUserNotOrderByCreatedDateDesc(true, user);
+        }
+
+        return quizRepository.findAllByIsPubliclyVisibleAndUserNot(true, user);
     }
 }

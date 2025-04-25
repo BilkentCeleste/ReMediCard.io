@@ -1,16 +1,22 @@
 package com.celeste.remedicard.io.deck.controller;
 
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
+import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
 import com.celeste.remedicard.io.deck.controller.dto.DeckCreateRequestDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.controller.dto.UpdateDeckNameRequestDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
+import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -96,6 +102,14 @@ public class DeckController {
     @PatchMapping("/undislike_deck/{deckId}")
     public void unDislikeDeck(@PathVariable Long deckId) {
         deckService.removeDisLikeFromDeck(deckId);
+    }
+
+    @GetMapping("/discover/{sorting_option}")
+    public List<DeckResponseWithoutFlashcardsDTO> unDislikeQuiz(@PathVariable SortingOption sorting_option) {
+        return deckService.discoverDecks(sorting_option)
+                .stream()
+                .map(DeckResponseWithoutFlashcardsMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/generateShareToken/{deckId}")

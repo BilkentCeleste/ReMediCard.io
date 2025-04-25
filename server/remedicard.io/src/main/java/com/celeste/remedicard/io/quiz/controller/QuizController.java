@@ -1,15 +1,19 @@
 package com.celeste.remedicard.io.quiz.controller;
 
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
+import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
 import com.celeste.remedicard.io.quiz.controller.dto.*;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.mapper.QuizCreateMapper;
 import com.celeste.remedicard.io.quiz.mapper.QuizResponseMapper;
+import com.celeste.remedicard.io.quiz.mapper.QuizzesResponseMapper;
 import com.celeste.remedicard.io.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/quiz")
@@ -76,6 +80,14 @@ public class QuizController {
     @PatchMapping("/undislike_quiz/{quizId}")
     public void unDislikeQuiz(@PathVariable Long quizId) {
         quizService.removeDisLikeFromQuiz(quizId);
+    }
+
+    @GetMapping("/discover/{sorting_option}")
+    public List<QuizResponseWithoutQuestionsDTO> unDislikeQuiz(@PathVariable SortingOption sorting_option) {
+        return quizService.discoverQuizzes(sorting_option)
+                .stream()
+                .map(QuizzesResponseMapper.INSTANCE::toDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/generateShareToken/{quizId}")

@@ -6,6 +6,7 @@ import com.celeste.remedicard.io.auth.service.UserService;
 import com.celeste.remedicard.io.autogeneration.dto.DeckCreationTask;
 import com.celeste.remedicard.io.autogeneration.dto.FlashcardCreationTask;
 import com.celeste.remedicard.io.cloud.service.S3Service;
+import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
@@ -324,7 +325,7 @@ public class DeckService {
         Deck deck = getDeckByDeckId(deckId);
 
         if(deck.getIsPubliclyVisible() == null){
-            deck.setIsPubliclyVisible(true);
+            deck.setIsPubliclyVisible(false);
         }
 
         deck.setIsPubliclyVisible(!deck.getIsPubliclyVisible());
@@ -362,5 +363,20 @@ public class DeckService {
         deck.getDislikerIds().remove(user.getId());
         deck.setLikeCount((long)deck.getDislikerIds().size());
         deckRepository.save(deck);
+    }
+
+    public List<Deck> discoverDecks(SortingOption option){
+
+        User user = currentUserService.getCurrentUser();
+
+        if(option.equals(SortingOption.LIKE_COUNT)){
+            return deckRepository.findAllByIsPubliclyVisibleAndUserNotOrderByLikeCountDesc(true, user);
+        }
+
+        if(option.equals(SortingOption.PUBLICATION_DATE)){
+            return deckRepository.findAllByIsPubliclyVisibleAndUserNotOrderByCreatedDateDesc(true, user);
+        }
+
+        return deckRepository.findAllByIsPubliclyVisibleAndUserNot(true, user);
     }
 }
