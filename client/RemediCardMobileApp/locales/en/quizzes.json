@@ -35,5 +35,11 @@
     "quiz_create_failed": "Failed to create quiz",
     "no_quizzes_available": "No quizzes available",
     "no_quizzes_available_message": "You need to add questions to the quiz before you can start it.",
-    "ok": "OK"
+    "ok": "OK",
+    "change_public_visibility": "Change Public Visibility",
+    "change_public_visibility_message": "Are you sure about changing the public visibility?",
+    "next_public_visibility": "Visibility will be: ",
+    "public": "Public",
+    "private": "Private, only visible to you",
+    "change_visibility": "Change"
 }

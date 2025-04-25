@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -29,6 +29,7 @@ import {
   getQuizzesByCurrentUser,
   createQuiz,
   generateQuizShareToken,
+  changeQuizVisibility,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -46,6 +47,7 @@ export default function Quizzes() {
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
+  const [visibilityPopUpVisible, setVisibilityPopUpVisible] = useState(false);
   const [quizzes, setQuizzes] = useState<any[]>([]);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
@@ -57,6 +59,8 @@ export default function Quizzes() {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
+
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getQuizzesByCurrentUser()
@@ -90,6 +94,10 @@ export default function Quizzes() {
             setShowLoading(false);
           });
       } else {
+        if (isFirstRender.current) {
+          isFirstRender.current = false;
+          return;
+        }
         setUpdated(!updated);
       }
     }, [debouncedSearchText]);
@@ -108,6 +116,16 @@ export default function Quizzes() {
     setSearchText("");
     setDebouncedSearchText("");
   };
+
+  const handleChangeVisibility = () => {
+      
+      changeQuizVisibility(selectedQuiz.id)
+      .then(res => {
+        selectedQuiz.isPubliclyVisible = !selectedQuiz.isPubliclyVisible
+        setVisibilityPopUpVisible(false)
+      })
+      .catch
+    }
 
   const handleQuizPress = (quiz: any) => {
     setSelectedQuiz(quiz);
@@ -450,6 +468,32 @@ export default function Quizzes() {
       </Modal>
 
       <Modal
+              transparent={true}
+              visible={visibilityPopUpVisible}
+              animationType="slide"
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContainer}>
+                  <Text style={styles.modalTitle}> {t("change_public_visibility_message")}</Text>
+                  <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedQuiz?.isPubliclyVisible ? "public" : "private")}</Text>
+                  <TouchableOpacity
+                    style={[styles.modalButton]}
+                    onPress={handleChangeVisibility}
+                  >
+                    <Text style={[styles.modalButtonText]}>{t("change_visibility")}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.modalCancel}
+                    onPress={() => setVisibilityPopUpVisible(false)}
+                  >
+                    <Text style={styles.modalCancelText}>{t("cancel")}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+
+      <Modal
         transparent={true}
         visible={modalVisible}
         animationType="slide"
@@ -476,6 +520,14 @@ export default function Quizzes() {
             >
               <Text style={styles.modalButtonText}>{t("share_quiz")}</Text>
             </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[styles.modalButton]}
+              onPress={() => setVisibilityPopUpVisible(true)}
+              >
+                <Text style={[styles.modalButtonText]}>{t("change_public_visibility")}</Text>
+            </TouchableOpacity>
+            
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
               onPress={() => setPopUpVisible(true)}

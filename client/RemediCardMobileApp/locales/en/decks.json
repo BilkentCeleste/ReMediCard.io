@@ -32,5 +32,11 @@
     "deck_deletion_failed": "Deck deletion failed. Please try again.",
     "no_cards_available": "No Cards Available",
     "no_cards_available_message": "There are no cards in this deck.",
-    "ok": "OK"
+    "ok": "OK",
+    "change_public_visibility": "Change Public Visibility",
+    "change_public_visibility_message": "Are you sure about changing the public visibility?",
+    "next_public_visibility": "Visibility will be: ",
+    "public": "Public",
+    "private": "Private, only visible to you",
+    "change_visibility": "Change"
 }

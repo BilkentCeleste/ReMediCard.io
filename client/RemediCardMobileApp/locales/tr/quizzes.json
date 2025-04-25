@@ -35,5 +35,11 @@
   "quiz_create_failed": "Test oluşturma işlemi başarısız oldu",
   "no_quizzes_available": "Bu Testte Soru Yok",
   "no_quizzes_available_message": "Testi çözmeye başlamadan önce soru eklemelisiniz.",
-  "ok": "Tamam"
+  "ok": "Tamam",
+  "change_public_visibility": "Herkese Açık Görünürlüğü Değiştir",
+  "change_public_visibility_message": "Herkese açık görünürlüğü değiştirmek istediğinize emin misiniz?",
+  "next_public_visibility": "Seçilecek Görünüm: ",
+  "public": "Herkese Açık",
+  "private": "Gizli, sadece siz görebilirsiniz",
+  "change_visibility": "Değiştir"
 }

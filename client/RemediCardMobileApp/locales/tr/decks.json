@@ -32,5 +32,11 @@
   "deck_deletion_failed": "Deste silme işlemi başarısız oldu. Lütfen tekrar deneyin.",
   "no_cards_available": "Kartlar Mevcut Değil",
   "no_cards_available_message": "Bu destede hiç kart yok.",
-  "ok": "Tamam"
+  "ok": "Tamam",
+  "change_public_visibility": "Herkese Açık Görünürlüğü Değiştir",
+  "change_public_visibility_message": "Herkese açık görünürlüğü değiştirmek istediğinize emin misiniz?",
+  "next_public_visibility": "Seçilecek Görünüm: ",
+  "public": "Herkese Açık",
+  "private": "Gizli, sadece siz görebilirsiniz",
+  "change_visibility": "Değiştir"
 }

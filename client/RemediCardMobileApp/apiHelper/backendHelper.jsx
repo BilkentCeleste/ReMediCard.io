@@ -63,6 +63,10 @@ export const updateDeckName = async (id, data) => {
   return await putFetcher(url.UPDATE_DECK_NAME_PATH(id), data);
 };
 
+export const changeDeckVisibility = async (id) => {
+  return await patchFetcher(url.CHANGE_DECK_VISIBILITY_PATH(id));
+};
+
 // deck statistics
 export const createDeckStats = async (data) => {
   return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);
@@ -144,6 +148,10 @@ export const autoGenerateQuiz = async (formData) => {
     formData,
     "multipart/form-data"
   );
+};
+
+export const changeQuizVisibility = async (id) => {
+  return await patchFetcher(url.CHANGE_QUIZ_VISIBILITY_PATH(id));
 };
 
 export const getUserProfile = async () => {

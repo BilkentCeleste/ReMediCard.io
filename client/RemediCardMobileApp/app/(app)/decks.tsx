@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -30,6 +30,7 @@ import {
   createDeck,
   generateDeckShareToken,
   decksSearch,
+  changeDeckVisibility,
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -48,6 +49,7 @@ export default function Decks() {
   const [selectedDeck, setSelectedDeck] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [popUpVisible, setPopUpVisible] = useState(false);
+  const [visibilityPopUpVisible, setVisibilityPopUpVisible] = useState(false);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
@@ -57,6 +59,8 @@ export default function Decks() {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
+
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getDecksByCurrentUser()
@@ -88,6 +92,10 @@ export default function Decks() {
               setShowLoading(false);
             });
         } else {
+          if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+          }
           setUpdated(!updated);
         }
       }, [debouncedSearchText]);
@@ -106,6 +114,16 @@ export default function Decks() {
     setSearchText("");
     setDebouncedSearchText("");
   };
+
+  const handleChangeVisibility = () => {
+    
+    changeDeckVisibility(selectedDeck.id)
+    .then(res => {
+      selectedDeck.isPubliclyVisible = !selectedDeck.isPubliclyVisible
+      setVisibilityPopUpVisible(false)
+    })
+    .catch
+  }
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -442,6 +460,32 @@ export default function Decks() {
 
       <Modal
         transparent={true}
+        visible={visibilityPopUpVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}> {t("change_public_visibility_message")}</Text>
+            <Text style={styles.modalTitle}> {t("next_public_visibility")} {t(selectedDeck?.isPubliclyVisible ? "public" : "private")}</Text>
+            <TouchableOpacity
+              style={[styles.modalButton]}
+              onPress={handleChangeVisibility}
+            >
+              <Text style={[styles.modalButtonText]}>{t("change_visibility")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setVisibilityPopUpVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        transparent={true}
         visible={modalVisible}
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
@@ -466,6 +510,12 @@ export default function Decks() {
               onPress={handleShareDeck}
             >
               <Text style={styles.modalButtonText}>{t("share_deck")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalButton]}
+              onPress={() => setVisibilityPopUpVisible(true)}
+            >
+              <Text style={[styles.modalButtonText]}>{t("change_public_visibility")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
