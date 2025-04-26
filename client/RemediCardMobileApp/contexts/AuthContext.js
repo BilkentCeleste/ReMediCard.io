@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { login, loginGoogle, register } from "@/apiHelper/backendHelper";
+import { login, loginGoogle, register, getUserProfile } from "@/apiHelper/backendHelper";
 import * as SecureStore from "expo-secure-store";
 import {
   GoogleSignin,
@@ -34,6 +34,14 @@ export const AuthProvider = ({ children }) => {
           setIsLoggedIn(true);
           setToken(existingToken);
         }
+
+        getUserProfile()
+        .then(res => res.data)
+        .catch(e => {
+          console.log(e)
+          logoutAuth()
+        })
+
       } catch (error) {
         console.error("Error checking token:", error);
       }
