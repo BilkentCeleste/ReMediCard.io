@@ -8,6 +8,8 @@ services:
     container_name: content-generator
     env_file:
       - .env
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - media-net
     restart: unless-stopped
@@ -19,6 +21,8 @@ services:
     container_name: video-voice-converter
     env_file:
       - .env
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - media-net
     restart: unless-stopped
@@ -30,6 +34,8 @@ services:
     container_name: image-text-extractor
     env_file:
       - .env
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - media-net
     restart: unless-stopped
@@ -41,6 +47,8 @@ services:
     container_name: pdf-text-extractor
     env_file:
       - .env
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - media-net
     restart: unless-stopped
