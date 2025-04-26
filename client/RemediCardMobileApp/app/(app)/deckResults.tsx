@@ -1,15 +1,14 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Pressable } from 'react-native';
-import { GoBackIcon, CorrectIcon, FalseIcon, CheckmarkIcon, CrossIcon} from "@/constants/icons";
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { GoBackIcon, CorrectIcon, FalseIcon } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 
 export default function DeckResults( ) {
     const { t } = useTranslation("deck_results");
     const router = useRouter();
+    const {deck, trueAnswerCount, falseAnswerCount} = useLocalSearchParams();
 
-    const {deck, trueAnwserCount, falseAnswerCount} = useLocalSearchParams();
-
-    const successRate = (Number(trueAnwserCount) / (Number(trueAnwserCount) + Number(falseAnswerCount))) * 100;
+    const successRate = (Number(trueAnswerCount) / (Number(trueAnswerCount) + Number(falseAnswerCount))) * 100;
 
     const handleRetry = () => {
         router.push(`/(app)/card?deck=${deck}`);
@@ -35,7 +34,7 @@ export default function DeckResults( ) {
             </View>
             <View style={styles.scoreTable}>
                 <View style={[styles.checkIcon, styles.scoreTableIconLayout]}><CorrectIcon width={20} height={20}></CorrectIcon></View>
-                <Text style={[styles.text2, styles.scoreText]}>{t("correct")} {trueAnwserCount}</Text>
+                <Text style={[styles.text2, styles.scoreText]}>{t("correct")} {trueAnswerCount}</Text>
                 <View style={[styles.crossIcon, styles.scoreTableIconLayout]}><FalseIcon width={20} height={20}></FalseIcon></View>
                 <Text style={[styles.text3, styles.scoreText]}>{t("incorrect")} {falseAnswerCount}</Text>
             </View>
@@ -56,7 +55,6 @@ export default function DeckResults( ) {
 
         </View>
     )
-    
 }
 
 const styles = StyleSheet.create({
@@ -129,12 +127,6 @@ const styles = StyleSheet.create({
         left: 10,
         position: "absolute"
     },
-    text1: {
-        top: "37.7%",
-        right: 10,
-        width: 55,
-        zIndex: 0
-    },
     text2: {
         top: "20%",
         left: "15%"
@@ -157,38 +149,13 @@ const styles = StyleSheet.create({
     crossIcon: {
         top: "75%",
     },
-    interactiveContainer: {
-        flexDirection: "row", // Layout the children horizontally
-        justifyContent: "space-between", // Spread children across the container
-        alignItems: "center", // Center the icons vertically
-        width: "75%", // Keep the container width consistent with the rest of the layout
-        marginTop: 30, // Add margin top to give space between elements
-        height: 75, // Adjust height to fit the icons
-    },
-    interactiveContainerPosition: {
-        zIndex: 0,
-        bottom: 0,
-        marginTop: 30,
-        height: 75,
-        width: "75%"
-    },
-    checkMarkIconPosition: {
-        backgroundColor: "green",
-        borderRadius: 50,
-        right: 0
-    },
-    crossIconPosition: {
-        backgroundColor: "red",
-        borderRadius: 50,
-        left: 0
-    },
     retryButton: {
         borderRadius: 20,
         backgroundColor: "#2916ff",
         width: "75%",
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center", // Center text inside button
+        justifyContent: "center",
         gap: 30,
         height: 50,
         marginTop: 10

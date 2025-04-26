@@ -14,7 +14,6 @@ import {
   useRouter,
   Link,
   useLocalSearchParams,
-  useNavigation,
 } from "expo-router";
 import {
   PlusIcon,
@@ -30,7 +29,6 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function editQuiz() {
   const { t } = useTranslation("edit_quiz");
   const router = useRouter();
-  const navigation = useNavigation();
   const { quizId } = useLocalSearchParams();
 
   const [quiz, setQuiz] = useState();
@@ -38,10 +36,6 @@ export default function editQuiz() {
   const [DeleteQuestionModalVisible, setDeleteQuestionModalVisible] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState("");
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
 
   useEffect(() => {
     if (quizId) {
@@ -106,7 +100,6 @@ export default function editQuiz() {
   };
 
   const handleNameSave = async () => {
-
     if (!editedName) {
         Alert.alert(t("error"), t("name_required"));
         return;
@@ -283,38 +276,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#53789D",
-  },
-  title: {
-    top: 60,
-    fontSize: 30,
-    lineHeight: 32,
-    fontFamily: "InriaSans-Regular",
-    color: "#fff",
-    textAlign: "center",
-    width: "100%",
-    height: 27,
-    marginBottom: 25,
-    fontWeight: "bold",
-  },
-  flashcardComponent: {
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    width: "49%",
-    minHeight: 80,
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: 15,
-    marginVertical: 5,
-  },
-  flashcardQuestion: {
-    fontSize: 16,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  flashcardAnswer: {
-    fontSize: 12,
-    color: "rgba(0, 0, 0, 0.7)",
   },
   navbarRow: {
     flexDirection: "row",

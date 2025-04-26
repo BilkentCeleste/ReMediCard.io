@@ -56,7 +56,6 @@ export default function Updatedeck() {
                 })
                 .catch((error) => {
                     Alert.alert(t("error"), t("delete_failed"));
-                    console.error('Error deleting flashcard:', error);
                 });
         }
 
@@ -84,7 +83,6 @@ export default function Updatedeck() {
                 setIsEditingName(false);
             })
             .catch((error) => {
-                console.error(error);
                 Alert.alert(t("error"), t("update_failed"));
             });
     };
@@ -171,7 +169,6 @@ export default function Updatedeck() {
                         <TouchableOpacity
                             style={styles.deleteButton}
                             onPress={() => handleDeleteCardModal(item.id)}
-                            //onPress handle delete
                         >
                         <Text style={styles.deleteButtonText}>{t("delete")}</Text>
                         </TouchableOpacity>
@@ -242,18 +239,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#53789D',
     },
-    title: {
-        top: 60,
-        fontSize: 30,
-        lineHeight: 32,
-        fontFamily: 'InriaSans-Regular',
-        color: '#fff',
-        textAlign: 'center',
-        width: '100%',
-        height: 27,
-        marginBottom: 25,
-        fontWeight: 'bold',
-    },
     flashcardComponent: {
         borderRadius: 20,
         backgroundColor: '#fff',
@@ -263,16 +248,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 15,
         marginVertical: 5,
-    },
-    flashcardQuestion: {
-        fontSize: 16,
-        color: '#000',
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    flashcardAnswer: {
-        fontSize: 12,
-        color: 'rgba(0, 0, 0, 0.7)',
     },
     navbarRow: {
         flexDirection: 'row',
@@ -302,12 +277,12 @@ const styles = StyleSheet.create({
         bottom: 50,
         backgroundColor: "#53789D",
         height: 1,
-      },
+    },
     navbarLine: {
         flex: 1,
         height: 1,
         backgroundColor: "#fff",
-      },
+    },
     createParent: {
         borderRadius: 20,
         backgroundColor: "#2916ff",
@@ -317,15 +292,15 @@ const styles = StyleSheet.create({
         gap: 30,
         height: 50,
         bottom: "15%",
-      },
+    },
     buttonText: {
         fontSize: 17,
         lineHeight: 22,
         fontFamily: "Inter-Regular",
         color: "#fff",
         textAlign: "center",
-      },
-      menuComponent: {
+    },
+    menuComponent: {
         width: "75%",
         minHeight: 20,
         padding: 10,
@@ -377,10 +352,10 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     editButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 14,
-    textAlign: "center",
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 14,
+        textAlign: "center",
     },
     deleteButton: {
         backgroundColor: "#C8102E",
@@ -399,24 +374,24 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-      },
-      modalContent: {
+    },
+    modalContent: {
         width: "80%",
         backgroundColor: "#fff",
         borderRadius: 10,
         padding: 20,
         alignItems: "center",
-      },
-      modalTitle: {
+    },
+    modalTitle: {
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 20,
-      },
-      modalButtonContainer: {
+    },
+    modalButtonContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         width: "100%",
-      },
+    },
     nameEditContainer: {
         flexDirection: 'row',
         alignItems: 'center',

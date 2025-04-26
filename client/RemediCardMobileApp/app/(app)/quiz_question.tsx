@@ -235,7 +235,6 @@ export default function QuizQuestion(props: any) {
 
   return (
     <View style={styles.container}>
-      {/* Header row */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()}>
           <GoBackIcon />
@@ -250,7 +249,6 @@ export default function QuizQuestion(props: any) {
 
       <View style={styles.divider} />
 
-      {/* Timer and question count */}
       <View style={styles.infoRow}>
         <Text style={styles.infoText}>{formatTime(timeRemaining)}</Text>
         <Text style={styles.infoText}>
@@ -258,7 +256,6 @@ export default function QuizQuestion(props: any) {
         </Text>
       </View>
 
-      {/* Question box */}
       <View style={styles.questionBox}>
         <ScrollView>
           <Text style={styles.questionText}>
@@ -267,7 +264,6 @@ export default function QuizQuestion(props: any) {
         </ScrollView>
       </View>
 
-      {/* Answers list */}
       <View style={styles.answersContainer}>
         {currentQuestion?.options?.map((answer: any, index: any) => (
           <TouchableOpacity
@@ -354,7 +350,6 @@ export default function QuizQuestion(props: any) {
       </Modal>
 )}
 
-      {/* Bottom nav row for previous/next question */}
       <View style={styles.bottomNavRow}>
         <TouchableOpacity onPress={handlePrevQuestion}>
           <NextQuestionIcon rotation={180}/>
@@ -370,7 +365,6 @@ export default function QuizQuestion(props: any) {
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -413,7 +407,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginBottom: 20,
-    maxHeight: 130, // limit how tall the box can be
+    maxHeight: 130,
   },
   questionText: {
     fontSize: 14,
@@ -433,7 +427,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   selectedAnswer: {
-    backgroundColor: "#abd5ff", // Light gray for selected
+    backgroundColor: "#abd5ff",
   },
   answerLabel: {
     width: 30,
@@ -462,7 +456,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   answerTextScroll: {
-    maxHeight: 55, // kutu içi max boyut
+    maxHeight: 55,
     flex: 1,
   },
   endQuizButton: {
@@ -472,57 +466,52 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,  
     alignItems: "center",   
     justifyContent: "center", 
-},
-registertext: {
+  },
+  registertext: {
+      fontSize: 17,
+      lineHeight: 22,
+      fontFamily: "InriaSans-Regular",
+      color: "#fff",
+      textAlign: "center",
+      fontWeight: "bold",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalButton: {
+    borderRadius: 20,
+    backgroundColor: "#2916ff",
+    width: "75%",
+    alignItems: "center",
+    justifyContent:"center",
+    gap: 30,
+    height: 45,
+    marginTop: 10
+  },
+  modalButtonText: {
     fontSize: 17,
     lineHeight: 22,
-    fontFamily: "InriaSans-Regular",
+    fontFamily: "Inter-Regular",
     color: "#fff",
     textAlign: "center",
-    fontWeight: "bold",
-},
-modalOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0,0,0,0.5)',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-modalContent: {
-  width: '80%',
-  padding: 20,
-  backgroundColor: 'white',
-  borderRadius: 10,
-  alignItems: 'center',
-},
-modalTitle: {
-  fontSize: 20,
-  fontWeight: 'bold',
-  marginBottom: 10,
-},
-modalText: {
-  fontSize: 16,
-  marginVertical: 5,
-},
-modalButton: {
-  borderRadius: 20,
-  backgroundColor: "#2916ff",
-  width: "75%",
-  alignItems: "center",
-  justifyContent:"center",
-  gap: 30,
-  height: 45,
-  marginTop: 10
-},
-modalButtonText: {
-  fontSize: 17,
-  lineHeight: 22,
-  fontFamily: "Inter-Regular",
-  color: "#fff",
-  textAlign: "center",
-},
-valueText: {
-  fontWeight: 'bold',
-  color: '#2916ff', // or a color you want to stand out
-},
-
+  },
+  valueText: {
+    fontWeight: 'bold',
+    color: '#2916ff',
+  },
 });

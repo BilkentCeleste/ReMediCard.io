@@ -70,7 +70,6 @@ export default function SharedDeck() {
                 })
                 .catch((error: Error) => {
                     Alert.alert(t('error'), t('add_deck_failed'));
-                    console.error(error);
                 });
         }
     };
@@ -183,16 +182,6 @@ const styles = StyleSheet.create({
         padding: 15,
         marginVertical: 5,
     },
-    flashcardQuestion: {
-        fontSize: 16,
-        color: '#000',
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    flashcardAnswer: {
-        fontSize: 12,
-        color: 'rgba(0, 0, 0, 0.7)',
-    },
     navbarRow: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -211,7 +200,6 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         paddingBottom: 20,
         justifyContent: 'space-evenly',
-
     },
     navbarContainer: {
         flexDirection: "row",
@@ -226,16 +214,6 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: "#fff",
-    },
-    createParent: {
-        borderRadius: 20,
-        backgroundColor: "#2916ff",
-        width: "75%",
-        height: 40,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        bottom: "14%"
     },
     buttonText: {
         fontSize: 14,
@@ -288,11 +266,6 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#fff',
     },
-    loadingText: {
-        color: '#fff',
-        fontSize: 18,
-        textAlign: 'center',
-    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'center', 
@@ -314,14 +287,4 @@ const styles = StyleSheet.create({
         height: 50,
         bottom: "15%",
     },
-    loadingContainer: {
-        width: "60%",
-        height: "50%",
-        justifyContent: "center"
-    },
-    indicator: {
-        transform: [{ scale: 2.2 }],
-        margin: 20,
-        color: "#fff",    
-      },
 });

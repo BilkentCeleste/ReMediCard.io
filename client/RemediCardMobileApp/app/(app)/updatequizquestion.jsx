@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import {useRouter, useNavigation, useLocalSearchParams} from 'expo-router';
+import {useRouter, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
 import { createQuestion, editQuestion } from '@/apiHelper/backendHelper';
 import TutorialInfoButton from '../../components/TutorialInfoButton';
 
-
 export default function UpdateFlashcard() {
     const { t } = useTranslation('update_quiz_question');
-
     const router = useRouter();
-    const navigation = useNavigation();
-    
-    useEffect(() => {
-        navigation.setOptions({ headerShown: false });
-    }, [navigation]);
-
     const {question, quizId} = useLocalSearchParams();
+
     const isNewQuestion = !question || question === 'undefined';
     const parsedQuestion = !isNewQuestion ? JSON.parse(question) : null;
 
@@ -27,12 +20,7 @@ export default function UpdateFlashcard() {
         const parsedOptions = parsedQuestion?.options || [];
         return [...parsedOptions, ...Array(5 - parsedOptions.length).fill('')].slice(0, 5);
     });
-
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(isNewQuestion ? null : parsedQuestion?.correctAnswerIndex);
-
-    const handleBack = () => {
-        router.push("/(app)/editquiz?quizId=" + quizId);
-    };
 
     const handleSaveEdit = () => {
         if (correctAnswerIndex === null) {
@@ -52,7 +40,7 @@ export default function UpdateFlashcard() {
                 router.push("/(app)/editquiz?quizId=" + quizId);
             })
             .catch((error) => {
-                console.error('Error updating question:', error);
+                Alert.alert(t("error"), t("update_failed"));
             });
     }
 
@@ -85,7 +73,7 @@ export default function UpdateFlashcard() {
                 router.push("/(app)/editquiz?quizId=" + quizId);
             })
             .catch((error) => {
-                console.error('Error creating question:', error);
+                Alert.alert(t("error"), t("create_failed"));
             });
     };
 
@@ -136,7 +124,7 @@ export default function UpdateFlashcard() {
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                keyboardVerticalOffset={20} // adjust this based on your header height
+                keyboardVerticalOffset={20}
                 >
                 <ScrollView contentContainerStyle={{ paddingBottom: 10 }}>
                     {options?.map((opt, index) => (

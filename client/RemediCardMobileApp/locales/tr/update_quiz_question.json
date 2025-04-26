@@ -7,6 +7,9 @@
     "save": "Kaydet",
     "select_correct_answer": "Doğru Cevabı Seçin",
     "please_fill_all_answers": "Lütfen tüm cevapları doldurun",
-    "please_fill_question": "Lütfen soruyu doldurun"
+    "please_fill_question": "Lütfen soruyu doldurun",
+    "update_failed": "Güncelleme Başarısız",
+    "error": "Hata",
+    "create_failed": "Oluşturma Başarısız"
 
 }

@@ -3,26 +3,21 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
-  Alert,
   TouchableOpacity,
-  Pressable,
   FlatList,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import axios from "axios";
 import {
   SearchIcon,
   FlashcardIcon,
   QuizIcon,
   GoalsIcon,
-  CreateIcon,
   HomeIcon,
   ProfileIcon,
   SettingsIcon,
   DiscoverIcon
-} from "../../constants/icons";
+} from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 import { generalSearch } from "@/apiHelper/backendHelper";
 
@@ -75,12 +70,7 @@ export default function Home() {
     router.push("/(app)/study_dashboard");
   };
 
-  const uploadGeneralEditPage = () => {
-    router.push("/(app)/editdecklist");
-  };
-
   const uploadDiscoverPage = () => {
-    console.log("discover")
     router.push("/(app)/discover");
   };
 
@@ -350,14 +340,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "45%",
     height: 130,
-    justifyContent: "center", // Center vertically
+    justifyContent: "center",
     alignItems: "center",
-    position: "relative", // Allows positioning of the text at the bottom
+    position: "relative",
   },
   mainComponentText: {
-    position: "absolute", // Positions the text at the bottom
-    bottom: 5, // Adjusts the spacing from the bottom edge
-    fontSize: 15, // Adjust font size to fit nicely
+    position: "absolute",
+    bottom: 5,
+    fontSize: 15,
     fontFamily: "Inter-Regular",
     color: "#000",
     textAlign: "center",

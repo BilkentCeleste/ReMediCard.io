@@ -2,8 +2,7 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import {useEffect, useState} from "react";
 import { getQuizByQuizId } from "@/apiHelper/backendHelper";
-import { CorrectIcon, FalseIcon, QuestionMarkIcon } from "@/constants/icons";
-
+import { CorrectIcon, FalseIcon } from "@/constants/icons";
 import {
   GoBackIcon,
   HomeIcon,
@@ -38,10 +37,6 @@ export default function QuizResults() {
 
   const handleRetry = () => {
     router.push(`/(app)/quiz_question?quizId=${quizId}`);
-  };
-
-  const handleHomePage = () => {
-    router.push("/(app)/home");
   };
 
   const [quizData, setQuizData] = useState<any>(null);
@@ -86,14 +81,12 @@ export default function QuizResults() {
     selectedIndex: number,
     correctIndex: number
   ): "bold" | "normal" => {
-    // Apply bold to colored (non-default) options
     if (selectedIndex === -1 && index === correctIndex) return "bold";
     if (selectedIndex === correctIndex && index === correctIndex) return "bold";
     if (selectedIndex !== correctIndex && (index === selectedIndex || index === correctIndex)) return "bold";
     return "normal";
   };
-  
-    
+
   return (
     <View style={styles.container}>
       <View style={styles.menuComponent}>
@@ -112,7 +105,6 @@ export default function QuizResults() {
 
       <View style={styles.resultBox}>
       <View style={styles.columnContainer}>
-        {/* Left Column */}
         <View style={styles.column}>
           <Text style={styles.labelText}>
             {t("correct")}: <Text style={styles.valueText}>{correctAnswers}/{totalQuestions}</Text>
@@ -127,7 +119,6 @@ export default function QuizResults() {
           </Text>
         </View>
 
-        {/* Right Column */}
         <View style={styles.column}>
           <Text style={styles.labelText}>
             {t("accuracy")}: <Text style={styles.valueText}>{score}%</Text>
@@ -278,43 +269,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#fff",
   },
-  scoreTable: {
-    width: "75%",
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    marginBottom: 20,
-  },
-  scoreText: {
-    textAlign: "left",
-    color: "#fff",
-    fontFamily: "Inter-Regular",
-    lineHeight: 20,
-    fontSize: 20,
-    marginVertical: 10,
-  },
-  timeText: {
-    textAlign: "center",
-    color: "#fff",
-    fontFamily: "Inter-Regular",
-    lineHeight: 20,
-    fontSize: 20,
-    marginBottom: 30,
-  },
-  scoreTableIconLayout: {
-    height: 14,
-    width: 14,
-    left: 10,
-    position: "absolute",
-  },
-  checkIcon: {
-    top: "25%",
-  },
-  crossIcon: {
-    top: "75%",
-  },
   buttonContainer: {
     width: "75%",
     flexDirection: "row",
@@ -323,12 +277,6 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     backgroundColor: "#2916ff",
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-  },
-  homeButton: {
-    backgroundColor: "#4CAF50",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 20,
@@ -376,46 +324,46 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "75%",
     height: "52%"
-},
-questionItem: {
-    backgroundColor: '#fff',
-    width: "100%",
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
-},
-questionText: {
-    maxWidth: "90%",
-    fontSize: 16,
-    marginBottom: 10,
-},
-optionsContainer: {
-    marginLeft: 10,
-},
-optionText: {
+  },
+  questionItem: {
+      backgroundColor: '#fff',
+      width: "100%",
+      borderRadius: 10,
+      padding: 15,
+      marginBottom: 10,
+  },
+  questionText: {
+      maxWidth: "90%",
+      fontSize: 16,
+      marginBottom: 10,
+  },
+  optionsContainer: {
+      marginLeft: 10,
+  },
+  optionText: {
+      fontSize: 14,
+      marginBottom: 5,
+  },
+  columnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  column: {
+    flex: 1,
+    gap: 10,
+    paddingHorizontal: 8,
+  },
+  labelText: {
     fontSize: 14,
-    marginBottom: 5,
-},
-columnContainer: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-},
-column: {
-  flex: 1,
-  gap: 10,
-  paddingHorizontal: 8,
-},
-labelText: {
-  fontSize: 14,
-},
-questionRow: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-},
-uncertainIcon:{
-  color: "orange",
-  fontFamily: "Inter-Regular",
-  fontSize: 15,
-},
+  },
+  questionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  uncertainIcon:{
+    color: "orange",
+    fontFamily: "Inter-Regular",
+    fontSize: 15,
+  },
 });

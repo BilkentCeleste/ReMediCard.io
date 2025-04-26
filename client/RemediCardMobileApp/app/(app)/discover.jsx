@@ -11,7 +11,6 @@ import {
   Dimensions,
   Animated,
   Easing,
-  Share,
 } from "react-native";
 import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {
@@ -20,7 +19,6 @@ import {
   ProfileIcon,
   SettingsIcon,
   SearchIcon,
-  PlusIcon,
   ChevronDown,
   LikeIcon,
   DislikeIcon
@@ -43,9 +41,7 @@ const { width } = Dimensions.get("window");
 
 export default function Discover() {
   const { t } = useTranslation("discover");
-  
   const router = useRouter();
-
   const {id, type} = useLocalSearchParams()
 
   const [sortOrder, setSortOrder] = useState("desc");
@@ -74,9 +70,9 @@ export default function Discover() {
         setShowLoading(false);
         if(isFirstLoad.current && id){
           isFirstLoad.current = false
-          const item = res.data.find(item => item.id == id)
+          const item = res.data.find(item => item.id === id)
           setSelectedItem(item)
-          setModalVisible(item ? true : false)
+          setModalVisible(!!item)
         }
       })
       .catch((error) => {
@@ -90,9 +86,9 @@ export default function Discover() {
         setShowLoading(false);
         if(isFirstLoad.current && id){
           isFirstLoad.current = false
-          const item = res.data.find(item => item.id == id)
+          const item = res.data.find(item => item.id === id)
           setSelectedItem(item)
-          setModalVisible(item ? true : false)
+          setModalVisible(!!item)
         }
       })
       .catch((error) => {
@@ -221,7 +217,6 @@ export default function Discover() {
 
   function sortList(list, sortBy = 'access', order = 'desc') {
     return list.slice().sort((a, b) => {
-      const getDate = stat => stat ? new Date(stat.accessDate) : new Date(0);
       const getRate = stat => stat ? stat.successRate : -1;
 
       let compare = 0;
@@ -286,7 +281,6 @@ export default function Discover() {
 
   return (
     <View style={styles.container}>
-      {/* Header, Search, Sort */}
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
       <View style={styles.searchComponent}>
@@ -463,7 +457,6 @@ export default function Discover() {
         </View>
       </Modal>}
 
-      {/* Navbar */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -506,17 +499,6 @@ const styles = StyleSheet.create({
     height: 27,
     marginBottom: 75,
     fontWeight: "bold",
-  },
-  separatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginVertical: 20,
-  },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   navbarRow: {
     flexDirection: "row",
@@ -565,29 +547,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     position: "absolute",
   },
-  menuComponent: {
-    width: "75%",
-    height: 20,
-    padding: 10,
-    gap: 10,
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  textComponent: {
-    width: "75%",
-    alignItems: "center",
-  },
-  menuText: {
-    left: "10%",
-    fontSize: 12,
-    lineHeight: 22,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "left",
-    zIndex: 1,
-    top: 5,
-    position: "absolute",
-  },
   iconLayout: {
     height: 24,
     width: 24,
@@ -598,69 +557,44 @@ const styles = StyleSheet.create({
     zIndex: 3,
     top: "70%",
   },
-  menuIcon: {
-    right: "95%",
-    zIndex: 3,
-    top: 5,
-  },
-  selectedOption: {
-    marginTop: 20,
-    fontSize: 16,
-    color: "gray",
-  },
   deckInfoText: {
     fontSize: 12,
     lineHeight: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 4, // Spacing below title
+    marginBottom: 4,
   },
   deckTitle: {
     fontSize: 16,
     color: "#000",
     fontWeight: "bold",
-    marginBottom: 8, // Spacing below title
+    marginBottom: 8,
   },
   deckComponent: {
     borderRadius: 20,
     backgroundColor: "#fff",
-    width: "100%", // Adjusted width to fit screen
-    height: 135, // Increased height for sufficient spacing
+    width: "100%",
+    height: 135,
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
-    padding: 15, // Add padding for content
-    marginVertical: 5, // Space between items
-  },
-  accessInfoPosition: {
-    top: 35,
-    zIndex: 1,
-    left: 15,
-  },
-  cardsLengthInfoPosition: {
-    top: 55,
-    left: 15,
-    zIndex: 2,
-  },
-  performanceInfoPosition: {
-    top: 75,
-    zIndex: 3,
-    left: 15,
+    padding: 15,
+    marginVertical: 5,
   },
   flatListContainer: {
-    width: "75%", // Adjust the width to be larger
-    height: "35%", // Shorten the height
-    marginTop: 5, // Lower its starting position
-    backgroundColor: "transparent", // Optional, keeps it aligned with the background
+    width: "75%",
+    height: "35%",
+    marginTop: 5,
+    backgroundColor: "transparent",
     marginBottom: 120,
   },
   flatListContent: {
-    alignItems: "stretch", // Ensure items stretch to the container width
-    paddingBottom: 20, // Add padding if needed at the bottom
+    alignItems: "stretch",
+    paddingBottom: 20,
   },
   link: {
-    flexDirection: "column", // Stack children vertically
-    alignItems: "flex-start", // Align text to the left
-    width: "100%", // Ensure it doesn't shrink
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "100%",
   },
   modalOverlay: {
     flex: 1,
@@ -723,13 +657,11 @@ const styles = StyleSheet.create({
     gap: 10,
     height: 50,
   },
-  
   createNewDeck: {
     color: "white",
     fontWeight: "normal",
     fontSize: 18,
-    alignSelf: "center", // Ensure the text stays centered within the button
-
+    alignSelf: "center",
   },
   activeText: {
     fontWeight: "bold",
@@ -742,8 +674,8 @@ const styles = StyleSheet.create({
     bottom: "12%",
   },
   activeButton: {
-    borderBottomWidth: 2,  // Underline effect on active state
-    borderColor: "#fff", // Matching color for underline
+    borderBottomWidth: 2,
+    borderColor: "#fff",
   },
   clearButton: {
     paddingHorizontal: 6,

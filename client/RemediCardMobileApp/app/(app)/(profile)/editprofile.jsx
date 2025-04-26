@@ -3,11 +3,9 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Alert,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
@@ -17,7 +15,7 @@ import {
   EyeOpenIcon,
   EyeClosedIcon,
   GoBackIcon
-} from "../../../constants/icons";
+} from "@/constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -33,7 +31,7 @@ export default function EditProfile() {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
 
-  const { isLoggedIn, registerAuth } = useAuth();
+  const { registerAuth } = useAuth();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -190,14 +188,6 @@ const styles = StyleSheet.create({
     color: "#ffff",
     marginRight: "25%"
   },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#fff",
-  },
   usernametext: {
     top: 5,
     left: 45,
@@ -252,22 +242,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
-  separatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    marginVertical: 10,
-  },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
-  },
-  seperatortext: {
-    marginHorizontal: 10,
-    fontSize: 14,
-    color: "#fff",
-  },
   link: {
     marginHorizontal: 10,
     fontSize: 16,
@@ -288,17 +262,5 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 14,
     color: "#2916FF",
-  },
-  deleteAccountContainer: {
-    height: 50,
-    borderRadius: 20,
-    width: "75%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-    gap: 30,
-    top: 75,
-
   },
 });
