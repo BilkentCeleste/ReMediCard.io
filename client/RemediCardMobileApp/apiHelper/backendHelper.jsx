@@ -67,6 +67,18 @@ export const changeDeckVisibility = async (id) => {
   return await patchFetcher(url.CHANGE_DECK_VISIBILITY_PATH(id));
 };
 
+export const discoverDecks = async (sortionOption) => {
+  return await getFetcher(url.DISCOVER_DECKS_PATH(sortionOption));
+};
+
+export const likeDeck = async (id) => {
+  return await patchFetcher(url.LIKE_DECK_PATH(id));
+};
+
+export const dislikeDeck = async (id) => {
+  return await patchFetcher(url.DISLIKE_DECK_PATH(id));
+};
+
 // deck statistics
 export const createDeckStats = async (data) => {
   return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);
@@ -154,6 +166,18 @@ export const changeQuizVisibility = async (id) => {
   return await patchFetcher(url.CHANGE_QUIZ_VISIBILITY_PATH(id));
 };
 
+export const discoverQuizzes = async (sortionOption) => {
+  return await getFetcher(url.DISCOVER_QUIZZES_PATH(sortionOption));
+};
+
+export const likeQuiz = async (id) => {
+  return await patchFetcher(url.LIKE_QUIZ_PATH(id));
+};
+
+export const dislikeQuiz = async (id) => {
+  return await patchFetcher(url.DISLIKE_QUIZ_PATH(id));
+};
+
 export const getUserProfile = async () => {
   return await getFetcher(url.GET_USER_PROFILE());
 };
@@ -168,6 +192,14 @@ export const decksSearch = async (searchText) => {
 
 export const quizzesSearch = async (searchText) => {
   return await getFetcher(url.SEARCH_QUIZZES_PATH(searchText));
+};
+
+export const decksOthersSearch = async (searchText) => {
+  return await getFetcher(url.SEARCH_OTHERS_DECKS_PATH(searchText));
+};
+
+export const quizzesOthersSearch = async (searchText) => {
+  return await getFetcher(url.SEARCH_OTHERS_QUIZZES_PATH(searchText));
 };
 
 export const generateQuizShareToken = async (id) => {

@@ -2,10 +2,12 @@ package com.celeste.remedicard.io.search.service;
 
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.auth.service.UserService;
+import com.celeste.remedicard.io.deck.controller.dto.DeckExploreResponseDTO;
 import com.celeste.remedicard.io.deck.controller.dto.DeckResponseWithoutFlashcardsDTO;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import com.celeste.remedicard.io.flashcard.entity.Flashcard;
+import com.celeste.remedicard.io.quiz.controller.dto.QuizExploreResponseDTO;
 import com.celeste.remedicard.io.quiz.controller.dto.QuizResponseWithoutQuestionsDTO;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.service.QuizService;
@@ -94,23 +96,22 @@ public class SearchService {
         searchableDeckRepository.save(searchableDeck);
     }
 
-    public Set<DeckResponseWithoutFlashcardsDTO> searchOthersDecks(String searchText){
+    public List<DeckExploreResponseDTO> searchOthersDecks(String searchText){
         Long userId = currentUserService.getCurrentUserId();
 
         List<SearchableDeck> searchableDecks = searchableDeckRepository.findSearchableDeckContainingButNotOwnedBy(searchText, userId);
+        List<Deck> decks = deckService.findDecksByIds(searchableDecks.stream().map(SearchableDeck::getId).collect(Collectors.toSet())).stream().toList();
 
-        Set<Deck> decks = deckService.findDecksByIds(searchableDecks.stream().map(SearchableDeck::getId).collect(Collectors.toSet()));
-
-        return  deckService.convertFromDeckToDeckResponseWithoutFlashcardsDTO(decks, userId);
+        return  deckService.convertFromDeckToDeckExploreResponseDTO(decks, userId);
     }
 
-    public Set<QuizResponseWithoutQuestionsDTO> searchOthersQuizzes(String searchText){
+    public List<QuizExploreResponseDTO> searchOthersQuizzes(String searchText){
         Long userId = currentUserService.getCurrentUserId();
 
         List<SearchableQuiz> searchableQuizzes = searchableQuizRepository.findSearchableQuizContainingButNotOwnedBy(searchText, userId);
 
-        Set<Quiz> quizzes = quizService.findQuizzesByIds(searchableQuizzes.stream().map(SearchableQuiz::getId).collect(Collectors.toSet()));
+        List<Quiz> quizzes = quizService.findQuizzesByIds(searchableQuizzes.stream().map(SearchableQuiz::getId).collect(Collectors.toSet())).stream().toList();
 
-        return  quizService.convertFromQuizToQuizResponseWithoutFlashcardsDTO(quizzes, userId);
+        return  quizService.convertFromQuizToQuizExploreResponseDTO(quizzes, userId);
     }
 }

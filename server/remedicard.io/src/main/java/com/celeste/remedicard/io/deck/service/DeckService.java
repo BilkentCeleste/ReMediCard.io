@@ -346,36 +346,38 @@ public class DeckService {
         deckRepository.save(deck);
     }
 
-    public void addLikeToDeck(Long deckId) {
+    public Deck likeDeck(Long deckId) {
         Deck deck = getDeckByDeckId(deckId);
-        User user = currentUserService.getCurrentUser();
-        deck.getLikerIds().add(user.getId());
+        Long userId = currentUserService.getCurrentUserId();
+        if(deck.getLikerIds().contains(userId)){
+            deck.getLikerIds().remove(userId);
+        }
+        else{
+            deck.getLikerIds().add(userId);
+        }
+        deck.setLikeCount((long)deck.getLikerIds().size());
+        deck.getDislikerIds().remove(userId);
+        deck.setDislikeCount((long)deck.getDislikerIds().size());
+        deckRepository.save(deck);
+
+        return deck;
+    }
+
+    public Deck dislikeDeck(Long deckId) {
+        Deck deck = getDeckByDeckId(deckId);
+        Long userId = currentUserService.getCurrentUserId();
+        if(deck.getDislikerIds().contains(userId)){
+            deck.getDislikerIds().remove(userId);
+        }
+        else{
+            deck.getDislikerIds().add(userId);
+        }
+        deck.setDislikeCount((long)deck.getDislikerIds().size());
+        deck.getLikerIds().remove(userId);
         deck.setLikeCount((long)deck.getLikerIds().size());
         deckRepository.save(deck);
-    }
 
-    public void removeLikeFromDeck(Long deckId) {
-        Deck deck = getDeckByDeckId(deckId);
-        User user = currentUserService.getCurrentUser();
-        deck.getLikerIds().remove(user.getId());
-        deck.setLikeCount((long)deck.getLikerIds().size());
-        deckRepository.save(deck);
-    }
-
-    public void addDisLikeToDeck(Long deckId) {
-        Deck deck = getDeckByDeckId(deckId);
-        User user = currentUserService.getCurrentUser();
-        deck.getDislikerIds().add(user.getId());
-        deck.setLikeCount((long)deck.getDislikerIds().size());
-        deckRepository.save(deck);
-    }
-
-    public void removeDisLikeFromDeck(Long deckId) {
-        Deck deck = getDeckByDeckId(deckId);
-        User user = currentUserService.getCurrentUser();
-        deck.getDislikerIds().remove(user.getId());
-        deck.setLikeCount((long)deck.getDislikerIds().size());
-        deckRepository.save(deck);
+        return deck;
     }
 
     public List<Deck> discoverDecks(SortingOption option){

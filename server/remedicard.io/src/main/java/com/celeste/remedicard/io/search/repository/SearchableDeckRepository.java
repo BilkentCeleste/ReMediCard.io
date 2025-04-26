@@ -44,7 +44,7 @@ public interface SearchableDeckRepository extends ElasticsearchRepository<Search
     @Query("""
             {
               "bool": {
-                "filter": [
+                "must_not": [
                     { "term": { "userId": "?1" } }
                   ],
                 "should": [

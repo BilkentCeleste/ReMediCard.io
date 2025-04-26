@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert} from 'react-native';
-import {useRouter, useLocalSearchParams, Link} from 'expo-router';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, BackHandler} from 'react-native';
+import {useRouter, useLocalSearchParams, Link, useFocusEffect} from 'expo-router';
 import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
 import {getQuizByShareToken, addUserQuiz, getQuizByQuizId} from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
@@ -60,6 +60,19 @@ export default function SharedQuiz() {
         }
     }, [id]);
 
+    useFocusEffect(() => {
+            const onBackPress = () => {
+              router.replace(id ? `/(app)/discover?type=quiz&id=${id}` : "/(app)/quizzes");
+              return true;
+            };
+          
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+          
+            return () => {
+              BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+            };
+          });
+
     const handleAddToMyQuizzes = () => {
         if (quiz?.id) {
             addUserQuiz(quiz.id)
@@ -94,7 +107,7 @@ export default function SharedQuiz() {
         <View style={styles.container}>
             <View style={styles.menuComponent}>
                 <View style={[styles.menuIcon, styles.iconLayout]}>
-                    <Link href="/(app)/quizzes"><GoBackIcon  width={100} height={100} /></Link>
+                    <Link href={id ? `/(app)/discover?type=quiz&id=${id}` : "/(app)/quizzes"}><GoBackIcon  width={100} height={100} /></Link>
                 </View>
 
                 <View style = {styles.textComponent}>

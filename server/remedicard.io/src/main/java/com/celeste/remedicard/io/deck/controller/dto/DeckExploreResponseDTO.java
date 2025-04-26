@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,5 @@ public class DeckExploreResponseDTO {
     private Long dislikeCount;
     private Boolean isDisliked;
     private Boolean isLiked;
+    private Date createdDate;
 }

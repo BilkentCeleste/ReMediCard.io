@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,5 @@ public class QuizExploreResponseDTO {
     private Boolean isLiked;
     private Boolean isDisliked;
     private Integer questionCount;
+    private Date createdDate;
 }

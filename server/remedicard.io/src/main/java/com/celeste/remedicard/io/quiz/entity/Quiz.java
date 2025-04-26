@@ -61,6 +61,20 @@ public class Quiz extends AuditableEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @PrePersist
+    protected void onCreate() {
+        if(isPubliclyVisible == null){
+            isPubliclyVisible = false;
+        }
+
+        if (likeCount == null) {
+            likeCount = 0L;
+        }
+        if (dislikeCount == null) {
+            dislikeCount = 0L;
+        }
+    }
+
     public Quiz(Quiz quiz) {
         BeanUtils.copyProperties(quiz, this, "id", "user", "questions", "questionCount", "shareToken", "quizStats");
         List<Question> originalQuestions = quiz.getQuestions();

@@ -27,12 +27,14 @@ import {
 } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {
-  getDecksByCurrentUser,
-  deleteDeck,
-  createDeck,
-  generateDeckShareToken,
-  decksSearch,
-  changeDeckVisibility,
+  decksOthersSearch,
+  quizzesOthersSearch,
+  discoverDecks,
+  discoverQuizzes,
+  likeDeck,
+  dislikeDeck,
+  likeQuiz,
+  dislikeQuiz
 } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
@@ -44,52 +46,73 @@ export default function Discover() {
   
   const router = useRouter();
 
-  const [selectedSort, setSelectedSort] = useState("access");
+  const {id, type} = useLocalSearchParams()
+
   const [sortOrder, setSortOrder] = useState("desc");
-  const [decks, setDecks] = useState([]);
-  const [selectedDeck, setSelectedDeck] = useState(null);
+  const [list, setList] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [popUpVisible, setPopUpVisible] = useState(false);
-  const [visibilityPopUpVisible, setVisibilityPopUpVisible] = useState(false);
-  const [createModalVisible, setCreateModalVisible] = useState(false);
-  const [updated, setUpdated] = useState(false);
-  const [manualCreateModalVisible, setManualCreateModalVisible] = useState(false);
-  const [newDeckTitle, setNewDeckTitle] = useState("");
   const [showLoading, setShowLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
-
-  const [listType, setListType] = useState("deck")
+  const [sortingOption, setSortingOption] = useState("NONE")
+  const [listType, setListType] = useState(type ? type : "deck")
+  const [updated, setUpdated] = useState(false)
 
   const isFirstRender = useRef(true);
+  const isFirstLoad = useRef(true);
 
   useEffect(() => {
-    getDecksByCurrentUser()
-      .then((decks) => {
-        setDecks(decks?.data);
+    setShowLoading(true)
+
+    if(listType === "deck"){
+      discoverDecks(sortingOption)
+      .then((res) => {
+        setList(res.data);
         setShowLoading(false);
+        if(isFirstLoad.current && id){
+          isFirstLoad.current = false
+          const item = res.data.find(item => item.id == id)
+          setSelectedItem(item)
+          setModalVisible(item ? true : false)
+        }
       })
       .catch((error) => {
-        console.log(error);
         setShowLoading(false);
       });
-  }, [updated]);
+    }
+    else{
+      discoverQuizzes(sortingOption)
+      .then((res) => {
+        setList(res.data);
+        setShowLoading(false);
+        if(isFirstLoad.current && id){
+          isFirstLoad.current = false
+          const item = res.data.find(item => item.id == id)
+          setSelectedItem(item)
+          setModalVisible(item ? true : false)
+        }
+      })
+      .catch((error) => {
+        setShowLoading(false);
+      });
+    }
+    
+  }, [listType, updated, sortingOption]);
 
   useEffect(() => {
         if (debouncedSearchText.trim() !== "") {
           setShowLoading(true);
-          decksSearch(debouncedSearchText)
-            .then((res) => {
-              setShowLoading(false);
-              setDecks(res.data);
-            })
-            .catch((e) => {
-              console.log(e)
-              setShowLoading(false);
-            });
-        } else {
+          if(listType === "deck"){
+            handleSearchDecks()
+          }
+          else{
+            handleSearchQuizzes()
+          }
+        }
+        else{
           if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
@@ -113,14 +136,60 @@ export default function Discover() {
     setDebouncedSearchText("");
   };
 
-  const handleChangeVisibility = () => {
-    
-    changeDeckVisibility(selectedDeck.id)
-    .then(res => {
-      selectedDeck.isPubliclyVisible = !selectedDeck.isPubliclyVisible
-      setVisibilityPopUpVisible(false)
+  const handleSearchDecks = () => {
+    decksOthersSearch(debouncedSearchText)
+            .then((res) => {
+              setShowLoading(false);
+              setList(res.data);
+            })
+            .catch((e) => {
+              console.log(e)
+              setShowLoading(false);
+            });
+  }
+
+  const handleSearchQuizzes = () => {
+    quizzesOthersSearch(debouncedSearchText)
+            .then((res) => {
+              setShowLoading(false);
+              setList(res.data);
+            })
+            .catch((e) => {
+              console.log(e);
+              setShowLoading(false);
+            });
+  }
+
+  const handleLikeDeck = () => {
+    likeDeck(selectedItem.id).then(res => {
+      list[list.findIndex(item => item.id === selectedItem.id)] = res.data
+      setSelectedItem(res.data)
     })
-    .catch
+    .catch(e => console.log(e))
+  }
+
+  const handleDislikeDeck = () => {
+    dislikeDeck(selectedItem.id).then(res => {
+      list[list.findIndex(item => item.id === selectedItem.id)] = res.data
+      setSelectedItem(res.data)
+    })
+    .catch(e => console.log(e))
+  }
+
+  const handleLikeQuiz = () => {
+    likeQuiz(selectedItem.id).then(res => {
+      list[list.findIndex(item => item.id === selectedItem.id)] = res.data
+      setSelectedItem(res.data)
+    })
+    .catch(e => console.log(e))
+  }
+
+  const handleDislikeQuiz = () => {
+    dislikeQuiz(selectedItem.id).then(res => {
+      list[list.findIndex(item => item.id === selectedItem.id)] = res.data
+      setSelectedItem(res.data)
+    })
+    .catch(e => console.log(e))
   }
 
   const toggleSortOrder = () => {
@@ -144,49 +213,41 @@ export default function Discover() {
   };
 
   const sortOptions = [
-    { label: t("sort_by_access_date"), value: "access" },
-    { label: t("sort_by_recent_performance"), value: "recent" },
-    { label: t("sort_by_best_performance"), value: "best" },
-    { label: t("sort_by_alphabetical"), value: "alphabetical" },
+    { label: t("sort_by_like_count"), value: "LIKE_COUNT" },
+    { label: t("sort_by_date"), value: "PUBLICATION_DATE" },
   ];
 
-  const sortedDecks = sortDecks(decks, selectedSort, sortOrder);
+  const sortedList = sortList(list, sortingOption, sortOrder);
 
-  function sortDecks(decks, sortBy = 'access', order = 'desc') {
-    return decks.slice().sort((a, b) => {
+  function sortList(list, sortBy = 'access', order = 'desc') {
+    return list.slice().sort((a, b) => {
       const getDate = stat => stat ? new Date(stat.accessDate) : new Date(0);
       const getRate = stat => stat ? stat.successRate : -1;
 
       let compare = 0;
 
-      if (sortBy === 'access') {
-        const aDate = getDate(a.lastDeckStat || a.bestDeckStat);
-        const bDate = getDate(b.lastDeckStat || b.bestDeckStat);
-        compare = aDate - bDate;
-      } else if (sortBy === 'recent') {
-        const aRate = getRate(a.lastDeckStat);
-        const bRate = getRate(b.lastDeckStat);
+      if (sortBy === "LIKE_COUNT") {
+        const aRate = getRate(a.likeCount);
+        const bRate = getRate(b.likeCount);
         compare = aRate - bRate;
-      } else if (sortBy === 'best') {
-        const aRate = getRate(a.bestDeckStat);
-        const bRate = getRate(b.bestDeckStat);
+      } else if (sortBy === "PUBLICATION_DATE") {
+        const aRate = getRate(a.createdDate);
+        const bRate = getRate(b.createdDate);
         compare = aRate - bRate;
-      } else if (sortBy === 'alphabetical') {
-        compare = a.name.localeCompare(b.name);
       }
 
       return order === 'asc' ? compare : -compare;
     });
   }
 
-  const handleDeckPress = (deck) => {
-    setSelectedDeck(deck);
+  const handleItemPress = (item) => {
+    setSelectedItem(item);
     setModalVisible(true);
   };
 
-  const handleStartDeck = () => {
-    if (selectedDeck) {
-      if(selectedDeck.flashcardCount === 0){
+  const handleView = () => {
+    if (listType === "deck") {
+      if(selectedItem.flashcardCount === 0){
          Alert.alert(t("no_cards_available"), 
          t("no_cards_available_message"), 
          [{text: t("ok"), style: "cancel"}], { cancelable: false }
@@ -194,13 +255,23 @@ export default function Discover() {
         return
       }
       
-      setModalVisible(false);
       router.push({
-        pathname: "/(app)/card",
-        params: { deck: JSON.stringify(selectedDeck) },
+        pathname: "/(app)/shareddeck",
+        params: { id: selectedItem.id },
       });
     } else {
-      Alert.alert(t("error"), t("deck_info_missing"));
+      if(selectedItem.questionCount === 0){
+        Alert.alert(t("no_questions_available"), 
+        t("no_questions_available_message"), 
+        [{text: t("ok"), style: "cancel"}], { cancelable: false }
+       );
+       return
+     }
+     
+     router.push({
+      pathname: "/(app)/sharedquiz",
+      params: { id: selectedItem.id },
+     });
     }
   };
 
@@ -240,7 +311,7 @@ export default function Discover() {
       <DropDown
         options={sortOptions}
         placeholder={t("select_sort_option")}
-        onSelect={(value) => setSelectedSort(value)}
+        onSelect={(value) => setSortingOption(value)}
         showChevron = {false}
       />
 
@@ -259,12 +330,12 @@ export default function Discover() {
         <FlatList
           style={styles.flatListContainer}
           contentContainerStyle={styles.flatListContent}
-          data={sortedDecks}
+          data={sortedList}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.deckComponent}
-              onPress={() => handleDeckPress(item)}
+              onPress={() => handleItemPress(item)}
             >
               <View>
                 <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
@@ -276,8 +347,21 @@ export default function Discover() {
                 )}
 
                 <Text style={styles.deckInfoText}>
-                  {item.flashcardCount} {t("cards")}
+                {listType === "deck" ? `${item.flashcardCount} ${t("cards")}` : `${item.questionCount} ${t("questions")}`}
                 </Text>
+
+                <Text style={styles.deckInfoText}>
+                {item.likeCount} {t("likes")}
+                </Text>
+
+                <Text style={styles.deckInfoText}>
+                {item.dislikeCount} {t("dislikes")}
+                </Text>
+
+                <Text style={styles.deckInfoText}>
+                {formatDate(item.createdDate)}
+                </Text>
+
                 {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
                     {t("like")}: 50 {" "}
@@ -299,14 +383,18 @@ export default function Discover() {
         <TouchableOpacity
           style={[
             styles.createButton,
-            listType === "quizzes" && styles.activeButton,
+            listType === "quiz" && styles.activeButton,
           ]}
-          onPress={() => setListType("quizzes")}
+          onPress={() => {
+            setShowLoading(true)
+            setSearchText("")
+            setListType("quiz")
+          }}
         >
           <Text
             style={[
               styles.createNewDeck,
-              listType === "quizzes" && styles.activeText,
+              listType === "quiz" && styles.activeText,
             ]}
           >
             {t("quizzes")}
@@ -318,7 +406,13 @@ export default function Discover() {
             styles.createButton,
             listType === "deck" && styles.activeButton,
           ]}
-          onPress={() => setListType("deck")}
+          onPress={() => {
+            {
+              setShowLoading(true)
+              setSearchText("")
+              setListType("deck")
+            }
+          }}
         >
           <Text
             style={[
@@ -332,7 +426,7 @@ export default function Discover() {
       </View>
       )}
 
-      <Modal
+      {selectedItem && <Modal
         transparent={true}
         visible={modalVisible}
         animationType="slide"
@@ -340,20 +434,22 @@ export default function Discover() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{selectedDeck?.topic}</Text>
+            <Text style={styles.modalTitle}>{selectedItem?.name}</Text>
             <TouchableOpacity
               style={styles.modalButton}
-              onPress={handleStartDeck}
+              onPress={handleView}
             >
-              <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
+              <Text style={styles.modalButtonText}>{listType==="deck" ? t("view_deck") : t("view_quiz")}</Text>
             </TouchableOpacity>
             <View style={styles.likeContainer}>
-              <TouchableOpacity style={styles.modalButton2}>
+              <TouchableOpacity style={styles.modalButton2} onPress={listType === "deck" ? handleLikeDeck : handleLikeQuiz}>
                 <LikeIcon />
+                {selectedItem.isLiked && <Text> Liked </Text>}
                 <Text style={styles.modalButtonText}>{t("like")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton2}>
+              <TouchableOpacity style={styles.modalButton2} onPress={listType === "deck"? handleDislikeDeck : handleDislikeQuiz}>
                 <DislikeIcon />
+                {selectedItem.isDisliked && <Text> Disliked </Text>}
                 <Text style={styles.modalButtonText}>{t("dislike")}</Text>
               </TouchableOpacity>
             </View>
@@ -365,7 +461,7 @@ export default function Discover() {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal>}
 
       {/* Navbar */}
       <View style={styles.navbarRow}>

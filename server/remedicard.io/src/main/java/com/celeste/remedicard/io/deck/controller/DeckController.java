@@ -5,14 +5,12 @@ import com.celeste.remedicard.io.common.config.enumeration.SortingOption;
 import com.celeste.remedicard.io.deck.controller.dto.*;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.mapper.DeckCreateMapper;
-import com.celeste.remedicard.io.deck.mapper.DeckResponseWithoutFlashcardsMapper;
 import com.celeste.remedicard.io.deck.service.DeckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,21 +82,19 @@ public class DeckController {
     }
 
     @PatchMapping("/like_deck/{deckId}")
-    public void likeDeck(@PathVariable Long deckId) {
-        deckService.addLikeToDeck(deckId);
-    }
+    public DeckExploreResponseDTO likeDeck(@PathVariable Long deckId) {
+        Deck deck = deckService.likeDeck(deckId);
+        Long userId = currentUserService.getCurrentUserId();
 
-    @PatchMapping("/unlike_deck/{deckId}")
-    public void unlikeDeck(@PathVariable Long deckId) {
-        deckService.removeLikeFromDeck(deckId);
+        return deckService.convertFromDeckToDeckExploreResponseDTO(List.of(deck), userId).get(0);
     }
 
     @PatchMapping("/dislike_deck/{deckId}")
-    public void dislikeDeck(@PathVariable Long deckId) {deckService.addDisLikeToDeck(deckId);}
+    public DeckExploreResponseDTO dislikeDeck(@PathVariable Long deckId) {
+        Deck deck = deckService.dislikeDeck(deckId);
+        Long userId = currentUserService.getCurrentUserId();
 
-    @PatchMapping("/undislike_deck/{deckId}")
-    public void unDislikeDeck(@PathVariable Long deckId) {
-        deckService.removeDisLikeFromDeck(deckId);
+        return deckService.convertFromDeckToDeckExploreResponseDTO(List.of(deck), userId).get(0);
     }
 
     @GetMapping("/discover/{sorting_option}")

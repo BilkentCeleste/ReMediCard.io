@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert} from 'react-native';
-import { useRouter, Link, useLocalSearchParams } from 'expo-router';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, BackHandler} from 'react-native';
+import { useRouter, Link, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon } from '@/constants/icons';
 import {addUserDeck, getDeckByDeckId, getDeckByShareToken} from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
@@ -49,6 +49,19 @@ export default function SharedDeck() {
         }
     }, [id]);
 
+    useFocusEffect(() => {
+        const onBackPress = () => {
+          router.replace(id ? `/(app)/discover?type=deck&id=${id}` : "/(app)/decks");
+          return true;
+        };
+      
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      
+        return () => {
+          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        };
+      });
+
     const handleAddToMyDecks = () => {
         if (deck?.id) {
             addUserDeck(deck.id)
@@ -83,7 +96,7 @@ export default function SharedDeck() {
         <View style={styles.container}>
             <View style={styles.menuComponent}>
                 <View style={[styles.menuIcon, styles.iconLayout]}>
-                    <Link href="/(app)/decks"><GoBackIcon  width={100} height={100} /></Link>
+                    <Link href={id ? `/(app)/discover?type=deck&id=${id}` : "/(app)/decks"}><GoBackIcon  width={100} height={100} /></Link>
                 </View>
 
                 <View style = {styles.textComponent}>

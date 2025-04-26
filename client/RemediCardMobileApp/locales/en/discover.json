@@ -1,5 +1,23 @@
 {
+  "title": "ReMediCard.io",
   "quizzes": "Quizzes",
   "decks": "Decks",
-  "select_sort_option": "Select sort option"
+  "cards": "Cards",
+  "questions": "Questions",
+  "select_sort_option": "Select Sort Option",
+  "sort_by_like_count": "Sort by Likes",
+  "sort_by_date": "Sort by Date",
+  "view_deck": "View Deck",
+  "view_quiz": "View Quiz",
+  "no_cards_available": "No Cards Available",
+  "no_cards_available_message": "There are no cards in this deck.",
+  "no_questions_available": "No questions available",
+  "no_questions_available_message": "Quiz shouldn't be empty.",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "like": "Like",
+  "dislike": "Dislike",
+  "likes": "Likes",
+  "dislikes": "Dislikes",
+  "search": "Search"
 }

@@ -220,36 +220,38 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
-    public void addLikeToQuiz(Long quizId) {
+    public Quiz likeQuiz(Long quizId) {
         Quiz quiz = getById(quizId);
         User user = currentUserService.getCurrentUser();
-        quiz.getLikerIds().remove(user.getId());
+        if(quiz.getLikerIds().contains(user.getId())){
+            quiz.getLikerIds().remove(user.getId());
+        }
+        else{
+            quiz.getLikerIds().add(user.getId());
+        }
         quiz.setLikeCount((long)quiz.getLikerIds().size());
-        quizRepository.save(quiz);
-    }
-
-    public void removeLikeFromQuiz(Long quizId) {
-        Quiz quiz = getById(quizId);
-        User user = currentUserService.getCurrentUser();
-        quiz.getLikerIds().remove(user.getId());
-        quiz.setLikeCount((long)quiz.getLikerIds().size());
-        quizRepository.save(quiz);
-    }
-
-    public void addDisLikeToQuiz(Long quizId) {
-        Quiz quiz = getById(quizId);
-        User user = currentUserService.getCurrentUser();
         quiz.getDislikerIds().remove(user.getId());
         quiz.setDislikeCount((long)quiz.getDislikerIds().size());
         quizRepository.save(quiz);
+
+        return quiz;
     }
 
-    public void removeDisLikeFromQuiz(Long quizId) {
+    public Quiz dislikeQuiz(Long quizId) {
         Quiz quiz = getById(quizId);
         User user = currentUserService.getCurrentUser();
-        quiz.getDislikerIds().remove(user.getId());
+        if(quiz.getDislikerIds().contains(user.getId())){
+            quiz.getDislikerIds().remove(user.getId());
+        }
+        else{
+            quiz.getDislikerIds().add(user.getId());
+        }
         quiz.setDislikeCount((long)quiz.getDislikerIds().size());
+        quiz.getLikerIds().remove(user.getId());
+        quiz.setLikeCount((long)quiz.getLikerIds().size());
         quizRepository.save(quiz);
+
+        return quiz;
     }
 
     public List<Quiz> discoverQuizzes(SortingOption option){

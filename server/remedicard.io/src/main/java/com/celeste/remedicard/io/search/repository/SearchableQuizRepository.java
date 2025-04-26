@@ -41,7 +41,7 @@ public interface SearchableQuizRepository extends ElasticsearchRepository<Search
     @Query("""
             {
               "bool": {
-                "filter": [
+                "must_not": [
                       { "term": { "userId": "?1" } }
                     ],
                 "should": [

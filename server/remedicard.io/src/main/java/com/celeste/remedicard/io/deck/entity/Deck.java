@@ -48,7 +48,7 @@ public class Deck extends AuditableEntity {
     private Long likeCount = 0L;
 
     @Column
-    private Long disLikeCount = 0L;
+    private Long dislikeCount = 0L;
 
     @ElementCollection
     private Set<Long> likerIds = new HashSet<>();
@@ -73,6 +73,20 @@ public class Deck extends AuditableEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        if(isPubliclyVisible == null){
+            isPubliclyVisible = false;
+        }
+
+        if (likeCount == null) {
+            likeCount = 0L;
+        }
+        if (dislikeCount == null) {
+            dislikeCount = 0L;
+        }
+    }
 
     public Deck(Deck deck) {
         BeanUtils.copyProperties(deck, this, "id", "user", "flashcardSet", "figureSet", "shareToken", "deckStatsSet");

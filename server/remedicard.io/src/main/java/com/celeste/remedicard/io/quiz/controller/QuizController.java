@@ -65,22 +65,19 @@ public class QuizController {
     }
 
     @PatchMapping("/like_quiz/{quizId}")
-    public void likeQuiz(@PathVariable Long quizId) {
-        quizService.addLikeToQuiz(quizId);
-    }
+    public QuizExploreResponseDTO likeQuiz(@PathVariable Long quizId) {
+        Quiz quiz = quizService.likeQuiz(quizId);
+        Long userId = currentUserService.getCurrentUserId();
 
-    @PatchMapping("/unlike_quiz/{quizId}")
-    public void unlikeQuiz(@PathVariable Long quizId) {
-        quizService.removeLikeFromQuiz(quizId);
+        return quizService.convertFromQuizToQuizExploreResponseDTO(List.of(quiz), userId).get(0);
     }
 
     @PatchMapping("/dislike_quiz/{quizId}")
-    public void dislikeQuiz(@PathVariable Long quizId) {quizService.addDisLikeToQuiz(quizId);}
+    public QuizExploreResponseDTO dislikeQuiz(@PathVariable Long quizId) {
+        Quiz quiz = quizService.dislikeQuiz(quizId);
+        Long userId = currentUserService.getCurrentUserId();
 
-    @PatchMapping("/undislike_quiz/{quizId}")
-    public void unDislikeQuiz(@PathVariable Long quizId) {
-        quizService.removeDisLikeFromQuiz(quizId);
-    }
+        return quizService.convertFromQuizToQuizExploreResponseDTO(List.of(quiz), userId).get(0);}
 
     @GetMapping("/discover/{sorting_option}")
     public List<QuizExploreResponseDTO> discoverQuizzes(@PathVariable SortingOption sorting_option) {

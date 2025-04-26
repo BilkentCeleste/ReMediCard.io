@@ -26,6 +26,9 @@ export const GENERATE_DECK_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/deck/generate
 export const GET_DECK_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/deck/getByShareToken/${shareToken}`;
 export const UPDATE_DECK_NAME_PATH = (id) => `${BASE_URL}/deck/updateName/${id}`;
 export const CHANGE_DECK_VISIBILITY_PATH = (id) => `${BASE_URL}/deck/change_public_visibility/${id}`;
+export const DISCOVER_DECKS_PATH = (sortingOption) => `${BASE_URL}/deck/discover/${sortingOption}`;
+export const LIKE_DECK_PATH = (id) => `${BASE_URL}/deck/like_deck/${id}`;
+export const DISLIKE_DECK_PATH = (id) => `${BASE_URL}/deck/dislike_deck/${id}`;
 
 // deck statistics
 export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
@@ -54,6 +57,9 @@ export const GENERATE_QUIZ_SHARE_TOKEN_PATH = (id) => `${BASE_URL}/quiz/generate
 export const GET_QUIZ_BY_SHARE_TOKEN_PATH = (shareToken) => `${BASE_URL}/quiz/getByShareToken/${shareToken}`;
 export const UPDATE_QUIZ_NAME_PATH = (id) => `${BASE_URL}/quiz/updateName/${id}`;
 export const CHANGE_QUIZ_VISIBILITY_PATH = (id) => `${BASE_URL}/quiz/change_public_visibility/${id}`;
+export const DISCOVER_QUIZZES_PATH = (sortingOption) => `${BASE_URL}/quiz/discover/${sortingOption}`;
+export const LIKE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/like_quiz/${id}`;
+export const DISLIKE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/dislike_quiz/${id}`;
 
 // deck statistics
 export const CREATE_QUIZ_STATS_PATH = () => `${BASE_URL}/quizStats/create`;
@@ -71,3 +77,5 @@ export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile
 export const SEARCH_PATH = (searchText) => `${BASE_URL}/search?searchtext=${searchText}`;
 export const SEARCH_DECKS_PATH = (searchText) => `${BASE_URL}/search/deck?searchtext=${searchText}`;
 export const SEARCH_QUIZZES_PATH = (searchText) => `${BASE_URL}/search/quiz?searchtext=${searchText}`;
+export const SEARCH_OTHERS_DECKS_PATH = (searchText) => `${BASE_URL}/search/others/deck?searchtext=${searchText}`;
+export const SEARCH_OTHERS_QUIZZES_PATH = (searchText) => `${BASE_URL}/search/others/quiz?searchtext=${searchText}`;

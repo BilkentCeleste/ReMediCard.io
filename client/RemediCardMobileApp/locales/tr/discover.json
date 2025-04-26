@@ -1,5 +1,23 @@
 {
+  "title": "ReMediCard.io",
   "quizzes": "Testler",
   "decks": "Desteler",
-  "select_sort_option": "Sıralama Seçeneğini Belirleyin"
+  "cards": "Kart",
+  "questions": "Soru",
+  "select_sort_option": "Sıralama Seçeneğini Belirleyin",
+  "sort_by_like_count": "Beğenilere Göre Sırala",
+  "sort_by_date": "Tarihe Göre Sırala",
+  "no_cards_available": "Kartlar Mevcut Değil",
+  "no_cards_available_message": "Bu destede hiç kart yok.",
+  "no_questions_available": "Bu Testte Soru Yok",
+  "no_questions_available_message": "Bu testte hiç soru yok.",
+  "ok": "Tamam",
+  "cancel": "İptal",
+  "view_deck": "Desteye göz at",
+  "view_quiz": "Teste göz at",
+  "like": "Beğendim",
+  "dislike": "Beğenmedim",
+  "likes": "Kişi Beğendi",
+  "dislikes": "Kişi Beğenmedi",
+  "search": "Ara"
 }
