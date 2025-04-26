@@ -227,6 +227,7 @@ public class DeckService {
             flashcards.add(flashcard);
         }
 
+        deck.setFlashcardCount(flashcards.size());
         deck.setFlashcardSet(flashcards);
 
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
