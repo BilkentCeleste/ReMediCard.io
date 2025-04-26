@@ -91,18 +91,17 @@ export default function SharedDeck() {
     };
   });
 
-  const handleAddToMyDecks = () => {
-    if (deck?.id) {
-      addUserDeck(deck.id)
-        .then(() => {
-          router.push("/(app)/decks");
-        })
-        .catch((error: Error) => {
-          Alert.alert(t("error"), t("add_deck_failed"));
-          console.error(error);
-        });
-    }
-  };
+    const handleAddToMyDecks = () => {
+        if (deck?.id) {
+            addUserDeck(deck.id)
+                .then(() => {
+                    router.push('/(app)/decks');
+                })
+                .catch((error: Error) => {
+                    Alert.alert(t('error'), t('add_deck_failed'));
+                });
+        }
+    };
 
   if (notFound) {
     return <NotFound title={t("not_found_title")} message={t("not_found")} />;
@@ -215,186 +214,151 @@ export default function SharedDeck() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#53789D",
-  },
-  title: {
-    top: 60,
-    fontSize: 30,
-    lineHeight: 32,
-    fontFamily: "InriaSans-Regular",
-    color: "#fff",
-    textAlign: "center",
-    width: "100%",
-    height: 27,
-    marginBottom: 25,
-    fontWeight: "bold",
-  },
-  flashcardComponent: {
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    width: "49%",
-    minHeight: 80,
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: 15,
-    marginVertical: 5,
-  },
-  flashcardQuestion: {
-    fontSize: 16,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  flashcardAnswer: {
-    fontSize: 12,
-    color: "rgba(0, 0, 0, 0.7)",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-  },
-  flatListContainer: {
-    width: "75%",
-    height: "80%",
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  flatListContent: {
-    alignItems: "stretch",
-    paddingBottom: 20,
-    justifyContent: "space-evenly",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
-  },
-  createParent: {
-    borderRadius: 20,
-    backgroundColor: "#2916ff",
-    width: "75%",
-    height: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: "14%",
-  },
-  buttonText: {
-    fontSize: 14,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  menuComponent: {
-    width: "75%",
-    minHeight: 20,
-    padding: 10,
-    gap: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-  },
-  textComponent: {
-    width: "75%",
-    alignItems: "center",
-  },
-  menuText: {
-    fontSize: 20,
-    lineHeight: 22,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "left",
-    zIndex: 1,
-    top: 5,
-    position: "relative",
-  },
-  iconLayout: {
-    height: 24,
-    width: 24,
-    position: "absolute",
-  },
-  menuIcon: {
-    right: "95%",
-    zIndex: 3,
-    top: 5,
-  },
-  separatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 15,
-  },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
-  },
-  loadingText: {
-    color: "#fff",
-    fontSize: 18,
-    textAlign: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-    marginBottom: 100,
-    gap: 10,
-    width: 200,
-    alignSelf: "center",
-  },
-  button: {
-    borderRadius: 20,
-    backgroundColor: "#2916ff",
-    width: "75%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 30,
-    height: 50,
-    bottom: "15%",
-  },
-  loadingContainer: {
-    width: "60%",
-    height: "50%",
-    justifyContent: "center",
-  },
-  indicator: {
-    transform: [{ scale: 2.2 }],
-    margin: 20,
-    color: "#fff",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
-    width: "80%",
-    padding: 20,
-    borderRadius: 20,
-    alignItems: "center",
-  },
+    container: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#53789D',
+    },
+    title: {
+        top: 60,
+        fontSize: 30,
+        lineHeight: 32,
+        fontFamily: 'InriaSans-Regular',
+        color: '#fff',
+        textAlign: 'center',
+        width: '100%',
+        height: 27,
+        marginBottom: 25,
+        fontWeight: 'bold',
+    },
+    flashcardComponent: {
+        borderRadius: 20,
+        backgroundColor: '#fff',
+        width: '49%',
+        minHeight: 80,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: 15,
+        marginVertical: 5,
+    },
+    navbarRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        width: '100%',
+        position: 'absolute',
+        bottom: 50,
+        backgroundColor: '#53789D',
+    },
+    flatListContainer: {
+        width: '75%',
+        height: '80%',
+        marginTop: 5,
+        marginBottom: 5,
+    },
+    flatListContent: {
+        alignItems: 'stretch',
+        paddingBottom: 20,
+        justifyContent: 'space-evenly',
+    },
+    navbarContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: "75%",
+        position: "absolute",
+        bottom: 50,
+        backgroundColor: "#53789D",
+        height: 1,
+    },
+    navbarLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: "#fff",
+    },
+    buttonText: {
+        fontSize: 14,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "center",
+        fontWeight: "bold",
+    },
+    menuComponent: {
+        width: "75%",
+        minHeight: 20,
+        padding: 10,
+        gap: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 40,
+    },
+    textComponent: {
+        width: "75%",
+        alignItems: "center",
+    },
+    menuText: {
+        fontSize: 20,
+        lineHeight: 22,
+        fontFamily: "Inter-Regular",
+        color: "#fff",
+        textAlign: "left",
+        zIndex: 1,
+        top: 5,
+        position: "relative",
+    },
+    iconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute"
+    },
+    menuIcon: {
+        right: "95%",
+        zIndex: 3,
+        top: 5
+    },
+    separatorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: "100%",
+        marginTop: 15,
+    },
+    separatorLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#fff',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 100,
+        gap: 10,
+        width: 200,
+        alignSelf: 'center',
+    },
+    button: {
+        borderRadius: 20,
+        backgroundColor: "#2916ff",
+        width: "75%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 30,
+        height: 50,
+        bottom: "15%",
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalContainer: {
+        backgroundColor: "#fff",
+        width: "80%",
+        padding: 20,
+        borderRadius: 20,
+        alignItems: "center",
+    },
 });

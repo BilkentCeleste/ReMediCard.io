@@ -11,5 +11,8 @@
     "select_back_image": "Select Image for Back Side (Optional)",
     "front_image_selected": "Front Side Image Selected",
     "back_image_selected": "Back Side Image Selected",
-    "file_transfer": "Please wait wihle the flashcards are being created. This may take a few seconds depending on the size of the images."
+    "file_transfer": "Please wait while the flashcards are being created. This may take a few seconds depending on the size of the images.",
+    "flashcard_creation_error": "An error occurred while creating the flashcard. Please try again.",
+    "flashcard_update_error": "An error occurred while updating the flashcard. Please try again.",
+    "permission_denied": "Permission denied. Please allow access to the camera and photo library."
 }

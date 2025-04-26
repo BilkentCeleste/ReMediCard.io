@@ -13,14 +13,12 @@ export default function Card( props: any ) {
     const router = useRouter();
     const {deck} = useLocalSearchParams();
 
-    const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
-
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
     const [falseAnswers, setFalseAnswers] = useState(0);
     const [maybeAnswers, setMaybeAnswers] = useState(0);
     const [flashCardList, setFlashCardList] = useState([]);
-    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; result: string; lastReviewed: timestamp }[]>([]);
+    const [flashcardReviewList, setFlashcardReviewList] = useState<{ id: any; result: string; lastReviewed: any }[]>([]);
     const [showSummaryModal, setShowSummaryModal] = useState(false);
     const [sessionStats, setSessionStats] = useState({
         correct: 0,
@@ -29,6 +27,7 @@ export default function Card( props: any ) {
         accuracy: 0
     });
 
+    const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
     const widthAndHeight = 200;
     
     const series = [
@@ -39,7 +38,7 @@ export default function Card( props: any ) {
 
     const hasValidData = series.length > 0;
 
-    async function getFlashcards(deckId) {
+    async function getFlashcards(deckId: any) {
         try {
             const response = await getFlashcardsInBatch(deckId);
             setFlashCardList(response.data.sort((a, b) => a.recallProbability - b.recallProbability));
@@ -157,11 +156,13 @@ export default function Card( props: any ) {
             successRate: trueAnswers == 0 ? 0 : (trueAnswers / (trueAnswers + falseAnswers)) * 100,
             deckId: parsedDeck.id,
         }
-        createDeckStats(deckStat).then(() => {
-            console.log("Deck stats created successfully.");
-        }).catch((error) => {
-            console.error("Error creating deck stats:", error);
-        });
+        createDeckStats(deckStat)
+            .then(() => {
+                console.log("Deck stats created successfully.");
+            })
+            .catch((error) => {
+                console.error("Error creating deck stats:", error);
+            });
 
         const totalAnswers = trueAnswers + falseAnswers + maybeAnswers;
         const accuracy = totalAnswers === 0 ? 0 : ((trueAnswers + 0.5 * maybeAnswers) / totalAnswers) * 100;
@@ -174,7 +175,6 @@ export default function Card( props: any ) {
         });
     
         setShowSummaryModal(true);
-        //router.push(`/(app)/deckResults?deck=${deck}&trueAnwserCount=${trueAnswers}&falseAnswerCount=${falseAnswers}`);
     }
 
     const handleRetry = () => {
@@ -223,19 +223,16 @@ export default function Card( props: any ) {
                         <Text style={styles.scoreText}>{trueAnswers}</Text>
                     </View>
 
-                    {/* Uncertain */}
                     <View style={styles.scoreItem}>
                         <Text style={styles.uncertainIcon}>?</Text>
                         <Text style={styles.scoreText}>{maybeAnswers}</Text>
                     </View>
 
-                    {/* False */}
                     <View style={styles.scoreItem}>
                         <FalseIcon />
                         <Text style={styles.scoreText}>{falseAnswers}</Text>
                     </View>
 
-                    {/* Solved / Total */}
                     <Text style={styles.scoreText}>{currentCard + 1}/{flashCardList.length}</Text>
                     </View>
 
@@ -275,7 +272,7 @@ export default function Card( props: any ) {
                     </View>
                     </View>
 
-                    <TouchableOpacity style={styles.endSeesionPosition} onPress={handleEndSession}>
+                    <TouchableOpacity style={styles.endSessionPosition} onPress={handleEndSession}>
                         <Text style = {styles.registertext}>{t("end_session")}</Text></TouchableOpacity>
                 </>
             )}
@@ -373,16 +370,6 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#fff',
     },
-    iconLayout: {
-        height: 24,
-        width: 24,
-        position: "absolute"
-    },
-    menuIcon: {
-        right: "95%",
-        zIndex: 3,
-        top: 5
-    },
     scoreTable: {
         width: "75%",
         height: 50,
@@ -407,12 +394,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     interactiveContainer: {
-        flexDirection: "row", // Layout the children horizontally
-        justifyContent: "space-between", // Spread children across the container
-        alignItems: "center", // Center the icons vertically
-        width: "75%", // Keep the container width consistent with the rest of the layout
-        marginTop: 30, // Add margin top to give space between elements
-        height: 75, // Adjust height to fit the icons
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "75%",
+        marginTop: 30,
+        height: 75,
     },
     interactiveContainerPosition: {
         zIndex: 0,
@@ -436,7 +423,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         left: 0
     },
-    endSeesionPosition: {
+    endSessionPosition: {
         marginTop: 40,
         backgroundColor: "blue",
         borderRadius: 50,
@@ -493,10 +480,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    modalText: {
-        fontSize: 16,
-        marginVertical: 5,
-    },
     modalButton: {
         borderRadius: 20,
         backgroundColor: "#2916ff",
@@ -514,5 +497,4 @@ const styles = StyleSheet.create({
         color: "#fff",
         textAlign: "center",
     },
-    
 });

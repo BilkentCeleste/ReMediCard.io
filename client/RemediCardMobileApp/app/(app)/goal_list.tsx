@@ -1,23 +1,9 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-} from "react-native";
-import { useRouter, Link } from "expo-router";
-import {
-  SearchIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
-  ChevronRightIcon,
-  PlusIcon
-} from "../../constants/icons"; // Adjust to your icon imports
-import DropDown from "../../components/DropDown"; // Same custom DropDown component used in deck.tsx
-import { useTranslation } from "react-i18next";
+import React, {useState} from "react";
+import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,} from "react-native";
+import {Link, useRouter} from "expo-router";
+import {ChevronRightIcon, HomeIcon, PlusIcon, ProfileIcon, SearchIcon, SettingsIcon} from "@/constants/icons";
+import DropDown from "../../components/DropDown";
+import {useTranslation} from "react-i18next";
 
 interface Goal {
   title: string;
@@ -30,10 +16,11 @@ interface Goal {
 
 export default function GoalList() {
   const { t } = useTranslation("goal_list");
-
   const router = useRouter();
 
-  // Sorting options (mirroring what you do in decks)
+  const [selectedSort, setSelectedSort] = useState<string>("longest");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const sortOptions = [
     { label: t("sort_by_longest"), value: "longest" },
     { label: t("sort_by_shortest"), value: "shortest" },
@@ -41,10 +28,6 @@ export default function GoalList() {
     { label: t("sort_by_lowest"), value: "lowestGoal" },
   ];
 
-  const [selectedSort, setSelectedSort] = useState<string>("longest");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  // Sample goal data
   const goals: Goal[] = [
     {
       title: "Goal 1 for Deck 1",
@@ -64,19 +47,14 @@ export default function GoalList() {
     },
   ];
 
-  // Filter and sort the goals based on user input
-  const filteredGoals = goals.filter((goal) =>
-    goal.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const sortedGoals = goals.filter((goal) =>
+      goal.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Example: you could apply sorting logic here if needed
-  const sortedGoals = filteredGoals; // Currently just returning as-is
 
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
-      {/* Search Bar */}
       <View style={styles.searchComponent}>
         <SearchIcon />
         <TextInput
@@ -88,15 +66,12 @@ export default function GoalList() {
         />
       </View>
 
-      {/* Sort Dropdown */}
       <DropDown
         options={sortOptions}
         placeholder={t("select_sort_option")}
         onSelect={(value) => setSelectedSort(value)}
-        // optional: default selected could be set here
       />
 
-      {/* FlatList of goals */}
       <FlatList
         style={styles.flatListContainer}
         contentContainerStyle={styles.flatListContent}
@@ -104,7 +79,6 @@ export default function GoalList() {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.goalComponent}>
-            {/* If you want to link to a goal details page, adjust the href below */}
             <View style={styles.link}>
               <View>
                 <Text style={styles.goalTitle}>{item.title}</Text>
@@ -120,7 +94,6 @@ export default function GoalList() {
                 <Text style={styles.goalInfoText}>
                   Goal: {item.goalPercent}%
                 </Text>
-                {/* Chevron icon on the right */}
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
                 </View>
@@ -130,7 +103,6 @@ export default function GoalList() {
         )}
       />
 
-      {/* "Create New Study Goal" button */}
       <TouchableOpacity style={styles.createButton} onPress={() => {
           router.push("/(app)/create_goal");
         }}>
@@ -138,17 +110,6 @@ export default function GoalList() {
           <Text style={styles.createNewDeck}>{t("create_goal")}</Text>
       </TouchableOpacity>
 
-      {/* <TouchableOpacity
-        style={styles.createGoalButton}
-        onPress={() => {
-          // Navigate to create goal page or handle logic
-          router.push("(app)/create_goal");
-        }}
-      >
-        <Text style={styles.createGoalButtonText}>+ Create New Study Goal</Text>
-      </TouchableOpacity> */}
-
-      {/* Bottom Nav Bar */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -165,7 +126,6 @@ export default function GoalList() {
         </TouchableOpacity>
       </View>
 
-      {/* White separator line behind the nav icons */}
       <View style={styles.navbarContainer}>
         <View style={styles.navbarLine} />
       </View>
@@ -185,7 +145,7 @@ const styles = StyleSheet.create({
     top: 60,
     fontSize: 30,
     lineHeight: 32,
-    fontFamily: "InriaSans-Regular", // match your deck.tsx
+    fontFamily: "InriaSans-Regular",
     color: "#fff",
     textAlign: "center",
     width: "100%",
@@ -248,7 +208,7 @@ const styles = StyleSheet.create({
   goalInfoText: {
     fontSize: 12,
     color: "rgba(0, 0, 0, 0.7)",
-    marginBottom: 2, // Tweak spacing
+    marginBottom: 2,
   },
   iconLayout: {
     height: 24,
@@ -264,20 +224,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
     width: "100%",
-  },
-  createGoalButton: {
-    position: "absolute",
-    bottom: 100,
-    backgroundColor: "#1E40AF", // e.g. a dark-blue color
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  createGoalButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
   },
   navbarRow: {
     flexDirection: "row",
@@ -312,11 +258,11 @@ const styles = StyleSheet.create({
     height: 50,
     bottom: "12%"
   },
-createNewDeck: {
+  createNewDeck: {
     fontSize: 17,
     lineHeight: 22,
     fontFamily: "Inter-Regular",
     color: "#fff",
     textAlign: "center",
-},
+  },
 });

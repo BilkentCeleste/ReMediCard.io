@@ -81,7 +81,6 @@ export default function SharedQuiz() {
                 })
                 .catch((error: Error) => {
                     Alert.alert(t('error'), t('add_quiz_failed'));
-                    console.error(error);
                 });
         }
     };
@@ -170,11 +169,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#53789D',
     },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
     navbarRow: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -182,12 +176,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 50,
         backgroundColor: '#53789D',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff',
-        marginLeft: 20,
     },
     questionsContainer: {
         flex: 1,
@@ -237,12 +225,6 @@ const styles = StyleSheet.create({
         color: "#fff",
         textAlign: "center",
         fontWeight: "bold",
-    },
-    loadingText: {
-        color: '#fff',
-        fontSize: 18,
-        textAlign: 'center',
-        marginTop: 15
     },
     menuComponent: {
         width: "75%",
@@ -302,14 +284,4 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: "#fff",
     },
-    loadingContainer: {
-        width: "60%",
-        height: "50%",
-        justifyContent: "center"
-    },
-    indicator: {
-        transform: [{ scale: 2.2 }],
-        margin: 20,
-        color: "#fff",    
-      },
 }); 

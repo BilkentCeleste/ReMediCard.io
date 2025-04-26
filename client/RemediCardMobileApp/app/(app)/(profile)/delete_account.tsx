@@ -7,24 +7,18 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useRouter, useNavigation } from "expo-router";
-import { AtIcon, LockIcon } from "@/constants/icons";
+import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
   const { t } = useTranslation("delete_account");
-
-  const [authId, setAuthId] = useState(["", "", "", "", "", ""]);
-  const navigation = useNavigation();
   const router = useRouter();
 
-  React.useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
+  const [authId, setAuthId] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef(authId.map(() => React.createRef()));
 
   const handleDelete = () => {
-
+    console.log("Deleting account with authId:", authId.join(""));
   };
 
   const handleAuthInputChange = (text, index) => {
@@ -95,23 +89,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     marginBottom: 50,
-  },
-  component: {
-    height: 60,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    width: "75%",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  input: {
-    fontSize: 18,
-    color: "#111",
-    flex: 1,
-    marginLeft: 10,
   },
   authCodeContainer: {
     flexDirection: "row",

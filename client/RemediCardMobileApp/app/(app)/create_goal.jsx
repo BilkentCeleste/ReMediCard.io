@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,32 +11,20 @@ import {
   HomeIcon,
   ProfileIcon,
   SettingsIcon,
-  GoBackIcon, // placeholder for "Back" icon
-  EditProfileIcon, // placeholder for "Edit" icon
-  ChevronDown, // placeholder for "Discard" icon
-  SaveIcon, // placeholder for "Save" icon
+  GoBackIcon,
+  EditProfileIcon,
+  SaveIcon,
   DiscordIcon
-} from "../../constants/icons";
+} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
-import { useSearchParams } from "expo-router/build/hooks";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
-  
   const router = useRouter();
-
   const { deck_id } = useLocalSearchParams();
 
-  //console.log("Full Route:", router.asPath);
-  //console.log("Deck_id", deck_id);
-
-  // useEffect(() => {
-  //   console.log("deck_id?", deck_id);
-  // }, []);
-
-  // Example states for each form field
   const [deck, setDeck] = useState("Deck 1");
   const [repOneValue, setRepOneValue] = useState("1");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
@@ -44,7 +32,6 @@ export default function CreateGoal() {
   const [repTwoUnit, setRepTwoUnit] = useState("day(s)");
   const [performance, setPerformance] = useState("80");
 
-  // Example options for the drop downs
   const deckOptions = [
     { label: "Deck 1", value: "Deck 1" },
     { label: "Deck 2", value: "Deck 2" },
@@ -53,7 +40,6 @@ export default function CreateGoal() {
     { label: "1", value: "1" },
     { label: "2", value: "2" },
     { label: "3", value: "3" },
-    // Add more as needed
   ];
   const repUnitsMonth = [
     { label: t("months"), value: "month(s)" },
@@ -64,12 +50,10 @@ export default function CreateGoal() {
     { label: t("hours"), value: "hour(s)" },
   ];
 
-  // Derived text for the summary box at the bottom
   const summaryText = `You will be notified about ${deck} every ${repTwoValue} ${repTwoUnit} for ${repOneValue} ${repOneUnit} until you exceed ${performance}% success`;
 
   return (
     <View style={styles.container}>
-      {/* Header Row */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()}>
           <GoBackIcon color="#fff" />
@@ -80,13 +64,10 @@ export default function CreateGoal() {
         </TouchableOpacity>
       </View>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
-      {/* Deck Row */}
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("deck")}</Text>
-        {/* Example using DropDown component (like in deck.tsx) */}
         <DropDown
           options={deckOptions}
           placeholder={t("select_deck")}
@@ -96,7 +77,6 @@ export default function CreateGoal() {
       </View>
       <View style={styles.lineSeparator} />
 
-      {/* Repetition Row #1 */}
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("repetition")}</Text>
         <View style={styles.repetitionRow}>
@@ -119,7 +99,6 @@ export default function CreateGoal() {
       </View>
       <View style={styles.lineSeparator} />
 
-      {/* Repetition Row #2 */}
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("repetition")}</Text>
         <View style={styles.repetitionRow}>
@@ -143,10 +122,8 @@ export default function CreateGoal() {
       </View>
       <View style={styles.lineSeparator} />
 
-      {/* Performance Row */}
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("performance")}</Text>
-        {/* Example: plain TextInput for performance */}
         <TextInput
           style={styles.performanceInput}
           value={performance}
@@ -159,14 +136,12 @@ export default function CreateGoal() {
       </View>
       <View style={styles.lineSeparator} />
 
-      {/* White summary card at the bottom */}
       <View style={styles.summaryCard}>
         <Text style={styles.summaryText}>{summaryText}</Text>
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={styles.discardButton}
             onPress={() => {
-              // handle discard
               router.back();
             }}
           >
@@ -176,8 +151,6 @@ export default function CreateGoal() {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={() => {
-              // handle save
-              // e.g., router.push("/(app)/goal_list");
             }}
           >
             <SaveIcon color="#000" />
@@ -186,7 +159,6 @@ export default function CreateGoal() {
         </View>
       </View>
 
-      {/* Bottom Navigation */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -209,7 +181,6 @@ export default function CreateGoal() {
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -257,7 +228,7 @@ const styles = StyleSheet.create({
   repetitionRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "60%", // Adjust as needed
+    width: "60%",
   },
   performanceInput: {
     width: "20%",
@@ -271,11 +242,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     position: "absolute",
-    right: "20%", // Slightly tweak if needed
+    right: "20%",
     top: 0,
     bottom: 0,
     textAlignVertical: "center",
-    // or you can put a small margin to the left
   },
   summaryCard: {
     width: "90%",
@@ -283,7 +253,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginTop: 10,
-    // push it above the navbar
     marginBottom: 80,
   },
   summaryText: {
@@ -313,7 +282,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#000",
   },
-  // Navbar
   navbarRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",

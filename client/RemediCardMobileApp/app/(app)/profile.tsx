@@ -2,12 +2,8 @@ import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
-  TextInput,
-  Button,
   StyleSheet,
-  Alert,
   TouchableOpacity,
-  Pressable,
   Modal,
   Image,
 } from "react-native";
@@ -34,7 +30,7 @@ export default function Profile() {
   const { t, i18n } = useTranslation("profile");
 
   const router = useRouter();
-  const { isLoggedIn, logoutAuth } = useAuth();
+  const { logoutAuth } = useAuth();
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
@@ -192,7 +188,7 @@ export default function Profile() {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/uk_flag.png")} // Path relative to the file
+                  source={require("../../assets/images/uk_flag.png")}
                   style={styles.flag_image}
                 />
               </TouchableOpacity>
@@ -206,7 +202,7 @@ export default function Profile() {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/tr_flag.png")} // Path relative to the file
+                  source={require("../../assets/images/tr_flag.png")}
                   style={styles.flag_image}
                 />
               </TouchableOpacity>
@@ -222,7 +218,6 @@ export default function Profile() {
         </View>
       </Modal>
 
-      {/* Navbar */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -331,7 +326,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "100%",
     marginTop: 30,
-    position: "absolute", // Position the navbar absolutely
+    position: "absolute",
     bottom: 50,
   },
   navbarContainer: {
@@ -340,7 +335,7 @@ const styles = StyleSheet.create({
     width: "75%",
     position: "absolute",
     bottom: 50,
-    backgroundColor: "#53789D", // Match the background color
+    backgroundColor: "#53789D",
     height: 1,
   },
   navbarLine: {
@@ -367,18 +362,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  modalButton: {
-    backgroundColor: "#2916ff",
-    padding: 10,
-    borderRadius: 10,
-    width: "100%",
-    marginVertical: 5,
-    alignItems: "center",
-  },
-  modalButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
   modalBack: {
     marginTop: 10,
   },
@@ -399,9 +382,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e6f0ff",
     borderWidth: 2,
     borderColor: "#000000",
-  },
-  flagIcon: {
-    marginRight: 10,
   },
   flag_image: {
     width: 44,

@@ -7,5 +7,7 @@
     "send_message": "Send your complaints or recommendations to Team Celeste:",
     "subject": "Subject",
     "content": "Content",
-    "submit": "Submit"
+    "submit": "Submit",
+    "error": "Error",
+    "error_message": "An error occurred while sending your feedback. Please try again later."
 }

@@ -412,7 +412,6 @@ export default function Quizzes() {
               style={styles.modalButton}
               onPress={() => {
                 setCreateModalVisible(false);
-                //handleManualCreate();
                 setManualCreateModalVisible(true);
               }}
             >
@@ -623,17 +622,6 @@ const styles = StyleSheet.create({
     marginBottom: 75,
     fontWeight: "bold",
   },
-  separatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginVertical: 20,
-  },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
-  },
   navbarRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -681,25 +669,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     position: "absolute",
   },
-  menuComponent: {
-    width: "75%",
-    height: 20,
-    padding: 10,
-    gap: 10,
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  menuText: {
-    left: "10%",
-    fontSize: 12,
-    lineHeight: 22,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "left",
-    zIndex: 1,
-    top: 5,
-    position: "absolute",
-  },
   iconLayout: {
     height: 24,
     width: 24,
@@ -709,16 +678,6 @@ const styles = StyleSheet.create({
     left: "90%",
     zIndex: 3,
     top: "70%",
-  },
-  menuIcon: {
-    right: "95%",
-    zIndex: 3,
-    top: 5,
-  },
-  selectedOption: {
-    marginTop: 20,
-    fontSize: 16,
-    color: "gray",
   },
   deckInfoText: {
     fontSize: 12,
@@ -741,21 +700,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 15,
     marginVertical: 5,
-  },
-  accessInfoPosition: {
-    top: 35,
-    zIndex: 1,
-    left: 15,
-  },
-  cardsLengthInfoPosition: {
-    top: 55,
-    left: 15,
-    zIndex: 2,
-  },
-  performanceInfoPosition: {
-    top: 75,
-    zIndex: 3,
-    left: 15,
   },
   flatListContainer: {
     width: "75%",

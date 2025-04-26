@@ -12,4 +12,7 @@
     "front_image_selected": "Ön Yüz Görseli Seçildi",
     "back_image_selected": "Arka Yüz Görseli Seçildi",
     "file_transfer": "Bilgi kartları oluşturulurken lütfen bekleyin. Bu işlem, görsellerin boyutuna bağlı olarak birkaç saniye sürebilir.",
+    "flashcard_creation_error": "Bilgi kartı oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.",
+    "flashcard_update_error": "Bilgi kartı güncellenirken bir hata oluştu. Lütfen tekrar deneyin.",
+    "permission_denied": "İzin reddedildi. Lütfen kameraya ve fotoğraf kütüphanesine erişim izni verin."
 }

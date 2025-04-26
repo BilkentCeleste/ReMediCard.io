@@ -3,11 +3,9 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Alert,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { GoBackIcon } from "../../../constants/icons";
@@ -16,7 +14,6 @@ import { useTranslation } from "react-i18next";
 
 export default function ContactUs() {
   const { t } = useTranslation("contact_us");
-
   const router = useRouter();
 
   const [subject, setSubject] = useState("");
@@ -30,18 +27,24 @@ export default function ContactUs() {
       return;
     }
 
-    createFeedback({
-      subject: subject,
-      content: content
-    }).then(res => {
-      Alert.alert(
-        t("success"), t("success_message")
-      );
-      setSubject("")
-      setContent("")
-    })
-    .catch(e => console.log(e))
+    const data = {
+        subject: subject,
+        content: content
+    }
 
+    createFeedback(data)
+        .then(res => {
+          Alert.alert(
+            t("success"), t("success_message")
+          );
+          setSubject("")
+          setContent("")
+        })
+        .catch(e => {
+            Alert.alert(
+                t("error"), t("error_message")
+            );
+        })
   };
 
   return (
@@ -102,17 +105,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#53789D",
   },
-  component: {
-    height: 50,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    width: "75%",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    gap: 30,
-    marginBottom: 20,
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -126,14 +118,6 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     color: "#ffff",
     width: "75%",
-  },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#fff",
   },
   textAreaContainerSmall: {
     width: "75%",
@@ -180,12 +164,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontWeight: "bold",
-  },
-  toggleButton: {
-    marginLeft: 175,
-  },
-  toggleText: {
-    fontSize: 14,
-    color: "#2916FF",
   },
 });

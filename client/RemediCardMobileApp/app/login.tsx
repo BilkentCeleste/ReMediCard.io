@@ -3,14 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
-  Alert,
   TouchableOpacity,
   Pressable,
   Image,
 } from "react-native";
-import { useRouter } from "expo-router";
 import {
   LockIcon,
   AtIcon,
@@ -76,8 +73,6 @@ export default function Login() {
   const handleLoginWithGoogle = () => {
     loginGoogleAuth();
   };
-
-  const uploadRegisterPage = () => {};
 
   return isLoggedIn ? (
     <Redirect href="/(app)/home" />

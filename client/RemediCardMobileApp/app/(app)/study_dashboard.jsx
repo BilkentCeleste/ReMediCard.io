@@ -7,7 +7,7 @@ import {
   SettingsIcon,
   ChevronRightIcon,
   PlusIcon
-} from "../../constants/icons";
+} from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 
 export default function StudyDashboard() {
@@ -18,16 +18,13 @@ export default function StudyDashboard() {
   //TODO fetch decks
 
   const loadCreateGoal = (deck_id) => {
-    //console.log();
     router.push(`/(app)/create_goal?deck_id=${deck_id}`);
   };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
-      {/* Suggestion Box 1 */}
       <TouchableOpacity
         onPress={() => {
           loadCreateGoal(1);
@@ -41,14 +38,12 @@ export default function StudyDashboard() {
           <Text style={styles.suggestionSubtitle}>
             The deck you haven't studied for the longest time is Deck 1. (dummy)
           </Text>
-          {/* Chevron icon on the right */}
           <View style={[styles.chevronRightIcon, styles.iconLayout]}>
             <ChevronRightIcon color="#fff" />
           </View>
         </View>
       </TouchableOpacity>
 
-      {/* Suggestion Box 2 */}
       <TouchableOpacity
         onPress={() => {
           loadCreateGoal(2);
@@ -63,7 +58,6 @@ export default function StudyDashboard() {
             <Text style={styles.suggestionSubtitle}>
               The deck in which you perform the lowest is Deck 2 (dummy)
             </Text>
-            {/* Chevron icon on the right */}
             <View style={[styles.chevronRightIcon, styles.iconLayout]}>
               <ChevronRightIcon color="#fff" />
             </View>
@@ -71,7 +65,6 @@ export default function StudyDashboard() {
         </Link>
       </TouchableOpacity>
 
-      {/* Active Study Goals Box */}
       <TouchableOpacity style={[styles.suggestionBox, styles.whiteBox]}>
         <Link href="/(app)/goal_list" style={styles.suggestionLink}>
           <View>
@@ -81,23 +74,12 @@ export default function StudyDashboard() {
             <Text style={[styles.suggestionSubtitle, styles.blueText]}>
               See your goals (dummy)
             </Text>
-            {/* Chevron icon on the right */}
             <View style={[styles.chevronRightIcon, styles.iconLayout]}>
               <ChevronRightIcon color="#1E40AF" />
             </View>
           </View>
         </Link>
       </TouchableOpacity>
-
-      {/* Create New Study Goal Button */}
-      {/* <TouchableOpacity
-        style={styles.createGoalButton}
-        onPress={() => {
-          router.push("/(app)/create_goal");
-        }}
-      >
-        <Text style={styles.createGoalButtonText}>+ Create New Study Goal</Text>
-      </TouchableOpacity> */}
 
       <TouchableOpacity style={styles.createButton} onPress={() => {
           router.push("/(app)/create_goal");
@@ -106,7 +88,6 @@ export default function StudyDashboard() {
           <Text style={styles.createNewDeck}>{t("create_goal")}</Text>
       </TouchableOpacity>
 
-      {/* Bottom Navigation */}
       <View style={styles.navbarRow}>
         <TouchableOpacity>
           <Link href="/(app)/home">
@@ -130,7 +111,6 @@ export default function StudyDashboard() {
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -150,7 +130,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontWeight: "bold",
   },
-  // Suggestion Boxes
   suggestionBox: {
     width: "75%",
     borderRadius: 20,
@@ -159,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   blueBox: {
-    backgroundColor: "#2916ff", // A bright blue/purple, adjust as needed
+    backgroundColor: "#2916ff",
   },
   whiteBox: {
     backgroundColor: "#fff",
@@ -180,9 +159,8 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   blueText: {
-    color: "#1E40AF", // If text is on a white box
+    color: "#1E40AF",
   },
-  // Chevron Icon layout inside the suggestion boxes
   iconLayout: {
     height: 24,
     width: 24,
@@ -192,26 +170,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: "40%",
   },
-
-  // Create button
-  createGoalButton: {
-    position: "absolute",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: 100,
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#1E40AF",
-  },
-  createGoalButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-
-  // Bottom nav
   navbarRow: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -243,12 +201,12 @@ const styles = StyleSheet.create({
     gap: 30,
     height: 50,
     top:"35%"
-},
-createNewDeck: {
-    fontSize: 17,
-    lineHeight: 22,
-    fontFamily: "Inter-Regular",
-    color: "#fff",
-    textAlign: "center",
-},
+  },
+  createNewDeck: {
+      fontSize: 17,
+      lineHeight: 22,
+      fontFamily: "Inter-Regular",
+      color: "#fff",
+      textAlign: "center",
+  },
 });
