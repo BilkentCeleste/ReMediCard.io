@@ -60,8 +60,8 @@ export default function Login() {
     );
 
     const language = await SecureStore.getItemAsync(
-              LANGUAGE_KEY
-            );
+      LANGUAGE_KEY
+    );
 
     const body = {
       username: username,

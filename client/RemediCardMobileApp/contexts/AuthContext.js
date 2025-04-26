@@ -7,6 +7,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { EXPO_PUSH_TOKEN_KEY, GOOGLE_WEB_CLIENT_ID, LANGUAGE_KEY } from "@/constants/config";
 import { Alert } from "react-native";
+import {useTranslation} from "react-i18next";
 
 const AuthContext = createContext({
   isLoggedIn: false,
@@ -17,6 +18,8 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
+  const { t } = useTranslation("auth_context");
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         removeToken();
+
         loginGoogle(body)
           .then((res) => {
             setIsLoggedIn(true);
@@ -74,18 +78,15 @@ export const AuthProvider = ({ children }) => {
             GoogleSignin.signOut();
           })
           .catch((err) => {
-            console.log(err);
             GoogleSignin.signOut();
           });
       }
     } catch (error) {
-      console.log(error);
-
       if (error.code === "PLAY_SERVICES_NOT_AVAILABLE") {
         Alert.alert(
-          "Play Services Not Available",
-          "Google Play Services must be available on your device to sign in. Please install or update Google Play Services.",
-          [{ text: "OK" }],
+          t("google_play_services_error_title"),
+          t("google_play_services_error_message"),
+          [{ text: t("ok") }],
           { cancelable: false }
         );
       }
@@ -111,7 +112,12 @@ export const AuthProvider = ({ children }) => {
         addToken(res.data.access_token);
       })
       .catch((err) => {
-        console.log(err);
+        Alert.alert(
+            t("login_error_title"),
+            t("login_error_message"),
+            [{ text: t("ok") }],
+            { cancelable: false }
+            );
       });
   };
 
