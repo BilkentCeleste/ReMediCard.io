@@ -9,6 +9,7 @@ interface FlashcardProps {
     width?: number;
     height?: number;
     textSize?: number;
+    longPressHandler?: () => void;
 }
 
 const Flashcard: React.FC<FlashcardProps> = ({
@@ -18,7 +19,8 @@ const Flashcard: React.FC<FlashcardProps> = ({
     backImageURL,
     width = 300, // Default width
     height = 200, // Default height
-    textSize = 20
+    textSize = 20,
+    longPressHandler = () => {console.log("LONG PRESS")}
 }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false); // Animation state
@@ -62,7 +64,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
     };
 
     return (
-        <TouchableWithoutFeedback onPress={flipCard}>
+        <TouchableWithoutFeedback onPress={flipCard} onLongPress={longPressHandler}>
             <View style={[styles.cardContainer, { width, height }]}>
                 {/* Front Face */}
                 <Animated.View

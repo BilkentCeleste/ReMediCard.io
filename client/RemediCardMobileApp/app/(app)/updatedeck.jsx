@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, Alert, Pressable } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
 import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon, PlusIcon } from '@/constants/icons';
 import { getDeckByDeckId, deleteFlashcard, updateDeckName } from '@/apiHelper/backendHelper';
@@ -16,6 +16,9 @@ export default function Updatedeck() {
     const [selectedCard, setSelectedCard] = useState(null);
     const [isEditingName, setIsEditingName] = useState(false);
     const [editedName, setEditedName] = useState("");
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [shownItem, setShownItem] = useState(null);
 
     useEffect(() => {
         if (deckId) {
@@ -161,6 +164,10 @@ export default function Updatedeck() {
                             width={110}
                             height={80}
                             textSize={8}
+                            longPressHandler={() => {
+                                setModalVisible(true);
+                                setShownItem(item);
+                              }}
                         />
                         <TouchableOpacity
                             style={styles.editButton}
@@ -178,6 +185,30 @@ export default function Updatedeck() {
                     </View>
                 )}
             />
+
+            {shownItem && (
+                    <Modal
+                      transparent={true}
+                      visible={modalVisible}
+                      animationType="slide"
+                      onRequestClose={() => setModalVisible(false)}
+                    >
+                      <Pressable
+                        onPress={() => setModalVisible(false)}
+                        style={styles.modalOverlay}
+                      >
+                        <View style={styles.modalContainer}>
+                          <Flashcard
+                            question={shownItem?.frontSide?.text || ""}
+                            answer={shownItem?.backSide?.text || ""}
+                            width={300}
+                            height={500}
+                            textSize={20}
+                          />
+                        </View>
+                      </Pressable>
+                    </Modal>
+                  )}
 
             <Modal
                     animationType="slide"
@@ -374,7 +405,7 @@ const styles = StyleSheet.create({
         paddingVertical: 1,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginBottom: 2,
+        marginVertical: 4
     },
     editButtonText: {
     color: "#fff",
@@ -442,5 +473,18 @@ const styles = StyleSheet.create({
     saveButtonText: {
         color: '#fff',
         fontWeight: 'bold',
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
     },
 });

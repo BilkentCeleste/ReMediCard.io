@@ -1,5 +1,5 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from "react-native";
 import {useEffect, useState} from "react";
 import { getQuizByQuizId } from "@/apiHelper/backendHelper";
 import { CorrectIcon, FalseIcon, QuestionMarkIcon } from "@/constants/icons";
@@ -11,6 +11,7 @@ import {
   SettingsIcon,
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
+import { useFocusEffect } from "expo-router";
 
 export default function QuizResults() {
   const { t } = useTranslation("quiz_results");
@@ -57,6 +58,19 @@ export default function QuizResults() {
           });
       }
     }, [quizId]);
+
+    useFocusEffect(() => {
+                const onBackPress = () => {
+                  router.replace("/(app)/quizzes");
+                  return true;
+                };
+              
+                BackHandler.addEventListener('hardwareBackPress', onBackPress);
+              
+                return () => {
+                  BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+                };
+              });
 
   const [expandedQuestionId, setExpandedQuestionId] = useState<number | null>(null);
 
