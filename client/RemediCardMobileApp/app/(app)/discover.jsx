@@ -338,7 +338,7 @@ export default function Discover() {
               onPress={() => handleItemPress(item)}
             >
               <View>
-                <Text style={styles.deckTitle} numberOfLines={3} ellipsizeMode="tail">{item.name}</Text>
+                <Text style={styles.deckTitle} numberOfLines={2} ellipsizeMode="tail">{item.name}</Text>
                 {item.lastDeckStat && (
                   <Text style={styles.deckInfoText}>
                     {t("create_time")}{" "}
@@ -443,13 +443,19 @@ export default function Discover() {
             </TouchableOpacity>
             <View style={styles.likeContainer}>
               <TouchableOpacity style={styles.modalButton2} onPress={listType === "deck" ? handleLikeDeck : handleLikeQuiz}>
-                <LikeIcon />
-                {selectedItem.isLiked && <Text> Liked </Text>}
+                  <LikeIcon 
+                    fill={selectedItem.isLiked ? "#fff" : "none"} 
+                    strokeWidth={selectedItem.isLiked ? 0.5 : 2} 
+                  />
+                {/* {selectedItem.isLiked && <Text> Liked </Text>} */}
                 <Text style={styles.modalButtonText}>{t("like")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.modalButton2} onPress={listType === "deck"? handleDislikeDeck : handleDislikeQuiz}>
-                <DislikeIcon />
-                {selectedItem.isDisliked && <Text> Disliked </Text>}
+                  <DislikeIcon 
+                    fill={selectedItem.isDisliked ? "#fff" : "none"} 
+                    strokeWidth={selectedItem.isDisliked ? 0.5 : 2} 
+                  />
+                {/* {selectedItem.isDisliked && <Text> Disliked </Text>} */}
                 <Text style={styles.modalButtonText}>{t("dislike")}</Text>
               </TouchableOpacity>
             </View>

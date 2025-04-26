@@ -228,7 +228,7 @@ export function DiscoverIcon() {
       <Path
         d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9s4-3 4-9-4-9-4-9m0 18s-4-3-4-9 4-9 4-9m-9 9a9 9 0 019-9"
         stroke="#000"
-        strokeWidth={0.6}
+        strokeWidth={0.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -843,18 +843,23 @@ export function InfoIcon() {
  )
 }
 
-export function LikeIcon() {
+interface LikeIconProps {
+  fill?: string;
+  strokeWidth?: number;
+}
+
+export function LikeIcon({fill = "none", strokeWidth = 2 }:LikeIconProps) {
   return (
     <Svg
       width={24}
       height={24}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={fill}
     >
       <Path
         d="M8 10v10m0-10H4v10h4m0-10l5.196-6.062a2 2 0 012.003-.638l.048.012a2 2 0 011.179 3.05L14 10h4.56a2 2 0 011.962 2.392l-1.2 6A2 2 0 0117.36 20H8"
         stroke="#fff"
-        strokeWidth={2}
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -862,19 +867,23 @@ export function LikeIcon() {
   )
 }
 
+interface DislikeIconProps {
+  fill?: string;
+  strokeWidth?: number;
+}
 
-export function DislikeIcon() {
+export function DislikeIcon({fill = "none", strokeWidth = 2 }:DislikeIconProps) {
   return (
     <Svg
       width={24}
       height={24}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={fill}
     >
       <Path
         d="M8 14V4m0 10H4V4h4m0 10l5.196 6.061a2 2 0 002.003.64l.048-.013a2 2 0 001.179-3.05L14 14h4.56a2 2 0 001.962-2.392l-1.2-6A2 2 0 0017.36 4H8"
         stroke="#fff"
-        strokeWidth={2}
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
