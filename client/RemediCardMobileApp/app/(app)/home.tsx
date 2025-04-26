@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Dimensions,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -20,6 +21,9 @@ import {
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 import { generalSearch } from "@/apiHelper/backendHelper";
+import ListLoader from "@/components/ListLoader";
+
+const { width } = Dimensions.get("window");
 
 export default function Home() {
   const { t } = useTranslation("home");
@@ -28,13 +32,22 @@ export default function Home() {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [searchResult, setSearchResult] = useState(null);
 
+  const [showLoading, setShowLoading] = useState(false)
+
   useEffect(() => {
     if (debouncedSearchText.trim() !== "") {
+      
+      setShowLoading(true)
       generalSearch(debouncedSearchText)
         .then((res) => {
+          setShowLoading(false)
           setSearchResult(res.data);
         })
-        .catch((e) => console.log(e));
+        .catch((e) =>
+          {
+            setShowLoading(false)
+            console.log(e)
+          });
     } else {
       setSearchResult(null);
     }
@@ -108,6 +121,9 @@ export default function Home() {
 
       {searchText.trim() !== "" ? (
         <>
+
+        {showLoading && <ListLoader count={4} width={width} height={"40%"}/> }
+
           {searchResult && searchResult.quizzes.length > 0 && (
             <View style={styles.resultContainer}>
               <Text style={styles.resultTitle}>{t("quizzes")}</Text>
@@ -158,9 +174,9 @@ export default function Home() {
             </View>
           )}
 
-          {!searchResult ||
+          {!showLoading && (!searchResult ||
             (searchResult.decks.length == 0 &&
-              searchResult.quizzes.length === 0 && (
+              searchResult.quizzes.length === 0) && (
                 <Text style={styles.resultTitle}>{t("no_results_found")}</Text>
               ))}
         </>
@@ -272,6 +288,7 @@ const styles = StyleSheet.create({
     gap: 30,
     marginTop: 40,
     marginBottom: 20,
+    position: "relative"
   },
   searchText: {
     left: "25%",

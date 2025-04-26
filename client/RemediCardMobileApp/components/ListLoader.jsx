@@ -2,8 +2,8 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import ListItemLoader from "./ListItemLoader";
 
-const ListLoader = ({ count = 5, width }) => (
-  <View style={styles.flatListContainer}>
+const ListLoader = ({ count = 5, width, height = "63%" }) => (
+  <View style={[styles.flatListContainer, {height: height}]}>
     {Array.from({ length: count }).map((_, index) => (
       <ListItemLoader key={index} width={width} />
     ))}
