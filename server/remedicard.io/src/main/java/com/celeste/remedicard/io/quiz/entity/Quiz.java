@@ -81,6 +81,12 @@ public class Quiz extends AuditableEntity {
         for (Question question : originalQuestions) {
             this.addQuestion(new Question(question));
         }
+
+        this.isPubliclyVisible = false;
+        this.likerIds = new HashSet<>();
+        this.dislikerIds = new HashSet<>();
+        this.likeCount = 0L;
+        this.dislikeCount = 0L;
     }
 
     public void addQuestion(Question question) {

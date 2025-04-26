@@ -383,27 +383,6 @@ export default function Discover() {
         <TouchableOpacity
           style={[
             styles.createButton,
-            listType === "quiz" && styles.activeButton,
-          ]}
-          onPress={() => {
-            setShowLoading(true)
-            setSearchText("")
-            setListType("quiz")
-          }}
-        >
-          <Text
-            style={[
-              styles.createNewDeck,
-              listType === "quiz" && styles.activeText,
-            ]}
-          >
-            {t("quizzes")}
-          </Text>
-        </TouchableOpacity>
-    
-        <TouchableOpacity
-          style={[
-            styles.createButton,
             listType === "deck" && styles.activeButton,
           ]}
           onPress={() => {
@@ -421,6 +400,27 @@ export default function Discover() {
             ]}
           >
             {t("decks")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.createButton,
+            listType === "quiz" && styles.activeButton,
+          ]}
+          onPress={() => {
+            setShowLoading(true)
+            setSearchText("")
+            setListType("quiz")
+          }}
+        >
+          <Text
+            style={[
+              styles.createNewDeck,
+              listType === "quiz" && styles.activeText,
+            ]}
+          >
+            {t("quizzes")}
           </Text>
         </TouchableOpacity>
       </View>

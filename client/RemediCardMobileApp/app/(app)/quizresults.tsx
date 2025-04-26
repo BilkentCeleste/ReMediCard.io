@@ -319,11 +319,10 @@ const styles = StyleSheet.create({
     width: "75%",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 10,
   },
   retryButton: {
     backgroundColor: "#2916ff",
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 20,
   },

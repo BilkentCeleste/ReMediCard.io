@@ -94,6 +94,12 @@ public class Deck extends AuditableEntity {
         for (Flashcard flashcard : originalFlashcards) {
             this.addFlashcard(new Flashcard(flashcard));
         }
+
+        this.isPubliclyVisible = false;
+        this.likerIds = new HashSet<>();
+        this.dislikerIds = new HashSet<>();
+        this.likeCount = 0L;
+        this.dislikeCount = 0L;
     }
 
     public void addFlashcard(Flashcard flashcard) {
