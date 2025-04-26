@@ -1,0 +1,7 @@
+{
+  "login_error_title": "Hatalı kimlik bilgileri",
+  "login_error_message": "Lütfen e-posta adresinizi ve şifrenizi kontrol edin",
+  "ok": "Tamam",
+  "google_play_services_error_title": "Google Play Hizmetleri Kullanılamıyor",
+  "google_play_services_error_message": "Google Play Hizmetleri, oturum açmak için cihazınızda mevcut olmalıdır. Lütfen Google Play Hizmetleri'ni yükleyin veya güncelleyin."
+}
