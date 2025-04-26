@@ -155,7 +155,7 @@ export function MailIcon({ color = "#000" }: MailIcoProps) {
         <Path
           d="M5.833 24.792H44.45M17.5 48.125h3.762m10.821 0h10.209M23.275 59.792h27.942c10.383 0 12.95-2.567 12.95-12.805V20.096m-5.863-9.159c-1.808-.524-4.142-.729-7.087-.729H18.783c-10.354 0-12.95 2.567-12.95 12.804v23.946c0 6.825 1.138 10.238 4.988 11.755m53.346-52.88L5.833 64.167"
           stroke="#292D32"
-          strokeWidth={1.5}
+          strokeWidth={1.6}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
@@ -210,6 +210,25 @@ export function CreateIcon() {
         d="M42.292 51.042h17.5m-8.75 8.75v-17.5M64.167 24.12V12.338c0-4.638-1.867-6.505-6.505-6.505H45.88c-4.637 0-6.504 1.867-6.504 6.505V24.12c0 4.637 1.867 6.504 6.504 6.504h11.784c4.637 0 6.504-1.867 6.504-6.504zm-33.542.729V11.608c0-4.112-1.867-5.775-6.504-5.775H12.338c-4.638 0-6.505 1.663-6.505 5.775v13.213c0 4.141 1.867 5.775 6.505 5.775H24.12c4.637.029 6.504-1.634 6.504-5.746zm0 32.813V45.879c0-4.637-1.867-6.504-6.504-6.504H12.338c-4.638 0-6.505 1.867-6.505 6.504v11.784c0 4.637 1.867 6.504 6.505 6.504H24.12c4.637 0 6.504-1.867 6.504-6.505z"
         stroke="#292D32"
         strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+export function DiscoverIcon() {
+  return (
+    <Svg
+      width={80}
+      height={80}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9s4-3 4-9-4-9-4-9m0 18s-4-3-4-9 4-9 4-9m-9 9a9 9 0 019-9"
+        stroke="#000"
+        strokeWidth={0.6}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -823,4 +842,44 @@ export function InfoIcon() {
  </Svg>
  )
 }
+
+export function LikeIcon() {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M8 10v10m0-10H4v10h4m0-10l5.196-6.062a2 2 0 012.003-.638l.048.012a2 2 0 011.179 3.05L14 10h4.56a2 2 0 011.962 2.392l-1.2 6A2 2 0 0117.36 20H8"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+
+export function DislikeIcon() {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M8 14V4m0 10H4V4h4m0 10l5.196 6.061a2 2 0 002.003.64l.048-.013a2 2 0 001.179-3.05L14 14h4.56a2 2 0 001.962-2.392l-1.2-6A2 2 0 0017.36 4H8"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
 

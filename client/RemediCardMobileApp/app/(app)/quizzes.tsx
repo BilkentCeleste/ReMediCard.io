@@ -41,6 +41,7 @@ export default function Quizzes() {
   const { t } = useTranslation("quizzes");
   const { quiz_selected } = useLocalSearchParams();
   const router = useRouter();
+  const isFirstRender = useRef(true);
 
   const [selectedSort, setSelectedSort] = useState<string>("access");
   const [sortOrder, setSortOrder] = useState<string>("desc");
@@ -59,8 +60,6 @@ export default function Quizzes() {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
-
-  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getQuizzesByCurrentUser()
@@ -118,13 +117,14 @@ export default function Quizzes() {
   };
 
   const handleChangeVisibility = () => {
-      
       changeQuizVisibility(selectedQuiz.id)
-      .then(res => {
-        selectedQuiz.isPubliclyVisible = !selectedQuiz.isPubliclyVisible
-        setVisibilityPopUpVisible(false)
-      })
-      .catch
+        .then(res => {
+          selectedQuiz.isPubliclyVisible = !selectedQuiz.isPubliclyVisible
+          setVisibilityPopUpVisible(false)
+        })
+      .catch(error => {
+            Alert.alert(t("error"), t("change_visibility_failed"));
+        });
     }
 
   const handleQuizPress = (quiz: any) => {

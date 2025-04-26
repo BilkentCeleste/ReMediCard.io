@@ -41,6 +41,7 @@ export default function Decks() {
   const { t } = useTranslation("decks");
   const { deck_selected } = useLocalSearchParams();
   const router = useRouter();
+  const isFirstRender = useRef(true);
 
   const [searchParamUsed, setSearchParamUsed] = useState(false);
   const [selectedSort, setSelectedSort] = useState<string>("access");
@@ -59,8 +60,6 @@ export default function Decks() {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [isRotated, setIsRotated] = useState(false);
   const rotation = useState(new Animated.Value(0))[0];
-
-  const isFirstRender = useRef(true);
 
   useEffect(() => {
     getDecksByCurrentUser()
@@ -116,13 +115,14 @@ export default function Decks() {
   };
 
   const handleChangeVisibility = () => {
-    
     changeDeckVisibility(selectedDeck.id)
-    .then(res => {
-      selectedDeck.isPubliclyVisible = !selectedDeck.isPubliclyVisible
-      setVisibilityPopUpVisible(false)
-    })
-    .catch
+      .then(res => {
+        selectedDeck.isPubliclyVisible = !selectedDeck.isPubliclyVisible
+        setVisibilityPopUpVisible(false)
+      })
+    .catch(err => {
+      Alert.alert(t("error"), t("change_visibility_failed"));
+    });
   }
 
   const toggleSortOrder = () => {

@@ -21,6 +21,7 @@ import {
   HomeIcon,
   ProfileIcon,
   SettingsIcon,
+  DiscoverIcon
 } from "../../constants/icons";
 import { useTranslation } from "react-i18next";
 import { generalSearch } from "@/apiHelper/backendHelper";
@@ -218,7 +219,7 @@ export default function Home() {
                 style={styles.mainComponent}
                 onPress={uploadDiscoverPage}
               >
-                <CreateIcon></CreateIcon>
+                <DiscoverIcon></DiscoverIcon>
                 <Text style={[styles.mainComponentText]}>{t("discover")}</Text>
               </TouchableOpacity>
             </View>
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   mainComponentText: {
     position: "absolute", // Positions the text at the bottom
     bottom: 5, // Adjusts the spacing from the bottom edge
-    fontSize: 16, // Adjust font size to fit nicely
+    fontSize: 15, // Adjust font size to fit nicely
     fontFamily: "Inter-Regular",
     color: "#000",
     textAlign: "center",

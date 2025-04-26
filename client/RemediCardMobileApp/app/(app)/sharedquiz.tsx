@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert} from 'react-native';
 import {useRouter, useLocalSearchParams, Link} from 'expo-router';
 import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
-import { getQuizByShareToken, addUserQuiz } from '@/apiHelper/backendHelper';
+import {getQuizByShareToken, addUserQuiz, getQuizByQuizId} from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator } from 'react-native';
 import NotFound from "@/components/NotFound";
+import Loading from "@/components/Loading";
 
 interface Question {
     id: number;
@@ -22,23 +22,43 @@ interface Quiz {
 export default function SharedQuiz() {
     const { t } = useTranslation('shared_quiz');
     const router = useRouter();
-    const { shareToken } = useLocalSearchParams();
+    const { shareToken, id } = useLocalSearchParams();
 
     const [quiz, setQuiz] = useState<Quiz | null>(null);
     const [notFound, setNotFound] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (shareToken) {
+            setLoading(true);
             getQuizByShareToken(shareToken)
                 .then((res) => {
                     setQuiz(res?.data);
                     setNotFound(false);
+                    setLoading(false);
                 })
                 .catch((error: Error) => {
                     setNotFound(true);
+                    setLoading(false);
                 });
         }
     }, [shareToken]);
+
+    useEffect(() => {
+        if (id) {
+            setLoading(true);
+            getQuizByQuizId(id)
+                .then((res) => {
+                    setQuiz(res?.data);
+                    setNotFound(false);
+                    setLoading(false);
+                })
+                .catch((error: Error) => {
+                    setNotFound(true);
+                    setLoading(false);
+                });
+        }
+    }, [id]);
 
     const handleAddToMyQuizzes = () => {
         if (quiz?.id) {
@@ -56,34 +76,17 @@ export default function SharedQuiz() {
     if (notFound) {
         return (
             <NotFound
+                title={t("not_found_title")}
                 message={t("not_found")}
             />
         );
     }
 
-    if (!quiz) {
+    if (loading) {
         return (
-            <View style={styles.container}>
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size={"large"} style={styles.indicator}/>
-                    <Text style={styles.loadingText}>{t('loading_quiz')}</Text>
-                </View>
-
-                <View style={styles.navbarRow}>
-                    <TouchableOpacity>
-                        <Link href="/(app)/home"><HomeIcon /></Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Link href="/(app)/profile"><ProfileIcon /></Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <SettingsIcon />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.navbarContainer}>
-                    <View style={styles.navbarLine} />
-                </View>
-        </View>
+            <Loading
+                message={t('loading_quiz')}
+            />
         );
     }
 

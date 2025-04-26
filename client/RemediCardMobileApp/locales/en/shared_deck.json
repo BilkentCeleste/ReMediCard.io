@@ -2,5 +2,6 @@
   "loading_deck": "Cards in the deck are loading...",
   "add_to_my_decks": "Add to my decks",
   "add_deck_failed": "Failed to add deck",
-  "not_found": "Shared deck has been deleted or not available"
+  "not_found": "Shared deck has been deleted or not available",
+  "not_found_title": "Oops! Something went wrong"
 }
