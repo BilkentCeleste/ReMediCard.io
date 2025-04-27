@@ -31,6 +31,7 @@ import Flashcard from "../../components/FlashCard";
 import { useTranslation } from "react-i18next";
 import NotFound from "@/components/NotFound";
 import Loading from "@/components/Loading";
+import NavBar from "@/components/NavBar";
 
 export default function SharedDeck() {
   const { t } = useTranslation("shared_deck");
@@ -190,25 +191,7 @@ export default function SharedDeck() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -243,14 +226,6 @@ const styles = StyleSheet.create({
         padding: 15,
         marginVertical: 5,
     },
-    navbarRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        width: '100%',
-        position: 'absolute',
-        bottom: 50,
-        backgroundColor: '#53789D',
-    },
     flatListContainer: {
         width: '75%',
         height: '80%',
@@ -261,20 +236,6 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         paddingBottom: 20,
         justifyContent: 'space-evenly',
-    },
-    navbarContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "75%",
-        position: "absolute",
-        bottom: 50,
-        backgroundColor: "#53789D",
-        height: 1,
-    },
-    navbarLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: "#fff",
     },
     buttonText: {
         fontSize: 14,

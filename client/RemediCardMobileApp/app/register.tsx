@@ -3,20 +3,17 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
-  Alert,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
-import { Redirect, useRouter } from "expo-router";
+import { Redirect } from "expo-router";
 import {
   LockIcon,
   MailIcon,
   AtIcon,
   EyeOpenIcon,
   EyeClosedIcon,
-} from "../constants/icons";
+} from "@/constants/icons";
 import { Link } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -25,6 +22,7 @@ import * as SecureStore from "expo-secure-store";
 
 export default function Register() {
   const { t } = useTranslation("register");
+  const { isLoggedIn, registerAuth } = useAuth();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -32,8 +30,6 @@ export default function Register() {
   const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-
-  const { isLoggedIn, registerAuth } = useAuth();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -49,8 +45,8 @@ export default function Register() {
     );
 
     const language = await SecureStore.getItemAsync(
-                  LANGUAGE_KEY
-                );
+      LANGUAGE_KEY
+    );
 
     const body = {
       username: username,
@@ -64,93 +60,92 @@ export default function Register() {
   };
 
   const uploadRegisterPage = () => {};
+    return isLoggedIn ? (
+      <Redirect href="/(app)/home" />
+    ) : (
+      <View style={styles.container}>
+        <Text style={styles.title}>{t("title")}</Text>
 
-  return isLoggedIn ? (
-    <Redirect href="/(app)/home" />
-  ) : (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t("title")}</Text>
+        <View style={styles.component}>
+          <AtIcon />
+          <TextInput
+            style={[styles.usernametext]}
+            placeholder={t("username")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            value={username}
+            onChangeText={setUsername}
+          ></TextInput>
+        </View>
 
-      <View style={styles.component}>
-        <AtIcon />
-        <TextInput
-          style={[styles.usernametext]}
-          placeholder={t("username")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          value={username}
-          onChangeText={setUsername}
-        ></TextInput>
-      </View>
+        <View style={styles.component}>
+          <MailIcon />
+          <TextInput
+            style={[styles.usernametext]}
+            placeholder={t("email")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            value={email}
+            onChangeText={setMail}
+          ></TextInput>
+        </View>
 
-      <View style={styles.component}>
-        <MailIcon />
-        <TextInput
-          style={[styles.usernametext]}
-          placeholder={t("email")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          value={email}
-          onChangeText={setMail}
-        ></TextInput>
-      </View>
+        <View style={styles.component}>
+          <LockIcon />
+          <TextInput
+            style={styles.passwordtext}
+            placeholder={t("password")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+          ></TextInput>
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={togglePasswordVisibility}
+          >
+            <Text style={styles.toggleText}>
+              {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.component}>
-        <LockIcon />
-        <TextInput
-          style={styles.passwordtext}
-          placeholder={t("password")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          secureTextEntry={!passwordVisible}
-          value={password}
-          onChangeText={setPassword}
-        ></TextInput>
-        <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
-        >
-          <Text style={styles.toggleText}>
-            {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
-          </Text>
+        <View style={styles.component}>
+          <LockIcon></LockIcon>
+          <TextInput
+            style={styles.passwordtext}
+            placeholder={t("confirm_password")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            secureTextEntry={!confirmPasswordVisible}
+            value={passwordCheck}
+            onChangeText={setPasswordCheck}
+          ></TextInput>
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={toggleConfirmPasswordVisibility}
+          >
+            <Text style={styles.toggleText}>
+              {confirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.registercomponent} onPress={handleSignUp}>
+          <Text style={styles.registertext}>{t("sign_up")}</Text>
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.component}>
-        <LockIcon></LockIcon>
-        <TextInput
-          style={styles.passwordtext}
-          placeholder={t("confirm_password")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          secureTextEntry={!confirmPasswordVisible}
-          value={passwordCheck}
-          onChangeText={setPasswordCheck}
-        ></TextInput>
-        <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={toggleConfirmPasswordVisibility}
-        >
-          <Text style={styles.toggleText}>
-            {confirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity style={styles.registercomponent} onPress={handleSignUp}>
-        <Text style={styles.registertext}>{t("sign_up")}</Text>
-      </TouchableOpacity>
-
-      <View style={styles.bottomContainer}>
-        <View style={styles.separatorContainer}>
-          <View style={styles.separatorLine} />
-          <Text style={styles.seperatortext}>
-            {t("already_have_an_account")}
-            <Link href="/login" style={styles.link}>
-              <Text style={styles.link}> {t("log_in")}</Text>
-            </Link>
-          </Text>
-          <View style={styles.separatorLine} />
+        <View style={styles.bottomContainer}>
+          <View style={styles.separatorContainer}>
+            <View style={styles.separatorLine} />
+            <Text style={styles.seperatortext}>
+              {t("already_have_an_account")}
+              <Link href="/login" style={styles.link}>
+                <Text style={styles.link}> {t("log_in")}</Text>
+              </Link>
+            </Text>
+            <View style={styles.separatorLine} />
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -176,14 +171,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 75,
     color: "#ffff",
-  },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#fff",
   },
   usernametext: {
     top: 15,

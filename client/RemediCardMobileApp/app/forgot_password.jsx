@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, createRef } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useNavigation } from "expo-router";
 import { AtIcon, LockIcon } from "@/constants/icons";
 import {
   sendForgotPasswordCode,
@@ -20,16 +19,16 @@ import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
   const { t } = useTranslation("forgot_password");
+  const { addToken, setIsLoggedIn } = useAuth();
+  const router = useRouter();
 
   const [stage, setStage] = useState(1);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigation = useNavigation();
-  const { addToken, setIsLoggedIn } = useAuth();
 
-  const router = useRouter();
+  const inputRefs = useRef(code?.map(() => createRef()));
 
   const clearState = () => {
     setStage(1);
@@ -39,25 +38,22 @@ export default function ForgotPassword() {
     setConfirmPassword("");
   };
 
-  React.useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
-  const inputRefs = useRef(code.map(() => React.createRef()));
-
   const handleEmailSubmit = () => {
     if (!email.includes("@")) {
       Alert.alert(t("invalid_email"), t("invalid_email_message"));
       return;
     }
 
-    sendForgotPasswordCode({
+    const data = {
       email: email,
-    })
+    }
+
+    sendForgotPasswordCode(data)
       .then((res) => {
         setStage(2);
       })
       .catch((e) => {
-        console.log(e.status);
+        Alert.alert(t("failed"), t("send_code_failed"));
       });
   };
 
@@ -67,16 +63,17 @@ export default function ForgotPassword() {
       return;
     }
 
-    verifyResetPasswordcode({
+    const data = {
       email: email,
       code: code.join(""),
-    })
+    }
+
+    verifyResetPasswordcode(data)
       .then((res) => {
         addToken(res.data.access_token);
         setStage(3);
       })
       .catch((e) => {
-        console.log(e);
         Alert.alert(t("failed"), t("code_is_invalid"));
       });
   };
@@ -87,15 +84,17 @@ export default function ForgotPassword() {
       return;
     }
     if (newPassword !== confirmPassword) {
-      Alert.alert(t("missmatch_password"), t("missmatch_password_message"));
+      Alert.alert(t("mismatch_password"), t("mismatch_password_message"));
       return;
     }
 
-    resetPassword({
+    const data = {
       email: email,
       code: code.join(""),
       password: newPassword,
-    })
+    }
+
+    resetPassword(data)
       .then((res) => {
         setIsLoggedIn(true);
         Alert.alert(t("success"), t("password_reset_success_message"), [
@@ -109,15 +108,11 @@ export default function ForgotPassword() {
         ]);
       })
       .catch((e) => {
-        console.log(e.status);
-        Alert.alert(
-          t("failed"), t("password_should_be_different_from_old_passwords_message")
-        );
+        Alert.alert(t("failed"), t("password_should_be_different_from_old_passwords_message"));
       });
   };
 
   const handleAuthInputChange = (text, index) => {
-
     if (text.length > 1) return;
     const newCode = [...code];
     newCode[index] = text;
@@ -154,7 +149,7 @@ export default function ForgotPassword() {
             {t("enter_verification_code")}
           </Text>
           <View style={styles.authCodeContainer}>
-            {code.map((digit, index) => (
+            {code?.map((digit, index) => (
               <TextInput
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}

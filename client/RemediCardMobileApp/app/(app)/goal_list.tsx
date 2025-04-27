@@ -4,6 +4,7 @@ import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {ChevronRightIcon, HomeIcon, PlusIcon, ProfileIcon, SearchIcon, SettingsIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {useTranslation} from "react-i18next";
+import NavBar from "@/components/NavBar";
 
 interface Goal {
   title: string;
@@ -201,25 +202,7 @@ export default function GoalList() {
         </View>
       </Modal>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -315,29 +298,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
     width: "100%",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginTop: 30,
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   createButton: {
     borderRadius: 20,

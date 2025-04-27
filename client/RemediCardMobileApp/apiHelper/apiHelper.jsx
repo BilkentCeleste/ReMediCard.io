@@ -30,18 +30,18 @@ const _get = async (url, responseType) => {
     })
 }
 
-const _post = async (url, data, contentType) => {
+const _post = async (url, data, contentType, onUploadProgress) => {
     let headers = await getCommonHeaders();
     if (contentType) {
         headers["Content-Type"] = contentType;
     }
     return await axios.post(url,
         data,
-        {headers}
+        {headers, onUploadProgress}
     )
 }
 
-const _put = async (url, data, contentType) => {
+const _put = async (url, data, contentType, onUploadProgress) => {
     let headers = await getCommonHeaders();
 
     if (contentType) {
@@ -49,7 +49,7 @@ const _put = async (url, data, contentType) => {
     }
     return await axios.put(url, 
         data,
-        {headers}
+        {headers, onUploadProgress}
     )
 }
 
@@ -79,14 +79,14 @@ const getFetcher = async (url, responseType = "json", isRaw = true) => {
   return isRaw ? res : res.json();
 };
 
-const postFetcher = async (url, data={}, contentType="application/json", isRaw=true) => {
-    const res = await _post(url, data, contentType)
+const postFetcher = async (url, data={}, contentType="application/json", onUploadProgress, isRaw=true) => {
+    const res = await _post(url, data, contentType, onUploadProgress)
     await _handleError(res)
     return isRaw ? res : res.json()
 }
 
-const putFetcher = async (url, data, contentType="application/json", isRaw=true) => {
-    const res = await _put(url, data, contentType)
+const putFetcher = async (url, data, contentType="application/json", onUploadProgress, isRaw=true) => {
+    const res = await _put(url, data, contentType, onUploadProgress)
     await _handleError(res)
     return isRaw ? res : res.json()
 }

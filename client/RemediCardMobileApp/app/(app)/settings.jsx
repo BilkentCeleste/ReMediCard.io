@@ -9,12 +9,7 @@ import {
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
-  AtIcon,
-  MailIcon,
   ChevronRightIcon,
-  EditProfileIcon,
-  SubscriptionIcon,
-  ContactIcon,
   ProfileIcon,
   SettingsIcon,
   LanguageIcon,
@@ -25,15 +20,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { getUserProfile } from "@/apiHelper/backendHelper";
 import { useFocusEffect } from "expo-router";
-import NavBar from "@/components/NavBar"
+import  NavBar from "@/components/NavBar"
 
-export default function Profile() {
+export default function Settings() {
   const { t, i18n } = useTranslation("profile");
+
   const router = useRouter();
   const { logoutAuth } = useAuth();
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
+
   const [userProfile, setUserProfile] = useState({
     username: "-----",
     email: "-------",
@@ -47,7 +44,7 @@ export default function Profile() {
     }, [])
   );
 
-  const handleLanguageSelection = (language: any) => {
+  const handleLanguageSelection = (language) => {
     if (selectedLanguage === language) {
       return;
     }
@@ -77,24 +74,12 @@ export default function Profile() {
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
-      <View style={styles.infoCard}>
-        <View style={styles.infoRow}>
-          <AtIcon color="white" style={[styles.infoIcon]} />
-          <Text style={styles.infoText}>{userProfile.username}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <MailIcon color="white" style={[styles.infoIcon]} />
-          <Text style={styles.infoText}>{userProfile.email}</Text>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.menuComponent} onPress={loadEditProfile}>
+      <TouchableOpacity style={styles.menuComponent} onPress={loadLanguage}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <EditProfileIcon></EditProfileIcon>
+          <LanguageIcon />
         </View>
 
-        <Text style={styles.menuText}>{t("edit_profile")}</Text>
+        <Text style={styles.menuText}>{t("language")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -105,28 +90,12 @@ export default function Profile() {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.menuComponent}>
+      <TouchableOpacity style={styles.menuComponent} onPress={logoutHandler}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <SubscriptionIcon />
+          <LogoutIcon />
         </View>
 
-        <Text style={styles.menuText}>{t("subscription")}</Text>
-
-        <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-          <ChevronRightIcon></ChevronRightIcon>
-        </View>
-
-        <View style={styles.separatorContainer}>
-          <View style={styles.separatorLine} />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.menuComponent} onPress={loadContactUs}>
-        <View style={[styles.menuIcon, styles.iconLayout]}>
-          <ContactIcon />
-        </View>
-
-        <Text style={styles.menuText}>{t("contact_us")}</Text>
+        <Text style={styles.menuText}>{t("log_out")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -136,9 +105,59 @@ export default function Profile() {
           <View style={styles.separatorLine} />
         </View>
       </TouchableOpacity>
+
+      <Modal
+        transparent={true}
+        visible={showLanguage}
+        animationType="slide"
+        onRequestClose={() => setShowLanguage(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{t("language")}</Text>
+
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity
+                style={[
+                  styles.languageOption,
+                  selectedLanguage === "en" && styles.selectedOption,
+                ]}
+                onPress={() => {
+                  handleLanguageSelection("en");
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/uk_flag.png")}
+                  style={styles.flag_image}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.languageOption,
+                  selectedLanguage === "tr" && styles.selectedOption,
+                ]}
+                onPress={() => {
+                  handleLanguageSelection("tr");
+                }}
+              >
+                <Image
+                  source={require("../../assets/images/tr_flag.png")}
+                  style={styles.flag_image}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={styles.modalBack}
+              onPress={() => setShowLanguage(false)}
+            >
+              <Text style={styles.modalBackText}>{t("back")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <NavBar/>
-
     </View>
   );
 }
@@ -169,19 +188,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginBottom: 50,
   },
-  infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  infoIcon: {
-    marginRight: 10,
-  },
   infoText: {
-    fontSize: 20,
+    flex: 1,
+    top: 5,
+    fontSize: 25,
+    lineHeight: 25,
     fontFamily: "InriaSans-Regular",
     color: "#fff",
-    marginLeft: 5,
+    textAlign: "left",
   },
   menuComponent: {
     width: "75%",
@@ -227,20 +241,6 @@ const styles = StyleSheet.create({
     right: "95%",
     zIndex: 3,
     top: 5,
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   modalOverlay: {
     flex: 1,

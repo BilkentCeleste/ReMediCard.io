@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, createRef } from "react";
 import {
   View,
   Text,
@@ -15,10 +15,11 @@ export default function ForgotPassword() {
   const router = useRouter();
 
   const [authId, setAuthId] = useState(["", "", "", "", "", ""]);
-  const inputRefs = useRef(authId.map(() => React.createRef()));
+
+  const inputRefs = useRef(authId?.map(() => createRef()));
 
   const handleDelete = () => {
-    console.log("Deleting account with authId:", authId.join(""));
+    console.log("Deleting account with authId:", authId?.join(""));
   };
 
   const handleAuthInputChange = (text, index) => {

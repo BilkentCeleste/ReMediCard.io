@@ -25,6 +25,7 @@ import {
 import { getQuizByQuizId, removeQuestion, updateQuizName } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import { useFocusEffect } from "@react-navigation/native";
+import NavBar from "@/components/NavBar"
 
 export default function editQuiz() {
   const { t } = useTranslation("edit_quiz");
@@ -246,25 +247,7 @@ export default function editQuiz() {
           <Text style={styles.createButtonText}>{t("create_question")}</Text>
         </TouchableOpacity>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </TouchableOpacity>
   );
 }
@@ -275,14 +258,6 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#53789D",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    position: "absolute",
-    bottom: 50,
     backgroundColor: "#53789D",
   },
   flatListContainer: {
@@ -296,20 +271,6 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     paddingBottom: 20,
     justifyContent: "space-evenly",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   createButton: {
     borderRadius: 20,

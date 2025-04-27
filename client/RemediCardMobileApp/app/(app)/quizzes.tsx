@@ -34,6 +34,7 @@ import {
 import { useTranslation } from "react-i18next";
 import ListLoader from "../../components/ListLoader";
 import { quizzesSearch } from "@/apiHelper/backendHelper";
+import NavBar from "@/components/NavBar";
 
 const { width } = Dimensions.get("window");
 
@@ -579,25 +580,7 @@ export default function Quizzes() {
         </View>
       </Modal>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -621,29 +604,6 @@ const styles = StyleSheet.create({
     height: 27,
     marginBottom: 75,
     fontWeight: "bold",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginTop: 30,
-    position: "absolute",
-    bottom: "4%",
-    backgroundColor: "#53789D",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: "4%",
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   searchComponent: {
     height: 40,

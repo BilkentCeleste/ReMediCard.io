@@ -5,6 +5,7 @@ import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon, PlusIcon } from '@/con
 import { getDeckByDeckId, deleteFlashcard, updateDeckName } from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
+import NavBar from "@/components/NavBar"
 
 export default function Updatedeck() {
     const { t } = useTranslation('update_deck');
@@ -162,6 +163,8 @@ export default function Updatedeck() {
                             width={110}
                             height={80}
                             textSize={8}
+                            frontImageURL={item.frontSide.imageURL}
+                            backImageURL={item.backSide.imageURL}
                             longPressHandler={() => {
                                 setModalVisible(true);
                                 setShownItem(item);
@@ -201,6 +204,8 @@ export default function Updatedeck() {
                             width={300}
                             height={500}
                             textSize={20}
+                            frontImageURL={shownItem?.frontSide?.imageURL}
+                            backImageURL={shownItem?.backSide?.imageURL}
                           />
                         </View>
                       </Pressable>
@@ -243,21 +248,7 @@ export default function Updatedeck() {
                 <Text style={styles.buttonText}>{t("create_flashcard")}</Text>
             </TouchableOpacity>
 
-            <View style={styles.navbarRow}>
-                <TouchableOpacity>
-                    <Link href="/(app)/home"><HomeIcon /></Link>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Link href="/(app)/profile"><ProfileIcon /></Link>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <SettingsIcon />
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.navbarContainer}>
-                <View style={styles.navbarLine} />
-            </View>
+            <NavBar/>
         </TouchableOpacity>
     );
 }
@@ -280,14 +271,6 @@ const styles = StyleSheet.create({
         padding: 15,
         marginVertical: 5,
     },
-    navbarRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        width: '100%',
-        position: 'absolute',
-        bottom: 50,
-        backgroundColor: '#53789D',
-    },
     flatListContainer: {
         width: '75%',
         height: '50%',
@@ -299,20 +282,6 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         justifyContent: 'space-evenly',
 
-    },
-    navbarContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "75%",
-        position: "absolute",
-        bottom: 50,
-        backgroundColor: "#53789D",
-        height: 1,
-    },
-    navbarLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: "#fff",
     },
     createParent: {
         borderRadius: 20,
