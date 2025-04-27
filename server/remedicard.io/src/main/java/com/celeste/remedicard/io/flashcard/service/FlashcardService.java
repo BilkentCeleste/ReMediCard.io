@@ -38,10 +38,10 @@ public class FlashcardService {
         flashcardRepository.save(flashcard);
 
         if(frontImage != null){
-            sideService.uploadImage(flashcard.getFrontSide(), frontImage);
+            sideService.uploadImage(flashcard.getFrontSide(), frontImage.getInputStream(), frontImage.getSize(), frontImage.getOriginalFilename());
         }
         if(backImage != null){
-            sideService.uploadImage(flashcard.getBackSide(), backImage);
+            sideService.uploadImage(flashcard.getBackSide(), backImage.getInputStream(), backImage.getSize(), backImage.getOriginalFilename());
         }
 
         spacedRepetitionService.create(deck.getUser(), flashcard);
@@ -90,10 +90,12 @@ public class FlashcardService {
         flashcardToUpdate.getFrontSide().setUrlSet(dto.getFrontSide().getUrlSet());
         flashcardToUpdate.getBackSide().setUrlSet(dto.getBackSide().getUrlSet());
         if (dto.getFrontSide().getImage() != null) {
-            sideService.uploadImage(flashcardToUpdate.getFrontSide(), dto.getFrontSide().getImage());
+            MultipartFile frontImage = dto.getFrontSide().getImage();
+            sideService.uploadImage(flashcardToUpdate.getFrontSide(), frontImage.getInputStream(), frontImage.getSize(), frontImage.getOriginalFilename());
         }
         if (dto.getBackSide().getImage() != null) {
-            sideService.uploadImage(flashcardToUpdate.getBackSide(), dto.getBackSide().getImage());
+            MultipartFile backImage = dto.getBackSide().getImage();
+            sideService.uploadImage(flashcardToUpdate.getBackSide(), backImage.getInputStream(), backImage.getSize(), backImage.getOriginalFilename());
         }
 
         flashcardRepository.save(flashcardToUpdate);

@@ -11,11 +11,13 @@ import com.celeste.remedicard.io.autogeneration.entity.MediaProcessingRecord;
 import com.celeste.remedicard.io.autogeneration.repository.MediaProcessingRecordRepository;
 import com.celeste.remedicard.io.cloud.service.S3Service;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,12 +30,11 @@ public class MediaProcessingService {
     private final S3Service s3Service;
     private final MediaProcessingRecordRepository mediaProcessingRecordRepository;
 
+    @Async
     public void enqueueAutoGenerationTask
-            (MultipartFile[] files, DataType dataType, Language language, TargetDataType targetDataType) throws IOException {
+            (List<InputStream> files, List<String> fileNames, List<Long> fileSizes, DataType dataType, Language language, TargetDataType targetDataType) throws IOException {
 
-        List<String> addresses = s3Service.uploadFiles(files);
-
-        List<String> fileNames = Arrays.stream(files).map(MultipartFile::getOriginalFilename).toList();
+        List<String> addresses = s3Service.uploadFiles(files, fileNames, fileSizes);
 
         MediaProcessingRecord mediaProcessingRecord = MediaProcessingRecord.builder()
                 .addresses(addresses)
