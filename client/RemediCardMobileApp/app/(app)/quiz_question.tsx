@@ -41,6 +41,7 @@ export default function QuizQuestion(props: any) {
     if (quizId) {
       getQuizByQuizId(quizId)
         .then((res) => {
+          console.log(res.data);
           setQuizData(res?.data);
           if (res?.data?.questions?.length === 0) {
             Alert.alert(
