@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { login, loginGoogle, register, getUserProfile } from "@/apiHelper/backendHelper";
+import { login, loginGoogle, register, getUserProfile, updateUserProfile } from "@/apiHelper/backendHelper";
 import * as SecureStore from "expo-secure-store";
 import {
   GoogleSignin,
@@ -14,7 +14,8 @@ const AuthContext = createContext({
   loginAuth: (body) => {},
   registerAuth: (body) => {},
   logoutAuth: () => {},
-  loginGoogleAuth: (body) => {}
+  loginGoogleAuth: (body) => {},
+  updateUserProfileAuth: (body) => {}
 });
 
 export const AuthProvider = ({ children }) => {
@@ -147,6 +148,21 @@ export const AuthProvider = ({ children }) => {
     await removeToken();
   };
 
+  const updateUserProfileAuth = async (data) => {
+    const body = {
+      username: data.username,
+      email: data.email,
+    };
+
+    updateUserProfile(body)
+      .then((res) => {
+        addToken(res.data.access_token);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -159,6 +175,7 @@ export const AuthProvider = ({ children }) => {
         addToken,
         setIsLoggedIn,
         loginGoogleAuth,
+        updateUserProfileAuth
       }}
     >
       {children}

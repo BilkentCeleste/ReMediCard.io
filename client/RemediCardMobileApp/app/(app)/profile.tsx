@@ -19,7 +19,7 @@ import {
   SettingsIcon,
   LanguageIcon,
   LogoutIcon,
-  HomeIcon,
+  HomeIcon, EditIcon,
 } from "@/constants/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -64,6 +64,10 @@ export default function Profile() {
     router.push("/(app)/(profile)/editprofile");
   };
 
+  const loadResetPassword = () => {
+    router.push("/forgot_password?isResetPassword=true");
+  }
+
   const loadContactUs = () => {
     router.push("/(app)/(profile)/contactus");
   };
@@ -94,6 +98,22 @@ export default function Profile() {
         </View>
 
         <Text style={styles.menuText}>{t("edit_profile")}</Text>
+
+        <View style={[styles.chevronRightIcon, styles.iconLayout]}>
+          <ChevronRightIcon></ChevronRightIcon>
+        </View>
+
+        <View style={styles.separatorContainer}>
+          <View style={styles.separatorLine} />
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.menuComponent} onPress={loadResetPassword}>
+        <View style={[styles.menuIcon, styles.iconLayout]}>
+          <EditIcon></EditIcon>
+        </View>
+
+        <Text style={styles.menuText}>{t("reset_password")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>

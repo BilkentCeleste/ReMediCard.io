@@ -26,6 +26,14 @@ export const register = async (data) => {
   return await postFetcher(url.REGISTER_PATH(), data);
 };
 
+export const getUserProfile = async () => {
+  return await getFetcher(url.GET_USER_PROFILE());
+};
+
+export const updateUserProfile = async (data) => {
+  return await postFetcher(url.UPDATE_USER_PROFILE(), data);
+}
+
 // deck
 export const createDeck = async (data) => {
   return await postFetcher(url.CREATE_DECK_PATH(), data);
@@ -178,10 +186,6 @@ export const likeQuiz = async (id) => {
 
 export const dislikeQuiz = async (id) => {
   return await patchFetcher(url.DISLIKE_QUIZ_PATH(id));
-};
-
-export const getUserProfile = async () => {
-  return await getFetcher(url.GET_USER_PROFILE());
 };
 
 export const generalSearch = async (searchText) => {

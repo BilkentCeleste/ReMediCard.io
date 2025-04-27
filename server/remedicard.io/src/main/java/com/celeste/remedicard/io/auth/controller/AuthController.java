@@ -4,7 +4,6 @@ import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -76,4 +75,8 @@ public class AuthController {
         return ResponseEntity.ok(authService.getCurrentUserProfile());
     }
 
+    @PostMapping("update_user_profile")
+    public AuthResponse updateUserProfile(@RequestBody UpdateProfileRequest request) {
+        return authService.updateUserProfile(request);
+    }
 }

@@ -11,5 +11,6 @@
     "success": "Başarı",
     "passwords_do_not_match": "Şifreler uyuşmuyor!",
     "fill_all_fields": "Lütfen tüm alanları doldurun!",
-    "success_message": "Değişiklikler başarıyla kaydedildi!"
+    "success_message": "Değişiklikler başarıyla kaydedildi!",
+    "update_error": "Profili güncellerken hata. Lütfen tekrar deneyin."
 }
