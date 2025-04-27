@@ -5,6 +5,7 @@ import {createFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon, UploadIcon} from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
 import * as ImagePicker from "expo-image-picker";
+import * as Notifications from 'expo-notifications';
 
 export default function UpdateFlashcard() {
     const { t } = useTranslation('update_flashcard');
@@ -18,6 +19,7 @@ export default function UpdateFlashcard() {
     const [frontImage, setFrontImage] = useState(null);
     const [backImage, setBackImage] = useState(null);
     const [showIndicator, setShowIndicator] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
 
     useEffect(() => {
         if (flashcard) {
@@ -69,8 +71,15 @@ export default function UpdateFlashcard() {
                 name: "image"  + backImage.substring(backImage.lastIndexOf(".")),
             });
         }
+        const uploadId = Date.now().toString(); // Unique ID
 
-        createFlashcard(formData)
+
+        createFlashcard(formData,
+            async (progressEvent) => {
+                const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setUploadProgress(progress);
+            }
+        )
             .then(() => {
                 setShowIndicator(false);
                 router.push("/(app)/updatedeck?deckId=" + deckId);
@@ -117,7 +126,12 @@ export default function UpdateFlashcard() {
             });
         }
 
-        updateFlashcard(flashcardId, formData)
+        updateFlashcard(flashcardId, formData,
+            async (progressEvent) => {
+                const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setUploadProgress(progress);
+            }
+        )
             .then(() => {
                 setShowIndicator(false);
                 router.push("/(app)/updatedeck?deckId=" + deckId);
@@ -212,7 +226,7 @@ export default function UpdateFlashcard() {
                 <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <ActivityIndicator size={"large"} style={styles.indicator} />
-
+                    <Text>{uploadProgress}%</Text>
                     <Text style={styles.indicatorText}> {t("file_transfer")}</Text>
                 </View>
                 </View>

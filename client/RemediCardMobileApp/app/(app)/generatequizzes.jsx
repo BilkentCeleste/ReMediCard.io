@@ -29,6 +29,7 @@ export default function GenerateQuiz() {
   const [popupMessage, setPopupMessage] = useState("");
 
   const [showIndicator, setShowIndicator] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [contentLanguage, setContentLanguage] = useState(
     i18n.language === "en" ? "ENGLISH" : "TURKISH"
   );
@@ -154,7 +155,12 @@ export default function GenerateQuiz() {
     formData.append("dataType", dataType);
     formData.append("language", language);
 
-    autoGenerateQuiz(formData)
+    autoGenerateQuiz(formData,
+      async (progressEvent) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(progress);
+      }
+    )
       .then((res) => {
         setShowIndicator(false);
         setFile(null);
@@ -248,7 +254,7 @@ export default function GenerateQuiz() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <ActivityIndicator size={"large"} style={styles.indicator} />
-
+            <Text>{uploadProgress}%</Text>
             <Text style={styles.indicatorText}> {t("file_transfer")}</Text>
           </View>
         </View>
