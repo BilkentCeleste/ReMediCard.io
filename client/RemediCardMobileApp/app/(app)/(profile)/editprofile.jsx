@@ -22,19 +22,22 @@ import { useTranslation } from "react-i18next";
 
 export default function EditProfile() {
   const { t } = useTranslation("edit_profile");
-
   const router = useRouter();
+  const { registerAuth } = useAuth();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
 
-  const { registerAuth } = useAuth();
-
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
   const handleSaveChanges = () => {
@@ -93,44 +96,41 @@ export default function EditProfile() {
       <View style={styles.component}>
         <LockIcon />
         <TextInput
-          style={styles.passwordtext}
-          placeholder={t("password")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
-          secureTextEntry={!passwordVisible}
-          value={password}
-          onChangeText={setPassword}
-        ></TextInput>
+            style={styles.passwordtext}
+            placeholder={t("password")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            maxLength={16}
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+        />
         <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
+            style={styles.toggleButton}
+            onPress={togglePasswordVisibility}
         >
-          <Text style={styles.toggleText}>
-            {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
-          </Text>
+          {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </TouchableOpacity>
       </View>
 
       <View style={styles.component}>
-        <LockIcon></LockIcon>
+        <LockIcon />
         <TextInput
-          style={styles.passwordtext}
-          placeholder={t("confirm_password")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          maxLength={16}
-          secureTextEntry={!passwordVisible}
-          value={passwordCheck}
-          onChangeText={setPasswordCheck}
-        ></TextInput>
+            style={styles.passwordtext}
+            placeholder={t("confirm_password")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            maxLength={16}
+            secureTextEntry={!confirmPasswordVisible}
+            value={passwordCheck}
+            onChangeText={setPasswordCheck}
+        />
         <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
+            style={styles.toggleButton}
+            onPress={toggleConfirmPasswordVisibility}
         >
-          <Text style={styles.toggleText}>
-            {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
-          </Text>
+          {confirmPasswordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </TouchableOpacity>
       </View>
+
 
       <TouchableOpacity
         style={styles.saveButton}
@@ -177,38 +177,29 @@ const styles = StyleSheet.create({
     width: "75%",
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    gap: 30,
+    paddingHorizontal: 15,
     marginBottom: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#ffff",
+    color: "#fff",
     marginRight: "25%"
   },
   usernametext: {
-    top: 5,
-    left: 45,
+    flex: 1,
     fontSize: 18,
-    lineHeight: 22,
     fontFamily: "Inter-Regular",
     color: "#111",
-    textAlign: "left",
-    zIndex: 1,
-    position: "absolute",
+    marginLeft: 15,
   },
   passwordtext: {
-    top: 5,
-    left: 45,
+    flex: 1,
     fontSize: 18,
-    lineHeight: 22,
     fontFamily: "Inter-Regular",
     color: "#111",
-    textAlign: "left",
-    zIndex: 1,
-    position: "absolute",
+    marginLeft: 15,
   },
   saveButton: {
     height: 50,
@@ -218,8 +209,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
-    gap: 30,
     marginTop: 20,
   },
   cancelButton: {
@@ -230,13 +219,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
-    gap: 30,
     marginTop: 20,
   },
   registertext: {
     fontSize: 17,
-    lineHeight: 22,
     fontFamily: "InriaSans-Regular",
     color: "#fff",
     textAlign: "center",
@@ -246,7 +232,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontSize: 16,
     color: "#960c03",
-    cursor: "pointer",
     fontWeight: "bold"
   },
   bottomContainer: {
@@ -257,7 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   toggleButton: {
-    marginLeft: 175,
+    paddingHorizontal: 10,
   },
   toggleText: {
     fontSize: 14,

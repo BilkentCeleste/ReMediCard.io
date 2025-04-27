@@ -29,13 +29,11 @@ import NavBar from "@/components/NavBar"
 
 export default function Profile() {
   const { t, i18n } = useTranslation("profile");
-
   const router = useRouter();
   const { logoutAuth } = useAuth();
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
-
   const [userProfile, setUserProfile] = useState({
     username: "-----",
     email: "-------",
@@ -49,7 +47,7 @@ export default function Profile() {
     }, [])
   );
 
-  const handleLanguageSelection = (language) => {
+  const handleLanguageSelection = (language: any) => {
     if (selectedLanguage === language) {
       return;
     }
@@ -80,12 +78,15 @@ export default function Profile() {
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
       <View style={styles.infoCard}>
-        <Text style={styles.infoText}>
-          <AtIcon color="white" /> {userProfile.username}
-        </Text>
-        <Text style={styles.infoText}>
-          <MailIcon color="white" /> {userProfile.email}
-        </Text>
+        <View style={styles.infoRow}>
+          <AtIcon color="white" style={[styles.infoIcon]} />
+          <Text style={styles.infoText}>{userProfile.username}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <MailIcon color="white" style={[styles.infoIcon]} />
+          <Text style={styles.infoText}>{userProfile.email}</Text>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.menuComponent} onPress={loadEditProfile}>
@@ -136,57 +137,6 @@ export default function Profile() {
         </View>
       </TouchableOpacity>
 
-      <Modal
-        transparent={true}
-        visible={showLanguage}
-        animationType="slide"
-        onRequestClose={() => setShowLanguage(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("language")}</Text>
-
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity
-                style={[
-                  styles.languageOption,
-                  selectedLanguage === "en" && styles.selectedOption,
-                ]}
-                onPress={() => {
-                  handleLanguageSelection("en");
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/uk_flag.png")}
-                  style={styles.flag_image}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.languageOption,
-                  selectedLanguage === "tr" && styles.selectedOption,
-                ]}
-                onPress={() => {
-                  handleLanguageSelection("tr");
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/tr_flag.png")}
-                  style={styles.flag_image}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-              style={styles.modalBack}
-              onPress={() => setShowLanguage(false)}
-            >
-              <Text style={styles.modalBackText}>{t("back")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
       <NavBar/>
 
     </View>
@@ -219,14 +169,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginBottom: 50,
   },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  infoIcon: {
+    marginRight: 10,
+  },
   infoText: {
-    flex: 1,
-    top: 5,
-    fontSize: 25,
-    lineHeight: 25,
+    fontSize: 20,
     fontFamily: "InriaSans-Regular",
     color: "#fff",
-    textAlign: "left",
+    marginLeft: 5,
   },
   menuComponent: {
     width: "75%",

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +30,18 @@ public class AutoGenerationController {
             @RequestPart("dataType") String dataType,
             @RequestPart("language") String language) throws IOException {
 
-        mediaProcessingService.enqueueAutoGenerationTask(files,
+        List<InputStream> inputStreams = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        List<Long> fileSizes = new ArrayList<>();
+        for (MultipartFile file : files) {
+            inputStreams.add(file.getInputStream());
+            fileNames.add(file.getOriginalFilename());
+            fileSizes.add(file.getSize());
+        }
+
+        mediaProcessingService.enqueueAutoGenerationTask(inputStreams,
+                fileNames,
+                fileSizes,
                 DataType.valueOf(dataType),
                 Language.valueOf(language),
                 TargetDataType.DECK);
@@ -41,7 +55,18 @@ public class AutoGenerationController {
             @RequestPart("dataType") String dataType,
             @RequestPart("language") String language) throws IOException {
 
-        mediaProcessingService.enqueueAutoGenerationTask(files,
+        List<InputStream> inputStreams = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        List<Long> fileSizes = new ArrayList<>();
+        for (MultipartFile file : files) {
+            inputStreams.add(file.getInputStream());
+            fileNames.add(file.getOriginalFilename());
+            fileSizes.add(file.getSize());
+        }
+
+        mediaProcessingService.enqueueAutoGenerationTask(inputStreams,
+                fileNames,
+                fileSizes,
                 DataType.valueOf(dataType),
                 Language.valueOf(language),
                 TargetDataType.QUIZ);

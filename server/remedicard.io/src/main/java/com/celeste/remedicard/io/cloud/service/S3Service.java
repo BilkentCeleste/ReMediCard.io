@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class S3Service {
     @Value("${aws.region}")
     private String region;
 
-    public List<String> uploadFiles(MultipartFile[] files) throws IOException {
+    public List<String> uploadFiles(List<InputStream> files, List<String> fileNames, List<Long> fileSizes) throws IOException {
         User user = currentUserService.getCurrentUser();
 
         List<String> addresses = new ArrayList<>();
@@ -39,8 +40,8 @@ public class S3Service {
 
         folderName = user.getId() + "/task_" + UUID.randomUUID();
 
-        for(MultipartFile file : files) {
-            fileName = file.getOriginalFilename();
+        for(int i = 0; i < files.size(); i++) {
+            fileName = fileNames.get(i);
 
             key = "media_processing_files" + "/" + folderName + "/" +  fileName;
 
@@ -49,7 +50,7 @@ public class S3Service {
                     .key(key)
                     .build();
 
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(files.get(i), fileSizes.get(i)));
 
             fileAddress = "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
 
@@ -59,10 +60,9 @@ public class S3Service {
         return addresses;
     }
 
-    public String uploadFile(MultipartFile file, String keyPrefix) throws IOException {
+    public String uploadFile(InputStream inputStream, long size, String fileName, String keyPrefix) {
         User user = currentUserService.getCurrentUser();
 
-        String fileName = file.getOriginalFilename();
         String key = keyPrefix + "/" + user.getId() + "/task_" + UUID.randomUUID() + "/" + fileName;
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -70,7 +70,7 @@ public class S3Service {
                 .key(key)
                 .build();
 
-        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, size));
 
         return "https://" + bucketName + ".s3." + region + ".amazonaws.com/"+ key;
     }

@@ -8,6 +8,7 @@ import com.celeste.remedicard.io.flashcard.mapper.FlashcardCreateMapper;
 import com.celeste.remedicard.io.flashcard.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,9 +22,10 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void create(@ModelAttribute FlashcardCreateRequestDTO dto) throws IOException {
+    public ResponseEntity<String> create(@ModelAttribute FlashcardCreateRequestDTO dto) throws IOException {
         Flashcard flashcard = FlashcardCreateMapper.INSTANCE.toEntity(dto);
         flashcardService.create(flashcard, dto.getDeckId(), dto.getFrontSide().getImage(), dto.getBackSide().getImage());
+        return ResponseEntity.ok().body("File is being processed");
     }
 
     @GetMapping("/getFlashcardsInBatch/{deckId}")

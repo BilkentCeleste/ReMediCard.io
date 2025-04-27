@@ -32,22 +32,18 @@ export default function Home() {
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [searchResult, setSearchResult] = useState(null);
-
   const [showLoading, setShowLoading] = useState(false)
 
   useEffect(() => {
     if (debouncedSearchText.trim() !== "") {
-      
       setShowLoading(true)
       generalSearch(debouncedSearchText)
         .then((res) => {
           setShowLoading(false)
           setSearchResult(res.data);
         })
-        .catch((e) =>
-          {
+        .catch((e) => {
             setShowLoading(false)
-            console.log(e)
           });
     } else {
       setSearchResult(null);

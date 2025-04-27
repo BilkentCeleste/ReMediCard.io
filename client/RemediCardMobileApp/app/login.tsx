@@ -24,17 +24,15 @@ import * as SecureStore from "expo-secure-store";
 
 export default function Login() {
   const { t, i18n } = useTranslation("login");
+  const { isLoggedIn, loginAuth, loginGoogleAuth } = useAuth();
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-
   const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, loginAuth, loginGoogleAuth } = useAuth();
-
-  const handleLanguageSelection = (language) => {
+  const handleLanguageSelection = (language: any) => {
     if (selectedLanguage === language) {
       return;
     }
@@ -91,23 +89,18 @@ export default function Login() {
         ></TextInput>
       </View>
 
-      <View style={styles.component}>
-        <LockIcon></LockIcon>
+      <View style={styles.passwordContainer}>
+        <LockIcon />
         <TextInput
-          style={styles.passwordtext}
-          placeholder={t("password")}
-          placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
-          secureTextEntry={!passwordVisible}
-          value={password}
-          onChangeText={setPassword}
-        ></TextInput>
-        <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={togglePasswordVisibility}
-        >
-          <Text style={styles.toggleText}>
-            {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
-          </Text>
+            style={styles.passwordtext}
+            placeholder={t("password")}
+            placeholderTextColor={"rgba(0, 0, 0, 0.25)"}
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+        />
+        <TouchableOpacity onPress={togglePasswordVisibility}>
+          {passwordVisible ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </TouchableOpacity>
       </View>
 
@@ -155,7 +148,7 @@ export default function Login() {
           }}
         >
           <Image
-            source={require("../assets/images/uk_flag.png")} // Path relative to the file
+            source={require("../assets/images/uk_flag.png")}
             style={styles.flag_image}
           />
         </TouchableOpacity>
@@ -169,7 +162,7 @@ export default function Login() {
           }}
         >
           <Image
-            source={require("../assets/images/tr_flag.png")} // Path relative to the file
+            source={require("../assets/images/tr_flag.png")}
             style={styles.flag_image}
           />
         </TouchableOpacity>
@@ -192,9 +185,6 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    left: 0,
-  },
   container: {
     height: "100%",
     justifyContent: "center",
@@ -218,14 +208,6 @@ const styles = StyleSheet.create({
     marginBottom: 75,
     color: "#ffff",
   },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#fff",
-  },
   usernametext: {
     top: 15,
     left: 45,
@@ -238,17 +220,22 @@ const styles = StyleSheet.create({
     zIndex: 1,
     position: "absolute",
   },
-  passwordtext: {
-    top: 15,
-    left: 45,
-    fontSize: 18,
-    lineHeight: 22,
+  passwordContainer: {
+    height: 50,
+    borderRadius: 20,
+    backgroundColor: "#fff",
     width: "75%",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    gap: 10,
+  },
+  passwordtext: {
+    flex: 1,
+    fontSize: 18,
     fontFamily: "Inter-Regular",
     color: "#111",
-    textAlign: "left",
-    zIndex: 1,
-    position: "absolute"
   },
   logincomponent: {
     height: 50,
@@ -289,11 +276,6 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginRight: 10,
     backgroundColor: "#53789D",
-    justifyContent: "center",
-    textAlign: "center",
-  },
-  checkedBox: {
-    backgroundColor: "#fff",
     justifyContent: "center",
     textAlign: "center",
   },
@@ -364,9 +346,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e6f0ff",
     borderWidth: 2,
     borderColor: "#000000",
-  },
-  flagIcon: {
-    marginRight: 10,
   },
   flag_image: {
     width: 44,

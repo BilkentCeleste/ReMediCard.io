@@ -9,5 +9,9 @@
     "session_summary": "Oturum Özeti",
     "retry": "Yeniden Dene",
     "home": "Ana Menüye Dön",
-    "accuracy": "Başarı Yüzdesi"
+    "accuracy": "Başarı Yüzdesi",
+    "error": "Hata",
+    "error_fetching_flashcards": "Kartları alırken bir hata oluştu",
+    "error_updating_flashcard_reviews": "Kart incelemelerini güncellerken bir hata oluştu",
+    "error_creating_deck_stats": "Deste istatistikleri oluştururken bir hata oluştu"
 }
