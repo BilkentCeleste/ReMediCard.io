@@ -22,6 +22,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { generalSearch } from "@/apiHelper/backendHelper";
 import ListLoader from "@/components/ListLoader";
+import NavBar from "@/components/NavBar";
 
 const { width } = Dimensions.get("window");
 
@@ -233,27 +234,7 @@ export default function Home() {
         </>
       )}
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity
-          onPress={() => {
-            cleanSearch();
-            router.push("/(app)/home");
-          }}
-        >
-          <HomeIcon />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -370,30 +351,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     marginTop: 5,
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginTop: 30,
-    position: "absolute",
-    bottom: "4%",
-    zIndex: 0,
-    backgroundColor: "#53789D",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: "4%",
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   resultContainer: {
     backgroundColor: "#2916ff",

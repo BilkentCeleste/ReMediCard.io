@@ -11,6 +11,7 @@ import {
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 import { useFocusEffect } from "expo-router";
+import NavBar from "@/components/NavBar";
 
 export default function QuizResults() {
   const { t } = useTranslation("quiz_results");
@@ -214,25 +215,7 @@ export default function QuizResults() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -298,29 +281,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontFamily: "Inter-Regular",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginTop: 30,
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   valueText: {
     fontWeight: 'bold',

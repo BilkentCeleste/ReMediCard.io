@@ -9,12 +9,7 @@ import {
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
-  AtIcon,
-  MailIcon,
   ChevronRightIcon,
-  EditProfileIcon,
-  SubscriptionIcon,
-  ContactIcon,
   ProfileIcon,
   SettingsIcon,
   LanguageIcon,
@@ -25,9 +20,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { getUserProfile } from "@/apiHelper/backendHelper";
 import { useFocusEffect } from "expo-router";
-import NavBar from "@/components/NavBar"
+import  NavBar from "@/components/NavBar"
 
-export default function Profile() {
+export default function Settings() {
   const { t, i18n } = useTranslation("profile");
 
   const router = useRouter();
@@ -79,21 +74,12 @@ export default function Profile() {
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
 
-      <View style={styles.infoCard}>
-        <Text style={styles.infoText}>
-          <AtIcon color="white" /> {userProfile.username}
-        </Text>
-        <Text style={styles.infoText}>
-          <MailIcon color="white" /> {userProfile.email}
-        </Text>
-      </View>
-
-      <TouchableOpacity style={styles.menuComponent} onPress={loadEditProfile}>
+      <TouchableOpacity style={styles.menuComponent} onPress={loadLanguage}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <EditProfileIcon></EditProfileIcon>
+          <LanguageIcon />
         </View>
 
-        <Text style={styles.menuText}>{t("edit_profile")}</Text>
+        <Text style={styles.menuText}>{t("language")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -104,28 +90,12 @@ export default function Profile() {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.menuComponent}>
+      <TouchableOpacity style={styles.menuComponent} onPress={logoutHandler}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <SubscriptionIcon />
+          <LogoutIcon />
         </View>
 
-        <Text style={styles.menuText}>{t("subscription")}</Text>
-
-        <View style={[styles.chevronRightIcon, styles.iconLayout]}>
-          <ChevronRightIcon></ChevronRightIcon>
-        </View>
-
-        <View style={styles.separatorContainer}>
-          <View style={styles.separatorLine} />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.menuComponent} onPress={loadContactUs}>
-        <View style={[styles.menuIcon, styles.iconLayout]}>
-          <ContactIcon />
-        </View>
-
-        <Text style={styles.menuText}>{t("contact_us")}</Text>
+        <Text style={styles.menuText}>{t("log_out")}</Text>
 
         <View style={[styles.chevronRightIcon, styles.iconLayout]}>
           <ChevronRightIcon></ChevronRightIcon>
@@ -188,7 +158,6 @@ export default function Profile() {
       </Modal>
 
       <NavBar/>
-
     </View>
   );
 }
@@ -272,20 +241,6 @@ const styles = StyleSheet.create({
     right: "95%",
     zIndex: 3,
     top: 5,
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   modalOverlay: {
     flex: 1,

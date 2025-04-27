@@ -6,6 +6,7 @@ import {getQuizByShareToken, addUserQuiz, getQuizByQuizId} from '@/apiHelper/bac
 import { useTranslation } from 'react-i18next';
 import NotFound from "@/components/NotFound";
 import Loading from "@/components/Loading";
+import NavBar from '@/components/NavBar';
 
 interface Question {
     id: number;
@@ -143,20 +144,7 @@ export default function SharedQuiz() {
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.navbarRow}>
-                <TouchableOpacity>
-                    <Link href="/(app)/home"><HomeIcon /></Link>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Link href="/(app)/profile"><ProfileIcon /></Link>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <SettingsIcon />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.navbarContainer}>
-                <View style={styles.navbarLine} />
-            </View>
+            <NavBar/>
         </View>
     );
 }
@@ -167,14 +155,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#53789D',
-    },
-    navbarRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        width: '100%',
-        position: 'absolute',
-        bottom: 50,
         backgroundColor: '#53789D',
     },
     questionsContainer: {
@@ -269,19 +249,5 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 1,
         backgroundColor: '#fff',
-    },
-    navbarContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "75%",
-        position: "absolute",
-        bottom: 50,
-        backgroundColor: "#53789D",
-        height: 1,
-    },
-    navbarLine: {
-        flex: 1,
-        height: 1,
-        backgroundColor: "#fff",
     },
 }); 
