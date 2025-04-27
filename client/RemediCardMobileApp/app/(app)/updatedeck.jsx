@@ -163,6 +163,8 @@ export default function Updatedeck() {
                             width={110}
                             height={80}
                             textSize={8}
+                            frontImageURL={item.frontSide.imageURL}
+                            backImageURL={item.backSide.imageURL}
                             longPressHandler={() => {
                                 setModalVisible(true);
                                 setShownItem(item);
@@ -202,6 +204,8 @@ export default function Updatedeck() {
                             width={300}
                             height={500}
                             textSize={20}
+                            frontImageURL={shownItem?.frontSide?.imageURL}
+                            backImageURL={shownItem?.backSide?.imageURL}
                           />
                         </View>
                       </Pressable>
