@@ -111,7 +111,7 @@ export default function Profile() {
 
       <TouchableOpacity style={styles.menuComponent} onPress={loadResetPassword}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
-          <EditIcon></EditIcon>
+          <EditIcon color={"#fff"}></EditIcon>
         </View>
 
         <Text style={styles.menuText}>{t("reset_password")}</Text>
