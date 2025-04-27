@@ -634,8 +634,8 @@ export function UploadIcon() {
 export function DiscordIcon() {
   return (
     <Svg
-      width={75}
-      height={75}
+      width={65}
+      height={65}
       viewBox="0 0 75 75"
       fill="none"
     >
@@ -654,8 +654,8 @@ export function DiscordIcon() {
 export function SaveIcon() {
   return (
     <Svg
-      width={75}
-      height={75}
+      width={65}
+      height={65}
       viewBox="0 0 75 75"
       fill="none"
     >

@@ -5,12 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudyGoalsCreateRequestDTO {
 
-    int targetPerformance;
     Long deckId;
+    Long quizId;
+    Double targetPerformance;
+    Integer durationInDays;
+    Integer repetitionIntervalInHours;
 }

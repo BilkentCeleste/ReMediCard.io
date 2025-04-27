@@ -2,11 +2,16 @@ package com.celeste.remedicard.io.studyGoals.repository;
 
 import com.celeste.remedicard.io.studyGoals.entity.StudyGoals;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public interface StudyGoalsRepository extends JpaRepository<StudyGoals, Long> {
     Set<StudyGoals> findByUserId(Long userId);
-    Optional<StudyGoals> findByUserIdAndDeckId(Long userId, Long deckId);
+
+    @Query("SELECT s FROM StudyGoals s WHERE s.nextNotificationDate <= :dueDate")
+    List<StudyGoals> findAllDueGoals(LocalDateTime dueDate);
 }

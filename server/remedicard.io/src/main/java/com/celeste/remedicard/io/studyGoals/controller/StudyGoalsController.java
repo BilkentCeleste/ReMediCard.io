@@ -23,8 +23,7 @@ public class StudyGoalsController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> create(@RequestBody StudyGoalsCreateRequestDTO dto) {
-        StudyGoals studyGoals = StudyGoalsCreateRequestMapper.INSTANCE.toEntity(dto);
-        studyGoalsService.create(studyGoals, dto.getDeckId());
+        studyGoalsService.create(dto);
         return ResponseEntity.ok().build();
     }
 
@@ -36,8 +35,7 @@ public class StudyGoalsController {
 
     @PutMapping("/update/{studyGoalsId}")
     public ResponseEntity<Void> update(@RequestBody StudyGoalsCreateRequestDTO dto, @PathVariable Long studyGoalsId) {
-        StudyGoals studyGoals = StudyGoalsCreateRequestMapper.INSTANCE.toEntity(dto);
-        studyGoalsService.update(studyGoals, studyGoalsId);
+        studyGoalsService.update(dto, studyGoalsId);
         return ResponseEntity.ok().build();
     }
 
@@ -45,13 +43,6 @@ public class StudyGoalsController {
     public Set<StudyGoalsResponseDTO> getByCurrentUser() {
         Long currentUserId = currentUserService.getCurrentUserId();
         Set<StudyGoals> studyGoals = studyGoalsService.getStudyGoalsByUserId(currentUserId);
-        return StudyGoalsResponseMapper.INSTANCE.toDTO(studyGoals);
-    }
-
-    @GetMapping("/getByCurrentUserAndDeck/{deckId}")
-    public StudyGoalsResponseDTO getByCurrentUserAndDeck(@PathVariable Long deckId) {
-        Long currentUserId = currentUserService.getCurrentUserId();
-        StudyGoals studyGoals = studyGoalsService.getStudyGoalsByUserIdAndDeckId(currentUserId, deckId);
         return StudyGoalsResponseMapper.INSTANCE.toDTO(studyGoals);
     }
 

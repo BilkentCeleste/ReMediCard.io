@@ -77,7 +77,7 @@ export default function Home() {
   };
 
   const uploadStudyDashboardPage = () => {
-    router.push("/(app)/study_dashboard");
+    router.push("/(app)/goal_list");
   };
 
   const uploadDiscoverPage = () => {

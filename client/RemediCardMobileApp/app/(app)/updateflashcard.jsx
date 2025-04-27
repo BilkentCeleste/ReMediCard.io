@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         fontSize: 16,
     },
+    
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

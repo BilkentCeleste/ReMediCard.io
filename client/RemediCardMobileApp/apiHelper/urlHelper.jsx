@@ -13,6 +13,8 @@ export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
 export const FORGOT_PASSWORD_PATH = () => `${BASE_URL}/auth/forgot_password`;
 export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_reset_passwordcode`;
 export const RESET_PASSWORD_PATH = () => `${BASE_URL}/auth/reset_password`;
+export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
+export const UPDATE_USER_PROFILE = () => `${BASE_URL}/auth/update_user_profile`;
 
 // deck
 export const CREATE_DECK_PATH = () => `${BASE_URL}/deck/create`;
@@ -68,10 +70,6 @@ export const CREATE_QUIZ_STATS_PATH = () => `${BASE_URL}/quizStats/create`;
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/question/delete/${id}`;
 export const CREATE_QUESTION_PATH = () => `${BASE_URL}/question/create`;
 export const EDIT_QUESTION_PATH = (id) => `${BASE_URL}/question/update/${id}`;
-
-// profile
-export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
-
 
 // search 
 export const SEARCH_PATH = (searchText) => `${BASE_URL}/search?searchtext=${searchText}`;

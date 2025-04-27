@@ -8,5 +8,8 @@
     "repetition": "Tekrar",
     "performance": "Performans",
     "discard": "İptal Et",
-    "save": "Kaydet"
+    "save": "Kaydet",
+    "quiz": "Test",
+    "select_quiz": "Test Seç",
+    "duration": "Süre"
 }
