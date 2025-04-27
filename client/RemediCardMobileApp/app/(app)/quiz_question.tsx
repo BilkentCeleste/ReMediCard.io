@@ -13,6 +13,7 @@ import { GoBackIcon, NextQuestionIcon } from "@/constants/icons";
 import {useLocalSearchParams} from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 import { getQuizByQuizId, createQuizStats } from "@/apiHelper/backendHelper";
+import Loading from "@/components/Loading";
 
 export default function QuizQuestion(props: any) {
   const { t } = useTranslation("quiz_question");
@@ -22,7 +23,7 @@ export default function QuizQuestion(props: any) {
   const [quizData, setQuizData] = useState<any>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
-  const [timeRemaining, setTimeRemaining] = useState(600);
+  const [timePassed, setTimePassed] = useState(0);
   const [timerActive, setTimerActive] = useState(true);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [sessionStats, setSessionStats] = useState({
@@ -33,6 +34,8 @@ export default function QuizQuestion(props: any) {
           skippedQuestions: 0,
           incorrectQuestions: 0
       });
+  
+  const [showHint, setShowHint] = useState(false)
 
   useEffect(() => {
     if (quizId) {
@@ -64,15 +67,15 @@ export default function QuizQuestion(props: any) {
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (timerActive && timeRemaining > 0) {
+    if (timerActive/*  && timePassed > 0 */) {
       timer = setInterval(() => {
-        setTimeRemaining((prev) => prev - 1);
+        setTimePassed((prev) => prev + 1);
       }, 1000);
-    } else if (timeRemaining === 0) {
+    } else if (timePassed === 1500) {
       handleQuizCompletion();
     }
     return () => clearInterval(timer);
-  }, [timeRemaining, timerActive]);
+  }, [timePassed, timerActive]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -95,12 +98,14 @@ export default function QuizQuestion(props: any) {
   const handlePrevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      setShowHint(false)
     }
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      setShowHint(false)
     } 
   };
 
@@ -140,7 +145,7 @@ export default function QuizQuestion(props: any) {
         score: score,
         correctAnswers: correct,
         totalQuestions: totalQuestions,
-        timeSpent: 600 - timeRemaining,
+        timeSpent: timePassed,
         skippedQuestions: skipped,
         incorrectQuestions: incorrect
   });
@@ -194,7 +199,7 @@ export default function QuizQuestion(props: any) {
         incorrectAnswers: incorrect,
         skippedQuestions: skipped,
         totalQuestions: totalQuestions,
-        timeSpent: 600 - timeRemaining,
+        timeSpent: timePassed,
         selectedAnswers: selectedAnswers
       }
     });
@@ -203,7 +208,7 @@ export default function QuizQuestion(props: any) {
   const handleRetry = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers([])
-    setTimeRemaining(600)
+    setTimePassed(0)
     setTimerActive(true)
     setShowSummaryModal(false)
     setSessionStats({
@@ -214,6 +219,7 @@ export default function QuizQuestion(props: any) {
       skippedQuestions: 0,
       incorrectQuestions: 0
     })
+    setShowHint(false)
   };
 
   const handleHomePage = () => {
@@ -223,7 +229,7 @@ export default function QuizQuestion(props: any) {
   if (!quizData || !quizData.questions) {
     return (
       <View style={styles.container}>
-        <Text style={{ color: "#fff", fontSize: 18 }}>{t("loading_quiz")}</Text>
+        <Loading message={t("loading_quiz")}/>
       </View>
     );
   }
@@ -250,7 +256,7 @@ export default function QuizQuestion(props: any) {
       <View style={styles.divider} />
 
       <View style={styles.infoRow}>
-        <Text style={styles.infoText}>{formatTime(timeRemaining)}</Text>
+        <Text style={styles.infoText}>{formatTime(timePassed)}</Text>
         <Text style={styles.infoText}>
           {currentQuestionIndex + 1}/{totalQuestions}
         </Text>
@@ -282,6 +288,24 @@ export default function QuizQuestion(props: any) {
             </ScrollView>
           </TouchableOpacity>
         ))}
+      </View>
+      
+      <View style={styles.hintBox}>
+        {!showHint ? <TouchableOpacity onPress={() => setShowHint(true)}> 
+          <Text style = {[styles.hintTextPosition, styles.showHint]}> {t("show_hint")} </Text> 
+          </TouchableOpacity> : 
+            <ScrollView>
+            <Text style={[styles.hintText, styles.hintText]}>
+              {<Text style={styles.hintTitle}>
+                {t("hint")}
+              </Text>}
+              <Text>
+                {'\n'}
+              </Text>
+              {currentQuestion?.hint || t("no_hint")}
+            </Text>
+          </ScrollView>
+        }
       </View>
       
       {showSummaryModal && (
@@ -514,4 +538,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2916ff',
   },
+  hintBox: {
+    width: "90%",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 20,
+    maxHeight: 130,
+    marginTop: 30,
+  },
+  showHint: {
+    textAlign: "center",
+    backgroundColor: "#14dbc1",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 15,
+    fontWeight: "bold"
+  },
+  hintText: {
+    backgroundColor: "#d402f5",
+    padding: 12,
+    borderRadius: 12,
+    textAlign: "center",
+    color: "#fff"
+  },
+  hintTextPosition: {
+    textAlign: "center"
+  },
+  hintTitle: {
+    textAlign: "left",
+    fontWeight: "bold",
+    color: "#fff",
+    fontSize: 16,
+    display: "flex",
+    width: "90%"
+  }
 });

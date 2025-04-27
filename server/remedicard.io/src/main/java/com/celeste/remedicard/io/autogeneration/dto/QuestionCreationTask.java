@@ -11,4 +11,6 @@ public class QuestionCreationTask {
     private String description;
     private String answer;
     private List<String> options;
+    private String hint;
+    private String explanation;
 }

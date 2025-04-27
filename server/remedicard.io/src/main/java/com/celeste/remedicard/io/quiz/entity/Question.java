@@ -29,6 +29,12 @@ public class Question extends AuditableEntity {
     @Column
     private Integer correctAnswerIndex;
 
+    @Column(columnDefinition = "TEXT")
+    private String hint;
+
+    @Column(columnDefinition = "TEXT")
+    private String explanation;
+
     @ElementCollection
     @CollectionTable(name = "OPTIONS", joinColumns = @JoinColumn(name = "question_id"))
 //    @OrderColumn(name = "option_order")
