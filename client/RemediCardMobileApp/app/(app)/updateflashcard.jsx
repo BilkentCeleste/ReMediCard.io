@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert, Image} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon, UploadIcon} from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
 import * as ImagePicker from "expo-image-picker";
-import * as Notifications from 'expo-notifications';
 
 export default function UpdateFlashcard() {
     const { t } = useTranslation('update_flashcard');
@@ -28,6 +27,8 @@ export default function UpdateFlashcard() {
             setCardBackSide(flashCardData.backSide.text);
             setFlashcardId(flashCardData.id);
             setIsCreating(false);
+            setFrontImage(flashCardData.frontSide.imageURL || null);
+            setBackImage(flashCardData.backSide.imageURL || null);
         } else {
             setIsCreating(true);
             setCardFrontSide('');
@@ -175,7 +176,7 @@ export default function UpdateFlashcard() {
                 </View>
 
                 <Text style={styles.menuText}>{isCreating ? t("create_flashcard") : t("update_flashcard")}</Text>
-            
+
                 <View style={styles.separatorContainer}>
                     <View style={styles.separatorLine} />
                 </View>
@@ -190,14 +191,24 @@ export default function UpdateFlashcard() {
                 textAlignVertical="top"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
-            <View style={styles.selectComponent}>
-                <Text onPress={() => pickImage(setFrontImage)}>
-                    {frontImage? t("front_image_selected") : t("select_front_image")}{" "}
-                </Text>
-                <View>
-                    {frontImage == null && <UploadIcon></UploadIcon>}
-                </View>
-            </View>
+            <TouchableOpacity style={styles.selectComponent} onPress={() => pickImage(setFrontImage)}>
+                {frontImage ? (
+                    <View style={styles.imageContainer}>
+                        <Image source={{ uri: frontImage }} style={styles.uploadedImage} />
+                        <TouchableOpacity style={styles.clearButton} onPress={(e) => {
+                            e.stopPropagation();
+                            setFrontImage(null);
+                        }}>
+                            <Text style={styles.clearButtonText}>✖️</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <>
+                        <Text>{t("select_front_image")}</Text>
+                        <UploadIcon />
+                    </>
+                )}
+            </TouchableOpacity>
 
             <TextInput
                 style={[styles.aInput, {marginTop: 50}]}
@@ -208,15 +219,25 @@ export default function UpdateFlashcard() {
                 textAlignVertical="top"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
             />
-            <View style={styles.selectComponent}>
-                <Text onPress={() => pickImage(setBackImage)}>
-                    {backImage? t("back_image_selected") : t("select_back_image")}{" "}
-                </Text>
-                <View>
-                    {backImage == null && <UploadIcon></UploadIcon>}
-                </View>
-            </View>
-            
+            <TouchableOpacity style={styles.selectComponent} onPress={() => pickImage(setBackImage)} activeOpacity={0.7}>
+                {backImage ? (
+                    <View style={styles.imageContainer}>
+                        <Image source={{ uri: backImage }} style={styles.uploadedImage} />
+                        <TouchableOpacity style={styles.clearButton} onPress={(e) => {
+                            e.stopPropagation();
+                            setBackImage(null);
+                        }}>
+                            <Text style={styles.clearButtonText}>✖️</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    <>
+                        <Text>{t("select_back_image")}</Text>
+                        <UploadIcon />
+                    </>
+                )}
+            </TouchableOpacity>
+
             <Modal
                 transparent={true}
                 visible={showIndicator}
@@ -331,11 +352,12 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: "rgba(207, 207, 207, 0.3)",
         width: "100%",
-        height: 45,
-        flexDirection: "row",
+        minHeight: 45,
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         marginTop: "5%",
+        paddingVertical: 10,
     },
     modalOverlay: {
         flex: 1,
@@ -354,5 +376,23 @@ const styles = StyleSheet.create({
         transform: [{ scale: 1.8 }],
         margin: 20,
         color: "#888888",
+    },
+    uploadedImage: {
+        width: 120,
+        height: 120,
+        borderRadius: 15,
+        marginLeft: 0,
+        marginTop: 10,
+        objectFit: 'cover',
+    },
+    imageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    clearButtonText: {
+        color: '#ff3333',
+        fontSize: 18,
+        marginLeft: 10,
     },
 });
