@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,} from "react-native";
-import {Link, useRouter} from "expo-router";
+import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,  Modal} from "react-native";
+import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {ChevronRightIcon, HomeIcon, PlusIcon, ProfileIcon, SearchIcon, SettingsIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {useTranslation} from "react-i18next";
+import NavBar from "@/components/NavBar";
 
 interface Goal {
   title: string;
@@ -17,9 +18,21 @@ interface Goal {
 export default function GoalList() {
   const { t } = useTranslation("goal_list");
   const router = useRouter();
+    const {id, type} = useLocalSearchParams()
+  
 
   const [selectedSort, setSelectedSort] = useState<string>("longest");
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const [listType, setListType] = useState(type ? type : "deck")
+  const [showLoading, setShowLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDeck, setSelectedDeck] = useState<any>(null);
+  
+  const handleDeckPress = (deck: any) => {
+    setSelectedDeck(deck);
+    setModalVisible(true);
+  };
 
   const sortOptions = [
     { label: t("sort_by_longest"), value: "longest" },
@@ -51,6 +64,8 @@ export default function GoalList() {
       goal.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  let isCompleted = true
+
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
@@ -78,7 +93,13 @@ export default function GoalList() {
         data={sortedGoals}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.goalComponent}>
+          <TouchableOpacity style={[
+            styles.goalComponent,
+            isCompleted && { borderColor: '#28a745', borderWidth: 5 }
+          ]} onPress={() => handleDeckPress(item)}>
+              {isCompleted && (
+                <Text style={styles.completedBadge}>Completed</Text>
+              )}
             <View style={styles.link}>
               <View>
                 <Text style={styles.goalTitle}>{item.title}</Text>
@@ -103,6 +124,48 @@ export default function GoalList() {
         )}
       />
 
+      <View style={styles.toggleContainer}>
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            listType === "deck" && styles.activeButton,
+          ]}
+          onPress={() => {
+            {
+              setListType("deck")
+            }
+          }}
+        >
+          <Text
+            style={[
+              styles.toggleButtonText,
+              listType === "deck" && styles.activeText,
+            ]}
+          >
+            {t("decks")}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            listType === "quiz" && styles.activeButton,
+          ]}
+          onPress={() => {
+            setListType("quiz")
+          }}
+        >
+          <Text
+            style={[
+              styles.toggleButtonText,
+              listType === "quiz" && styles.activeText,
+            ]}
+          >
+            {t("quizzes")}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <TouchableOpacity style={styles.createButton} onPress={() => {
           router.push("/(app)/create_goal");
         }}>
@@ -110,25 +173,44 @@ export default function GoalList() {
           <Text style={styles.createNewDeck}>{t("create_goal")}</Text>
       </TouchableOpacity>
 
-      <View style={styles.navbarRow}>
-        <TouchableOpacity>
-          <Link href="/(app)/home">
-            <HomeIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="/(app)/profile">
-            <ProfileIcon />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingsIcon />
-        </TouchableOpacity>
-      </View>
+      <Modal
+              transparent={true}
+              visible={modalVisible}
+              animationType="slide"
+              onRequestClose={() => setModalVisible(false)}
+            >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{selectedDeck?.title}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              //onPress={handleStartDeck}
+            >
+              <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              //onPress={handleEditDeck}
+            >
+              <Text style={styles.modalButtonText}>{t("edit_goal")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
+              //onPress={() => setPopUpVisible(true)}
+            >
+              <Text style={[styles.modalButtonText]}>{t("delete_goal")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>{t("cancel")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
-      <View style={styles.navbarContainer}>
-        <View style={styles.navbarLine} />
-      </View>
+      <NavBar/>
     </View>
   );
 }
@@ -218,35 +300,12 @@ const styles = StyleSheet.create({
   chevronRightIcon: {
     left: "90%",
     zIndex: 3,
-    top: "85%",
+    top: "75%",
   },
   link: {
     flexDirection: "column",
     alignItems: "flex-start",
     width: "100%",
-  },
-  navbarRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginTop: 30,
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
   },
   createButton: {
     borderRadius: 20,
@@ -256,7 +315,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 30,
     height: 50,
-    bottom: "12%"
+    bottom: "13%"
   },
   createNewDeck: {
     fontSize: 17,
@@ -265,4 +324,85 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
   },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: "75%",
+    bottom: "14%",
+  },  
+  toggleButton: {
+    width: "40%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    height: 50,
+  },
+  toggleButtonText:{
+    color: "white",
+    fontWeight: "normal",
+    fontSize: 18,
+    alignSelf: "center",
+  },
+  activeText: {
+    fontWeight: "bold",
+  },
+   activeButton: {
+    borderBottomWidth: 2,
+    borderColor: "#fff",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButton: {
+    backgroundColor: "#2916ff",
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  modalCancel: {
+    marginTop: 10,
+  },
+  modalCancelText: {
+    color: "#2916ff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  completedBadge: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#28a745",
+    color: "#fff",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    fontSize: 12,
+    fontWeight: "bold",
+    overflow: "hidden",
+  },
+  
 });

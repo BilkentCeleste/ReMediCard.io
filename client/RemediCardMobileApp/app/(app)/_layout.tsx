@@ -41,6 +41,7 @@ export default function RootLayout() {
       <Stack.Screen name="discover" options={{ headerShown: false }} />
       <Stack.Screen name="editquiz" options={{ headerShown: false }} />
       <Stack.Screen name="updatequizquestion" options={{ headerShown: false }} />
+      <Stack.Screen name="settings" options={{ headerShown: false }} />
     </Stack>
   );
 }

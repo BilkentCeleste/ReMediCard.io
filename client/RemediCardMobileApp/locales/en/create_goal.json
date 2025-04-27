@@ -8,5 +8,8 @@
     "repetition": "Repetition",
     "performance": "Performance",
     "discard": "Discard",
-    "save": "Save"
+    "save": "Save",
+    "quiz": "Quiz",
+    "select_quiz": "Select Quiz",
+    "duration": "Duration"
 }

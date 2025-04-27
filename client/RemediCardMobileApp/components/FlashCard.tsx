@@ -77,7 +77,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                     {frontImageURL && 
                         <Image
                             source={{ uri: frontImageURL}}
-                            style={{ width: 200, height: 200, borderRadius: 10 }}
+                            style={{ width: "80%", height: "80%", borderRadius: 10 }}
                         />
                     }
                     <Text style={[styles.text, { fontSize: textSize }]}>{question}</Text>
@@ -94,7 +94,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                     {backImageURL && 
                         <Image
                             source={{ uri: backImageURL}}
-                            style={{ width: 200, height: 200, borderRadius: 10 }}
+                            style={{ width: "80%", height: "80%", borderRadius: 10 }}
                         />
                     }
                     <Text style={[styles.text, { fontSize: textSize }]}>{answer}</Text>
