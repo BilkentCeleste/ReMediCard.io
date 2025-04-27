@@ -1,4 +1,4 @@
-import React, { useState, useRef, createRef } from "react";
+import React, {useState, useRef, createRef, useEffect} from "react";
 import {
   View,
   Text,
@@ -16,11 +16,13 @@ import {
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import {useLocalSearchParams} from "expo-router/build/hooks";
 
 export default function ForgotPassword() {
   const { t } = useTranslation("forgot_password");
   const { addToken, setIsLoggedIn } = useAuth();
   const router = useRouter();
+  const { isResetPassword } = useLocalSearchParams();
 
   const [stage, setStage] = useState(1);
   const [email, setEmail] = useState("");
@@ -37,6 +39,12 @@ export default function ForgotPassword() {
     setNewPassword("");
     setConfirmPassword("");
   };
+
+  useEffect(() => {
+    if (isResetPassword) {
+      setStage(3);
+    }
+  }, [isResetPassword]);
 
   const handleEmailSubmit = () => {
     if (!email.includes("@")) {
@@ -125,7 +133,7 @@ export default function ForgotPassword() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("title")}</Text>
+      <Text style={styles.title}>{isResetPassword ? t("reset_password_title") : t("title")}</Text>
       {stage === 1 && (
         <>
           <Text style={styles.infoText}>

@@ -9,6 +9,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -234,6 +237,30 @@ public class AuthService {
         return AccountProfileDTO.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .build();
+    }
+
+    public AuthResponse updateUserProfile(UpdateProfileRequest request) {
+        User user = currentUserService.getCurrentUser();
+
+        if(!user.getEmail().equals(request.getEmail()) && userRepository.existsUserByEmail(request.getEmail())){
+            throw new IllegalArgumentException("Email already taken");
+        }
+
+        if(!user.getUsername().equals(request.getUsername()) && userRepository.existsUserByUsername(request.getUsername())){
+            throw new IllegalArgumentException("Username already taken");
+        }
+
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+
+        userRepository.save(user);
+
+        String jwtToken = jwtService.generateToken(user);
+        currentUserService.setCurrentUser(user);
+        return AuthResponse.builder()
+                .accessToken(jwtToken)
+                .role(user.getRole())
                 .build();
     }
 }

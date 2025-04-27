@@ -64,6 +64,8 @@ export default function GoalList() {
       goal.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  let isCompleted = true
+
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
@@ -91,7 +93,13 @@ export default function GoalList() {
         data={sortedGoals}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.goalComponent} onPress={() => handleDeckPress(item)}>
+          <TouchableOpacity style={[
+            styles.goalComponent,
+            isCompleted && { borderColor: '#28a745', borderWidth: 5 }
+          ]} onPress={() => handleDeckPress(item)}>
+              {isCompleted && (
+                <Text style={styles.completedBadge}>Completed</Text>
+              )}
             <View style={styles.link}>
               <View>
                 <Text style={styles.goalTitle}>{item.title}</Text>
@@ -383,4 +391,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  completedBadge: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#28a745",
+    color: "#fff",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    fontSize: 12,
+    fontWeight: "bold",
+    overflow: "hidden",
+  },
+  
 });

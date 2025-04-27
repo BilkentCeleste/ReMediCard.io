@@ -11,5 +11,6 @@
     "success": "Success",
     "passwords_do_not_match": "Passwords do not match!",
     "fill_all_fields": "Please fill in all fields!",
-    "success_message": "Changes saved successfully!"
+    "success_message": "Changes saved successfully!",
+    "update_error": "Error updating profile. Please try again."
 }
