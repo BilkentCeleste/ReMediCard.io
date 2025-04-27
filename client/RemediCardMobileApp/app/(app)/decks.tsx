@@ -73,8 +73,8 @@ export default function Decks() {
         }
       })
       .catch((error) => {
-        console.log(error);
         setShowLoading(false);
+        Alert.alert(t("error"), t("fetch_decks_failed"));
       });
   }, [updated]);
 
@@ -87,7 +87,6 @@ export default function Decks() {
               setDecks(res.data);
             })
             .catch((e) => {
-              console.log(e)
               setShowLoading(false);
             });
         } else {
@@ -228,7 +227,6 @@ export default function Decks() {
           setModalVisible(false);
         })
         .catch((err) => {
-          console.error(err);
           Alert.alert(t("error"), t("deck_deletion_failed"));
         });
   };
@@ -256,7 +254,6 @@ export default function Decks() {
         setDecks((prevDecks) => [...prevDecks, res.data]);
       })
       .catch((err) => {
-        console.error(err);
         Alert.alert(t("error"), t("deck_creation_failed"));
       });
   };
@@ -276,7 +273,6 @@ export default function Decks() {
             subject: selectedDeck?.name,
           })})
         .catch((err) => {
-          console.error(err);
           Alert.alert(t("error"), t("share_failed"));
         });
     } else {

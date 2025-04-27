@@ -9,5 +9,9 @@
     "session_summary": "Session Summary",
     "retry": "Retry",
     "home": "Return to Home Page",
-    "accuracy": "Accuracy"
+    "accuracy": "Accuracy",
+    "error": "Error",
+    "error_fetching_flashcards": "Error fetching flashcards",
+    "error_updating_flashcard_reviews": "Error updating flashcard reviews",
+    "error_creating_deck_stats": "Error creating deck statistics"
 }

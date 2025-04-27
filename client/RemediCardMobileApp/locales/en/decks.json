@@ -39,5 +39,6 @@
     "public": "Public",
     "private": "Private, only visible to you",
     "change_visibility": "Change",
-    "change_visibility_failed": "Error changing visibility"
+    "change_visibility_failed": "Error changing visibility",
+    "fetch_decks_failed": "Error fetching decks"
 }

@@ -58,7 +58,7 @@ export default function Card( props: any ) {
                 );
             }
         } catch (error) {
-            console.error("Error fetching flashcards:", error);
+            Alert.alert(t("error"), t("error_fetching_flashcards"));
         }
     }
 
@@ -67,7 +67,7 @@ export default function Card( props: any ) {
             await updateFlashcardReviews(flashcardReviewList);
             setFlashcardReviewList([]);
         } catch (error) {
-            console.error("Error updating flashcard reviews:", error);
+            Alert.alert(t("error"), t("error_updating_flashcard_reviews"));
         }
     }
 
@@ -161,7 +161,7 @@ export default function Card( props: any ) {
                 console.log("Deck stats created successfully.");
             })
             .catch((error) => {
-                console.error("Error creating deck stats:", error);
+                Alert.alert(t("error"), t("error_creating_deck_stats"));
             });
 
         const totalAnswers = trueAnswers + falseAnswers + maybeAnswers;

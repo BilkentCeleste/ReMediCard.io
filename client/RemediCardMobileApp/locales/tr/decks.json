@@ -39,5 +39,6 @@
   "public": "Herkese Açık",
   "private": "Gizli, sadece siz görebilirsiniz",
   "change_visibility": "Değiştir",
-  "change_visibility_failed": "Görünürlük değiştirirken hata oluştu"
+  "change_visibility_failed": "Görünürlük değiştirirken hata oluştu",
+  "fetch_decks_failed": "Desteleri getirirken bir hata oluştu"
 }
