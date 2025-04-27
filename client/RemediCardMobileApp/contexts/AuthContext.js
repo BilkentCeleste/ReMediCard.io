@@ -154,13 +154,13 @@ export const AuthProvider = ({ children }) => {
       email: data.email,
     };
 
-    updateUserProfile(body)
-      .then((res) => {
-        addToken(res.data.access_token);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await updateUserProfile(body);
+      await addToken(res.data.access_token);
+      return res;
+    } catch (err) {
+      throw err;
+    }
   }
 
   return (

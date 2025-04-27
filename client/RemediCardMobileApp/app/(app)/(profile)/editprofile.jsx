@@ -37,7 +37,7 @@ export default function EditProfile() {
         });
   }, []);
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     if (!username || !email) {
       Alert.alert(t("error"), t("fill_all_fields"));
       return;
@@ -48,14 +48,13 @@ export default function EditProfile() {
       email: email
     };
 
-    updateUserProfileAuth(body)
-        .then((response) => {
-          Alert.alert(t("success"), t("success_message"))
-          router.push(`/(app)/home`);
-        })
-        .catch((error) => {
-          Alert.alert(t("error"), t("update_error"));
-        });
+    try {
+      await updateUserProfileAuth(body);
+      Alert.alert(t("success"), t("success_message"));
+      router.push(`/(app)/home`);
+    } catch (error) {
+      Alert.alert(t("error"), t("update_error"));
+    }
   };
 
   return (
