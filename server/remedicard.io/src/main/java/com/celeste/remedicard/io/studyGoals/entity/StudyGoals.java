@@ -6,6 +6,10 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -15,15 +19,22 @@ import lombok.*;
 @Table(name = "study_goals")
 public class StudyGoals extends AuditableEntity {
 
-    @Column
-    private int targetPerformance;
+    private Long deckId;    // nullable
+    private Long quizId;    // nullable
+
+    private Double targetPerformance;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
+    private Duration repetitionInterval;
+
+    private LocalDateTime nextNotificationDate;
+
+    @Enumerated(EnumType.STRING)
+    private StudyGoalStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "deck_id", nullable = false)
-    private Deck deck;
-
 }
