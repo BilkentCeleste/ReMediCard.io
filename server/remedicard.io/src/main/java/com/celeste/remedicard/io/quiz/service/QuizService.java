@@ -116,6 +116,8 @@ public class QuizService {
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
                     .correctAnswerIndex(handleQuestionAnswerIndexing(questionCreationTask.getAnswer().toUpperCase()))
+                    .hint(questionCreationTask.getHint())
+                    .explanation(questionCreationTask.getExplanation())
                     .build());
         }
 

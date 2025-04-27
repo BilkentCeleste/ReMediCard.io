@@ -16,5 +16,8 @@
     "session_summary": "Session Summary",
     "retry": "Retry the Quiz" ,
     "home": "Return to Home Page",
-    "results": "Results"
+    "results": "Results",
+    "show_hint": "Show Hint",
+    "hint": "Hint:",
+    "no_hint": "No hints for this question"
 }
