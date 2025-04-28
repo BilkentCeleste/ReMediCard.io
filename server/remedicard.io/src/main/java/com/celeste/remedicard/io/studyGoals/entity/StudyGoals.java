@@ -1,13 +1,12 @@
 package com.celeste.remedicard.io.studyGoals.entity;
 
 import com.celeste.remedicard.io.auth.entity.User;
+import com.celeste.remedicard.io.common.entity.AbstractEntity;
 import com.celeste.remedicard.io.common.entity.AuditableEntity;
-import com.celeste.remedicard.io.deck.entity.Deck;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Duration;
-import java.time.LocalDate;
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,22 +16,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "study_goals")
-public class StudyGoals extends AuditableEntity {
+public class StudyGoals extends AbstractEntity {
 
-    private Long deckId;    // nullable
-    private Long quizId;    // nullable
+    @Nullable
+    private Long deckId;
+    @Nullable
+    private Long quizId;
 
     private Double targetPerformance;
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    private Duration repetitionInterval;
+    private int repetitionInterval; // in hours
 
     private LocalDateTime nextNotificationDate;
 
-    @Enumerated(EnumType.STRING)
-    private StudyGoalStatus status;
+    private boolean isCompleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

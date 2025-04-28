@@ -77,3 +77,9 @@ export const SEARCH_DECKS_PATH = (searchText) => `${BASE_URL}/search/deck?search
 export const SEARCH_QUIZZES_PATH = (searchText) => `${BASE_URL}/search/quiz?searchtext=${searchText}`;
 export const SEARCH_OTHERS_DECKS_PATH = (searchText) => `${BASE_URL}/search/others/deck?searchtext=${searchText}`;
 export const SEARCH_OTHERS_QUIZZES_PATH = (searchText) => `${BASE_URL}/search/others/quiz?searchtext=${searchText}`;
+
+// study goals
+export const CREATE_STUDY_GOAL_PATH = () => `${BASE_URL}/studyGoals/create`;
+export const GET_STUDY_GOALS_PATH = () => `${BASE_URL}/studyGoals/getByCurrentUser`;
+export const DELETE_STUDY_GOAL_PATH = (id) => `${BASE_URL}/studyGoals/delete/${id}`;
+export const UPDATE_STUDY_GOAL_PATH = (id) => `${BASE_URL}/studyGoals/update/${id}`;

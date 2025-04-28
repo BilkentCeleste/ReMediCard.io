@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,5 +15,11 @@ import lombok.Setter;
 public class StudyGoalsResponseDTO {
     private Long id;
     private int targetPerformance;
-    private DeckResponseWithoutFlashcardsDTO deck;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private int repetitionInterval;
+    private String deckOrQuizName;
+    private Long quizId;
+    private Long deckId;
+    private boolean isCompleted;
 }

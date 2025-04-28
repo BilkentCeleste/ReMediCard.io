@@ -5,6 +5,7 @@ import com.celeste.remedicard.io.studyGoals.entity.StudyGoals;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
@@ -13,7 +14,7 @@ public interface StudyGoalsResponseMapper {
 
     StudyGoalsResponseDTO toDTO(StudyGoals studyGoals);
 
-    Set<StudyGoalsResponseDTO> toDTO(Set<StudyGoals> studyGoals);
+    List<StudyGoalsResponseDTO> toDTO(List<StudyGoals> studyGoals);
 
     StudyGoals toEntity(StudyGoalsResponseMapper dto);
 }

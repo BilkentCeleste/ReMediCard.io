@@ -241,3 +241,20 @@ export const createQuestion = async (data) => {
 export const editQuestion = async (id, data) => {
   return await putFetcher(url.EDIT_QUESTION_PATH(id), data);
 };
+
+// study goals
+export const getStudyGoals = async () => {
+  return await getFetcher(url.GET_STUDY_GOALS_PATH());
+};
+
+export const createStudyGoal = async (data) => {
+  return await postFetcher(url.CREATE_STUDY_GOAL_PATH(), data);
+};
+
+export const deleteStudyGoal = async (id) => {
+  return await deleteFetcher(url.DELETE_STUDY_GOAL_PATH(id));
+};
+
+export const updateStudyGoal = async (id, data) => {
+  return await putFetcher(url.UPDATE_STUDY_GOAL_PATH(id), data);
+};

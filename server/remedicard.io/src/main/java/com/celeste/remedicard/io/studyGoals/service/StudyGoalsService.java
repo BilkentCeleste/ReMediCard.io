@@ -5,9 +5,13 @@ import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.notification.service.NotificationService;
+import com.celeste.remedicard.io.quiz.entity.Quiz;
+import com.celeste.remedicard.io.quiz.repository.QuizRepository;
 import com.celeste.remedicard.io.studyGoals.controller.dto.StudyGoalsCreateRequestDTO;
+import com.celeste.remedicard.io.studyGoals.controller.dto.StudyGoalsResponseDTO;
 import com.celeste.remedicard.io.studyGoals.entity.StudyGoalStatus;
 import com.celeste.remedicard.io.studyGoals.entity.StudyGoals;
+import com.celeste.remedicard.io.studyGoals.mapper.StudyGoalsResponseMapper;
 import com.celeste.remedicard.io.studyGoals.repository.StudyGoalsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +30,7 @@ public class StudyGoalsService {
     private final DeckRepository deckRepository;
     private final CurrentUserService currentUserService;
     private final NotificationService notificationService;
+    private final QuizRepository quizRepository;
 
     public void create(StudyGoalsCreateRequestDTO dto) {
         if ((dto.getDeckId() == null && dto.getQuizId() == null) ||
@@ -41,9 +46,9 @@ public class StudyGoalsService {
         goal.setTargetPerformance(dto.getTargetPerformance());
         goal.setStartDate(LocalDateTime.now());
         goal.setEndDate(LocalDateTime.now().plusDays(dto.getDurationInDays()));
-        goal.setRepetitionInterval(Duration.ofHours(dto.getRepetitionIntervalInHours()));
+        goal.setRepetitionInterval(dto.getRepetitionIntervalInHours());
         goal.setNextNotificationDate(LocalDateTime.now().plusHours(dto.getRepetitionIntervalInHours()));
-        goal.setStatus(StudyGoalStatus.ACTIVE);
+        goal.setCompleted(false);
 
         studyGoalsRepository.save(goal);
     }
@@ -59,26 +64,56 @@ public class StudyGoalsService {
                 .orElseThrow(() -> new RuntimeException("Study goals not found"));
         studyGoalsToUpdate.setTargetPerformance(dto.getTargetPerformance());
         studyGoalsToUpdate.setEndDate(studyGoalsToUpdate.getStartDate().plusDays(dto.getDurationInDays()));
-        studyGoalsToUpdate.setRepetitionInterval(Duration.ofHours(dto.getRepetitionIntervalInHours()));
+        studyGoalsToUpdate.setRepetitionInterval(dto.getRepetitionIntervalInHours());
         studyGoalsToUpdate.setNextNotificationDate(LocalDateTime.now().plusHours(dto.getRepetitionIntervalInHours()));
         studyGoalsRepository.save(studyGoalsToUpdate);
     }
     
-    public Set<StudyGoals> getStudyGoalsByUserId(Long userId) {
-        return studyGoalsRepository.findByUserId(userId);
+    public List<StudyGoalsResponseDTO> getStudyGoalsByUserId(Long userId) {
+        List<StudyGoals> studyGoals = studyGoalsRepository.findByUserId(userId);
+        List<StudyGoalsResponseDTO> dto = StudyGoalsResponseMapper.INSTANCE.toDTO(studyGoals);
+        for( int i = 0; i < dto.size(); i++) {
+            if (studyGoals.get(i).getDeckId() != null) {
+                Deck deck = deckRepository.findById(studyGoals.get(i).getDeckId()).orElseThrow(() -> new RuntimeException("Deck not found"));
+                dto.get(i).setDeckOrQuizName(deck.getName());
+            }
+            if(studyGoals.get(i).getQuizId() != null) {
+                Quiz quiz = quizRepository.findById(studyGoals.get(i).getQuizId()).orElseThrow(() -> new RuntimeException("Quiz not found"));
+                dto.get(i).setDeckOrQuizName(quiz.getName());
+            }
+        }
+        return dto;
     }
 
-    @Scheduled(cron = "0 0 * * * *") // 1 hour
+    public void checkIsGoalCompleted(Long userId, Long quizOrDeckId, double performance){
+        List<StudyGoals> studyGoals = studyGoalsRepository.findStudyGoalsByUserIdAndDeckOrQuizId(userId, quizOrDeckId);
+        for (StudyGoals studyGoal : studyGoals) {
+            if (performance >= studyGoal.getTargetPerformance()) {
+                studyGoal.setCompleted(true);
+                studyGoalsRepository.save(studyGoal);
+                currentUserService.setCurrentUser(studyGoal.getUser());
+                notificationService.sendNotification(
+                        "study_goal_completed",
+                        "study_goal_completed_message",
+                        new String[]{studyGoal.getDeckId() != null ? deckRepository.findById(studyGoal.getDeckId()).get().getName() : quizRepository.findById(studyGoal.getQuizId()).get().getName()},
+                        studyGoal.getUser().getPushNotificationToken()
+                );
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 * * * * *") // 1 hour
     public void sendStudyGoalNotifications() {
         List<StudyGoals> dueGoals = studyGoalsRepository.findAllDueGoals(LocalDateTime.now());
         for (StudyGoals goal : dueGoals) {
+            currentUserService.setCurrentUser(goal.getUser());
             notificationService.sendNotification(
-                    "notification.study-goal.title",
-                    "notification.study-goal.message",
-                    new String[]{goal.getDeckId() != null ? deckRepository.findById(goal.getDeckId()).get().getName() : "Quiz"},
+                    "study_goal_reminder",
+                    "study_goal_reminder_message",
+                    new String[]{goal.getDeckId() != null ? deckRepository.findById(goal.getDeckId()).get().getName() : quizRepository.findById(goal.getQuizId()).get().getName()},
                     goal.getUser().getPushNotificationToken()
             );
-            goal.setNextNotificationDate(goal.getNextNotificationDate().plus(goal.getRepetitionInterval()));
+            goal.setNextNotificationDate(goal.getNextNotificationDate().plusHours(goal.getRepetitionInterval()));
             studyGoalsRepository.save(goal);
         }
     }

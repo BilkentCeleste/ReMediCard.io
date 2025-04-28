@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -40,10 +41,9 @@ public class StudyGoalsController {
     }
 
     @GetMapping("/getByCurrentUser")
-    public Set<StudyGoalsResponseDTO> getByCurrentUser() {
+    public List<StudyGoalsResponseDTO> getByCurrentUser() {
         Long currentUserId = currentUserService.getCurrentUserId();
-        Set<StudyGoals> studyGoals = studyGoalsService.getStudyGoalsByUserId(currentUserId);
-        return StudyGoalsResponseMapper.INSTANCE.toDTO(studyGoals);
+        return studyGoalsService.getStudyGoalsByUserId(currentUserId);
     }
 
 }
