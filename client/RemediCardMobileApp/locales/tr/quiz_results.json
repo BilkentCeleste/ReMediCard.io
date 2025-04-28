@@ -6,5 +6,6 @@
   "retry": "Yeniden Çöz",
   "accuracy": "Başarı Yüzdesi",
   "total": "Toplam Soru",
-  "time_spent": "Geçen süre"
+  "time_spent": "Geçen süre",
+  "explanation": "Açıklama:"
 }
