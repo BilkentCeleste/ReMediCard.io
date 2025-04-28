@@ -8,7 +8,15 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import { GoBackIcon } from "@/constants/icons";
+import {
+  HomeIcon,
+  ProfileIcon,
+  SettingsIcon,
+  GoBackIcon,
+  EditProfileIcon,
+  SaveIcon,
+  DiscordIcon
+} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
@@ -18,8 +26,9 @@ import { createStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from 
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
   const router = useRouter();
-  const { deck_id } = useLocalSearchParams();
+  const { goal } = useLocalSearchParams();
 
+  const [parsedGoal, setParsedGoal] = useState(null);
   const [deckOrQuiz, setDeckOrQuiz] = useState("Deck");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
   const [repTwoUnit, setRepTwoUnit] = useState("day(s)");
@@ -30,6 +39,15 @@ export default function CreateGoal() {
   const [quizList, setQuizList] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+  const[isSelected,setIsSelected] = useState(false)
+
+    useEffect(() => {
+      if(goal){
+        setIsSelected(true)
+        setParsedGoal(JSON.parse(goal))
+      }
+    }, []);
 
     useEffect(() => {
       getDecksByCurrentUser()
@@ -54,6 +72,24 @@ export default function CreateGoal() {
     }, []);
 
   const handleSave = () => {
+    if(isSelected){
+      const data = {
+        deckId: null,
+        quizId: null,
+        targetPerformance: parseInt(performance),
+        repetitionIntervalInHours: repTwoUnit === "day(s)"? parseInt(repetition) * 24 : parseInt(repetition),
+        durationInDays: repOneUnit === "month(s)"? parseInt(duration) * 30 : parseInt(duration) * 7,
+      };
+      updateStudyGoal(parsedGoal.id, data)
+        .then((response) => {
+          router.push("/(app)/goal_list");
+        })
+        .catch((error) => {
+          console.log(error)
+          Alert.alert(t("error"), t("update_goal_failed"));
+        });
+      return;
+    }
     if( selectedDeck === null && selectedQuiz === null) {
       Alert.alert(t("error"), t("select_deck_or_quiz"));
       return;
@@ -102,7 +138,7 @@ export default function CreateGoal() {
         </View>
 
         <View style = {styles.textComponent}>
-        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{t("create_goal")}</Text>
+        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{ isSelected? t("update_goal") : t("create_goal") } </Text>
         </View>
 
         <View style={styles.separatorContainer}>
@@ -110,24 +146,33 @@ export default function CreateGoal() {
         </View>
     </View>
 
-      <View style={styles.formRow2}>
-      <View style={styles.formRow1}>
-        <DropDown
-            options={deckOrQuizOptions}
-            placeholder={t("deck")}
-            onSelect={(value) => setDeckOrQuiz(value)}
-          />
+    {!isSelected && (
+        <View style={styles.formRow2}>
+          <View style={styles.formRow1}>
+            <DropDown
+              options={deckOrQuizOptions}
+              placeholder={t("deck")}
+              onSelect={(value) => setDeckOrQuiz(value)}
+            />
+          </View>
+          <View style={styles.formRow1}>
+            <DropDown
+              key={deckOrQuiz} // Use a unique key to trigger re-renders if necessary
+              options={deckOrQuiz === "Deck" ? deckList : quizList}
+              placeholder={deckOrQuiz === "Deck" ? t("select_deck") : t("select_quiz")}
+              onSelect={(value) => {
+                if (deckOrQuiz === "Deck") {
+                  setSelectedDeck(value);
+                } else {
+                  setSelectedQuiz(value);
+                }
+              }}
+              initialValue={deckOrQuiz === "Deck" ? deckList[0]?.value : quizList[0]?.value}
+            />
+          </View>
         </View>
-        <View style={styles.formRow1}>
-        <DropDown
-            key={deckOrQuiz}
-            options={deckOrQuiz === "Deck" ? deckList : quizList}
-            placeholder={deckOrQuiz === "Deck"? t("select_deck"): t("select_quiz")}
-            onSelect={(value) => deckOrQuiz === "Deck"? setSelectedDeck(value): setSelectedQuiz(value)}
-            initialValue={deckList[0]?.value || quizList[0]?.value}
-          />
-        </View>
-      </View>
+      )}
+
       <View style={styles.lineSeparator} />
 
       <View style={styles.formRow}>

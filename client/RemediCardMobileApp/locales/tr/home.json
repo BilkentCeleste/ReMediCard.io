@@ -8,5 +8,13 @@
   "click_to_view_deck": "Desteye gitmek için tıklayınız",
   "click_to_view_quiz": "Teste gitmek için tıklayınız",
   "no_results_found": "Sonuç bulunamadı.",
-  "discover": "Keşfet"
+  "discover": "Keşfet",
+  "welcome": "ReMediCard.io'ya Hoş Geldiniz",
+  "welcome_message": "ReMediCard.io'ya Hoş Geldiniz, nihai çalışma arkadaşınız!",
+  "goal_heading": "{{deckOrQuizName}} hakkında çalışmaya ne dersiniz?",
+  "goal_message": "{{deckOrQuizName}} hakkında çalışmak için {{endDate}} tarihine kadar bir hedefiniz var.",
+  "deck_heading": "{{deckName}} destesine çalışmaya ne dersiniz?",
+  "deck_message": "{{deckName}} destesine en son {{accessDate}} tarihinde çalıştınız.",
+  "quiz_heading": "{{quizName}} testine çalışmaya ne dersiniz?",
+  "quiz_message": "{{quizName}} testine en son {{accessDate}} tarihinde çalıştınız."
 }

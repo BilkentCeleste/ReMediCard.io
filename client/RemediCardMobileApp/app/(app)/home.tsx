@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  Image,
+  ActivityIndicator
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
@@ -17,10 +19,11 @@ import {
   DiscoverIcon
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
-import { generalSearch } from "@/apiHelper/backendHelper";
+import { generalSearch, getRandomStudyGoal, getRandomDeckStats, getRandomQuizStats } from "@/apiHelper/backendHelper";
 import ListLoader from "@/components/ListLoader";
 import NavBar from "@/components/NavBar";
 import AppTitle from "@/components/AppTitle";
+import i18next from "i18next";
 
 const { width } = Dimensions.get("window");
 
@@ -30,7 +33,42 @@ export default function Home() {
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [searchResult, setSearchResult] = useState(null);
-  const [showLoading, setShowLoading] = useState(false)
+  const [showLoading, setShowLoading] = useState(false);
+  const [selectedRandomData, setSelectedRandomData] = useState(null);
+  const [selectedType, setSelectedType] = useState(null); // "goal" | "deck" | "quiz" | "none"
+
+  useEffect(() => {
+    Promise.all([
+      getRandomStudyGoal(),
+      getRandomDeckStats(),
+      getRandomQuizStats()
+    ])
+      .then(([goalRes, deckRes, quizRes]) => {
+        const options = [];
+
+        if (goalRes?.data) {
+          options.push({ type: "goal", data: goalRes.data });
+        }
+        if (deckRes?.data) {
+          options.push({ type: "deck", data: deckRes.data });
+        }
+        if (quizRes?.data) {
+          options.push({ type: "quiz", data: quizRes.data });
+        }
+
+        if (options.length > 0) {
+          const randomOption = options[Math.floor(Math.random() * options.length)];
+          setSelectedRandomData(randomOption.data);
+          setSelectedType(randomOption.type);
+        } else {
+          setSelectedType("none"); // All are empty
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        setSelectedType("none");
+      });
+  }, []);
 
   useEffect(() => {
     if (debouncedSearchText.trim() !== "") {
@@ -91,6 +129,29 @@ export default function Home() {
     cleanSearch();
     router.push(`/(app)/decks?deck_selected=${id}`);
   };
+
+  function formatLocalDateTime(dateString) {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+
+    if (isNaN(date)) {
+      console.error("Invalid date:", dateString);
+      return "";
+    }
+
+    const localeLanguage = i18next.language;
+    let language = "en-GB"; // Default to English (UK)
+    if( localeLanguage === "tr"){
+      language ="tr-TR";
+    }
+
+    return date.toLocaleDateString(language, {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -179,17 +240,54 @@ export default function Home() {
         </>
       ) : (
         <>
-          <View style={styles.reminderComponent}>
-            <Text
-              style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
-            >
-              What about exercising about cardiovascular system ? (dummy)
-            </Text>
-            <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-              Last time you exercised about cardiovascular system was 5 days ago
-              (dummy)
-            </Text>
-          </View>
+          {selectedType === null? (
+            <ActivityIndicator size={"large"} style={styles.indicator} />
+          ) : selectedType === "none" ? (
+            <View style={styles.reminderComponent}>
+              <Text
+                style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
+              >
+                {t("welcome")}
+              </Text>
+              <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
+                {t("welcome_message")}
+              </Text>
+            </View>
+          ) : selectedType === "goal" ? (
+            <View style={styles.reminderComponent}>
+              <Text
+                style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
+              >
+                {t("goal_heading", { deckOrQuizName: selectedRandomData.deckOrQuizName })}
+              </Text>
+              <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
+                {t("goal_message", { deckOrQuizName: selectedRandomData.deckOrQuizName, endDate: formatLocalDateTime(selectedRandomData.endDate) })}
+              </Text>
+            </View>
+          ) : selectedType === "deck" ? (
+            <View style={styles.reminderComponent}>
+              <Text
+                style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
+              >
+                {t("deck_heading", { deckName: selectedRandomData.deckName })}
+              </Text>
+              <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
+                {t("deck_message", { deckName: selectedRandomData.deckName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
+              </Text>
+            </View>
+          ) : selectedType === "quiz" ? (
+            <View style={styles.reminderComponent}>
+              <Text
+                style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
+              >
+                {t("quiz_heading", { quizName: selectedRandomData.quizName })}
+              </Text>
+              <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
+                {t("quiz_message", { quizName: selectedRandomData.quizName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
+              </Text>
+            </View>
+          ) : null
+          }
 
           <View style={styles.buttonContainer}>
             <View style={styles.row}>
@@ -382,5 +480,10 @@ const styles = StyleSheet.create({
   clearButtonText: {
     fontSize: 16,
     color: "#888",
+  },
+  indicator: {
+    transform: [{ scale: 1.8 }],
+    margin: 20,
+    color: "#ffffff",
   },
 });

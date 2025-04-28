@@ -8,5 +8,13 @@
   "click_to_view_deck": "Click to view the deck",
   "click_to_view_quiz": "Click to view the quiz",
   "no_results_found": "No results found.",
-  "discover": "Discover"
+  "discover": "Discover",
+  "welcome": "Welcome to ReMediCard.io",
+  "welcome_message": "Welcome to ReMediCard.io, your ultimate study companion!",
+  "goal_heading": "What about exercising about {{deckOrQuizName}}?",
+  "goal_message": "You have a study goal to exercise about {{deckOrQuizName}} ending on {{endDate}}.",
+  "deck_heading": "What about exercising about the deck {{deckName}}?",
+  "deck_message": "Last time you exercised about {{deckName}} was on {{accessDate}}.",
+  "quiz_heading": "What about exercising about the quiz {{quizName}}?",
+  "quiz_message": "Last time you exercised about {{quizName}} was on {{accessDate}}."
 }

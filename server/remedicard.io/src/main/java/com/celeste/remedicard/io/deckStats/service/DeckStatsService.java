@@ -4,6 +4,7 @@ import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
+import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsResponseWithDeckNameDTO;
 import com.celeste.remedicard.io.deckStats.entity.DeckStats;
 import com.celeste.remedicard.io.deckStats.repository.DeckStatsRepository;
 import com.celeste.remedicard.io.studyGoals.service.StudyGoalsService;
@@ -50,5 +51,18 @@ public class DeckStatsService {
 
     public DeckStats getLastDeckStatsByDeckIdAndUserId(Long deckId, Long userId) {
         return deckStatsRepository.findLastByDeckIdAndUserId(deckId, userId).orElse(null);
+    }
+
+    public DeckStatsResponseWithDeckNameDTO getRandomDeckStatsByCurrentUser() {
+        Long userId = currentUserService.getCurrentUserId();
+        DeckStats deckStats = deckStatsRepository.getRandomByUserId(userId).orElse(null);
+        if(deckStats == null ){
+            return null;
+        }
+        DeckStatsResponseWithDeckNameDTO dto = new DeckStatsResponseWithDeckNameDTO();
+        dto.setDeckName(deckStats.getDeck().getName());
+        dto.setSuccessRate(deckStats.getSuccessRate());
+        dto.setAccessDate(deckStats.getAccessDate());
+        return dto;
     }
 }

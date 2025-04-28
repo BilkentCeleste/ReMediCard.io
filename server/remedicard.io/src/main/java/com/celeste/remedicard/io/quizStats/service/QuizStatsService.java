@@ -2,8 +2,10 @@ package com.celeste.remedicard.io.quizStats.service;
 
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
+import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsResponseWithDeckNameDTO;
 import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.repository.QuizRepository;
+import com.celeste.remedicard.io.quizStats.controller.dto.QuizStatsResponseWithQuizNameDTO;
 import com.celeste.remedicard.io.quizStats.entity.QuizStats;
 import com.celeste.remedicard.io.quizStats.repository.QuizStatsRepository;
 import com.celeste.remedicard.io.studyGoals.service.StudyGoalsService;
@@ -50,5 +52,18 @@ public class QuizStatsService {
 
     public QuizStats getLastQuizStatsByQuizIdAndUserId(Long quizId, Long userId) {
         return quizStatsRepository.findLastByQuizIdAndUserId(quizId, userId).orElse(null);
+    }
+
+    public QuizStatsResponseWithQuizNameDTO getRandomQuizStatsByCurrentUser() {
+        Long userId = currentUserService.getCurrentUserId();
+        QuizStats quizStats = quizStatsRepository.getRandomByUserId(userId).orElse(null);
+        if(quizStats == null ){
+            return null;
+        }
+        QuizStatsResponseWithQuizNameDTO dto = new QuizStatsResponseWithQuizNameDTO();
+        dto.setQuizName(quizStats.getQuiz().getName());
+        dto.setSuccessRate(quizStats.getSuccessRate());
+        dto.setAccessDate(quizStats.getAccessDate());
+        return dto;
     }
 }

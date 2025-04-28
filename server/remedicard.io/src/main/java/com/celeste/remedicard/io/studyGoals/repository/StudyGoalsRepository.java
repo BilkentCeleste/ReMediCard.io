@@ -17,4 +17,7 @@ public interface StudyGoalsRepository extends JpaRepository<StudyGoals, Long> {
 
     @Query("SELECT s FROM StudyGoals s WHERE s.nextNotificationDate <= :dueDate")
     List<StudyGoals> findAllDueGoals(LocalDateTime dueDate);
+
+    @Query("SELECT s FROM StudyGoals s WHERE s.user.id = :userId ORDER BY RANDOM() LIMIT 1")
+    StudyGoals getRandomStudyGoalByUserId(Long userId);
 }

@@ -100,6 +100,10 @@ export const createDeckStats = async (data) => {
   return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);
 };
 
+export const getRandomDeckStats = async () => {
+  return await getFetcher(url.GET_RANDOM_DECK_STATS_PATH());
+}
+
 // flashcard
 export const createFlashcard = async (data, onUploadProgress) => {
   return await postFetcher(url.CREATE_FLASHCARD_PATH(), data, "multipart/form-data", onUploadProgress);
@@ -237,6 +241,10 @@ export const createQuizStats = async (data) => {
   return await postFetcher(url.CREATE_QUIZ_STATS_PATH(), data);
 };
 
+export const getRandomQuizStats = async () => {
+  return await getFetcher(url.GET_RANDOM_QUIZ_STATS_PATH());
+}
+
 // question
 export const removeQuestion = async (id, data) => {
   return await deleteFetcher(url.REMOVE_QUESTION_PATH(id), data);
@@ -266,3 +274,7 @@ export const deleteStudyGoal = async (id) => {
 export const updateStudyGoal = async (id, data) => {
   return await putFetcher(url.UPDATE_STUDY_GOAL_PATH(id), data);
 };
+
+export const getRandomStudyGoal = async () => {
+  return await getFetcher(url.GET_RANDOM_STUDY_GOAL_PATH());
+}

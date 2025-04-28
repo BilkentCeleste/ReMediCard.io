@@ -3,6 +3,7 @@ package com.celeste.remedicard.io.quizStats.controller;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.quizStats.controller.dto.QuizStatsCreateRequestDTO;
 import com.celeste.remedicard.io.quizStats.controller.dto.QuizStatsResponseDTO;
+import com.celeste.remedicard.io.quizStats.controller.dto.QuizStatsResponseWithQuizNameDTO;
 import com.celeste.remedicard.io.quizStats.entity.QuizStats;
 import com.celeste.remedicard.io.quizStats.mapper.QuizStatsCreateRequestMapper;
 import com.celeste.remedicard.io.quizStats.mapper.QuizStatsResponseMapper;
@@ -33,5 +34,10 @@ public class QuizStatsController {
         Long userId = currentUserService.getCurrentUserId();
         Set<QuizStats> quizStats = quizStatsService.getQuizStatsByQuizIdAndUserId(quizId, userId);
         return QuizStatsResponseMapper.INSTANCE.toDTO(quizStats);
+    }
+
+    @GetMapping("/getRandomQuizStatsByCurrentUser")
+    public QuizStatsResponseWithQuizNameDTO getRandomQuizStatsByCurrentUser() {
+        return quizStatsService.getRandomQuizStatsByCurrentUser();
     }
 }

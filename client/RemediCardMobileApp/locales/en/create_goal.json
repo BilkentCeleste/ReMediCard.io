@@ -18,7 +18,9 @@
     "create_goal_failed": "Error creating goal",
     "create_goal": "Create Goal",
     "informing_message": "You will be notified every {{repetition}} {{repTwoUnit}} for {{duration}} {{repOneUnit}} until you exceed {{performance}}% success",
-    "select_deck_or_quiz": "Please select a deck or quiz"
+    "select_deck_or_quiz": "Please select a deck or quiz",
+    "update_goal_failed": "Error updating goal",
+    "update_goal": "Update Goal"
     
 
 }
