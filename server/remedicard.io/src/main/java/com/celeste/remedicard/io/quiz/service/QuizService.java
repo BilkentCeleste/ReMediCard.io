@@ -18,6 +18,7 @@ import com.celeste.remedicard.io.quizStats.service.QuizStatsService;
 import com.celeste.remedicard.io.search.entity.SearchableQuestion;
 import com.celeste.remedicard.io.search.entity.SearchableQuiz;
 import com.celeste.remedicard.io.search.repository.SearchableQuizRepository;
+import com.celeste.remedicard.io.studyGoals.service.StudyGoalsService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class QuizService {
     private final CurrentUserService currentUserService;
     private final UserService userService;
     private final QuizStatsService quizStatsService;
+    private final StudyGoalsService studyGoalsService;
 
     @Value("${app.share-url-base}")
     private String shareUrlBase;
@@ -72,6 +74,8 @@ public class QuizService {
         quiz.removeUser();
         deleteSearchableQuiz(quizId);
         quizRepository.deleteById(quizId);
+
+        studyGoalsService.deleteByQuizId(quizId);
     }
 
     public void addUserQuiz(Long quizId) {

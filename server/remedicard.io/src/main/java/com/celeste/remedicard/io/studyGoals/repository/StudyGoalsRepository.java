@@ -20,4 +20,8 @@ public interface StudyGoalsRepository extends JpaRepository<StudyGoals, Long> {
 
     @Query("SELECT s FROM StudyGoals s WHERE s.user.id = :userId ORDER BY RANDOM() LIMIT 1")
     StudyGoals getRandomStudyGoalByUserId(Long userId);
+
+    List<StudyGoals> findByDeckId(Long deckId);
+
+    List<StudyGoals> findByQuizId(Long quizId);
 }

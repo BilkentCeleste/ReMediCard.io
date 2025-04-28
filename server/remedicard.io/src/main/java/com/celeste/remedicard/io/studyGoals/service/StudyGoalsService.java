@@ -56,6 +56,16 @@ public class StudyGoalsService {
         studyGoalsRepository.delete(studyGoals);
     }
 
+    public void deleteByDeckId(Long deckId) {
+        List<StudyGoals> studyGoals = studyGoalsRepository.findByDeckId(deckId);
+        studyGoalsRepository.deleteAll(studyGoals);
+    }
+
+    public void deleteByQuizId(Long quizId) {
+        List<StudyGoals> studyGoals = studyGoalsRepository.findByQuizId(quizId);
+        studyGoalsRepository.deleteAll(studyGoals);
+    }
+
     public void update(StudyGoalsCreateRequestDTO dto, Long studyGoalsId) {
         StudyGoals studyGoalsToUpdate = studyGoalsRepository.findById(studyGoalsId)
                 .orElseThrow(() -> new RuntimeException("Study goals not found"));
