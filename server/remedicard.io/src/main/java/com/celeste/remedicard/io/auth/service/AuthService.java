@@ -4,6 +4,7 @@ import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.entity.Role;
 import com.celeste.remedicard.io.auth.entity.User;
 import com.celeste.remedicard.io.auth.repository.UserRepository;
+import com.celeste.remedicard.io.autogeneration.config.Language;
 import com.celeste.remedicard.io.notification.service.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -268,6 +269,12 @@ public class AuthService {
     public void logoutUser() {
         User user = currentUserService.getCurrentUser();
         user.setPushNotificationToken(null);
+        userRepository.save(user);
+    }
+
+    public void changeLanguage(Language language) {
+        User user = currentUserService.getCurrentUser();
+        user.setLanguage(language);
         userRepository.save(user);
     }
 }

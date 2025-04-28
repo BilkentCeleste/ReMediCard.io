@@ -16,6 +16,7 @@ export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_re
 export const RESET_PASSWORD_PATH = () => `${BASE_URL}/auth/reset_password`;
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
 export const UPDATE_USER_PROFILE = () => `${BASE_URL}/auth/update_user_profile`;
+export const CHANGE_LANGUAGE_PATH = (language) => `${BASE_URL}/auth/language/${language}`;
 
 // deck
 export const CREATE_DECK_PATH = () => `${BASE_URL}/deck/create`;

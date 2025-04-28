@@ -38,6 +38,10 @@ export const updateUserProfile = async (data) => {
   return await postFetcher(url.UPDATE_USER_PROFILE(), data);
 }
 
+export const changeLanguage = async (language) => {
+  return await postFetcher(url.CHANGE_LANGUAGE_PATH(language));
+}
+
 // deck
 export const createDeck = async (data) => {
   return await postFetcher(url.CREATE_DECK_PATH(), data);
