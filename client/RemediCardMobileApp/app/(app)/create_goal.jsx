@@ -378,6 +378,7 @@ const styles = StyleSheet.create({
   saveButton: {
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor: '#4CAF50',
   },
   saveButtonText: {
     marginTop: 5,
@@ -392,9 +393,6 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
       backgroundColor: '#C8102E',
-  },
-  saveButton: {
-      backgroundColor: '#4CAF50',
   },
   buttonText: {
       color: '#fff',

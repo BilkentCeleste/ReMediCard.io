@@ -373,6 +373,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
+        width: "80%",
+        padding: 20,
+        borderRadius: 20,
     },
     modalContent: {
         width: "80%",
@@ -422,12 +425,5 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
-    },
-    modalContainer: {
-    backgroundColor: "#fff",
-    width: "80%",
-    padding: 20,
-    borderRadius: 20,
-    alignItems: "center",
     },
 });
