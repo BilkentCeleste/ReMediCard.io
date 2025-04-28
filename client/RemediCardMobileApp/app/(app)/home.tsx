@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Image,
   ActivityIndicator
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -29,13 +28,14 @@ const { width } = Dimensions.get("window");
 
 export default function Home() {
   const { t } = useTranslation("home");
+  const router = useRouter();
 
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const [showLoading, setShowLoading] = useState(false);
   const [selectedRandomData, setSelectedRandomData] = useState(null);
-  const [selectedType, setSelectedType] = useState(null); // "goal" | "deck" | "quiz" | "none"
+  const [selectedType, setSelectedType] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -61,7 +61,7 @@ export default function Home() {
           setSelectedRandomData(randomOption.data);
           setSelectedType(randomOption.type);
         } else {
-          setSelectedType("none"); // All are empty
+          setSelectedType("none");
         }
       })
       .catch((e) => {
@@ -102,8 +102,6 @@ export default function Home() {
     };
   }, [searchText]);
 
-  const router = useRouter();
-
   const uploadDecksPage = () => {
     router.push("/(app)/decks");
   };
@@ -141,7 +139,7 @@ export default function Home() {
     }
 
     const localeLanguage = i18next.language;
-    let language = "en-GB"; // Default to English (UK)
+    let language = "en-GB";
     if( localeLanguage === "tr"){
       language ="tr-TR";
     }

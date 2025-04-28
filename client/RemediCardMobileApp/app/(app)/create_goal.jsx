@@ -8,15 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import {
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
-  GoBackIcon,
-  EditProfileIcon,
-  SaveIcon,
-  DiscordIcon
-} from "@/constants/icons";
+import { GoBackIcon } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
@@ -39,7 +31,6 @@ export default function CreateGoal() {
   const [quizList, setQuizList] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
-
   const[isSelected,setIsSelected] = useState(false)
 
     useEffect(() => {
@@ -183,7 +174,7 @@ export default function CreateGoal() {
             style={styles.timeInput}
             value={duration}
             onChangeText={(text) => {
-              const cleaned = text.replace(/[^0-9]/g, ''); // Keep only digits
+              const cleaned = text.replace(/[^0-9]/g, '');
               if (cleaned === '' || parseInt(cleaned) > 0) {
                 setDuration(cleaned);
               }
@@ -213,7 +204,7 @@ export default function CreateGoal() {
             style={styles.timeInput}
             value={repetition}
             onChangeText={(text) => {
-              const cleaned = text.replace(/[^0-9]/g, ''); // Keep only digits
+              const cleaned = text.replace(/[^0-9]/g, '');
               if (cleaned === '' || parseInt(cleaned) > 0) {
                 setRepetition(cleaned);
               }
@@ -330,22 +321,22 @@ const styles = StyleSheet.create({
   formRow: {
     width: "75%",
     flexDirection: "column",
-    justifyContent: 'space-between', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
   formRow1: {
     width: "50%",
     flexDirection: "column",
-    justifyContent: 'space-between', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
   formRow2: {
     width: "90%",
     flexDirection: "row",
-    justifyContent: 'center', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   labelText: {
     fontSize: 16,
