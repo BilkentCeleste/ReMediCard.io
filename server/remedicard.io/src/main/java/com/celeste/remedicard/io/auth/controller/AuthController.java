@@ -79,4 +79,11 @@ public class AuthController {
     public AuthResponse updateUserProfile(@RequestBody UpdateProfileRequest request) {
         return authService.updateUserProfile(request);
     }
+
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout() {
+        authService.logoutUser();
+        
+        return ResponseEntity.ok().build();
+    }
 }
