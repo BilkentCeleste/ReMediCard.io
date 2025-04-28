@@ -22,6 +22,10 @@ export const loginGoogle = async (data) => {
   return await postFetcher(url.LOGIN_GOOGLE_PATH(), data);
 };
 
+export const logout = async (data) => {
+  return await postFetcher(url.LOGOUT_PATH());
+};
+
 export const register = async (data) => {
   return await postFetcher(url.REGISTER_PATH(), data);
 };

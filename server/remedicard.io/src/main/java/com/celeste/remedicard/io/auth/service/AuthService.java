@@ -7,6 +7,7 @@ import com.celeste.remedicard.io.auth.repository.UserRepository;
 import com.celeste.remedicard.io.notification.service.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -262,5 +263,11 @@ public class AuthService {
                 .accessToken(jwtToken)
                 .role(user.getRole())
                 .build();
+    }
+
+    public void logoutUser() {
+        User user = currentUserService.getCurrentUser();
+        user.setPushNotificationToken(null);
+        userRepository.save(user);
     }
 }
