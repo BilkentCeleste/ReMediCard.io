@@ -7,5 +7,7 @@
   "accuracy": "Başarı Yüzdesi",
   "total": "Toplam Soru",
   "time_spent": "Geçen süre",
-  "explanation": "Açıklama:"
+  "explanation": "Açıklama:",
+  "error": "Hata",
+    "fetch_quiz_error": "Test sonuçlarını alırken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
 }

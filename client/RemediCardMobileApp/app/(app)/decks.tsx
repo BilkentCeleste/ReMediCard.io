@@ -13,12 +13,9 @@ import {
   Easing,
   Share,
 } from "react-native";
-import { useRouter, Link, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import {
   ChevronRightIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
   SearchIcon,
   PlusIcon,
   ChevronDown

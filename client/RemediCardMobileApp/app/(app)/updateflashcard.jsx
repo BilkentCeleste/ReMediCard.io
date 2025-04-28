@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert, Image, KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert,
+    Image, KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon, UploadIcon} from '@/constants/icons';
@@ -72,8 +73,6 @@ export default function UpdateFlashcard() {
                 name: "image"  + backImage.substring(backImage.lastIndexOf(".")),
             });
         }
-        const uploadId = Date.now().toString(); // Unique ID
-
 
         createFlashcard(formData,
             async (progressEvent) => {

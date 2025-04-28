@@ -8,20 +8,12 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import {
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
-  GoBackIcon,
-  EditProfileIcon,
-  SaveIcon,
-  DiscordIcon
-} from "@/constants/icons";
+import { GoBackIcon } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 import NavBar from "@/components/NavBar"
-import { createStudyGoal, updateStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from "@/apiHelper/backendHelper";
+import { createStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from "@/apiHelper/backendHelper";
 
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
@@ -34,7 +26,6 @@ export default function CreateGoal() {
   const [performance, setPerformance] = useState("80");
   const [duration, setDuration] = useState("1");
   const [repetition, setRepetition] = useState("2");
-
   const [deckList, setDeckList] = useState([]);
   const [quizList, setQuizList] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(null);

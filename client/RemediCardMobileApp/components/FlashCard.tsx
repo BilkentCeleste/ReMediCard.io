@@ -58,7 +58,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 useNativeDriver: true,
             }).start(() => {
                 setIsFlipped(true);
-                setIsAnimating(false); // Unlock animation
+                setIsAnimating(false);
             });
         }
     };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, BackHandler} from 'react-native';
 import {useRouter, useLocalSearchParams, Link, useFocusEffect} from 'expo-router';
-import {GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon} from '@/constants/icons';
+import {GoBackIcon} from '@/constants/icons';
 import {getQuizByShareToken, addUserQuiz, getQuizByQuizId} from '@/apiHelper/backendHelper';
 import { useTranslation } from 'react-i18next';
 import NotFound from "@/components/NotFound";

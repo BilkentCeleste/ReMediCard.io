@@ -18,9 +18,6 @@ import {
 } from "expo-router";
 import {
   GoBackIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
 } from "@/constants/icons";
 import {
   addUserDeck,

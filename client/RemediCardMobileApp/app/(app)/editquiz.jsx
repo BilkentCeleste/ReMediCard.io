@@ -18,9 +18,6 @@ import {
 import {
   PlusIcon,
   GoBackIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
 } from "@/constants/icons";
 import { getQuizByQuizId, removeQuestion, updateQuizName } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";

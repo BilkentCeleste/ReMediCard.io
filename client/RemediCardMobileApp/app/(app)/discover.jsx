@@ -12,12 +12,9 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { useRouter, Link, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import {
   ChevronRightIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
   SearchIcon,
   ChevronDown,
   LikeIcon,
@@ -140,7 +137,6 @@ export default function Discover() {
               setList(res.data);
             })
             .catch((e) => {
-              console.log(e)
               setShowLoading(false);
             });
   }

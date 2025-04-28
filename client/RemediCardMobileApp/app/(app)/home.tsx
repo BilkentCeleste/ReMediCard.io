@@ -7,17 +7,13 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Image
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   SearchIcon,
   FlashcardIcon,
   QuizIcon,
   GoalsIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
   DiscoverIcon
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
