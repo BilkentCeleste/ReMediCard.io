@@ -25,7 +25,6 @@ export default function GoalList() {
   useEffect(() => {
     getStudyGoals()
       .then((goals) => {
-        console.log(goals.data);
         setDeckGoals(goals.data.filter((goal: any) => goal.deckId !== null).map((goal: any) => ({
             id: goal.id,
             title: t("goal_name", {deckOrQuizName: goal.deckOrQuizName}),
@@ -194,7 +193,7 @@ export default function GoalList() {
               )}
             <View style={styles.link}>
               <View>
-                <Text style={styles.goalTitle}>{item.title}</Text>
+                <Text style={styles.goalTitle} numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
                 <Text style={styles.goalInfoText}>
                   {t("duration")}: {item.duration}
                 </Text>
@@ -485,7 +484,7 @@ const styles = StyleSheet.create({
   },
   completedBadge: {
     position: "absolute",
-    top: 10,
+    top: 25,
     right: 10,
     backgroundColor: "#28a745",
     color: "#fff",
