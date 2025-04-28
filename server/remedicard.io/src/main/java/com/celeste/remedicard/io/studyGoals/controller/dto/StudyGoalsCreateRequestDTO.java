@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudyGoalsCreateRequestDTO {
-
     Long deckId;
     Long quizId;
     Double targetPerformance;

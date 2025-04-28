@@ -1,10 +1,11 @@
-import React, {useState} from "react";
-import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,  Modal} from "react-native";
+import React, {useEffect, useState} from "react";
+import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,  Modal, Alert} from "react-native";
 import { useRouter, Link, useLocalSearchParams } from "expo-router";
 import {ChevronRightIcon, HomeIcon, PlusIcon, ProfileIcon, SearchIcon, SettingsIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {useTranslation} from "react-i18next";
 import NavBar from "@/components/NavBar";
+import { getStudyGoals, deleteStudyGoal, getDeckByDeckId, getQuizByQuizId } from "@/apiHelper/backendHelper";
 
 interface Goal {
   title: string;
@@ -18,21 +19,142 @@ interface Goal {
 export default function GoalList() {
   const { t } = useTranslation("goal_list");
   const router = useRouter();
-    const {id, type} = useLocalSearchParams()
   
 
   const [selectedSort, setSelectedSort] = useState<string>("longest");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const [listType, setListType] = useState(type ? type : "deck")
-  const [showLoading, setShowLoading] = useState(true);
+  const [listType, setListType] = useState("deck")
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedDeck, setSelectedDeck] = useState<any>(null);
-  
-  const handleDeckPress = (deck: any) => {
-    setSelectedDeck(deck);
+  const [selectedGoal, setSelectedGoal] = useState<any>(null);
+  const [deckGoals, setDeckGoals] = useState<any[]>([]);
+  const [quizGoals, setQuizGoals] = useState<any[]>([]);
+  const [goals, setGoals] = useState<any[]>([]);
+
+
+  const formatDate = (dateStr: any) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  function daysBetween(dateTimeString1, dateTimeString2) {
+    const date1 = new Date(dateTimeString1);
+    const date2 = new Date(dateTimeString2);
+
+    // Get difference in milliseconds
+    const diffMillis = Math.abs(date2 - date1);
+
+    // Convert milliseconds to days
+    const diffDays = Math.floor(diffMillis / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
+
+  useEffect(() => {
+    getStudyGoals()
+      .then((goals) => {
+        console.log(goals.data);
+        setDeckGoals(goals.data.filter((goal: any) => goal.deckId !== null).map((goal: any) => ({
+            id: goal.id,
+            title: `Goal for ${goal.deckOrQuizName}`,
+            duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} Month(s)` : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} Week(s)`,
+            repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} Day(s)` : `${goal.repetitionInterval} Hour(s)`,
+            startDate: formatDate(goal.startDate),
+            endDate: formatDate(goal.endDate),
+            goalPercent: goal.targetPerformance,
+            deckId: goal.deckId,
+            completed: goal.completed,
+          }))
+        );
+        setQuizGoals(goals.data.filter((goal: any) => goal.quizId !== null).map((goal: any) => ({
+          id: goal.id,
+          title: `Goal for ${goal.deckOrQuizName}`,
+          duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} Month(s)` : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} Week(s)`,
+          repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} Day(s)` : `${goal.repetitionInterval} Hour(s)`,
+          startDate: formatDate(goal.startDate),
+          endDate: formatDate(goal.endDate),
+          goalPercent: goal.targetPerformance,
+          quizId: goal.quizId,
+          completed: goal.completed,
+          }))
+        );
+      })
+      .catch((error) => {
+        Alert.alert(t("error"), t("fetch_decks_failed"));
+      });
+  }, []);
+
+  useEffect(() => {
+    if (listType === "deck") {
+      setGoals(deckGoals);
+    } else {
+      setGoals(quizGoals);
+    }
+  }, [listType, deckGoals, quizGoals]);
+
+  const handleSelectGoal = (goal: any) => {
+    setSelectedGoal(goal);
     setModalVisible(true);
   };
+
+  const handleStart = () => {
+    if (selectedGoal) {
+      if ( listType === "deck") {
+        getDeckByDeckId(selectedGoal.deckId)
+          .then((deck) => {
+            if(deck.data.flashcardCount === 0){
+              Alert.alert(t("no_cards_available"), 
+              t("no_cards_available_message"), 
+              [{text: t("ok"), style: "cancel"}], { cancelable: false }
+              );
+              return
+            }
+            setModalVisible(false);
+            router.push({
+              pathname: "/(app)/card",
+              params: { deck: JSON.stringify(deck.data) },
+            });
+          })
+          .catch((error) => {
+            Alert.alert(t("error"), t("fetch_deck_failed"));
+          });
+      }
+      else if (listType === "quiz") {
+        getQuizByQuizId(selectedGoal.quizId)
+          .then((quiz) => {
+            if(quiz.data.questionCount === 0){
+              Alert.alert(t("no_quizzes_available"), t("no_quizzes_available_message"), 
+              [{text: t("ok"), 
+                style: "cancel" }],
+              { cancelable: false })
+                return
+              }
+            const quizId = quiz.data.id;
+            setModalVisible(false);
+            router.push(`/(app)/quiz_question?quizId=${quizId}`);
+          })
+          .catch((error) => {
+            Alert.alert(t("error"), t("fetch_quiz_failed"));
+          });
+      }
+    }
+  };
+
+  const handleDeleteGoal = () => {
+    deleteStudyGoal(selectedGoal.id)
+      .then(() => {
+        setModalVisible(false);
+        setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== selectedGoal.id));
+        Alert.alert(t("success"), t("goal_deleted"));
+      })
+      .catch((error) => {
+        Alert.alert(t("error"), t("delete_goal_failed"));
+      }
+    );
+  }
 
   const sortOptions = [
     { label: t("sort_by_longest"), value: "longest" },
@@ -41,30 +163,10 @@ export default function GoalList() {
     { label: t("sort_by_lowest"), value: "lowestGoal" },
   ];
 
-  const goals: Goal[] = [
-    {
-      title: "Goal 1 for Deck 1",
-      duration: "1 Month(s)",
-      repetition: "2 Day(s)",
-      startDate: "01.07.2025",
-      endDate: "01.08.2025",
-      goalPercent: 80,
-    },
-    {
-      title: "Goal 2 for Deck 2",
-      duration: "1 Week(s)",
-      repetition: "1 Day(s)",
-      startDate: "01.07.2025",
-      endDate: "07.07.2025",
-      goalPercent: 90,
-    },
-  ];
 
-  const sortedGoals = goals.filter((goal) =>
+  const searchedGoals = goals.filter((goal) =>
       goal.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  let isCompleted = true
 
   return (
     <View style={styles.container}>
@@ -90,14 +192,14 @@ export default function GoalList() {
       <FlatList
         style={styles.flatListContainer}
         contentContainerStyle={styles.flatListContent}
-        data={sortedGoals}
+        data={searchedGoals}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={[
             styles.goalComponent,
-            isCompleted && { borderColor: '#28a745', borderWidth: 5 }
-          ]} onPress={() => handleDeckPress(item)}>
-              {isCompleted && (
+            item.completed && { borderColor: '#28a745', borderWidth: 5 }
+          ]} onPress={() => handleSelectGoal(item)}>
+              {item.completed && (
                 <Text style={styles.completedBadge}>Completed</Text>
               )}
             <View style={styles.link}>
@@ -181,10 +283,10 @@ export default function GoalList() {
             >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{selectedDeck?.title}</Text>
+            <Text style={styles.modalTitle}>{selectedGoal?.title}</Text>
             <TouchableOpacity
               style={styles.modalButton}
-              //onPress={handleStartDeck}
+              onPress={handleStart}
             >
               <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
             </TouchableOpacity>
@@ -196,7 +298,7 @@ export default function GoalList() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalButton, { backgroundColor: "#C8102E" }]}
-              //onPress={() => setPopUpVisible(true)}
+              onPress={handleDeleteGoal}
             >
               <Text style={[styles.modalButtonText]}>{t("delete_goal")}</Text>
             </TouchableOpacity>

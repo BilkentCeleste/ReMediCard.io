@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -20,29 +20,69 @@ import DropDown from "../../components/DropDown";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 import NavBar from "@/components/NavBar"
+import { createStudyGoal, updateStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from "@/apiHelper/backendHelper";
 
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
   const router = useRouter();
   const { deck_id } = useLocalSearchParams();
 
-  const [deck, setDeck] = useState("Deck 1");
-  const [repOneValue, setRepOneValue] = useState("1");
+  const [deckOrQuiz, setDeckOrQuiz] = useState("Deck");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
-  const [repTwoValue, setRepTwoValue] = useState("2");
   const [repTwoUnit, setRepTwoUnit] = useState("day(s)");
   const [performance, setPerformance] = useState("80");
   const [duration, setDuration] = useState("1");
   const [repetition, setRepetition] = useState("2");
 
+  const [deckList, setDeckList] = useState([]);
+  const [quizList, setQuizList] = useState([]);
+  const [selectedDeck, setSelectedDeck] = useState(null);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+    useEffect(() => {
+      getDecksByCurrentUser()
+        .then((decks) => {
+          setDeckList(decks?.data.map((deck) => (
+            { label: deck.name, value: deck.id }
+          )));
+        })
+        .catch((error) => {
+          Alert.alert(t("error"), t("fetch_decks_failed"));
+        });
+
+      getQuizzesByCurrentUser()
+        .then((quizzes) => {
+          setQuizList(quizzes?.data.map((quiz) => (
+            { label: quiz.name, value: quiz.id }
+          )));
+        })
+        .catch((error) => {
+          Alert.alert(t("error"), t("fetch_quizzes_failed"));
+        });
+    }, []);
+
+  const handleSave = () => {
+    const data = {
+      deckId: deckOrQuiz === "Deck" ? selectedDeck : null,
+      quizId: deckOrQuiz === "Quiz" ? selectedQuiz : null,
+      targetPerformance: parseInt(performance),
+      repetitionIntervalInHours: repTwoUnit === "day(s)"? parseInt(repetition) * 24 : parseInt(repetition),
+      durationInDays: repOneUnit === "month(s)"? parseInt(duration) * 30 : parseInt(duration) * 7,
+    };
+
+    createStudyGoal(data)
+      .then((response) => {
+        router.push("/(app)/goal_list");
+      })
+      .catch((error) => {
+        Alert.alert(t("error"), t("create_goal_failed"));
+      });
+  }
+
   const handleBack = () => {
     router.push("/(app)/goal_list");
 }
 
-  const deckOptions = [
-    { label: "Deck 1", value: "Deck 1" },
-    { label: "Deck 2", value: "Deck 2" },
-  ];
   const deckOrQuizOptions = [
     { label: "Deck", value: "Deck" },
     { label: "Quiz", value: "Quiz" },
@@ -56,7 +96,7 @@ export default function CreateGoal() {
     { label: t("hours"), value: "hour(s)" },
   ];
 
-  const summaryText = `You will be notified about ${deck} every ${repTwoValue} ${repTwoUnit} for ${repOneValue} ${repOneUnit} until you exceed ${performance}% success`;
+  const summaryText = `You will be notified about ${deckOrQuiz === "Deck"? selectedDeck: selectedQuiz} every ${repetition} ${repTwoUnit} for ${duration} ${repOneUnit} until you exceed ${performance}% success`;
 
   return (
     <View style={styles.container}>
@@ -79,16 +119,15 @@ export default function CreateGoal() {
         <DropDown
             options={deckOrQuizOptions}
             placeholder={t("deck")}
-            onSelect={(value) => setDeck(value)}
-            initialValue={deck}
+            onSelect={(value) => setDeckOrQuiz(value)}
           />
         </View>
         <View style={styles.formRow1}>
         <DropDown
-            options={deckOptions}
+            options={deckOrQuiz === "Deck" ? deckList : quizList}
             placeholder={t("select_deck")}
-            onSelect={(value) => setDeck(value)}
-            initialValue={deck}
+            onSelect={(value) => deckOrQuiz === "Deck"? setSelectedDeck(value): setSelectedQuiz(value)}
+            initialValue={deckList[0]?.value || quizList[0]?.value}
           />
         </View>
       </View>
@@ -185,7 +224,7 @@ export default function CreateGoal() {
             <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleBack}>
                 <Text style={styles.buttonText}>{t("discard")}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.saveButton]}>
+            <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSave}>
                 <Text style={styles.buttonText}>{t("save")}</Text>
             </TouchableOpacity>
         </View>

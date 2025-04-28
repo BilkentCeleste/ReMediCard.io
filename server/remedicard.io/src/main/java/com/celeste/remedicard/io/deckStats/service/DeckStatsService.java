@@ -6,6 +6,7 @@ import com.celeste.remedicard.io.deck.entity.Deck;
 import com.celeste.remedicard.io.deck.repository.DeckRepository;
 import com.celeste.remedicard.io.deckStats.entity.DeckStats;
 import com.celeste.remedicard.io.deckStats.repository.DeckStatsRepository;
+import com.celeste.remedicard.io.studyGoals.service.StudyGoalsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class DeckStatsService {
     private final DeckStatsRepository deckStatsRepository;
     private final DeckRepository deckRepository;
     private final CurrentUserService currentUserService;
+    private final StudyGoalsService studyGoalsService;
 
     public void create(DeckStats deckStats, Long deckId) {
         Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
@@ -27,6 +29,8 @@ public class DeckStatsService {
         deckStats.setUser(user);
         deckStats.setAccessDate(LocalDateTime.now());
         deckStatsRepository.save(deckStats);
+
+        studyGoalsService.checkIsGoalCompleted(user.getId(), deck.getId(), deckStats.getSuccessRate());
     }
 
     public void delete(Long deckStatsId) {
