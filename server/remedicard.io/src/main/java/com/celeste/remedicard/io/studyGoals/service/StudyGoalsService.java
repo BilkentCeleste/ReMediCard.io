@@ -102,7 +102,7 @@ public class StudyGoalsService {
         }
     }
 
-    @Scheduled(cron = "0 * * * * *") // 1 hour
+    @Scheduled(cron = "0 0 * * * *") // 1 hour
     public void sendStudyGoalNotifications() {
         List<StudyGoals> dueGoals = studyGoalsRepository.findAllDueGoals(LocalDateTime.now());
         for (StudyGoals goal : dueGoals) {

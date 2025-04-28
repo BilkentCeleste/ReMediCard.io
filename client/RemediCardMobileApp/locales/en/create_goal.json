@@ -11,5 +11,14 @@
     "save": "Save",
     "quiz": "Quiz",
     "select_quiz": "Select Quiz",
-    "duration": "Duration"
+    "duration": "Duration",
+    "error": "Error",
+    "fetch_decks_failed": "Error fetching decks",
+    "fetch_quizzes_failed": "Error fetching quizzes",
+    "create_goal_failed": "Error creating goal",
+    "create_goal": "Create Goal",
+    "informing_message": "You will be notified every {{repetition}} {{repTwoUnit}} for {{duration}} {{repOneUnit}} until you exceed {{performance}}% success",
+    "select_deck_or_quiz": "Please select a deck or quiz"
+    
+
 }
