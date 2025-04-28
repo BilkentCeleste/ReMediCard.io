@@ -18,7 +18,7 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{animation: 'slide_from_right'}}>
+    <Stack screenOptions={{animation: 'fade', animationDuration: 100}}>
       <Stack.Screen name="(profile)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ headerShown: false }} />
