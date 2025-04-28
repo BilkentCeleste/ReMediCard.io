@@ -27,7 +27,7 @@ export default function GoalList() {
         setDeckGoals(goals.data.filter((goal: any) => goal.deckId !== null).map((goal: any) => ({
             id: goal.id,
             title: t("goal_name", {deckOrQuizName: goal.deckOrQuizName}),
-            duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
+            duration: daysBetween(goal.startDate, goal.endDate) % 30 === 0 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
             repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} ` + t("days") : `${goal.repetitionInterval} ` + t("hours"),
             startDate: formatDate(goal.startDate),
             endDate: formatDate(goal.endDate),
@@ -39,7 +39,7 @@ export default function GoalList() {
         setQuizGoals(goals.data.filter((goal: any) => goal.quizId !== null).map((goal: any) => ({
           id: goal.id,
           title: t("goal_name", {deckOrQuizName: goal.deckOrQuizName}),
-          duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
+          duration: daysBetween(goal.startDate, goal.endDate) % 30 === 0 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
           repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} ` + t("days") : `${goal.repetitionInterval} ` + t("hours"),
           startDate: formatDate(goal.startDate),
           endDate: formatDate(goal.endDate),

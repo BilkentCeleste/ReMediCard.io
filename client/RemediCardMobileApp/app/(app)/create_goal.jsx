@@ -27,6 +27,7 @@ export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
   const router = useRouter();
   const { goal } = useLocalSearchParams();
+  const [parsedGoal, setParsedGoal] = useState(null);
 
   const [deckOrQuiz, setDeckOrQuiz] = useState("Deck");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
@@ -44,8 +45,8 @@ export default function CreateGoal() {
 
     useEffect(() => {
       if(goal){
-        console.log(goal)
         setIsSelected(true)
+        setParsedGoal(JSON.parse(goal))
       }
     }, []);
 
@@ -72,6 +73,24 @@ export default function CreateGoal() {
     }, []);
 
   const handleSave = () => {
+    if(isSelected){
+      const data = {
+        deckId: null,
+        quizId: null,
+        targetPerformance: parseInt(performance),
+        repetitionIntervalInHours: repTwoUnit === "day(s)"? parseInt(repetition) * 24 : parseInt(repetition),
+        durationInDays: repOneUnit === "month(s)"? parseInt(duration) * 30 : parseInt(duration) * 7,
+      };
+      updateStudyGoal(parsedGoal.id, data)
+        .then((response) => {
+          router.push("/(app)/goal_list");
+        })
+        .catch((error) => {
+          console.log(error)
+          Alert.alert(t("error"), t("update_goal_failed"));
+        });
+      return;
+    }
     if( selectedDeck === null && selectedQuiz === null) {
       Alert.alert(t("error"), t("select_deck_or_quiz"));
       return;
@@ -120,7 +139,7 @@ export default function CreateGoal() {
         </View>
 
         <View style = {styles.textComponent}>
-        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{t("create_goal")}</Text>
+        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{ isSelected? t("update_goal") : t("create_goal") } </Text>
         </View>
 
         <View style={styles.separatorContainer}>
