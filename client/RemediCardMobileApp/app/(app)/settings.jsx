@@ -18,7 +18,7 @@ import {
 } from "@/constants/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
-import { getUserProfile } from "@/apiHelper/backendHelper";
+import { getUserProfile, changeLanguage } from "@/apiHelper/backendHelper";
 import { useFocusEffect } from "expo-router";
 import  NavBar from "@/components/NavBar"
 
@@ -49,8 +49,12 @@ export default function Settings() {
       return;
     }
 
+    changeLanguage(language === "en" ? "ENGLISH": "TURKISH")
+    .then(res => {
     setSelectedLanguage(language);
     i18n.changeLanguage(language);
+    })
+    .catch(e => console.log(e))
   };
 
   const logoutHandler = () => {
