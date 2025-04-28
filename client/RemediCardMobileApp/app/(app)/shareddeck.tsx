@@ -41,7 +41,6 @@ export default function SharedDeck() {
   const [deck, setDeck] = useState();
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const [modalVisible, setModalVisible] = useState(false);
   const [shownItem, setShownItem] = useState(null);
 

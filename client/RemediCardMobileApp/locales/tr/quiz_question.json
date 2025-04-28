@@ -16,5 +16,8 @@
     "session_summary": "Oturum Özeti",
     "retry": "Yeniden Çöz" ,
     "home": "Ana Menüye Dön",
-    "results": "Sonuçlar"
+    "results": "Sonuçlar",
+    "show_hint": "İpucu Ver",
+    "hint": "İpucu:",
+    "no_hint": "Bu soru için bir ipucu yok"
 }

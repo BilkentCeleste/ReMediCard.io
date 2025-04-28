@@ -91,7 +91,6 @@ export default function editQuiz() {
       })
       .catch((error) => {
         Alert.alert(t("error"), t("delete_failed"));
-        console.error(error);
       });
   };
 
@@ -112,7 +111,6 @@ export default function editQuiz() {
 
     updateQuizName(quizId, data)
         .then((res) => {
-          console.log(res?.data);
             setQuiz(prev => ({
               ...prev,
               name: editedName
@@ -120,7 +118,6 @@ export default function editQuiz() {
             setIsEditingName(false);
         })
         .catch((error) => {
-            console.error(error);
             Alert.alert(t("error"), t("update_failed"));
         });
   };

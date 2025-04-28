@@ -82,6 +82,7 @@ public class QuizService {
         newQuiz.addUser(user);
 
         quizRepository.save(newQuiz);
+        saveSearchableQuiz(newQuiz);
     }
 
     public Integer handleQuestionAnswerIndexing (String answer) {
@@ -116,6 +117,8 @@ public class QuizService {
                     .description(questionCreationTask.getDescription())
                     .options(questionCreationTask.getOptions())
                     .correctAnswerIndex(handleQuestionAnswerIndexing(questionCreationTask.getAnswer().toUpperCase()))
+                    .hint(questionCreationTask.getHint())
+                    .explanation(questionCreationTask.getExplanation())
                     .build());
         }
 

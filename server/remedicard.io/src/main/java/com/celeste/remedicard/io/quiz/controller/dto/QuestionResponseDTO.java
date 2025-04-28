@@ -20,4 +20,6 @@ public class QuestionResponseDTO {
     private String description;
     private Integer correctAnswerIndex;
     private List<String> options;
+    private String hint;
+    private String explanation;
 }

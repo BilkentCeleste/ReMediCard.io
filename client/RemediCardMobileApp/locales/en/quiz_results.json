@@ -6,5 +6,6 @@
   "retry": "Retry",
   "pass": "Skipped",
   "total": "Total Questions",
-  "accuracy": "Accuracy"
+  "accuracy": "Accuracy",
+  "explanation": "Explanation:"
 }

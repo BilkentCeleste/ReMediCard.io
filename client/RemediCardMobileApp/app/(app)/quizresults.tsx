@@ -170,37 +170,54 @@ export default function QuizResults() {
             }
 
             return (
-              <TouchableOpacity onPress={() => toggleExpand(item.id)} activeOpacity={0.7}>
-                <View
-                  style={[
-                    styles.questionItem]}
-                >
-                
-                <View style={styles.questionRow}>
-                <Text style={styles.questionText} numberOfLines={isExpanded ? undefined : 3}
-                >
-                  {item?.description}
-                </Text>
-                {StatusIcon}
-                </View>
-                
+              <TouchableOpacity
+                onPress={() => toggleExpand(item.id)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.questionItem]}>
+                  <View style={styles.questionRow}>
+                    <Text
+                      style={styles.questionText}
+                      numberOfLines={isExpanded ? undefined : 3}
+                    >
+                      {item?.description}
+                    </Text>
+                    {StatusIcon}
+                  </View>
+
                   {isExpanded && (
-                    <View style={styles.optionsContainer}>
-                      {item?.options?.map((option: string, i: number) => (
-                      <Text
-                          key={i}
-                          style={[
-                            styles.optionText,
-                            {
-                              color: getOptionColor(i, selectedAnswerIndex, correctAnswerIndex),
-                              fontWeight: getOptionFontWeight(i, selectedAnswerIndex, correctAnswerIndex)
-                            }
-                          ]}
-                        >                          
-                        {String.fromCharCode(65 + i)}. {option}
-                        </Text>
-                      ))}
-                    </View>
+                    <>
+                      <View style={styles.optionsContainer}>
+                        {item?.options?.map((option: string, i: number) => (
+                          <Text
+                            key={i}
+                            style={[
+                              styles.optionText,
+                              {
+                                color: getOptionColor(
+                                  i,
+                                  selectedAnswerIndex,
+                                  correctAnswerIndex
+                                ),
+                                fontWeight: getOptionFontWeight(
+                                  i,
+                                  selectedAnswerIndex,
+                                  correctAnswerIndex
+                                ),
+                              },
+                            ]}
+                          >
+                            {String.fromCharCode(65 + i)}. {option}
+                          </Text>
+                        ))}
+                        {item?.explanation && (
+                          <View style = {styles.explanationContainer}>
+                            <Text style = {styles.explanationTitle}>{t("explanation")}</Text>
+                            <Text style = {styles.explanationText} >{item?.explanation}</Text>
+                          </View>
+                        )}
+                      </View>
+                    </>
                   )}
                 </View>
               </TouchableOpacity>
@@ -294,9 +311,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   questionsContainer: {
-    marginTop: 10,
+    marginVertical: 10,
     width: "75%",
-    height: "52%"
+    height: "60%"
   },
   questionItem: {
       backgroundColor: '#fff',
@@ -339,4 +356,15 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Regular",
     fontSize: 15,
   },
+  explanationContainer: {
+    marginTop: 5,
+  },
+  explanationTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#9500ff"
+  }, 
+  explanationText:{
+    fontSize: 14
+  }
 });
