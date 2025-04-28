@@ -34,6 +34,7 @@ export const DISLIKE_DECK_PATH = (id) => `${BASE_URL}/deck/dislike_deck/${id}`;
 
 // deck statistics
 export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;
+export const GET_RANDOM_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/getRandomDeckStatsByCurrentUser`;
 
 // flashcard
 export const CREATE_FLASHCARD_PATH = () => `${BASE_URL}/flashcard/create`;
@@ -65,6 +66,7 @@ export const DISLIKE_QUIZ_PATH = (id) => `${BASE_URL}/quiz/dislike_quiz/${id}`;
 
 // deck statistics
 export const CREATE_QUIZ_STATS_PATH = () => `${BASE_URL}/quizStats/create`;
+export const GET_RANDOM_QUIZ_STATS_PATH = () => `${BASE_URL}/quizStats/getRandomQuizStatsByCurrentUser`;
 
 // question
 export const REMOVE_QUESTION_PATH = (id) => `${BASE_URL}/question/delete/${id}`;
@@ -83,3 +85,4 @@ export const CREATE_STUDY_GOAL_PATH = () => `${BASE_URL}/studyGoals/create`;
 export const GET_STUDY_GOALS_PATH = () => `${BASE_URL}/studyGoals/getByCurrentUser`;
 export const DELETE_STUDY_GOAL_PATH = (id) => `${BASE_URL}/studyGoals/delete/${id}`;
 export const UPDATE_STUDY_GOAL_PATH = (id) => `${BASE_URL}/studyGoals/update/${id}`;
+export const GET_RANDOM_STUDY_GOAL_PATH = () => `${BASE_URL}/studyGoals/getRandomByCurrentUser`;

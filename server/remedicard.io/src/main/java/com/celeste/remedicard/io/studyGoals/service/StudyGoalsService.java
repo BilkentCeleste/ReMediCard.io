@@ -9,7 +9,6 @@ import com.celeste.remedicard.io.quiz.entity.Quiz;
 import com.celeste.remedicard.io.quiz.repository.QuizRepository;
 import com.celeste.remedicard.io.studyGoals.controller.dto.StudyGoalsCreateRequestDTO;
 import com.celeste.remedicard.io.studyGoals.controller.dto.StudyGoalsResponseDTO;
-import com.celeste.remedicard.io.studyGoals.entity.StudyGoalStatus;
 import com.celeste.remedicard.io.studyGoals.entity.StudyGoals;
 import com.celeste.remedicard.io.studyGoals.mapper.StudyGoalsResponseMapper;
 import com.celeste.remedicard.io.studyGoals.repository.StudyGoalsRepository;
@@ -17,10 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +64,23 @@ public class StudyGoalsService {
         studyGoalsToUpdate.setRepetitionInterval(dto.getRepetitionIntervalInHours());
         studyGoalsToUpdate.setNextNotificationDate(LocalDateTime.now().plusHours(dto.getRepetitionIntervalInHours()));
         studyGoalsRepository.save(studyGoalsToUpdate);
+    }
+
+    public StudyGoalsResponseDTO getRandomStudyGoalByCurrentUser() {
+        Long currentUserId = currentUserService.getCurrentUserId();
+        StudyGoals studyGoal = studyGoalsRepository.getRandomStudyGoalByUserId(currentUserId);
+        StudyGoalsResponseDTO dto = StudyGoalsResponseMapper.INSTANCE.toDTO(studyGoal);
+        if( studyGoal != null){
+            if (studyGoal.getDeckId() != null) {
+                Deck deck = deckRepository.findById(studyGoal.getDeckId()).orElseThrow(() -> new RuntimeException("Deck not found"));
+                dto.setDeckOrQuizName(deck.getName());
+            }
+            if(studyGoal.getQuizId() != null) {
+                Quiz quiz = quizRepository.findById(studyGoal.getQuizId()).orElseThrow(() -> new RuntimeException("Quiz not found"));
+                dto.setDeckOrQuizName(quiz.getName());
+            }
+        }
+        return dto;
     }
     
     public List<StudyGoalsResponseDTO> getStudyGoalsByUserId(Long userId) {

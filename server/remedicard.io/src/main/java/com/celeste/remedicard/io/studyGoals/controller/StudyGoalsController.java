@@ -46,4 +46,9 @@ public class StudyGoalsController {
         return studyGoalsService.getStudyGoalsByUserId(currentUserId);
     }
 
+    @GetMapping("/getRandomByCurrentUser")
+    public ResponseEntity<StudyGoalsResponseDTO> getRandomByCurrentUser() {
+        return ResponseEntity.ok(studyGoalsService.getRandomStudyGoalByCurrentUser());
+    }
+
 }

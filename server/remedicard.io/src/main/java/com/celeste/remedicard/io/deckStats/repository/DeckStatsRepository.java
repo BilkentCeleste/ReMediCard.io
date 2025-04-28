@@ -16,4 +16,19 @@ public interface DeckStatsRepository extends JpaRepository<DeckStats, Long> {
 
     @Query("SELECT ds FROM DeckStats ds WHERE ds.deck.id = :deckId AND ds.user.id = :userId ORDER BY ds.accessDate DESC LIMIT 1")
     Optional<DeckStats> findLastByDeckIdAndUserId(Long deckId, Long userId);
+
+    @Query("""
+        SELECT ds FROM DeckStats ds
+        WHERE ds.user.id = :userId
+        AND ds.deck.id = (
+            SELECT ds2.deck.id FROM DeckStats ds2
+            WHERE ds2.user.id = :userId
+            GROUP BY ds2.deck.id
+            ORDER BY RANDOM()
+            LIMIT 1
+        )
+        ORDER BY ds.accessDate DESC
+        LIMIT 1
+    """)
+    Optional<DeckStats> getRandomByUserId(Long userId);
 }

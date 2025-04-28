@@ -3,6 +3,7 @@ package com.celeste.remedicard.io.deckStats.controller;
 import com.celeste.remedicard.io.auth.service.CurrentUserService;
 import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsCreateRequestDTO;
 import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsResponseDTO;
+import com.celeste.remedicard.io.deckStats.controller.dto.DeckStatsResponseWithDeckNameDTO;
 import com.celeste.remedicard.io.deckStats.entity.DeckStats;
 import com.celeste.remedicard.io.deckStats.mapper.DeckStatsCreateRequestMapper;
 import com.celeste.remedicard.io.deckStats.mapper.DeckStatsResponseMapper;
@@ -33,5 +34,10 @@ public class DeckStatsController {
         Long userId = currentUserService.getCurrentUserId();
         Set<DeckStats> deckStats = deckStatsService.getDeckStatsByDeckIdAndUserId(deckId, userId);
         return DeckStatsResponseMapper.INSTANCE.toDTO(deckStats);
+    }
+
+    @GetMapping("/getRandomDeckStatsByCurrentUser")
+    public DeckStatsResponseWithDeckNameDTO getRandomDeckStatsByCurrentUser() {
+        return deckStatsService.getRandomDeckStatsByCurrentUser();
     }
 }
