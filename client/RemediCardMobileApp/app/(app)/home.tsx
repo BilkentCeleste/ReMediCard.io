@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  Image
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -23,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { generalSearch } from "@/apiHelper/backendHelper";
 import ListLoader from "@/components/ListLoader";
 import NavBar from "@/components/NavBar";
+import AppTitle from "@/components/AppTitle";
 
 const { width } = Dimensions.get("window");
 
@@ -96,7 +98,9 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.remedicardio}>ReMediCard.io</Text>
+
+      <AppTitle/>
+
       <View style={styles.searchComponent}>
         <SearchIcon />
         <TextInput
@@ -242,17 +246,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#53789D",
-  },
-  remedicardio: {
-    fontSize: 30,
-    lineHeight: 32,
-    fontFamily: "InriaSans-Regular",
-    color: "#fff",
-    textAlign: "center",
-    width: "100%",
-    height: 27,
-    marginTop: 0,
-    fontWeight: "bold",
   },
   searchComponent: {
     height: 40,
