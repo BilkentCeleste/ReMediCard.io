@@ -7,15 +7,6 @@ import {useTranslation} from "react-i18next";
 import NavBar from "@/components/NavBar";
 import { getStudyGoals, deleteStudyGoal, getDeckByDeckId, getQuizByQuizId } from "@/apiHelper/backendHelper";
 
-interface Goal {
-  title: string;
-  duration: string;
-  repetition: string;
-  startDate: string;
-  endDate: string;
-  goalPercent: number;
-}
-
 export default function GoalList() {
   const { t } = useTranslation("goal_list");
   const router = useRouter();
@@ -31,37 +22,15 @@ export default function GoalList() {
   const [quizGoals, setQuizGoals] = useState<any[]>([]);
   const [goals, setGoals] = useState<any[]>([]);
 
-
-  const formatDate = (dateStr: any) => {
-    const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
-  function daysBetween(dateTimeString1, dateTimeString2) {
-    const date1 = new Date(dateTimeString1);
-    const date2 = new Date(dateTimeString2);
-
-    // Get difference in milliseconds
-    const diffMillis = Math.abs(date2 - date1);
-
-    // Convert milliseconds to days
-    const diffDays = Math.floor(diffMillis / (1000 * 60 * 60 * 24));
-
-    return diffDays;
-  }
-
   useEffect(() => {
     getStudyGoals()
       .then((goals) => {
         console.log(goals.data);
         setDeckGoals(goals.data.filter((goal: any) => goal.deckId !== null).map((goal: any) => ({
             id: goal.id,
-            title: `Goal for ${goal.deckOrQuizName}`,
-            duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} Month(s)` : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} Week(s)`,
-            repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} Day(s)` : `${goal.repetitionInterval} Hour(s)`,
+            title: t("goal_name", {deckOrQuizName: goal.deckOrQuizName}),
+            duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
+            repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} ` + t("days") : `${goal.repetitionInterval} ` + t("hours"),
             startDate: formatDate(goal.startDate),
             endDate: formatDate(goal.endDate),
             goalPercent: goal.targetPerformance,
@@ -71,9 +40,9 @@ export default function GoalList() {
         );
         setQuizGoals(goals.data.filter((goal: any) => goal.quizId !== null).map((goal: any) => ({
           id: goal.id,
-          title: `Goal for ${goal.deckOrQuizName}`,
-          duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} Month(s)` : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} Week(s)`,
-          repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} Day(s)` : `${goal.repetitionInterval} Hour(s)`,
+          title: t("goal_name", {deckOrQuizName: goal.deckOrQuizName}),
+          duration: daysBetween(goal.startDate, goal.endDate) >= 30 ? `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 30)} ` + t("months") : `${Math.floor(daysBetween(goal.startDate, goal.endDate) / 7)} ` + t("weeks"),
+          repetition: goal.repetitionInterval % 24 === 0 ? `${goal.repetitionInterval / 24} ` + t("days") : `${goal.repetitionInterval} ` + t("hours"),
           startDate: formatDate(goal.startDate),
           endDate: formatDate(goal.endDate),
           goalPercent: goal.targetPerformance,
@@ -168,6 +137,27 @@ export default function GoalList() {
       goal.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const formatDate = (dateStr: any) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  function daysBetween(dateTimeString1, dateTimeString2) {
+    const date1 = new Date(dateTimeString1);
+    const date2 = new Date(dateTimeString2);
+
+    // Get difference in milliseconds
+    const diffMillis = Math.abs(date2 - date1);
+
+    // Convert milliseconds to days
+    const diffDays = Math.floor(diffMillis / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.remedicardio}>{t("title")}</Text>
@@ -200,22 +190,22 @@ export default function GoalList() {
             item.completed && { borderColor: '#28a745', borderWidth: 5 }
           ]} onPress={() => handleSelectGoal(item)}>
               {item.completed && (
-                <Text style={styles.completedBadge}>Completed</Text>
+                <Text style={styles.completedBadge}>{t("completed")}</Text>
               )}
             <View style={styles.link}>
               <View>
                 <Text style={styles.goalTitle}>{item.title}</Text>
                 <Text style={styles.goalInfoText}>
-                  Duration: {item.duration}
+                  {t("duration")}: {item.duration}
                 </Text>
                 <Text style={styles.goalInfoText}>
-                  Repetition: {item.repetition}
+                  {t("repetition")}: {item.repetition}
                 </Text>
                 <Text style={styles.goalInfoText}>
-                  From: {item.startDate} - {item.endDate}
+                  {t("from")}: {item.startDate} - {item.endDate}
                 </Text>
                 <Text style={styles.goalInfoText}>
-                  Goal: {item.goalPercent}%
+                  {t("goal_performance")}: {item.goalPercent}%
                 </Text>
                 <View style={[styles.chevronRightIcon, styles.iconLayout]}>
                   <ChevronRightIcon color="#111" />
@@ -288,7 +278,7 @@ export default function GoalList() {
               style={styles.modalButton}
               onPress={handleStart}
             >
-              <Text style={styles.modalButtonText}>{t("review_deck")}</Text>
+              <Text style={styles.modalButtonText}>{listType === "deck"? t("review_deck"): t("review_quiz")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalButton}

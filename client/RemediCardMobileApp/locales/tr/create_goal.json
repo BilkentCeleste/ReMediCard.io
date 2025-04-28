@@ -11,5 +11,12 @@
     "save": "Kaydet",
     "quiz": "Test",
     "select_quiz": "Test Seç",
-    "duration": "Süre"
+    "duration": "Süre",
+    "error": "Hata",
+    "fetch_decks_failed": "Deste alınırken hata oluştu",
+    "fetch_quizzes_failed": "Test alınırken hata oluştu",
+    "create_goal_failed": "Hedef oluşturulurken hata oluştu",
+    "create_goal": "Hedef Oluştur",
+    "informing_message": "{{duration}} {{repOneUnit}} boyunca her {{repetition}} {{repTwoUnit}} için {{performance}}% başarıyı aşana kadar bilgilendirileceksiniz",
+    "select_deck_or_quiz": "Lütfen bir deste veya test seçin"
 }

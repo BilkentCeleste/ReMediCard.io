@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
@@ -62,6 +63,10 @@ export default function CreateGoal() {
     }, []);
 
   const handleSave = () => {
+    if( selectedDeck === null && selectedQuiz === null) {
+      Alert.alert(t("error"), t("select_deck_or_quiz"));
+      return;
+    }
     const data = {
       deckId: deckOrQuiz === "Deck" ? selectedDeck : null,
       quizId: deckOrQuiz === "Quiz" ? selectedQuiz : null,
@@ -84,8 +89,8 @@ export default function CreateGoal() {
 }
 
   const deckOrQuizOptions = [
-    { label: "Deck", value: "Deck" },
-    { label: "Quiz", value: "Quiz" },
+    { label: t("deck"), value: "Deck" },
+    { label: t("quiz"), value: "Quiz" },
   ];
   const repUnitsMonth = [
     { label: t("months"), value: "month(s)" },
@@ -96,7 +101,7 @@ export default function CreateGoal() {
     { label: t("hours"), value: "hour(s)" },
   ];
 
-  const summaryText = `You will be notified about ${deckOrQuiz === "Deck"? selectedDeck: selectedQuiz} every ${repetition} ${repTwoUnit} for ${duration} ${repOneUnit} until you exceed ${performance}% success`;
+  const summaryText = t("informing_message", {repetition: repetition, performance: performance, duration: duration, repOneUnit: repOneUnit === "month(s)"? t("months"): t("weeks"), repTwoUnit: repTwoUnit === "day(s)"? t("days"): t("hours")});
 
   return (
     <View style={styles.container}>
@@ -106,7 +111,7 @@ export default function CreateGoal() {
         </View>
 
         <View style = {styles.textComponent}>
-        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">Dummy</Text>
+        <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{t("create_goal")}</Text>
         </View>
 
         <View style={styles.separatorContainer}>
@@ -124,8 +129,9 @@ export default function CreateGoal() {
         </View>
         <View style={styles.formRow1}>
         <DropDown
+            key={deckOrQuiz}
             options={deckOrQuiz === "Deck" ? deckList : quizList}
-            placeholder={t("select_deck")}
+            placeholder={deckOrQuiz === "Deck"? t("select_deck"): t("select_quiz")}
             onSelect={(value) => deckOrQuiz === "Deck"? setSelectedDeck(value): setSelectedQuiz(value)}
             initialValue={deckList[0]?.value || quizList[0]?.value}
           />
