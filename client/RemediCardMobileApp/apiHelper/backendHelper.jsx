@@ -22,6 +22,10 @@ export const loginGoogle = async (data) => {
   return await postFetcher(url.LOGIN_GOOGLE_PATH(), data);
 };
 
+export const logout = async (data) => {
+  return await postFetcher(url.LOGOUT_PATH());
+};
+
 export const register = async (data) => {
   return await postFetcher(url.REGISTER_PATH(), data);
 };
@@ -32,6 +36,10 @@ export const getUserProfile = async () => {
 
 export const updateUserProfile = async (data) => {
   return await postFetcher(url.UPDATE_USER_PROFILE(), data);
+}
+
+export const changeLanguage = async (language) => {
+  return await postFetcher(url.CHANGE_LANGUAGE_PATH(language));
 }
 
 // deck

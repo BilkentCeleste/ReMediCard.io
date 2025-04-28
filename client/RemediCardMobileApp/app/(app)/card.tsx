@@ -233,7 +233,7 @@ export default function Card( props: any ) {
                         <Text style={styles.scoreText}>{falseAnswers}</Text>
                     </View>
 
-                    <Text style={styles.scoreText}>{currentCard + 1}/{flashCardList.length}</Text>
+                    <Text style={styles.scoreText}>{trueAnswers + maybeAnswers + falseAnswers}</Text>
                     </View>
 
                     <View style={{ justifyContent: "center", alignItems: "center" }}>

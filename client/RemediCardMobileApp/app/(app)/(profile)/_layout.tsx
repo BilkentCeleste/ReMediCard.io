@@ -14,7 +14,7 @@ export default function RootLayout() {
   }
 
   return (
-      <Stack>
+      <Stack screenOptions={{animation: 'fade', animationDuration: 100}}>
           <Stack.Screen name="editprofile" options={{ headerShown: false }} />
           <Stack.Screen name="contactus" options={{ headerShown: false }} />
           <Stack.Screen name="delete_account" options={{ headerShown: false }} />

@@ -2,6 +2,7 @@ package com.celeste.remedicard.io.auth.controller;
 
 import com.celeste.remedicard.io.auth.controller.dto.*;
 import com.celeste.remedicard.io.auth.service.AuthService;
+import com.celeste.remedicard.io.autogeneration.config.Language;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +79,20 @@ public class AuthController {
     @PostMapping("update_user_profile")
     public AuthResponse updateUserProfile(@RequestBody UpdateProfileRequest request) {
         return authService.updateUserProfile(request);
+    }
+
+    @PostMapping("language/{new_language}")
+    public ResponseEntity<Void> changeLanguage(@PathVariable("new_language") Language language) {
+
+        authService.changeLanguage(language);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout() {
+        authService.logoutUser();
+
+        return ResponseEntity.ok().build();
     }
 }

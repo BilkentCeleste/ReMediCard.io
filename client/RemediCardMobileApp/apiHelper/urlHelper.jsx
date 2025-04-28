@@ -9,12 +9,14 @@ import { BASE_URL } from "@/constants/config";
 // auth
 export const LOGIN_PATH = () => `${BASE_URL}/auth/login`;
 export const LOGIN_GOOGLE_PATH = () => `${BASE_URL}/auth/login_google`;
+export const LOGOUT_PATH = () => `${BASE_URL}/auth/logout`;
 export const REGISTER_PATH = () => `${BASE_URL}/auth/register`;
 export const FORGOT_PASSWORD_PATH = () => `${BASE_URL}/auth/forgot_password`;
 export const VERIFY_RESET_PASSWORD_CODE_PATH = () => `${BASE_URL}/auth/verify_reset_passwordcode`;
 export const RESET_PASSWORD_PATH = () => `${BASE_URL}/auth/reset_password`;
 export const GET_USER_PROFILE = () => `${BASE_URL}/auth/get_current_user_profile`;
 export const UPDATE_USER_PROFILE = () => `${BASE_URL}/auth/update_user_profile`;
+export const CHANGE_LANGUAGE_PATH = (language) => `${BASE_URL}/auth/language/${language}`;
 
 // deck
 export const CREATE_DECK_PATH = () => `${BASE_URL}/deck/create`;

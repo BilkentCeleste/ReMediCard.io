@@ -11,7 +11,6 @@ export default function GoalList() {
   const { t } = useTranslation("goal_list");
   const router = useRouter();
   
-
   const [selectedSort, setSelectedSort] = useState<string>("longest");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -67,6 +66,11 @@ export default function GoalList() {
     setSelectedGoal(goal);
     setModalVisible(true);
   };
+
+  const handleEditGoal = () => {
+    let path = '/create_goal?goal=' + encodeURIComponent(JSON.stringify(selectedGoal));
+-   router.push({ pathname: path });
+  }
 
   const handleStart = () => {
     if (selectedGoal) {
@@ -281,7 +285,7 @@ export default function GoalList() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalButton}
-              //onPress={handleEditDeck}
+              onPress={handleEditGoal}
             >
               <Text style={styles.modalButtonText}>{t("edit_goal")}</Text>
             </TouchableOpacity>

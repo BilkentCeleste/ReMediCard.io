@@ -295,7 +295,7 @@ export default function QuizQuestion(props: any) {
           <Text style = {[styles.hintTextPosition, styles.showHint]}> {t("show_hint")} </Text> 
           </TouchableOpacity> : 
             <ScrollView>
-            <Text style={[styles.hintText, styles.hintText]}>
+            <Text style={[styles.hintText]}>
               {<Text style={styles.hintTitle}>
                 {t("hint")}
               </Text>}
@@ -548,16 +548,19 @@ const styles = StyleSheet.create({
   },
   showHint: {
     textAlign: "center",
-    backgroundColor: "#14dbc1",
+    backgroundColor: "blue",
     padding: 12,
-    borderRadius: 12,
-    fontSize: 15,
-    fontWeight: "bold"
+    borderRadius: 20,
+    fontWeight: "bold",
+    fontSize: 17,
+    lineHeight: 22,
+    fontFamily: "InriaSans-Regular",
+    color: "#fff",
   },
   hintText: {
-    backgroundColor: "#d402f5",
+    backgroundColor: "#5402ab",
     padding: 12,
-    borderRadius: 12,
+    borderRadius: 20,
     textAlign: "center",
     color: "#fff"
   },

@@ -26,7 +26,7 @@ import { createStudyGoal, updateStudyGoal, getDecksByCurrentUser, getQuizzesByCu
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
   const router = useRouter();
-  const { deck_id } = useLocalSearchParams();
+  const { goal } = useLocalSearchParams();
 
   const [deckOrQuiz, setDeckOrQuiz] = useState("Deck");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
@@ -34,11 +34,20 @@ export default function CreateGoal() {
   const [performance, setPerformance] = useState("80");
   const [duration, setDuration] = useState("1");
   const [repetition, setRepetition] = useState("2");
-
+  
   const [deckList, setDeckList] = useState([]);
   const [quizList, setQuizList] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+  const[isSelected,setIsSelected] = useState(false)
+
+    useEffect(() => {
+      if(goal){
+        console.log(goal)
+        setIsSelected(true)
+      }
+    }, []);
 
     useEffect(() => {
       getDecksByCurrentUser()
@@ -118,26 +127,36 @@ export default function CreateGoal() {
             <View style={styles.separatorLine} />
         </View>
     </View>
+    
+    {!isSelected && (
+        <View style={styles.formRow2}>
+          <View style={styles.formRow1}>
+            <DropDown
+              options={deckOrQuizOptions}
+              placeholder={t("deck")}
+              onSelect={(value) => setDeckOrQuiz(value)}
+            />
+          </View>
+          <View style={styles.formRow1}>
+            <DropDown
+              key={deckOrQuiz} // Use a unique key to trigger re-renders if necessary
+              options={deckOrQuiz === "Deck" ? deckList : quizList}
+              placeholder={deckOrQuiz === "Deck" ? t("select_deck") : t("select_quiz")}
+              onSelect={(value) => {
+                if (deckOrQuiz === "Deck") {
+                  setSelectedDeck(value);
+                } else {
+                  setSelectedQuiz(value);
+                }
+              }}
+              initialValue={deckOrQuiz === "Deck" ? deckList[0]?.value : quizList[0]?.value}
+            />
+          </View>
+        </View>
+      )}
 
-      <View style={styles.formRow2}>
-      <View style={styles.formRow1}>
-        <DropDown
-            options={deckOrQuizOptions}
-            placeholder={t("deck")}
-            onSelect={(value) => setDeckOrQuiz(value)}
-          />
-        </View>
-        <View style={styles.formRow1}>
-        <DropDown
-            key={deckOrQuiz}
-            options={deckOrQuiz === "Deck" ? deckList : quizList}
-            placeholder={deckOrQuiz === "Deck"? t("select_deck"): t("select_quiz")}
-            onSelect={(value) => deckOrQuiz === "Deck"? setSelectedDeck(value): setSelectedQuiz(value)}
-            initialValue={deckList[0]?.value || quizList[0]?.value}
-          />
-        </View>
-      </View>
       <View style={styles.lineSeparator} />
+
 
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("duration")}</Text>
@@ -235,7 +254,7 @@ export default function CreateGoal() {
             </TouchableOpacity>
         </View>
       </View>
-
+          
       <NavBar/>
     </View>
   );

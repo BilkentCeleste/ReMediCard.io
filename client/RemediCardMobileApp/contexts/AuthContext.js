@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { login, loginGoogle, register, getUserProfile, updateUserProfile } from "@/apiHelper/backendHelper";
+import { login, loginGoogle, register, getUserProfile, updateUserProfile, logout } from "@/apiHelper/backendHelper";
 import * as SecureStore from "expo-secure-store";
 import {
   GoogleSignin,
@@ -142,10 +142,19 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logoutAuth = async () => {
-    setUser(null);
-    setToken(null);
-    setIsLoggedIn(false);
-    await removeToken();
+    try {
+      await logout();
+      setUser(null);
+      setToken(null);
+      setIsLoggedIn(false);
+      await removeToken();
+    } catch (e) {
+      console.log(e);
+      setUser(null);
+      setToken(null);
+      setIsLoggedIn(false);
+      await removeToken();
+    }
   };
 
   const updateUserProfileAuth = async (data) => {
