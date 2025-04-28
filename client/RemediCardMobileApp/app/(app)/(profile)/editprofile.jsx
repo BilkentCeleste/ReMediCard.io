@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 20,
     backgroundColor: "#fff",
-    width: "75%",
+    width: "90%",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 15,

@@ -7,14 +7,11 @@ import {
   Modal,
   Image,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   ChevronRightIcon,
-  ProfileIcon,
-  SettingsIcon,
   LanguageIcon,
   LogoutIcon,
-  HomeIcon,
 } from "@/constants/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -30,11 +27,6 @@ export default function Settings() {
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
-
-  const [userProfile, setUserProfile] = useState({
-    username: "-----",
-    email: "-------",
-  });
 
   useFocusEffect(
     useCallback(() => {
@@ -60,14 +52,6 @@ export default function Settings() {
   const logoutHandler = () => {
     logoutAuth();
     router.push("/login");
-  };
-
-  const loadEditProfile = () => {
-    router.push("/(app)/(profile)/editprofile");
-  };
-
-  const loadContactUs = () => {
-    router.push("/(app)/(profile)/contactus");
   };
 
   const loadLanguage = () => {
@@ -184,22 +168,6 @@ const styles = StyleSheet.create({
     height: 27,
     marginBottom: 50,
     fontWeight: "bold",
-  },
-  infoCard: {
-    width: "75%",
-    flexDirection: "column",
-    height: 100,
-    justifyContent: "space-evenly",
-    marginBottom: 50,
-  },
-  infoText: {
-    flex: 1,
-    top: 5,
-    fontSize: 25,
-    lineHeight: 25,
-    fontFamily: "InriaSans-Regular",
-    color: "#fff",
-    textAlign: "left",
   },
   menuComponent: {
     width: "75%",

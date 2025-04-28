@@ -2,9 +2,6 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter, Link } from "expo-router";
 import {
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
   ChevronRightIcon,
   PlusIcon
 } from "@/constants/icons";

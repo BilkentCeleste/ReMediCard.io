@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView,
+    ScrollView, Platform } from 'react-native';
 import {useRouter, useLocalSearchParams} from 'expo-router';
 import { GoBackIcon } from '@/constants/icons';
 import { useTranslation } from 'react-i18next';
@@ -279,8 +280,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '75%',
-        marginTop: 720,
-        position: "absolute"
+        marginVertical: 20,
+        alignSelf: 'center',
     },
     button: {
         flex: 0.48,

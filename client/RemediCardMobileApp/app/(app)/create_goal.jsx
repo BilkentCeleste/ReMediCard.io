@@ -8,39 +8,29 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import {
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
-  GoBackIcon,
-  EditProfileIcon,
-  SaveIcon,
-  DiscordIcon
-} from "@/constants/icons";
+import { GoBackIcon } from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTranslation } from "react-i18next";
 import NavBar from "@/components/NavBar"
-import { createStudyGoal, updateStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from "@/apiHelper/backendHelper";
+import { createStudyGoal, getDecksByCurrentUser, getQuizzesByCurrentUser } from "@/apiHelper/backendHelper";
 
 export default function CreateGoal() {
   const { t } = useTranslation("create_goal");
   const router = useRouter();
   const { goal } = useLocalSearchParams();
-  const [parsedGoal, setParsedGoal] = useState(null);
 
+  const [parsedGoal, setParsedGoal] = useState(null);
   const [deckOrQuiz, setDeckOrQuiz] = useState("Deck");
   const [repOneUnit, setRepOneUnit] = useState("month(s)");
   const [repTwoUnit, setRepTwoUnit] = useState("day(s)");
   const [performance, setPerformance] = useState("80");
   const [duration, setDuration] = useState("1");
   const [repetition, setRepetition] = useState("2");
-  
   const [deckList, setDeckList] = useState([]);
   const [quizList, setQuizList] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
-
   const[isSelected,setIsSelected] = useState(false)
 
     useEffect(() => {
@@ -160,7 +150,7 @@ export default function CreateGoal() {
             <View style={styles.separatorLine} />
         </View>
     </View>
-    
+
     {!isSelected && (
         <View style={styles.formRow2}>
           <View style={styles.formRow1}>
@@ -190,7 +180,6 @@ export default function CreateGoal() {
 
       <View style={styles.lineSeparator} />
 
-
       <View style={styles.formRow}>
         <Text style={styles.labelText}>{t("duration")}</Text>
         <View style={styles.formRow2}>
@@ -199,7 +188,7 @@ export default function CreateGoal() {
             style={styles.timeInput}
             value={duration}
             onChangeText={(text) => {
-              const cleaned = text.replace(/[^0-9]/g, ''); // Keep only digits
+              const cleaned = text.replace(/[^0-9]/g, '');
               if (cleaned === '' || parseInt(cleaned) > 0) {
                 setDuration(cleaned);
               }
@@ -230,7 +219,7 @@ export default function CreateGoal() {
             style={styles.timeInput}
             value={repetition}
             onChangeText={(text) => {
-              const cleaned = text.replace(/[^0-9]/g, ''); // Keep only digits
+              const cleaned = text.replace(/[^0-9]/g, '');
               if (cleaned === '' || parseInt(cleaned) > 0) {
                 setRepetition(cleaned);
               }
@@ -289,7 +278,7 @@ export default function CreateGoal() {
             </TouchableOpacity>
         </View>
       </View>
-          
+
       <NavBar/>
     </View>
   );
@@ -348,22 +337,22 @@ const styles = StyleSheet.create({
   formRow: {
     width: "75%",
     flexDirection: "column",
-    justifyContent: 'space-between', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
   formRow1: {
     width: "50%",
     flexDirection: "column",
-    justifyContent: 'space-between', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
   formRow2: {
     width: "90%",
     flexDirection: "row",
-    justifyContent: 'center', // optional, to space them nicely
-    alignItems: 'center', // optional, to vertically center them
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   labelText: {
     fontSize: 16,
@@ -441,6 +430,7 @@ const styles = StyleSheet.create({
   saveButton: {
     flexDirection: "column",
     alignItems: "center",
+    backgroundColor: '#4CAF50',
   },
   saveButtonText: {
     marginTop: 5,
@@ -455,9 +445,6 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
       backgroundColor: '#C8102E',
-  },
-  saveButton: {
-      backgroundColor: '#4CAF50',
   },
   buttonText: {
       color: '#fff',

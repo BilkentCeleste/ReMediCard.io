@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     textAlignVertical: "top",
-    fontSize: 16,
+    fontSize: 14,
     color: "#111",
   },
   registercomponent: {

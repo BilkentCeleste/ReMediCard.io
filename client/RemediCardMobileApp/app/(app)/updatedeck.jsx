@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, Alert, Pressable } from 'react-native';
 import { useRouter, Link, useLocalSearchParams } from 'expo-router';
-import { GoBackIcon, HomeIcon, ProfileIcon, SettingsIcon, PlusIcon } from '@/constants/icons';
+import { GoBackIcon, PlusIcon } from '@/constants/icons';
 import { getDeckByDeckId, deleteFlashcard, updateDeckName } from '@/apiHelper/backendHelper';
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,6 @@ export default function Updatedeck() {
     const [selectedCard, setSelectedCard] = useState(null);
     const [isEditingName, setIsEditingName] = useState(false);
     const [editedName, setEditedName] = useState("");
-
     const [modalVisible, setModalVisible] = useState(false);
     const [shownItem, setShownItem] = useState(null);
 
@@ -374,6 +373,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
+        width: "80%",
+        padding: 20,
+        borderRadius: 20,
     },
     modalContent: {
         width: "80%",
@@ -423,12 +425,5 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
-    },
-    modalContainer: {
-    backgroundColor: "#fff",
-    width: "80%",
-    padding: 20,
-    borderRadius: 20,
-    alignItems: "center",
     },
 });

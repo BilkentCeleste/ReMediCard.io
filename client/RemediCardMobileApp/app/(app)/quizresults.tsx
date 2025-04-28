@@ -1,14 +1,9 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler, Alert} from "react-native";
 import {useEffect, useState} from "react";
 import { getQuizByQuizId } from "@/apiHelper/backendHelper";
 import { CorrectIcon, FalseIcon } from "@/constants/icons";
-import {
-  GoBackIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
-} from "@/constants/icons";
+import { GoBackIcon } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
 import { useFocusEffect } from "expo-router";
 import NavBar from "@/components/NavBar";
@@ -17,6 +12,9 @@ export default function QuizResults() {
   const { t } = useTranslation("quiz_results");
   const router = useRouter();
   const searchParams = useLocalSearchParams();
+
+  const [quizData, setQuizData] = useState<any>(null);
+  const [expandedQuestionId, setExpandedQuestionId] = useState<number | null>(null);
 
   const quizId = Number(searchParams.quizId);
   const score = Number(searchParams.score);
@@ -40,8 +38,6 @@ export default function QuizResults() {
   const handleRetry = () => {
     router.push(`/(app)/quiz_question?quizId=${quizId}`);
   };
-
-  const [quizData, setQuizData] = useState<any>(null);
   
   useEffect(() => {
       if (quizId) {
@@ -50,25 +46,23 @@ export default function QuizResults() {
           setQuizData(res?.data);         
           })
           .catch((error) => {
-            console.error("Error fetching quiz data:", error);
+            Alert.alert(t("error"), t("fetch_quiz_error"));
           });
       }
     }, [quizId]);
 
-    useFocusEffect(() => {
-                const onBackPress = () => {
-                  router.replace("/(app)/quizzes");
-                  return true;
-                };
-              
-                BackHandler.addEventListener('hardwareBackPress', onBackPress);
-              
-                return () => {
-                  BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-                };
-              });
+  useFocusEffect(() => {
+    const onBackPress = () => {
+      router.replace("/(app)/quizzes");
+      return true;
+    };
 
-  const [expandedQuestionId, setExpandedQuestionId] = useState<number | null>(null);
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  });
 
   const toggleExpand = (id: number) => {
     setExpandedQuestionId(prev => (prev === id ? null : id));
@@ -313,7 +307,7 @@ const styles = StyleSheet.create({
   questionsContainer: {
     marginVertical: 10,
     width: "75%",
-    height: "60%"
+    height: "52%"
   },
   questionItem: {
       backgroundColor: '#fff',

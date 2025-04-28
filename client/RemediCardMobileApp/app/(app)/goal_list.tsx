@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View,  Modal, Alert} from "react-native";
-import { useRouter, Link, useLocalSearchParams } from "expo-router";
-import {ChevronRightIcon, HomeIcon, PlusIcon, ProfileIcon, SearchIcon, SettingsIcon} from "@/constants/icons";
+import { useRouter} from "expo-router";
+import {ChevronRightIcon, PlusIcon, SearchIcon} from "@/constants/icons";
 import DropDown from "../../components/DropDown";
 import {useTranslation} from "react-i18next";
 import NavBar from "@/components/NavBar";
@@ -10,10 +10,9 @@ import { getStudyGoals, deleteStudyGoal, getDeckByDeckId, getQuizByQuizId } from
 export default function GoalList() {
   const { t } = useTranslation("goal_list");
   const router = useRouter();
-  
+
   const [selectedSort, setSelectedSort] = useState<string>("longest");
   const [searchTerm, setSearchTerm] = useState<string>("");
-
   const [listType, setListType] = useState("deck")
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<any>(null);

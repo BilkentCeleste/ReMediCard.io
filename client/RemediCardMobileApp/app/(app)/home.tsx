@@ -7,18 +7,14 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Image,
   ActivityIndicator
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   SearchIcon,
   FlashcardIcon,
   QuizIcon,
   GoalsIcon,
-  HomeIcon,
-  ProfileIcon,
-  SettingsIcon,
   DiscoverIcon
 } from "@/constants/icons";
 import { useTranslation } from "react-i18next";
@@ -32,13 +28,14 @@ const { width } = Dimensions.get("window");
 
 export default function Home() {
   const { t } = useTranslation("home");
+  const router = useRouter();
 
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const [showLoading, setShowLoading] = useState(false);
   const [selectedRandomData, setSelectedRandomData] = useState(null);
-  const [selectedType, setSelectedType] = useState(null); // "goal" | "deck" | "quiz" | "none"
+  const [selectedType, setSelectedType] = useState(null);
 
   useEffect(() => {
     Promise.all([
@@ -48,7 +45,7 @@ export default function Home() {
     ])
       .then(([goalRes, deckRes, quizRes]) => {
         const options = [];
-  
+
         if (goalRes?.data) {
           options.push({ type: "goal", data: goalRes.data });
         }
@@ -58,13 +55,13 @@ export default function Home() {
         if (quizRes?.data) {
           options.push({ type: "quiz", data: quizRes.data });
         }
-  
+
         if (options.length > 0) {
           const randomOption = options[Math.floor(Math.random() * options.length)];
           setSelectedRandomData(randomOption.data);
           setSelectedType(randomOption.type);
         } else {
-          setSelectedType("none"); // All are empty
+          setSelectedType("none");
         }
       })
       .catch((e) => {
@@ -105,8 +102,6 @@ export default function Home() {
     };
   }, [searchText]);
 
-  const router = useRouter();
-
   const uploadDecksPage = () => {
     router.push("/(app)/decks");
   };
@@ -135,20 +130,20 @@ export default function Home() {
 
   function formatLocalDateTime(dateString) {
     if (!dateString) return "";
-  
+
     const date = new Date(dateString);
-  
+
     if (isNaN(date)) {
       console.error("Invalid date:", dateString);
       return "";
     }
 
     const localeLanguage = i18next.language;
-    let language = "en-GB"; // Default to English (UK)
+    let language = "en-GB";
     if( localeLanguage === "tr"){
       language ="tr-TR";
     }
-  
+
     return date.toLocaleDateString(language, {
       day: "2-digit",
       month: "long",

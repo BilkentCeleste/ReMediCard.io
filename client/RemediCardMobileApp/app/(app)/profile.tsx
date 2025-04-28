@@ -4,10 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
-  Image,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   AtIcon,
   MailIcon,
@@ -15,25 +13,17 @@ import {
   EditProfileIcon,
   SubscriptionIcon,
   ContactIcon,
-  ProfileIcon,
-  SettingsIcon,
-  LanguageIcon,
-  LogoutIcon,
-  HomeIcon, EditIcon,
+  EditIcon,
 } from "@/constants/icons";
-import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { getUserProfile } from "@/apiHelper/backendHelper";
 import { useFocusEffect } from "expo-router";
 import NavBar from "@/components/NavBar"
 
 export default function Profile() {
-  const { t, i18n } = useTranslation("profile");
+  const { t } = useTranslation("profile");
   const router = useRouter();
-  const { logoutAuth } = useAuth();
 
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-  const [showLanguage, setShowLanguage] = useState(false);
   const [userProfile, setUserProfile] = useState({
     username: "-----",
     email: "-------",
@@ -47,20 +37,6 @@ export default function Profile() {
     }, [])
   );
 
-  const handleLanguageSelection = (language: any) => {
-    if (selectedLanguage === language) {
-      return;
-    }
-
-    setSelectedLanguage(language);
-    i18n.changeLanguage(language);
-  };
-
-  const logoutHandler = () => {
-    logoutAuth();
-    router.push("/login");
-  };
-
   const loadEditProfile = () => {
     router.push("/(app)/(profile)/editprofile");
   };
@@ -71,10 +47,6 @@ export default function Profile() {
 
   const loadContactUs = () => {
     router.push("/(app)/(profile)/contactus");
-  };
-
-  const loadLanguage = () => {
-    setShowLanguage(true);
   };
 
   return (
@@ -247,63 +219,5 @@ const styles = StyleSheet.create({
     right: "95%",
     zIndex: 3,
     top: 5,
-  },
-  navbarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "75%",
-    position: "absolute",
-    bottom: 50,
-    backgroundColor: "#53789D",
-    height: 1,
-  },
-  navbarLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#fff",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
-    width: "80%",
-    padding: 20,
-    borderRadius: 20,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  modalBack: {
-    marginTop: 10,
-  },
-  modalBackText: {
-    color: "#2916ff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  languageOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    fontSize: 32,
-    backgroundColor: "#f9f9f9",
-    marginBottom: 10,
-  },
-  selectedOption: {
-    backgroundColor: "#e6f0ff",
-    borderWidth: 2,
-    borderColor: "#000000",
-  },
-  flag_image: {
-    width: 44,
-    height: 28,
   },
 });

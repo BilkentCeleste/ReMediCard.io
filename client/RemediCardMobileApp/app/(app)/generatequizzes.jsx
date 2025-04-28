@@ -24,10 +24,8 @@ export default function GenerateQuiz() {
   const [file, setFile] = useState(null);
   const [images, setImages] = useState(null);
   const [fileType, setFileType] = useState(null);
-
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-
   const [showIndicator, setShowIndicator] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [contentLanguage, setContentLanguage] = useState(

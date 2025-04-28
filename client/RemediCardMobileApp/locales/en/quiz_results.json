@@ -7,5 +7,7 @@
   "pass": "Skipped",
   "total": "Total Questions",
   "accuracy": "Accuracy",
-  "explanation": "Explanation:"
+  "explanation": "Explanation:",
+  "error": "Error",
+  "fetch_quiz_error": "An error occurred while fetching the quiz results. Please try again later."
 }
