@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert, Image} from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ActivityIndicator, Alert, Image, KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
 import {createFlashcard, updateFlashcard} from "../../apiHelper/backendHelper";
 import { GoBackIcon, UploadIcon} from '@/constants/icons';
@@ -182,6 +182,22 @@ export default function UpdateFlashcard() {
                 </View>
             </View>
 
+            <KeyboardAvoidingView
+            style={{ flex: 1, maxHeight: "70%" }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={50} // adjust if you have a header
+            >
+            
+            <View style={{ flex: 1, width: 300 }}>
+
+            <ScrollView
+            contentContainerStyle={{
+                justifyContent: "flex-start",
+                
+            }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={true}
+            >
             <TextInput
                 style={styles.aInput}
                 placeholder={isCreating ? t("front_message") : ''}
@@ -211,7 +227,7 @@ export default function UpdateFlashcard() {
             </TouchableOpacity>
 
             <TextInput
-                style={[styles.aInput, {marginTop: 50}]}
+                style={[styles.aInput, {marginTop: 30}]}
                 placeholder={isCreating ? t("back_message") : ''}
                 value={cardBackSide}
                 onChangeText={setCardBackSide}
@@ -237,6 +253,9 @@ export default function UpdateFlashcard() {
                     </>
                 )}
             </TouchableOpacity>
+            </ScrollView>
+            </View>
+            </KeyboardAvoidingView>
 
             <Modal
                 transparent={true}
@@ -274,8 +293,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     aInput: {
-        width: '75%',
-        height: 150,
+        width: '100%',
+        height: 100,
         borderWidth: 1,
         borderColor: '#ddd',
         backgroundColor: '#fff',
@@ -382,7 +401,6 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 15,
         marginLeft: 0,
-        marginTop: 10,
         objectFit: 'cover',
     },
     imageContainer: {
