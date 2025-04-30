@@ -22,6 +22,7 @@ import com.celeste.remedicard.io.search.entity.SearchableDeck;
 import com.celeste.remedicard.io.search.entity.SearchableFlashcard;
 import com.celeste.remedicard.io.search.repository.SearchableDeckRepository;
 import com.celeste.remedicard.io.spacedrepetition.service.SpacedRepetitionService;
+import com.celeste.remedicard.io.studyGoals.service.StudyGoalsService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,7 @@ public class DeckService {
     private final DeckStatsService deckStatsService;
     private final S3Service s3Service;
     private final SideService sideService;
+    private final StudyGoalsService studyGoalsService;
 
     @Value("${app.share-url-base}")
     private String shareUrlBase;
@@ -104,6 +106,8 @@ public class DeckService {
                 s3Service.deleteFile(backImageUrl);
             }
         });
+
+        studyGoalsService.deleteByDeckId(deckId);
 
         deckRepository.delete(deck);
         deleteSearchableDeck(deckId);

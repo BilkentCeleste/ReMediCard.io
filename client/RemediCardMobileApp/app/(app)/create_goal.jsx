@@ -36,7 +36,20 @@ export default function CreateGoal() {
     useEffect(() => {
       if(goal){
         setIsSelected(true)
-        setParsedGoal(JSON.parse(goal))
+        const temp = JSON.parse(goal);
+
+        const duration = temp.duration.split(' ')[0];
+        const durationUnit = temp.duration.split(' ')[1];
+        const repetition = temp.repetition.split(' ')[0];
+        const repetitionUnit = temp.repetition.split(' ')[1];
+        console.log(durationUnit, repetitionUnit)
+
+        setParsedGoal(temp)
+        setDuration(duration);
+        setRepetition(repetition);
+        setRepOneUnit(durationUnit === "month(s)" || durationUnit === "ay(lar)" ? t("months") : t("weeks"));
+        setRepTwoUnit(repetitionUnit === "day(s)" || repetitionUnit === "gün(ler)" ? "day(s)" : "hour(s)");
+        setPerformance(temp.goalPercent.toString());
       }
     }, []);
 
@@ -71,6 +84,7 @@ export default function CreateGoal() {
         repetitionIntervalInHours: repTwoUnit === "day(s)"? parseInt(repetition) * 24 : parseInt(repetition),
         durationInDays: repOneUnit === "month(s)"? parseInt(duration) * 30 : parseInt(duration) * 7,
       };
+      console.log(parsedGoal)
       updateStudyGoal(parsedGoal.id, data)
         .then((response) => {
           router.push("/(app)/goal_list");
@@ -186,8 +200,9 @@ export default function CreateGoal() {
         </View>
         <View style={styles.formRow1}>
           <DropDown
+            key ={repOneUnit} // Use a unique key to trigger re-renders if necessary
             options={repUnitsMonth}
-            placeholder={t("months")}
+            placeholder={repOneUnit}
             onSelect={(value) => setRepOneUnit(value)}
             initialValue={repOneUnit}
           />
@@ -216,8 +231,9 @@ export default function CreateGoal() {
           </View>
           <View style={styles.formRow1}>
           <DropDown
+            key={repTwoUnit} //to trigger re-renders if necessary
             options={repUnitsDay}
-            placeholder={t("days")}
+            placeholder={repTwoUnit}
             onSelect={(value) => setRepTwoUnit(value)}
             initialValue={repTwoUnit}
           />
