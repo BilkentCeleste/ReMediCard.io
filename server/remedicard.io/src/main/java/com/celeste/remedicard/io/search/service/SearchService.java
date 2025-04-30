@@ -100,7 +100,7 @@ public class SearchService {
         Long userId = currentUserService.getCurrentUserId();
 
         List<SearchableDeck> searchableDecks = searchableDeckRepository.findSearchableDeckContainingButNotOwnedBy(searchText, userId);
-        List<Deck> decks = deckService.findDecksByIds(searchableDecks.stream().map(SearchableDeck::getId).collect(Collectors.toSet())).stream().toList();
+        List<Deck> decks = deckService.findDecksByIds(searchableDecks.stream().map(SearchableDeck::getId).collect(Collectors.toSet())).stream().filter(Deck::getIsPubliclyVisible).toList();
 
         return  deckService.convertFromDeckToDeckExploreResponseDTO(decks, userId);
     }
@@ -110,7 +110,7 @@ public class SearchService {
 
         List<SearchableQuiz> searchableQuizzes = searchableQuizRepository.findSearchableQuizContainingButNotOwnedBy(searchText, userId);
 
-        List<Quiz> quizzes = quizService.findQuizzesByIds(searchableQuizzes.stream().map(SearchableQuiz::getId).collect(Collectors.toSet())).stream().toList();
+        List<Quiz> quizzes = quizService.findQuizzesByIds(searchableQuizzes.stream().map(SearchableQuiz::getId).collect(Collectors.toSet())).stream().filter(Quiz::getIsPubliclyVisible).toList();
 
         return  quizService.convertFromQuizToQuizExploreResponseDTO(quizzes, userId);
     }

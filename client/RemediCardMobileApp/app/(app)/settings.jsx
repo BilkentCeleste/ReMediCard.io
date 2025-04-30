@@ -28,14 +28,6 @@ export default function Settings() {
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
   const [showLanguage, setShowLanguage] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      getUserProfile()
-        .then((res) => setUserProfile(res.data))
-        .catch((e) => console.log(e));
-    }, [])
-  );
-
   const handleLanguageSelection = (language) => {
     if (selectedLanguage === language) {
       return;
