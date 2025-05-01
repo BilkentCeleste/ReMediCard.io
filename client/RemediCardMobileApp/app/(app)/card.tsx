@@ -4,14 +4,14 @@ import {useRouter} from 'expo-router';
 import {CheckmarkIcon, CorrectIcon, CrossIcon, FalseIcon, QuestionMarkIcon} from "@/constants/icons";
 import Flashcard from '@/components/FlashCard';
 import {useLocalSearchParams} from 'expo-router/build/hooks';
-import {createDeckStats, getFlashcardsInBatch, updateFlashcardReviews} from '@/apiHelper/backendHelper';
+import {createDeckStats, getDecksByDeckIdWithoutFlashcards, getFlashcardsInBatch, updateFlashcardReviews} from '@/apiHelper/backendHelper';
 import {useTranslation} from 'react-i18next';
 import PieChart from 'react-native-pie-chart';
 
 export default function Card( props: any ) {
     const { t } = useTranslation("card");
     const router = useRouter();
-    const {deck} = useLocalSearchParams();
+    const {deckId} = useLocalSearchParams();
 
     const [currentCard, setCurrentCard] = useState(0);
     const [trueAnswers, setTrueAnswers] = useState(0);
@@ -26,8 +26,21 @@ export default function Card( props: any ) {
         incorrect: 0,
         accuracy: 0
     });
+    const [deckData, setDeckData] = useState<any>(null);
 
-    const parsedDeck = JSON.parse(Array.isArray(deck) ? deck[0] : deck);
+    
+    useEffect(() => {
+    if (deckId) {
+        getDecksByDeckIdWithoutFlashcards(deckId)
+        .then((res) => {
+            setDeckData(res?.data);    
+        })
+        .catch((error) => {
+            console.error("Error fetching deck data:", error);
+        });
+    }
+    }, [deckId]);
+
     const widthAndHeight = 200;
     
     const series = [
@@ -72,7 +85,7 @@ export default function Card( props: any ) {
     }
 
     useEffect(() => {
-        getFlashcards(parsedDeck.id);
+        getFlashcards(deckId);
     }
     , []);
 
@@ -82,7 +95,7 @@ export default function Card( props: any ) {
                 await sendFlashcardReviews();
                 if (currentCard === 0) {
                     setFlashCardList([]);
-                    await getFlashcards(parsedDeck.id);
+                    await getFlashcards(deckId);
                 }
             };
             updateAndFetch();
@@ -154,7 +167,7 @@ export default function Card( props: any ) {
         
         const deckStat = {
             successRate: trueAnswers == 0 ? 0 : (trueAnswers / (trueAnswers + falseAnswers)) * 100,
-            deckId: parsedDeck.id,
+            deckId: deckId,
         }
         createDeckStats(deckStat)
             .then(() => {
@@ -201,7 +214,7 @@ export default function Card( props: any ) {
 
         <View style={styles.menuComponent}>
             <View style = {styles.textComponent}>
-            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{parsedDeck?.topic}</Text>
+            <Text style={styles.menuText} numberOfLines={2} ellipsizeMode="tail">{deckData?.topic}</Text>
             </View>
 
             <View style={styles.separatorContainer}>

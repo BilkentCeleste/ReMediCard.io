@@ -15,4 +15,5 @@ public class DeckStatsResponseWithDeckNameDTO {
     private LocalDateTime accessDate;
     private double successRate;
     private String deckName;
+    private Long deckId;
 }

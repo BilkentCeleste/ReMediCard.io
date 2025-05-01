@@ -291,6 +291,17 @@ public class DeckService {
         return response;
     }
 
+    public DeckResponseWithoutFlashcardsDTO convertFromDeckToDeckResponseWithoutFlashcardsDTO(Deck deck, Long userId) {
+        DeckResponseWithoutFlashcardsDTO response = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDTO(deck);
+        if (response != null) {
+            DeckStats bestDeckStats = deckStatsService.getBestDeckStatsByDeckIdAndUserId(response.getId(), userId);
+            DeckStats lastDeckStats = deckStatsService.getLastDeckStatsByDeckIdAndUserId(response.getId(), userId);
+            response.setBestDeckStat(bestDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(bestDeckStats) : null);
+            response.setLastDeckStat(lastDeckStats != null ? DeckStatsResponseMapper.INSTANCE.toDTO(lastDeckStats) : null);
+        }
+        return response;
+    }
+
     public List<DeckExploreResponseDTO> convertFromDeckToDeckExploreResponseDTO(List<Deck> decks, Long userId){
         List<DeckExploreResponseDTO> response = decks.stream().map(deck -> {
             DeckExploreResponseDTO deckExploreResponseDTO = DeckResponseWithoutFlashcardsMapper.INSTANCE.toDeckExploreResponseDTO(deck);

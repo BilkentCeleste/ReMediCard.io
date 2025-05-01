@@ -16,5 +16,8 @@
   "deck_heading": "What about exercising about the deck {{deckName}}?",
   "deck_message": "Last time you exercised about {{deckName}} was on {{accessDate}}.",
   "quiz_heading": "What about exercising about the quiz {{quizName}}?",
-  "quiz_message": "Last time you exercised about {{quizName}} was on {{accessDate}}."
+  "quiz_message": "Last time you exercised about {{quizName}} was on {{accessDate}}.",
+  "go_to_deck": "Go to Deck",
+  "go_to_quiz": "Go to Quiz",
+  "cancel": "Cancel"
 }

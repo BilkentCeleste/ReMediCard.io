@@ -49,6 +49,13 @@ public class DeckController {
         return DeckCreateMapper.INSTANCE.toDTO(deck);
     }
 
+    @GetMapping("/getByDeckIdWithoutFlashcards/{deckId}")
+    public DeckResponseWithoutFlashcardsDTO getDeckByDeckIdWithoutFlashcards(@PathVariable Long deckId) {
+        Deck deck = deckService.getDeckByDeckId(deckId);
+        Long userId = currentUserService.getCurrentUserId();
+        return deckService.convertFromDeckToDeckResponseWithoutFlashcardsDTO(deck, userId);
+    }
+
     @PostMapping(value = "/generate", consumes = "multipart/form-data")
     public ResponseEntity<String> generateDeck(@RequestParam("file") MultipartFile file) {
         try {

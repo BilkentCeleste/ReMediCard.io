@@ -84,10 +84,8 @@ export default function GoalList() {
               return
             }
             setModalVisible(false);
-            router.push({
-              pathname: "/(app)/card",
-              params: { deck: JSON.stringify(deck.data) },
-            });
+            router.push(`/(app)/card?deckId=${deck.data.id}`);
+
           })
           .catch((error) => {
             Alert.alert(t("error"), t("fetch_deck_failed"));

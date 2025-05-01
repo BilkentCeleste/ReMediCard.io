@@ -33,6 +33,7 @@ export const CHANGE_DECK_VISIBILITY_PATH = (id) => `${BASE_URL}/deck/change_publ
 export const DISCOVER_DECKS_PATH = (sortingOption) => `${BASE_URL}/deck/discover/${sortingOption}`;
 export const LIKE_DECK_PATH = (id) => `${BASE_URL}/deck/like_deck/${id}`;
 export const DISLIKE_DECK_PATH = (id) => `${BASE_URL}/deck/dislike_deck/${id}`;
+export const GET_DECKS_BY_DECK_ID_WITHOUT_FLASHCARDS_PATH = (id) => `${BASE_URL}/deck/getByDeckIdWithoutFlashcards/${id}`;
 
 // deck statistics
 export const CREATE_DECK_STATS_PATH = () => `${BASE_URL}/deckStats/create`;

@@ -194,10 +194,7 @@ export default function Decks() {
       }
       
       setModalVisible(false);
-      router.push({
-        pathname: "/(app)/card",
-        params: { deck: JSON.stringify(selectedDeck) },
-      });
+      router.push(`/(app)/card?deckId=${selectedDeck.id}`);
     } else {
       Alert.alert(t("error"), t("deck_info_missing"));
     }

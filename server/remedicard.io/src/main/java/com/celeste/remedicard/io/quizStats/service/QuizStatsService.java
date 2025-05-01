@@ -62,6 +62,7 @@ public class QuizStatsService {
         }
         QuizStatsResponseWithQuizNameDTO dto = new QuizStatsResponseWithQuizNameDTO();
         dto.setQuizName(quizStats.getQuiz().getName());
+        dto.setQuizId(quizStats.getQuiz().getId());
         dto.setSuccessRate(quizStats.getSuccessRate());
         dto.setAccessDate(quizStats.getAccessDate());
         return dto;

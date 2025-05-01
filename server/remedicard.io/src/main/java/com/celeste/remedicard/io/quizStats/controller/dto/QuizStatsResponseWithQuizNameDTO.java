@@ -15,4 +15,5 @@ public class QuizStatsResponseWithQuizNameDTO {
     private LocalDateTime accessDate;
     private double successRate;
     private String quizName;
+    private Long quizId;
 }

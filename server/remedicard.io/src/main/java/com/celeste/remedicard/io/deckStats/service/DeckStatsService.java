@@ -61,6 +61,7 @@ public class DeckStatsService {
         }
         DeckStatsResponseWithDeckNameDTO dto = new DeckStatsResponseWithDeckNameDTO();
         dto.setDeckName(deckStats.getDeck().getName());
+        dto.setDeckId(deckStats.getDeck().getId());
         dto.setSuccessRate(deckStats.getSuccessRate());
         dto.setAccessDate(deckStats.getAccessDate());
         return dto;

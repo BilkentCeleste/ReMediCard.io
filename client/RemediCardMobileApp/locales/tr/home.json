@@ -16,5 +16,8 @@
   "deck_heading": "{{deckName}} destesine çalışmaya ne dersiniz?",
   "deck_message": "{{deckName}} destesine en son {{accessDate}} tarihinde çalıştınız.",
   "quiz_heading": "{{quizName}} testine çalışmaya ne dersiniz?",
-  "quiz_message": "{{quizName}} testine en son {{accessDate}} tarihinde çalıştınız."
+  "quiz_message": "{{quizName}} testine en son {{accessDate}} tarihinde çalıştınız.",
+  "go_to_deck": "Desteye git",
+  "go_to_quiz": "Teste git",
+  "cancel": "İptal"
 }

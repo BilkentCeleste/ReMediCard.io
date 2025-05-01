@@ -95,6 +95,10 @@ export const dislikeDeck = async (id) => {
   return await patchFetcher(url.DISLIKE_DECK_PATH(id));
 };
 
+export const getDecksByDeckIdWithoutFlashcards = async (id) => {
+  return await getFetcher(url.GET_DECKS_BY_DECK_ID_WITHOUT_FLASHCARDS_PATH(id));
+}
+
 // deck statistics
 export const createDeckStats = async (data) => {
   return await postFetcher(url.CREATE_DECK_STATS_PATH(), data);

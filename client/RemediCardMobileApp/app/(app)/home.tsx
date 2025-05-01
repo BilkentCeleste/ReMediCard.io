@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal
 } from "react-native";
 import { useRouter } from "expo-router";
 import {
@@ -36,6 +37,7 @@ export default function Home() {
   const [showLoading, setShowLoading] = useState(false);
   const [selectedRandomData, setSelectedRandomData] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -126,6 +128,22 @@ export default function Home() {
   const handleDeckResultSelection = (id) => {
     cleanSearch();
     router.push(`/(app)/decks?deck_selected=${id}`);
+  };
+
+  const handleStart = () => {
+    setModalVisible(false);
+    if (selectedType === "deck") {
+      router.push(`/(app)/decks?deck_selected=${selectedRandomData.deckId}`);
+    } else if (selectedType === "quiz") {
+      router.push(`/(app)/quizzes?quiz_selected=${selectedRandomData.quizId}`);
+    } else if (selectedType === "goal") {
+      if (selectedRandomData.deckId) {
+        router.push(`/(app)/decks?deck_selected=${selectedRandomData.deckId}`);
+      }
+      if (selectedRandomData.quizId) {
+        router.push(`/(app)/quizzes?quiz_selected=${selectedRandomData.quizId}`);
+      }
+    }
   };
 
   function formatLocalDateTime(dateString) {
@@ -238,6 +256,35 @@ export default function Home() {
         </>
       ) : (
         <>
+          <Modal
+                  transparent={true}
+                  visible={modalVisible}
+                  animationType="slide"
+                  onRequestClose={() => setModalVisible(false)}
+                >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>{selectedType === "deck"? selectedRandomData.deckName:
+                                                  selectedType === "quiz"? selectedRandomData.quizName:
+                                                  selectedType === "goal"? selectedRandomData.deckOrQuizName:
+                                                  null}</Text>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={handleStart}
+                >
+                  <Text style={styles.modalButtonText}>{selectedType === "deck" ||(selectedType === "goal" && selectedRandomData.deckId != null)?
+                                                        t("go_to_deck"):
+                                                        t("go_to_quiz")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancel}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalCancelText}>{t("cancel")}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           {selectedType === null? (
             <ActivityIndicator size={"large"} style={styles.indicator} />
           ) : selectedType === "none" ? (
@@ -252,7 +299,7 @@ export default function Home() {
               </Text>
             </View>
           ) : selectedType === "goal" ? (
-            <View style={styles.reminderComponent}>
+            <TouchableOpacity style={styles.reminderComponent} onPress={() => setModalVisible(true)}>
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
@@ -261,9 +308,9 @@ export default function Home() {
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
                 {t("goal_message", { deckOrQuizName: selectedRandomData.deckOrQuizName, endDate: formatLocalDateTime(selectedRandomData.endDate) })}
               </Text>
-            </View>
+            </TouchableOpacity>
           ) : selectedType === "deck" ? (
-            <View style={styles.reminderComponent}>
+            <TouchableOpacity style={styles.reminderComponent} onPress={() => setModalVisible(true)}>
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
@@ -272,9 +319,9 @@ export default function Home() {
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
                 {t("deck_message", { deckName: selectedRandomData.deckName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
               </Text>
-            </View>
+            </TouchableOpacity>
           ) : selectedType === "quiz" ? (
-            <View style={styles.reminderComponent}>
+            <TouchableOpacity style={styles.reminderComponent} onPress={() => setModalVisible(true)}>
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
@@ -283,7 +330,7 @@ export default function Home() {
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
                 {t("quiz_message", { quizName: selectedRandomData.quizName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
               </Text>
-            </View>
+            </TouchableOpacity>
           ) : null
           }
 
@@ -483,5 +530,44 @@ const styles = StyleSheet.create({
     transform: [{ scale: 1.8 }],
     margin: 20,
     color: "#ffffff",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "80%",
+    padding: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButton: {
+    backgroundColor: "#2916ff",
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  modalCancel: {
+    marginTop: 10,
+  },
+  modalCancelText: {
+    color: "#2916ff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
