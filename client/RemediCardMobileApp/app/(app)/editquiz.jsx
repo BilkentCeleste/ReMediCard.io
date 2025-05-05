@@ -18,6 +18,7 @@ import {
 import {
   PlusIcon,
   GoBackIcon,
+  EditIcon
 } from "@/constants/icons";
 import { getQuizByQuizId, removeQuestion, updateQuizName } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
@@ -173,6 +174,15 @@ export default function editQuiz() {
           )}
         </View>
 
+        {!isEditingName && (
+            <TouchableOpacity
+                style={[styles.menuIconEdit, styles.iconLayoutEdit]}
+                onPress={handleNameEdit}
+            >
+              <EditIcon color={"#fff"} />
+            </TouchableOpacity>
+        )}
+
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
         </View>
@@ -316,6 +326,16 @@ const styles = StyleSheet.create({
     zIndex: 3,
     top: 15,
   },
+  iconLayoutEdit: {
+    height: 24,
+    width: 24,
+    position: "absolute",
+  },
+  menuIconEdit: {
+    right: "25%",
+    zIndex: 3,
+    top: 15,
+  },
   separatorContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -395,24 +415,29 @@ const styles = StyleSheet.create({
   nameEditContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: '100%',
   },
   nameInput: {
     flex: 1,
     fontSize: 20,
-    lineHeight: 22,
+    lineHeight: 24,
     fontFamily: "Inter-Regular",
     color: "#fff",
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
     borderRadius: 5,
-    marginRight: 10,
+    height: 40,
+    minWidth: '90%',
   },
+
   saveButton: {
     backgroundColor: '#4CAF50',
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 5,
+    marginLeft: 10,
   },
   saveButtonText: {
     color: '#fff',

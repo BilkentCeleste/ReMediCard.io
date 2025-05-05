@@ -20,4 +20,7 @@
   "generateQuiz_1": "To auto generate a quiz, it is very important to select correct options in this page.",
   "generateQuiz_2": "You can either upload lecture notes as pdf or image files, video recordings as mp4 files, or audio recordings as mp3 files.",
   "generateQuiz_3": "You should correctly select the language of the material you upload. If you select the wrong language, the system may not be able to understand the material.",
+  "update_quiz_question1": "Start by entering the quiz question",
+  "update_quiz_question2": "You should enter 5 options and select the correct answer before saving",
+  "update_quiz_question_title": "Create Quiz Question Instructions"
 } 

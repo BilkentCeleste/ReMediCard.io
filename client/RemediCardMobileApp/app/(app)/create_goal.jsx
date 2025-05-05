@@ -42,7 +42,6 @@ export default function CreateGoal() {
         const durationUnit = temp.duration.split(' ')[1];
         const repetition = temp.repetition.split(' ')[0];
         const repetitionUnit = temp.repetition.split(' ')[1];
-        console.log(durationUnit, repetitionUnit)
 
         setParsedGoal(temp)
         setDuration(duration);
@@ -84,7 +83,6 @@ export default function CreateGoal() {
         repetitionIntervalInHours: repTwoUnit === "day(s)"? parseInt(repetition) * 24 : parseInt(repetition),
         durationInDays: repOneUnit === "month(s)"? parseInt(duration) * 30 : parseInt(duration) * 7,
       };
-      console.log(parsedGoal)
       updateStudyGoal(parsedGoal.id, data)
         .then((response) => {
           router.push("/(app)/goal_list");
