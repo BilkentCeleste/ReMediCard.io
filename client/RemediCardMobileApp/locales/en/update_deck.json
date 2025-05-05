@@ -2,7 +2,7 @@
     "update_flashcard": "Update",
     "create_flashcard": "Create Flashcard",
     "delete": "Delete",
-    "cancel": "cancel",
+    "cancel": "Cancel",
     "delete_card_consent": "Are you sure to delete selected flashcard?",
     "update_failed": "Update failed",
     "name_required": "Name is required",

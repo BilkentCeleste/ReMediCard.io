@@ -129,6 +129,7 @@ export default function editQuiz() {
           setIsEditingName(false);
         }
       }}
+      disabled={isEditingName === false}
     >
       <View style={styles.menuComponent}>
         <View style={[styles.menuIcon, styles.iconLayout]}>
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   menuIconEdit: {
-    right: "25%",
+    left: "95%",
     zIndex: 3,
     top: 15,
   },
@@ -367,8 +368,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginBottom: 2,
-    width: "50%"
   },
   editButtonText: {
     color: "#fff",
@@ -381,7 +380,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     paddingHorizontal: 20,
     borderRadius: 5,
-    width: "50%"
   },
   deleteButtonText: {
     color: "#fff",
@@ -431,7 +429,6 @@ const styles = StyleSheet.create({
     height: 40,
     minWidth: '90%',
   },
-
   saveButton: {
     backgroundColor: '#4CAF50',
     paddingHorizontal: 15,
