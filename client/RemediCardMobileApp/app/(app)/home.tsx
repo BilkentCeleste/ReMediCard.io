@@ -39,6 +39,11 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const truncate = (text, maxLength = 30) => {
+    if (!text) return "";
+    return text.length > maxLength ? text.substring(0, maxLength - 3) + "..." : text;
+  };
+  
   useEffect(() => {
     Promise.all([
       getRandomStudyGoal(),
@@ -303,10 +308,10 @@ export default function Home() {
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
-                {t("goal_heading", { deckOrQuizName: selectedRandomData.deckOrQuizName })}
+                {t("goal_heading", { deckOrQuizName: truncate(selectedRandomData.deckOrQuizName) })}
               </Text>
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-                {t("goal_message", { deckOrQuizName: selectedRandomData.deckOrQuizName, endDate: formatLocalDateTime(selectedRandomData.endDate) })}
+                {t("goal_message", { deckOrQuizName: truncate(selectedRandomData.deckOrQuizName), endDate: formatLocalDateTime(selectedRandomData.endDate) })}
               </Text>
             </TouchableOpacity>
           ) : selectedType === "deck" ? (
@@ -314,10 +319,10 @@ export default function Home() {
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
-                {t("deck_heading", { deckName: selectedRandomData.deckName })}
+                {t("deck_heading", { deckName: truncate(selectedRandomData.deckName) })}
               </Text>
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-                {t("deck_message", { deckName: selectedRandomData.deckName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
+                {t("deck_message", { deckName: truncate(selectedRandomData.deckName), accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
               </Text>
             </TouchableOpacity>
           ) : selectedType === "quiz" ? (
@@ -325,10 +330,10 @@ export default function Home() {
               <Text
                 style={[styles.reminderHeaderPlacement, styles.reminderHeader]}
               >
-                {t("quiz_heading", { quizName: selectedRandomData.quizName })}
+                {t("quiz_heading", { quizName: truncate(selectedRandomData.quizName)})}
               </Text>
               <Text style={[styles.reminderTextPlacement, styles.reminderText]}>
-                {t("quiz_message", { quizName: selectedRandomData.quizName, accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
+                {t("quiz_message", { quizName: truncate(selectedRandomData.quizName), accessDate: formatLocalDateTime(selectedRandomData.accessDate) })}
               </Text>
             </TouchableOpacity>
           ) : null
