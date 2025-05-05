@@ -247,6 +247,7 @@ export default function Discover() {
         return
       }
       
+      setModalVisible(false);
       router.push({
         pathname: "/(app)/shareddeck",
         params: { id: selectedItem.id },
@@ -260,7 +261,8 @@ export default function Discover() {
        return
      }
      
-     router.push({
+      setModalVisible(false);
+      router.push({
       pathname: "/(app)/sharedquiz",
       params: { id: selectedItem.id },
      });
