@@ -200,7 +200,7 @@ public class DeckService {
         User user = userService.getUserById(deckCreationTask.getUserId());
 
         Deck deck = Deck.builder()
-                .name("Generated_" + deckCreationTask.getName())
+                .name(deckCreationTask.getName())
                 .topic(deckCreationTask.getName())
                 .difficulty("Normal")
                 .user(user)
