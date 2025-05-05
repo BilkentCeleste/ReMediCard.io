@@ -40,7 +40,7 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const truncate = (text, maxLength = 30) => {
+  const truncate = (text, maxLength = 25) => {
     if (!text) return "";
     return text.length > maxLength ? text.substring(0, maxLength - 3) + "..." : text;
   };
@@ -449,6 +449,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Regular",
     height: "50%",
     left: 12,
+    marginTop:10,
   },
   reminderHeaderPlacement: {
     top: 10,

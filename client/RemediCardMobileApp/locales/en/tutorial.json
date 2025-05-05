@@ -4,7 +4,7 @@
   "test_title": "Test Title",
   "card_title": "Flashcard Instructions",
   "card_2": "The numbers on the top of the page shows the number of correct, uncertain, incorrect answers, and flashcards solved so far.",
-  "card_1": "If you easyly remember the answer, select correct. If you are not sure, select uncertain. If you don't remember the answer, select incorrect. The session continues until you press the end session button.",
+  "card_1": "If you easily remember the answer, select correct. If you are not sure, select uncertain. If you don't remember the answer, select incorrect. The session continues until you press the end session button.",
   "card_3": "Flashcards containing images may take a few seconds to load depending on the size of the image. Please be patient.",
   "updateDeck_title": "Edit Deck Instructions",
   "updateDeck_1": "You can edit the deck name by clicking on it. To add a flashcard, click on the create flashcard button on the bottom of the page. You can see the back of a flashcard by clicking on it.",
