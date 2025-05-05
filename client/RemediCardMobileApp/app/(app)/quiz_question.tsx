@@ -140,6 +140,8 @@ export default function QuizQuestion(props: any) {
 
   const handleQuizResults = () => {
     setTimerActive(false);
+    setShowSummaryModal(false);
+
     let correct = 0, incorrect = 0, skipped = 0;
 
     quizData.questions.forEach((q: any, i: number) => {
@@ -186,6 +188,7 @@ export default function QuizQuestion(props: any) {
   };
 
   const handleHomePage = () => {
+    setShowSummaryModal(false);
     router.push("/(app)/home");
   };
 
