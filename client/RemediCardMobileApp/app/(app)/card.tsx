@@ -7,6 +7,7 @@ import {useLocalSearchParams} from 'expo-router/build/hooks';
 import {createDeckStats, getDecksByDeckIdWithoutFlashcards, getFlashcardsInBatch, updateFlashcardReviews} from '@/apiHelper/backendHelper';
 import {useTranslation} from 'react-i18next';
 import PieChart from 'react-native-pie-chart';
+import TutorialInfoButton from '../../components/TutorialInfoButton';
 
 export default function Card( props: any ) {
     const { t } = useTranslation("card");
@@ -219,6 +220,13 @@ export default function Card( props: any ) {
 
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
+            </View>
+
+            <View style={styles.tutorialIconLayout}>
+                <TutorialInfoButton tutorialTitle = {"card_title"} tutorialTexts={["card_1", "card_2", "card_3"]} tutorialImages={[
+                    require('@/assets/images/tutorial/card/card_page_tutorial_image_1.jpg'), 
+                    require('@/assets/images/tutorial/card/card_page_tutorial_image_3.jpg'),
+                    require('@/assets/images/tutorial/card/card_page_tutorial_image_2.jpg')]}/>
             </View>
         </View>
 
@@ -509,5 +517,13 @@ const styles = StyleSheet.create({
         fontFamily: "Inter-Regular",
         color: "#fff",
         textAlign: "center",
+    },
+    tutorialIconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute",
+        left: "95%",
+        zIndex: 3,
+        top: 5
     },
 });

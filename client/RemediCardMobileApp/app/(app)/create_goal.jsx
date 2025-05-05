@@ -47,8 +47,8 @@ export default function CreateGoal() {
         setParsedGoal(temp)
         setDuration(duration);
         setRepetition(repetition);
-        setRepOneUnit(durationUnit === "month(s)" || durationUnit === "ay(lar)" ? t("months") : t("weeks"));
-        setRepTwoUnit(repetitionUnit === "day(s)" || repetitionUnit === "gün(ler)" ? "day(s)" : "hour(s)");
+        setRepOneUnit(durationUnit === "month(s)" || durationUnit === "ay" ? t("months") : t("weeks"));
+        setRepTwoUnit(repetitionUnit === "day(s)" || repetitionUnit === "gün" ? "day(s)" : "hour(s)");
         setPerformance(temp.goalPercent.toString());
       }
     }, []);
@@ -202,7 +202,7 @@ export default function CreateGoal() {
           <DropDown
             key ={repOneUnit} // Use a unique key to trigger re-renders if necessary
             options={repUnitsMonth}
-            placeholder={repOneUnit}
+            placeholder={repOneUnit === "month(s)"? t("months"): t("weeks")}
             onSelect={(value) => setRepOneUnit(value)}
             initialValue={repOneUnit}
           />
@@ -233,7 +233,7 @@ export default function CreateGoal() {
           <DropDown
             key={repTwoUnit} //to trigger re-renders if necessary
             options={repUnitsDay}
-            placeholder={repTwoUnit}
+            placeholder={repTwoUnit === "day(s)"? t("days"): t("hours")}
             onSelect={(value) => setRepTwoUnit(value)}
             initialValue={repTwoUnit}
           />

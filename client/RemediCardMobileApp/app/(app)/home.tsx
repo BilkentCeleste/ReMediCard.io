@@ -24,6 +24,7 @@ import ListLoader from "@/components/ListLoader";
 import NavBar from "@/components/NavBar";
 import AppTitle from "@/components/AppTitle";
 import i18next from "i18next";
+import TutorialInfoButton from '../../components/TutorialInfoButton';
 
 const { width } = Dimensions.get("window");
 
@@ -172,6 +173,12 @@ export default function Home() {
   return (
     <View style={styles.container}>
 
+    <View style={styles.tutorialIconLayout}>
+        <TutorialInfoButton tutorialTitle = {"home_title"} tutorialTexts={["home_1", "home_2"]} tutorialImages={[
+            require('@/assets/images/tutorial/home/home_tutorial_image_2.jpg'), 
+            require('@/assets/images/tutorial/home/home_tutorial_image_1.jpg')]}/>
+    </View>
+
       <AppTitle/>
 
       <View style={styles.searchComponent}>
@@ -286,7 +293,9 @@ export default function Home() {
             </View>
           </Modal>
           {selectedType === null? (
+          <View style={styles.reminderComponent}>
             <ActivityIndicator size={"large"} style={styles.indicator} />
+          </View>
           ) : selectedType === "none" ? (
             <View style={styles.reminderComponent}>
               <Text
@@ -530,6 +539,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 1.8 }],
     margin: 20,
     color: "#ffffff",
+    top: "20%",
   },
   modalOverlay: {
     flex: 1,
@@ -569,5 +579,13 @@ const styles = StyleSheet.create({
     color: "#2916ff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  tutorialIconLayout: {
+    height: 24,
+    width: 24,
+    position: "absolute",
+    left: "85%",
+    top: "10%",
+    zIndex: 3,
   },
 });

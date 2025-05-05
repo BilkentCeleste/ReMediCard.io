@@ -16,6 +16,7 @@ import { GoBackIcon, UploadIcon } from "@/constants/icons";
 import { autoGenerateQuiz } from "@/apiHelper/backendHelper";
 import { useTranslation } from "react-i18next";
 import * as ImagePicker from "expo-image-picker";
+import TutorialInfoButton from '../../components/TutorialInfoButton';
 
 export default function GenerateQuiz() {
   const { t, i18n } = useTranslation("generate_quizzes");
@@ -186,6 +187,14 @@ export default function GenerateQuiz() {
           </TouchableOpacity>
         </View>
         <Text style={styles.menuText}>{t("generate_new_quiz")}</Text>
+
+        <View style={styles.tutorialIconLayout}>
+            <TutorialInfoButton tutorialTitle = {"generateQuiz_title"} tutorialTexts={["generateQuiz_1", "generateQuiz_2", "generateQuiz_3"]} tutorialImages={[
+                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_1.jpg'), 
+                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_3.jpg'),
+                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_2.jpg')]}/>
+        </View>
+
         <View style={styles.separatorContainer}>
           <View style={styles.separatorLine} />
         </View>
@@ -404,6 +413,14 @@ const styles = StyleSheet.create({
   indicatorText: {
     fontSize: 20,
   },
+  tutorialIconLayout: {
+    height: 24,
+    width: 24,
+    position: "absolute",
+    left: "95%",
+    zIndex: 3,
+    top: 5
+},
 });
 
 const FadingPopup = ({ message, visible, onClose }) => {

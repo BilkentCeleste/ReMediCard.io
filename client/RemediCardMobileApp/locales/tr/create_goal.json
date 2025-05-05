@@ -1,8 +1,8 @@
 {
-    "months": "ay(lar)",
-    "days": "gün(ler)",
-    "weeks": "hafta(lar)",
-    "hours": "saat(ler)",
+    "months": "ay",
+    "days": "gün",
+    "weeks": "hafta",
+    "hours": "saat",
     "deck": "Deste",
     "select_deck": "Deste Seç",
     "repetition": "Tekrar",

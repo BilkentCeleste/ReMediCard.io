@@ -6,6 +6,7 @@ import { getDeckByDeckId, deleteFlashcard, updateDeckName } from '@/apiHelper/ba
 import Flashcard from "../../components/FlashCard";
 import { useTranslation } from 'react-i18next';
 import NavBar from "@/components/NavBar"
+import TutorialInfoButton from '../../components/TutorialInfoButton';
 
 export default function Updatedeck() {
     const { t } = useTranslation('update_deck');
@@ -103,6 +104,12 @@ export default function Updatedeck() {
             <View style={styles.menuComponent}>
                 <View style={[styles.menuIcon, styles.iconLayout]}>
                     <Link href="/(app)/decks"><GoBackIcon width={100} height={100} /></Link>
+                </View>
+
+                <View style={styles.tutorialIconLayout}>
+                    <TutorialInfoButton tutorialTitle = {"updateDeck_title"} tutorialTexts={["updateDeck_1", "updateDeck_2"]} tutorialImages={[
+                        require('@/assets/images/tutorial/updateDeck/updateDeck_tutorial_image_2.jpg'), 
+                        require('@/assets/images/tutorial/updateDeck/updateDeck_tutorial_image_1.jpg')]}/>
                 </View>
 
                 <View style={styles.textComponent}>
@@ -425,5 +432,13 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
+    },
+    tutorialIconLayout: {
+        height: 24,
+        width: 24,
+        position: "absolute",
+        left: "95%",
+        zIndex: 3,
+        top: 5
     },
 });

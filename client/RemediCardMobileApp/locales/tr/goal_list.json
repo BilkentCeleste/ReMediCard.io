@@ -31,10 +31,10 @@
   "cancel": "İptal",
   "decks": "Desteler",
   "quizzes": "Testler",
-  "months": "ay(lar)",
-  "days": "gün(ler)",
-  "weeks": "hafta(lar)",
-  "hours": "saat(ler)",
+  "months": "ay",
+  "days": "gün",
+  "weeks": "hafta",
+  "hours": "saat",
   "goal_name": "{{deckOrQuizName}} için Hedef",
   "goal_performance": "Hedef Performans"
 }
