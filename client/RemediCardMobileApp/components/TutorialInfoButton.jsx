@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { GoBackIcon, NextQuestionIcon, InfoIcon } from "@/constants/icons";
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { InfoIcon } from "@/constants/icons";
 import { useTranslation } from 'react-i18next';
 
 const TutorialInfoButton = ({ tutorialImages, tutorialTitle, tutorialTexts }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [index, setIndex] = useState(0)
-
   const {t} = useTranslation("tutorial")
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [index, setIndex] = useState(0)
 
   const incrementIndex = () => {
     if(index !== tutorialImages.length-1){
@@ -18,8 +16,6 @@ const TutorialInfoButton = ({ tutorialImages, tutorialTitle, tutorialTexts }) =>
   }
 
   const decrementIndex = () => {
-    console.log(index)
-
     if(index !== 0){
       setIndex(index - 1)
     }

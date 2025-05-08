@@ -20,4 +20,7 @@
   "generateQuiz_1": "Otomatik olarak bir test oluşturmak için, bu sayfadaki doğru seçenekleri seçmek çok önemlidir.",
   "generateQuiz_2": "Ders notlarını pdf veya resim dosyası olarak, video kayıtlarını mp4 dosyası olarak veya ses kayıtlarını mp3 dosyası olarak yükleyebilirsiniz.",
   "generateQuiz_3": "Yüklediğiniz materyalin dilini doğru bir şekilde seçmelisiniz. Yanlış dili seçerseniz, sistem materyali anlayamayabilir.",
+  "update_quiz_question1": "Test sorusunu girerek başlayın",
+  "update_quiz_question2": "Kaydetmeden önce 5 seçeneği ekleyin ve doğru cevabı seçin",
+  "update_quiz_question_title": "Test Sorusu Oluştur Talimatları"
 } 

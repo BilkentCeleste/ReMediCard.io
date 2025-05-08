@@ -190,9 +190,9 @@ export default function GenerateQuiz() {
 
         <View style={styles.tutorialIconLayout}>
             <TutorialInfoButton tutorialTitle = {"generateQuiz_title"} tutorialTexts={["generateQuiz_1", "generateQuiz_2", "generateQuiz_3"]} tutorialImages={[
-                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_1.jpg'), 
-                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_3.jpg'),
-                require('@/assets/images/tutorial/generateDecks/generateDeck_tutorial_image_2.jpg')]}/>
+                require('@/assets/images/tutorial/generateQuizzes/generate_quiz1.jpg'),
+                require('@/assets/images/tutorial/generateQuizzes/generate_quiz2.jpg'),
+                require('@/assets/images/tutorial/generateQuizzes/generate_quiz3.jpg')]}/>
         </View>
 
         <View style={styles.separatorContainer}>

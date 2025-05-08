@@ -100,17 +100,19 @@ export default function Updatedeck() {
                     setIsEditingName(false);
                 }
             }}
+            disabled={isEditingName === false}
         >
             <View style={styles.menuComponent}>
                 <View style={[styles.menuIcon, styles.iconLayout]}>
                     <Link href="/(app)/decks"><GoBackIcon width={100} height={100} /></Link>
                 </View>
 
+                {!isEditingName &&
                 <View style={styles.tutorialIconLayout}>
                     <TutorialInfoButton tutorialTitle = {"updateDeck_title"} tutorialTexts={["updateDeck_1", "updateDeck_2"]} tutorialImages={[
                         require('@/assets/images/tutorial/updateDeck/updateDeck_tutorial_image_2.jpg'), 
                         require('@/assets/images/tutorial/updateDeck/updateDeck_tutorial_image_1.jpg')]}/>
-                </View>
+                </View>}
 
                 <View style={styles.textComponent}>
                     {isEditingName ? (
@@ -355,7 +357,6 @@ const styles = StyleSheet.create({
         paddingVertical: 1,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginVertical: 4
     },
     editButtonText: {
         color: "#fff",
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-        width: "80%",
+        width: "100%",
         padding: 20,
         borderRadius: 20,
     },
@@ -404,24 +405,28 @@ const styles = StyleSheet.create({
     nameEditContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         width: '100%',
     },
     nameInput: {
         flex: 1,
         fontSize: 20,
-        lineHeight: 22,
+        lineHeight: 24,
         fontFamily: "Inter-Regular",
         color: "#fff",
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        padding: 5,
+        paddingVertical: 4,
+        paddingHorizontal: 10,
         borderRadius: 5,
-        marginRight: 10,
+        height: 40,
+        minWidth: '90%',
     },
     saveButton: {
         backgroundColor: '#4CAF50',
         paddingHorizontal: 15,
         paddingVertical: 5,
         borderRadius: 5,
+        marginLeft: 10
     },
     saveButtonText: {
         color: '#fff',
@@ -440,5 +445,15 @@ const styles = StyleSheet.create({
         left: "95%",
         zIndex: 3,
         top: 5
+    },
+    iconLayoutEdit: {
+        height: 24,
+        width: 24,
+        position: "absolute",
+    },
+    menuIconEdit: {
+        right: "25%",
+        zIndex: 3,
+        top: 15,
     },
 });

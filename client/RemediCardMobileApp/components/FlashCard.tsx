@@ -17,16 +17,15 @@ const Flashcard: React.FC<FlashcardProps> = ({
     frontImageURL,
     answer,
     backImageURL,
-    width = 300, // Default width
-    height = 200, // Default height
+    width = 300,
+    height = 200,
     textSize = 20,
-    longPressHandler = () => {console.log("LONG PRESS")}
+    longPressHandler = () => {}
 }) => {
     const [isFlipped, setIsFlipped] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false); // Animation state
+    const [isAnimating, setIsAnimating] = useState(false);
     const flipAnim = useRef(new Animated.Value(0)).current;
 
-    // Interpolations for flipping
     const frontInterpolate = flipAnim.interpolate({
         inputRange: [0, 180],
         outputRange: ["0deg", "180deg"],
@@ -37,7 +36,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
         outputRange: ["180deg", "360deg"],
     });
 
-    // Flip Animation with Animation Lock
     const flipCard = () => {
         if (isAnimating) return; // Prevent multiple triggers during animation
 
@@ -66,7 +64,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
     return (
         <TouchableWithoutFeedback onPress={flipCard} onLongPress={longPressHandler}>
             <View style={[styles.cardContainer, { width, height }]}>
-                {/* Front Face */}
                 <Animated.View
                     style={[
                         styles.card,
@@ -83,7 +80,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
                     <Text style={[styles.text, { fontSize: textSize }]}>{question}</Text>
                 </Animated.View>
 
-                {/* Back Face */}
                 <Animated.View
                     style={[
                         styles.card,
@@ -110,13 +106,13 @@ const styles = StyleSheet.create({
     cardContainer: {
         alignItems: "center",
         justifyContent: "center",
-        position: "relative", // Enables stacking front and back faces
+        position: "relative",
     },
     card: {
         alignItems: "center",
         justifyContent: "center",
-        backfaceVisibility: "hidden", // Prevents showing the reverse side
-        position: "absolute", // Stack on top of each other
+        backfaceVisibility: "hidden",
+        position: "absolute",
         borderRadius: 20,
     },
     front: {
@@ -124,7 +120,7 @@ const styles = StyleSheet.create({
     },
     back: {
         backgroundColor: "#C2E1FF",
-        transform: [{ rotateY: "180deg" }], // Pre-rotated for back face
+        transform: [{ rotateY: "180deg" }],
     },
     text: {
         fontSize: 20,

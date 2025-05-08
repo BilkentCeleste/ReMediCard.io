@@ -101,13 +101,15 @@ export default function UpdateFlashcard() {
                     <View style={styles.separatorLine} />
                 </View>
 
+                {isNewQuestion &&
                 <View style={styles.tutorialIconLayout}>
-                    <TutorialInfoButton tutorialTitle = {"test_title"} tutorialTexts={["test", "test", "test"]} tutorialImages={[
-                        require('@/assets/images/tutorial/tutorial_example_pic.jpg'), 
-                        require('@/assets/images/tutorial/tutorial_example_pic2.jpg'),
-                        require('@/assets/images/tutorial/tutorial_example_pic.jpg')]}/>
+                    <TutorialInfoButton tutorialTitle = {"update_quiz_question_title"}
+                                        tutorialTexts={["update_quiz_question1", "update_quiz_question2"]}
+                                        tutorialImages={[
+                        require('@/assets/images/tutorial/updateQuizQuestion/update_quiz_question1.jpg'),
+                        require('@/assets/images/tutorial/updateQuizQuestion/update_quiz_question2.jpg')]}/>
                 </View>
-
+                }
             </View>
             
             <TextInput
